@@ -37,7 +37,22 @@
     overflow:hidden;
     box-shadow:0 30px 60px -20px rgba(23,36,42,0.45);
     position:relative;
-    min-height:860px;
+    height:860px;
+  }
+  .page-scroll{
+    height:100%;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  @media (max-width:480px){
+    body{ padding:0; }
+    .device{
+      height:100vh;
+      height:100dvh;
+      max-width:100%;
+      border-radius:0;
+      box-shadow:none;
+    }
   }
   header{
     background:var(--ink);
@@ -294,6 +309,7 @@
 <body>
 
 <div class="device">
+<div class="page-scroll">
   <header>
     <div class="gender-toggle" id="genderToggle">
       <button class="gtbtn active" data-g="female" onclick="setGender('female')">👩 女性</button>
@@ -332,9 +348,11 @@
 
   <div class="section-label"><span class="bar"></span>シチュエーションから探す</div>
   <div class="situations" id="situationList"></div>
+</div>
 
   <div class="overlay" id="overlay" onclick="closeSheet()"></div>
   <div class="sheet" id="sheet">
+
     <div class="sheet-handle"></div>
     <div class="sheet-title" id="sheetTitle"></div>
     <div id="sheetBody"></div>

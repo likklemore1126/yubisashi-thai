@@ -66,6 +66,10 @@
   }
   .wordmark span.th{ color:var(--marigold); font-size:26px; }
   .tagline{ font-size:12.5px; opacity:0.75; margin-top:6px; letter-spacing:0.5px; }
+  .rate-status{
+    margin-top:10px; font-size:11.5px; color:var(--marigold); font-weight:600;
+    cursor:pointer; display:inline-flex; align-items:center; gap:4px;
+  }
   .gender-toggle{ position:absolute; top:20px; right:16px; display:flex; gap:4px; z-index:2; }
   .gtbtn{
     background:rgba(255,255,255,0.1); color:var(--paper);
@@ -81,7 +85,7 @@
   }
   .search-box input{
     border:none; outline:none; font-family:'Noto Sans JP', sans-serif;
-    font-size:14px; width:100%; background:transparent; color:var(--ink);
+    font-size:16px; width:100%; background:transparent; color:var(--ink);
   }
   .search-box input::placeholder{ color:#9A9284; }
   .search-icon{ font-size:16px; opacity:0.7; }
@@ -215,6 +219,54 @@
   .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
   .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.4; }
   .sp-jp{ font-size:13.5px; margin-top:7px; opacity:0.9; }
+  .nb-trigger{
+    margin-top:12px; background:rgba(255,255,255,0.16); color:#fff;
+    border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:9px 13px;
+    font-family:'Noto Sans JP', sans-serif; font-size:12.5px; font-weight:600; cursor:pointer;
+  }
+
+  .nb-display{ background:var(--ink); color:#fff; border-radius:16px; padding:22px 18px; margin:0 18px 18px; text-align:center; }
+  .nb-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:36px; line-height:1.2; }
+  .nb-jpy{ font-size:14px; color:var(--marigold); margin-top:8px; font-weight:600; }
+  .nb-rate-setup{ margin-top:12px; display:flex; gap:6px; align-items:center; justify-content:center; font-size:12px; flex-wrap:wrap; }
+  .nb-rate-setup span{ opacity:0.8; }
+  .nb-rate-setup input{ width:70px; padding:7px 8px; border-radius:8px; border:none; font-size:16px; text-align:center; }
+  .nb-rate-setup button{
+    background:var(--marigold); border:none; border-radius:8px; padding:7px 12px;
+    font-size:12px; font-weight:700; cursor:pointer; color:var(--ink);
+  }
+  .nb-keys{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 18px 24px; }
+  .nb-key{
+    background:var(--sand); border:1.5px solid var(--line); border-radius:14px; padding:20px 0;
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:22px; text-align:center; cursor:pointer;
+  }
+  .nb-key:active{ background:var(--marigold); border-color:var(--marigold-deep); }
+  .nb-key.action{ background:var(--ink); color:#fff; font-family:'Noto Sans JP', sans-serif; font-size:14px; font-weight:600; }
+
+  .rate-overlay{
+    position:absolute; inset:0; background:rgba(23,36,42,0.5);
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:20;
+  }
+  .rate-overlay.show{ opacity:1; pointer-events:auto; }
+  .rate-modal{
+    position:absolute; left:50%; top:44%; width:82%;
+    transform:translate(-50%,-45%) scale(0.95);
+    background:var(--paper); border-radius:18px; padding:22px 20px;
+    z-index:21; opacity:0; pointer-events:none; transition:all .2s ease;
+  }
+  .rate-modal.show{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  .rate-modal-title{ font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; margin-bottom:8px; }
+  .rate-modal-desc{ font-size:12px; color:#6B6252; line-height:1.6; margin-bottom:16px; }
+  .rate-modal-input-row{ display:flex; align-items:center; justify-content:center; gap:8px; font-size:15px; margin-bottom:18px; }
+  .rate-modal-input-row input{
+    width:90px; padding:9px 10px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:16px; text-align:center;
+  }
+  .rate-modal-save{
+    width:100%; background:var(--ink); color:#fff; border:none; border-radius:10px;
+    padding:12px; font-weight:600; font-size:14px; cursor:pointer; margin-bottom:8px;
+  }
+  .rate-modal-close{ width:100%; background:transparent; color:#8B8272; border:none; padding:8px; font-size:12.5px; cursor:pointer; }
 
   .mode-group-label{ font-size:11px; font-weight:700; color:#8B8272; letter-spacing:1px; margin:14px 2px 6px; }
   .follow-item{
@@ -237,6 +289,7 @@
     </div>
     <div class="wordmark">指さし<span class="th">タイ語</span></div>
     <div class="tagline">見せるだけで、伝わる。</div>
+    <div class="rate-status" id="rateStatus" onclick="openRateSheet()">💴 レート未設定(タップで設定) ›</div>
   </header>
 
   <div class="search-wrap">
@@ -281,6 +334,43 @@
     <div class="composer-fixed" id="composerFixed"></div>
     <div class="composer-list" id="composerList"></div>
   </div>
+
+  <div class="composer-screen" id="numberBoardScreen" style="z-index:9;">
+    <div class="composer-header">
+      <div class="ctitle">🔢 数字で答える</div>
+      <button class="composer-close" onclick="closeNumberBoard()">✕</button>
+    </div>
+    <div class="nb-display" id="nbDisplay"></div>
+    <div class="nb-keys">
+      <div class="nb-key" onclick="nbPress('1')">1</div>
+      <div class="nb-key" onclick="nbPress('2')">2</div>
+      <div class="nb-key" onclick="nbPress('3')">3</div>
+      <div class="nb-key" onclick="nbPress('4')">4</div>
+      <div class="nb-key" onclick="nbPress('5')">5</div>
+      <div class="nb-key" onclick="nbPress('6')">6</div>
+      <div class="nb-key" onclick="nbPress('7')">7</div>
+      <div class="nb-key" onclick="nbPress('8')">8</div>
+      <div class="nb-key" onclick="nbPress('9')">9</div>
+      <div class="nb-key" onclick="nbPress('000')">000</div>
+      <div class="nb-key" onclick="nbPress('0')">0</div>
+      <div class="nb-key" onclick="nbPress('00')">00</div>
+      <div class="nb-key action" style="grid-column:span 2;" onclick="nbPress('BACK')">⌫ 一文字戻す</div>
+      <div class="nb-key action" onclick="nbPress('C')">C</div>
+    </div>
+  </div>
+
+  <div class="rate-overlay" id="rateOverlay" onclick="closeRateSheet()"></div>
+  <div class="rate-modal" id="rateModal">
+    <div class="rate-modal-title">💴 レート設定</div>
+    <div class="rate-modal-desc">1バーツが何円か、出発前に調べて設定しておくと、現地で毎回調べる手間が省けます。</div>
+    <div class="rate-modal-input-row">
+      <span>1บาท=</span>
+      <input type="number" id="topRateInput" placeholder="例: 4.3" step="0.1" inputmode="decimal">
+      <span>円</span>
+    </div>
+    <button class="rate-modal-save" onclick="saveTopRate()">保存する</button>
+    <button class="rate-modal-close" onclick="closeRateSheet()">閉じる</button>
+  </div>
 </div>
 
 <script>
@@ -303,7 +393,7 @@ const transportItems = [
   {mode:'train', base:"ขอตั๋วชั้น 2 แบบแอร์",       type:'s', jp:"2等・エアコン付きの切符をください"},
   {mode:'train', base:"รถไฟออกกี่โมง",             type:'q', jp:"何時に出発しますか"},
   {mode:'taxi',  base:"ช่วยกดมิเตอร์ด้วย",          type:'s', jp:"メーターを使ってください"},
-  {mode:'taxi',  base:"ประมาณเท่าไหร่",            type:'q', jp:"だいたいいくらですか"},
+  {mode:'taxi',  base:"ประมาณเท่าไหร่",            type:'q', jp:"だいたいいくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'taxi',  base:"ไปทางนี้ได้ไหม",             type:'q', jp:"この道で行けますか(ダミー)"},
   {mode:'taxi',  base:"รอแป๊บนึงได้ไหม",            type:'q', jp:"少し待ってもらえますか(ダミー)"},
   {mode:'taxi',  base:"จอดตรงนี้",                 type:'s', jp:"ここで停めてください(ダミー)"},
@@ -334,10 +424,11 @@ const nearby = [
 
 const situations = [
   { icon:"🚕", title:"移動する", color:"var(--teal)", count:"14", phrases:[] },
-  { icon:"🏨", title:"ホテルにチェックインする", color:"var(--marigold)", count:"8", phrases:[
+  { icon:"🏨", title:"ホテルにチェックインする", color:"var(--marigold)", count:"9", phrases:[
     {base:"ต้องการเช็คอิน", type:'s', jp:"チェックインをお願いします"},
     {base:"ขอเตียงเสริมได้ไหม", type:'q', jp:"エキストラベッドは追加できますか"},
     {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか"},
+    {base:"พักกี่คืน", type:'q', jp:"何泊されますか(ダミー)", numberAnswer:{unit:'คืน', position:'suffix', jpy:false}},
   ]},
   { icon:"🍜", title:"レストランで注文する", color:"var(--pink)", count:"10", phrases:[
     {base:"ขอเมนูหน่อย", type:'s', jp:"メニューをください"},
@@ -351,7 +442,7 @@ const situations = [
   ]},
   { icon:"🛍️", title:"市場で買い物する", color:"var(--teal-deep)", count:"12", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
-    {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか"},
+    {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
     {base:"ลดได้ไหม", type:'q', jp:"安くなりますか"},
     {base:"มีสีอื่นไหม", type:'q', jp:"色違いはありますか"},
     {base:"มีไซส์ใหญ่กว่านี้ไหม", type:'q', jp:"もっと大きいサイズはありますか"},
@@ -375,6 +466,9 @@ let currentDestination = null;
 let selectedFollowUp = null;
 let anchorExpanded = true;
 let openState = null;
+let nbValue = '';
+let nbConfig = null;
+let thbToJpyRate = null;
 
 function renderNearby(){
   document.getElementById('nearbyRow').innerHTML = nearby.map((n,i) =>
@@ -509,6 +603,7 @@ function renderCategoryFixed(){
     document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase">
       <div class="sp-th">${fullTh(p.base, p.type)}</div>
       <div class="sp-jp">${p.jp}</div>
+      ${nbTriggerHtml(p.numberAnswer)}
     </div>`;
   }
 }
@@ -555,7 +650,80 @@ function renderSelectedPhraseBlock(){
   return `<div class="selected-phrase">
     <div class="sp-th">${fullTh(follow.base, follow.type)}</div>
     <div class="sp-jp">${follow.jp}</div>
+    ${nbTriggerHtml(follow.numberAnswer)}
   </div>`;
+}
+
+function nbTriggerHtml(config){
+  if(!config) return '';
+  return `<button class="nb-trigger" onclick="openNumberBoard()">🔢 数字で答えてもらう</button>`;
+}
+function openNumberBoard(){
+  if(openState.type === 'transport' || openState.type === 'mode'){
+    nbConfig = (selectedFollowUp !== null) ? transportItems[selectedFollowUp].numberAnswer : null;
+  } else if(openState.type === 'category'){
+    nbConfig = (selectedCategoryIdx !== null) ? situations[openState.index].phrases[selectedCategoryIdx].numberAnswer : null;
+  }
+  if(!nbConfig) return;
+  nbValue = '';
+  renderNumberBoard();
+  document.getElementById('numberBoardScreen').classList.add('show');
+}
+function closeNumberBoard(){
+  document.getElementById('numberBoardScreen').classList.remove('show');
+}
+function nbPress(key){
+  if(key === 'C'){ nbValue = ''; }
+  else if(key === 'BACK'){ nbValue = nbValue.slice(0, -1); }
+  else if(nbValue.length < 7){ nbValue += key; }
+  renderNumberBoard();
+}
+function renderNumberBoard(){
+  const displayNum = nbValue === '' ? '0' : Number(nbValue).toLocaleString('en-US');
+  const th = nbConfig.position === 'prefix' ? `${nbConfig.unit} ${displayNum}` : `${displayNum} ${nbConfig.unit}`;
+  let jpyHtml = '';
+  if(nbConfig.jpy){
+    if(thbToJpyRate){
+      const jpy = Math.round(Number(nbValue || 0) * thbToJpyRate).toLocaleString('en-US');
+      jpyHtml = `<div class="nb-jpy">(約 ${jpy}円)</div>`;
+    } else {
+      jpyHtml = `<div class="nb-rate-setup">
+        <span>1บาท=</span>
+        <input type="number" id="rateInput" placeholder="例: 4.3" step="0.1" inputmode="decimal">
+        <span>円</span>
+        <button onclick="saveRate()">設定</button>
+      </div>`;
+    }
+  }
+  document.getElementById('nbDisplay').innerHTML = `<div class="nb-value">${th}</div>${jpyHtml}`;
+}
+function saveRate(){
+  const v = parseFloat(document.getElementById('rateInput').value);
+  if(v && v > 0){ thbToJpyRate = v; renderNumberBoard(); updateRatePillText(); }
+}
+
+function openRateSheet(){
+  document.getElementById('topRateInput').value = thbToJpyRate || '';
+  document.getElementById('rateOverlay').classList.add('show');
+  document.getElementById('rateModal').classList.add('show');
+}
+function closeRateSheet(){
+  document.getElementById('rateOverlay').classList.remove('show');
+  document.getElementById('rateModal').classList.remove('show');
+}
+function saveTopRate(){
+  const v = parseFloat(document.getElementById('topRateInput').value);
+  if(v && v > 0){
+    thbToJpyRate = v;
+    updateRatePillText();
+  }
+  closeRateSheet();
+}
+function updateRatePillText(){
+  const el = document.getElementById('rateStatus');
+  el.textContent = thbToJpyRate
+    ? `💴 1บาท=${thbToJpyRate}円(タップで変更) ›`
+    : `💴 レート未設定(タップで設定) ›`;
 }
 
 
@@ -605,6 +773,7 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 
 renderNearby();
 renderSituations();
+updateRatePillText();
 </script>
 
 </body>

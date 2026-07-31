@@ -368,30 +368,6 @@
     <div class="composer-list" id="composerList"></div>
   </div>
 
-  <div class="composer-screen" id="numberBoardScreen" style="z-index:9;">
-    <div class="composer-header">
-      <div class="ctitle">🔢 数字で答える</div>
-      <button class="composer-close" onclick="closeNumberBoard()">✕</button>
-    </div>
-    <div class="nb-display" id="nbDisplay"></div>
-    <div class="nb-keys">
-      <div class="nb-key" onclick="nbPress('1')">1</div>
-      <div class="nb-key" onclick="nbPress('2')">2</div>
-      <div class="nb-key" onclick="nbPress('3')">3</div>
-      <div class="nb-key" onclick="nbPress('4')">4</div>
-      <div class="nb-key" onclick="nbPress('5')">5</div>
-      <div class="nb-key" onclick="nbPress('6')">6</div>
-      <div class="nb-key" onclick="nbPress('7')">7</div>
-      <div class="nb-key" onclick="nbPress('8')">8</div>
-      <div class="nb-key" onclick="nbPress('9')">9</div>
-      <div class="nb-key" onclick="nbPress('000')">000</div>
-      <div class="nb-key" onclick="nbPress('0')">0</div>
-      <div class="nb-key" onclick="nbPress('00')">00</div>
-      <div class="nb-key action" style="grid-column:span 2;" onclick="nbPress('BACK')">⌫ 一文字戻す</div>
-      <div class="nb-key action" onclick="nbPress('C')">C</div>
-    </div>
-  </div>
-
   <div class="rate-overlay" id="rateOverlay" onclick="closeRateSheet()"></div>
   <div class="rate-modal" id="rateModal">
     <div class="rate-modal-title">💴 レート設定</div>
@@ -407,7 +383,7 @@
 
   <div class="composer-screen" id="calcScreen" style="z-index:9;">
     <div class="composer-header">
-      <div class="ctitle">🧮 ฿計算機</div>
+      <div class="ctitle" id="calcTitle">🧮 ฿計算機</div>
       <button class="composer-close" onclick="closeCalc()">✕</button>
     </div>
     <div class="nb-display" id="calcDisplay"></div>
@@ -428,7 +404,9 @@
       <div class="nb-key" onclick="calcDigit('2')">2</div>
       <div class="nb-key" onclick="calcDigit('3')">3</div>
       <div class="nb-key op" onclick="calcOp('+')">+</div>
-      <div class="nb-key" onclick="calcDigit('0')" style="grid-column:span 3;">0</div>
+      <div class="nb-key" onclick="calcDigit('000')">000</div>
+      <div class="nb-key" onclick="calcDigit('00')">00</div>
+      <div class="nb-key" onclick="calcDigit('0')">0</div>
       <div class="nb-key eq" onclick="calcEquals()">=</div>
     </div>
   </div>
@@ -454,7 +432,7 @@ const transportItems = [
   {mode:'train', base:"ขอตั๋วชั้น 2 แบบแอร์",       type:'s', jp:"2等・エアコン付きの切符をください"},
   {mode:'train', base:"รถไฟออกกี่โมง",             type:'q', jp:"何時に出発しますか"},
   {mode:'taxi',  base:"ช่วยกดมิเตอร์ด้วย",          type:'s', jp:"メーターを使ってください"},
-  {mode:'taxi',  base:"ประมาณเท่าไหร่",            type:'q', jp:"だいたいいくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'taxi',  base:"เท่าไหร่",                  type:'q', jp:"いくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'taxi',  base:"ไปทางนี้ได้ไหม",             type:'q', jp:"この道で行けますか(ダミー)"},
   {mode:'taxi',  base:"รอแป๊บนึงได้ไหม",            type:'q', jp:"少し待ってもらえますか(ダミー)"},
   {mode:'taxi',  base:"จอดตรงนี้",                 type:'s', jp:"ここで停めてください(ダミー)"},
@@ -527,8 +505,6 @@ let currentDestination = null;
 let selectedFollowUp = null;
 let anchorExpanded = true;
 let openState = null;
-let nbValue = '';
-let nbConfig = null;
 let thbToJpyRate = null;
 
 function renderNearby(){
@@ -725,47 +701,18 @@ function nbTriggerHtml(config){
   return `<button class="nb-trigger" onclick="openNumberBoard()">🔢 数字で答えてもらう</button>`;
 }
 function openNumberBoard(){
+  let config = null;
   if(openState.type === 'transport' || openState.type === 'mode'){
-    nbConfig = (selectedFollowUp !== null) ? transportItems[selectedFollowUp].numberAnswer : null;
+    config = (selectedFollowUp !== null) ? transportItems[selectedFollowUp].numberAnswer : null;
   } else if(openState.type === 'category'){
-    nbConfig = (selectedCategoryIdx !== null) ? situations[openState.index].phrases[selectedCategoryIdx].numberAnswer : null;
+    config = (selectedCategoryIdx !== null) ? situations[openState.index].phrases[selectedCategoryIdx].numberAnswer : null;
   }
-  if(!nbConfig) return;
-  nbValue = '';
-  renderNumberBoard();
-  document.getElementById('numberBoardScreen').classList.add('show');
-}
-function closeNumberBoard(){
-  document.getElementById('numberBoardScreen').classList.remove('show');
-}
-function nbPress(key){
-  if(key === 'C'){ nbValue = ''; }
-  else if(key === 'BACK'){ nbValue = nbValue.slice(0, -1); }
-  else if(nbValue.length < 7){ nbValue += key; }
-  renderNumberBoard();
-}
-function renderNumberBoard(){
-  const displayNum = nbValue === '' ? '0' : Number(nbValue).toLocaleString('en-US');
-  const th = nbConfig.position === 'prefix' ? `${nbConfig.unit} ${displayNum}` : `${displayNum} ${nbConfig.unit}`;
-  let jpyHtml = '';
-  if(nbConfig.jpy){
-    if(thbToJpyRate){
-      const jpy = Math.round(Number(nbValue || 0) * thbToJpyRate).toLocaleString('en-US');
-      jpyHtml = `<div class="nb-jpy">(約 ${jpy}円)</div>`;
-    } else {
-      jpyHtml = `<div class="nb-rate-setup">
-        <span>1บาท=</span>
-        <input type="number" id="rateInput" placeholder="例: 4.3" step="0.1" inputmode="decimal">
-        <span>円</span>
-        <button onclick="saveRate()">設定</button>
-      </div>`;
-    }
-  }
-  document.getElementById('nbDisplay').innerHTML = `<div class="nb-value">${th}</div>${jpyHtml}`;
-}
-function saveRate(){
-  const v = parseFloat(document.getElementById('rateInput').value);
-  if(v && v > 0){ thbToJpyRate = v; renderNumberBoard(); updateRatePillText(); }
+  if(!config) return;
+  calcMode = 'phrase';
+  calcPhraseConfig = config;
+  document.getElementById('calcTitle').textContent = '🔢 数字で答える';
+  calcClearAll();
+  document.getElementById('calcScreen').classList.add('show');
 }
 
 function openRateSheet(){
@@ -793,13 +740,18 @@ function updateRatePillText(){
     : `💴 レート未設定(タップで設定) ›`;
 }
 
-/* ---------- ฿ calculator ---------- */
+/* ---------- shared calculator (standalone ฿計算機 / 質問への数字回答の両方で使用) ---------- */
+let calcMode = 'thb'; // 'thb' | 'phrase'
+let calcPhraseConfig = null;
 let calcCurrent = '0';
 let calcPrev = null;
 let calcOperator = null;
 let calcResetNext = false;
 
 function openCalc(){
+  calcMode = 'thb';
+  calcPhraseConfig = null;
+  document.getElementById('calcTitle').textContent = '🧮 ฿計算機';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
 }
@@ -810,9 +762,15 @@ function calcDigit(d){
   if(calcResetNext){ calcCurrent = '0'; calcResetNext = false; }
   if(d === '.'){
     if(!calcCurrent.includes('.')) calcCurrent += '.';
-  } else if(calcCurrent === '0'){
-    calcCurrent = d;
-  } else if(calcCurrent.length < 9){
+    calcRender();
+    return;
+  }
+  if(calcCurrent === '0'){
+    if(d !== '0' && d !== '00' && d !== '000'){ calcCurrent = d; }
+    calcRender();
+    return;
+  }
+  if(calcCurrent.length + d.length <= 9){
     calcCurrent += d;
   }
   calcRender();
@@ -863,14 +821,25 @@ function formatCalcDisplay(str){
 function calcRender(){
   const num = parseFloat(calcCurrent) || 0;
   const formatted = formatCalcDisplay(calcCurrent);
-  let jpyHtml = '';
-  if(thbToJpyRate){
-    const jpy = Math.round(num * thbToJpyRate).toLocaleString('en-US');
-    jpyHtml = `<div class="nb-jpy">≈ ${jpy}円</div>`;
+  let mainText, showJpy;
+  if(calcMode === 'phrase' && calcPhraseConfig){
+    const cfg = calcPhraseConfig;
+    mainText = cfg.position === 'prefix' ? `${cfg.unit} ${formatted}` : `${formatted} ${cfg.unit}`;
+    showJpy = !!cfg.jpy;
   } else {
-    jpyHtml = `<div class="calc-rate-hint">レート未設定です(トップ画面の「レート設定」から登録できます)</div>`;
+    mainText = `฿ ${formatted}`;
+    showJpy = true;
   }
-  document.getElementById('calcDisplay').innerHTML = `<div class="calc-value">฿ ${formatted}</div>${jpyHtml}`;
+  let jpyHtml = '';
+  if(showJpy){
+    if(thbToJpyRate){
+      const jpy = Math.round(num * thbToJpyRate).toLocaleString('en-US');
+      jpyHtml = `<div class="nb-jpy">≈ ${jpy}円</div>`;
+    } else {
+      jpyHtml = `<div class="calc-rate-hint">レート未設定です(トップ画面の「レート設定」から登録できます)</div>`;
+    }
+  }
+  document.getElementById('calcDisplay').innerHTML = `<div class="calc-value">${mainText}</div>${jpyHtml}`;
 }
 
 

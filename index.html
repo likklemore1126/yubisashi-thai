@@ -66,9 +66,16 @@
   }
   .wordmark span.th{ color:var(--marigold); font-size:26px; }
   .tagline{ font-size:12.5px; opacity:0.75; margin-top:6px; letter-spacing:0.5px; }
+  .header-tools{ display:flex; align-items:center; gap:14px; margin-top:10px; flex-wrap:wrap; }
   .rate-status{
-    margin-top:10px; font-size:11.5px; color:var(--marigold); font-weight:600;
+    font-size:11.5px; color:var(--marigold); font-weight:600;
     cursor:pointer; display:inline-flex; align-items:center; gap:4px;
+  }
+  .calc-trigger{
+    font-size:11.5px; color:var(--paper); font-weight:600; cursor:pointer;
+    display:inline-flex; align-items:center; gap:4px;
+    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3);
+    border-radius:999px; padding:4px 10px;
   }
   .gender-toggle{ position:absolute; top:20px; right:16px; display:flex; gap:4px; z-index:2; }
   .gtbtn{
@@ -242,6 +249,11 @@
   }
   .nb-key:active{ background:var(--marigold); border-color:var(--marigold-deep); }
   .nb-key.action{ background:var(--ink); color:#fff; font-family:'Noto Sans JP', sans-serif; font-size:14px; font-weight:600; }
+  .calc-keys{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:0 18px 24px; }
+  .nb-key.op{ background:var(--teal); color:#fff; }
+  .nb-key.eq{ background:var(--marigold); color:var(--ink); font-size:24px; }
+  .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:32px; word-break:break-all; }
+  .calc-rate-hint{ font-size:11.5px; color:var(--marigold); margin-top:8px; }
 
   .rate-overlay{
     position:absolute; inset:0; background:rgba(23,36,42,0.5);
@@ -289,7 +301,10 @@
     </div>
     <div class="wordmark">指さし<span class="th">タイ語</span></div>
     <div class="tagline">見せるだけで、伝わる。</div>
-    <div class="rate-status" id="rateStatus" onclick="openRateSheet()">💴 レート未設定(タップで設定) ›</div>
+    <div class="header-tools">
+      <div class="rate-status" id="rateStatus" onclick="openRateSheet()">💴 レート未設定(タップで設定) ›</div>
+      <div class="calc-trigger" onclick="openCalc()">🧮 ฿計算機</div>
+    </div>
   </header>
 
   <div class="search-wrap">
@@ -370,6 +385,34 @@
     </div>
     <button class="rate-modal-save" onclick="saveTopRate()">保存する</button>
     <button class="rate-modal-close" onclick="closeRateSheet()">閉じる</button>
+  </div>
+
+  <div class="composer-screen" id="calcScreen" style="z-index:9;">
+    <div class="composer-header">
+      <div class="ctitle">🧮 ฿計算機</div>
+      <button class="composer-close" onclick="closeCalc()">✕</button>
+    </div>
+    <div class="nb-display" id="calcDisplay"></div>
+    <div class="nb-keys calc-keys">
+      <div class="nb-key" onclick="calcClearAll()">C</div>
+      <div class="nb-key" onclick="calcBackspace()">⌫</div>
+      <div class="nb-key" onclick="calcDigit('.')">.</div>
+      <div class="nb-key op" onclick="calcOp('÷')">÷</div>
+      <div class="nb-key" onclick="calcDigit('7')">7</div>
+      <div class="nb-key" onclick="calcDigit('8')">8</div>
+      <div class="nb-key" onclick="calcDigit('9')">9</div>
+      <div class="nb-key op" onclick="calcOp('×')">×</div>
+      <div class="nb-key" onclick="calcDigit('4')">4</div>
+      <div class="nb-key" onclick="calcDigit('5')">5</div>
+      <div class="nb-key" onclick="calcDigit('6')">6</div>
+      <div class="nb-key op" onclick="calcOp('-')">−</div>
+      <div class="nb-key" onclick="calcDigit('1')">1</div>
+      <div class="nb-key" onclick="calcDigit('2')">2</div>
+      <div class="nb-key" onclick="calcDigit('3')">3</div>
+      <div class="nb-key op" onclick="calcOp('+')">+</div>
+      <div class="nb-key" onclick="calcDigit('0')" style="grid-column:span 3;">0</div>
+      <div class="nb-key eq" onclick="calcEquals()">=</div>
+    </div>
   </div>
 </div>
 
@@ -716,6 +759,7 @@ function saveTopRate(){
   if(v && v > 0){
     thbToJpyRate = v;
     updateRatePillText();
+    calcRender();
   }
   closeRateSheet();
 }
@@ -724,6 +768,77 @@ function updateRatePillText(){
   el.textContent = thbToJpyRate
     ? `💴 1บาท=${thbToJpyRate}円(タップで変更) ›`
     : `💴 レート未設定(タップで設定) ›`;
+}
+
+/* ---------- ฿ calculator ---------- */
+let calcCurrent = '0';
+let calcPrev = null;
+let calcOperator = null;
+let calcResetNext = false;
+
+function openCalc(){
+  calcClearAll();
+  document.getElementById('calcScreen').classList.add('show');
+}
+function closeCalc(){
+  document.getElementById('calcScreen').classList.remove('show');
+}
+function calcDigit(d){
+  if(calcResetNext){ calcCurrent = '0'; calcResetNext = false; }
+  if(d === '.'){
+    if(!calcCurrent.includes('.')) calcCurrent += '.';
+  } else if(calcCurrent === '0'){
+    calcCurrent = d;
+  } else if(calcCurrent.length < 9){
+    calcCurrent += d;
+  }
+  calcRender();
+}
+function calcBackspace(){
+  if(calcResetNext) return;
+  calcCurrent = calcCurrent.length > 1 ? calcCurrent.slice(0, -1) : '0';
+  calcRender();
+}
+function calcOp(op){
+  if(calcOperator && !calcResetNext){ calcEquals(); }
+  calcPrev = parseFloat(calcCurrent);
+  calcOperator = op;
+  calcResetNext = true;
+  calcRender();
+}
+function calcEquals(){
+  if(calcOperator === null || calcPrev === null) return;
+  const cur = parseFloat(calcCurrent);
+  let result = calcPrev;
+  if(calcOperator === '+') result = calcPrev + cur;
+  else if(calcOperator === '-') result = calcPrev - cur;
+  else if(calcOperator === '×') result = calcPrev * cur;
+  else if(calcOperator === '÷') result = cur !== 0 ? calcPrev / cur : 0;
+  result = Math.round(result * 100) / 100;
+  calcCurrent = String(result);
+  calcOperator = null;
+  calcPrev = null;
+  calcResetNext = true;
+  calcRender();
+}
+function calcClearAll(){
+  calcCurrent = '0';
+  calcPrev = null;
+  calcOperator = null;
+  calcResetNext = false;
+  calcRender();
+}
+function calcRender(){
+  const num = parseFloat(calcCurrent) || 0;
+  const formatted = num.toLocaleString('en-US', {maximumFractionDigits:2});
+  let jpyHtml = '';
+  if(thbToJpyRate){
+    const jpy = Math.round(num * thbToJpyRate).toLocaleString('en-US');
+    jpyHtml = `<div class="nb-jpy">≈ ${jpy}円</div>`;
+  } else {
+    jpyHtml = `<div class="calc-rate-hint">レート未設定です(トップ画面の「レート設定」から登録できます)</div>`;
+  }
+  document.getElementById('calcDisplay').innerHTML = `<div class="calc-value">฿ ${formatted}</div>${jpyHtml}`;
 }
 
 

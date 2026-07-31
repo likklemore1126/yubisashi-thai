@@ -265,10 +265,11 @@
   }
   .nb-key:active{ background:var(--marigold); border-color:var(--marigold-deep); }
   .nb-key.action{ background:var(--ink); color:#fff; font-family:'Noto Sans JP', sans-serif; font-size:14px; font-weight:600; }
-  .nb-key.eq{ background:var(--marigold); color:var(--ink); font-size:28px; }
+  .nb-key.eq{ font-size:28px; }
   .calc-keys{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:0 18px 24px; }
   .nb-key.op{ background:var(--teal); color:#fff; }
-  .nb-keys.phase-digits .nb-key:not(.action):not(.eq){
+  .calc-keys .nb-key.eq{ background:var(--marigold); color:var(--ink); }
+  .nb-keys.phase-digits .nb-key:not(.action){
     background:var(--marigold); border-color:var(--marigold-deep);
   }
   .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:38px; word-break:break-all; }
@@ -821,7 +822,7 @@ function renderTimeDisplay(){
   } else {
     const hhCls = timeField === 'hh' ? ' time-active' : '';
     const mmCls = timeField === 'mm' ? ' time-active' : '';
-    const ampmHtml = ampmTag ? `<span class="time-ampm">${ampmTag}</span> ` : '';
+    const ampmHtml = ampmTag ? `${ampmTag} ` : '';
     timeLine = `${ampmHtml}<span class="${hhCls}">${hhDisp}</span>:<span class="${mmCls}">${mmDisp}</span>`;
   }
 

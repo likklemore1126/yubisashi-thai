@@ -566,7 +566,12 @@ function closeSheet(){
 function openNearby(i){
   openState = {type:'nearby', index:i};
   const n = nearby[i];
-  openSheet(`近くの${n.label}`, [{ th: fullTh(n.base, n.type), jp: n.jp }]);
+  const th = fullTh(n.base, n.type);
+  document.getElementById('sheetTitle').textContent = `近くの${n.label}`;
+  document.getElementById('sheetBody').innerHTML =
+    `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div></div>`;
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('sheet').classList.add('show');
 }
 
 function openModeList(mode){
@@ -846,9 +851,18 @@ function calcClearAll(){
   calcResetNext = false;
   calcRender();
 }
+function formatCalcDisplay(str){
+  if(str === '' || str === '-') return '0';
+  const neg = str.startsWith('-');
+  const body = neg ? str.slice(1) : str;
+  const hasDot = body.includes('.');
+  const [intPart, fracPart = ''] = body.split('.');
+  const intFormatted = Number(intPart || '0').toLocaleString('en-US');
+  return (neg ? '-' : '') + intFormatted + (hasDot ? '.' + fracPart : '');
+}
 function calcRender(){
   const num = parseFloat(calcCurrent) || 0;
-  const formatted = num.toLocaleString('en-US', {maximumFractionDigits:2});
+  const formatted = formatCalcDisplay(calcCurrent);
   let jpyHtml = '';
   if(thbToJpyRate){
     const jpy = Math.round(num * thbToJpyRate).toLocaleString('en-US');

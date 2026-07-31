@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>指さしタイ語 - トップ画面</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17242A;
+    --paper:#FBF7EF;
+    --sand:#F1E9D8;
+    --marigold:#E8A33D;
+    --marigold-deep:#C9812A;
+    --teal:#0F6B62;
+    --teal-deep:#0A4C46;
+    --pink:#E23F73;
+    --pink-deep:#B92D5B;
+    --line:#E4DAC4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:#DED2B0;
+    font-family:'Noto Sans JP', sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    padding:24px 12px;
+  }
+  .device{
+    width:100%;
+    max-width:430px;
+    background:var(--paper);
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(23,36,42,0.45);
+    position:relative;
+    min-height:860px;
+  }
+  header{
+    background:var(--ink);
+    color:var(--paper);
+    padding:22px 20px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    right:-30px; top:-30px;
+    width:140px; height:140px;
+    border-radius:50%;
+    background:var(--marigold);
+    opacity:0.15;
+  }
+  .wordmark{
+    font-family:'Kanit', sans-serif;
+    font-weight:700;
+    font-size:26px;
+    letter-spacing:0.5px;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .wordmark span.th{ color:var(--marigold); font-size:26px; }
+  .tagline{ font-size:12.5px; opacity:0.75; margin-top:6px; letter-spacing:0.5px; }
+  .gender-toggle{ position:absolute; top:20px; right:16px; display:flex; gap:4px; z-index:2; }
+  .gtbtn{
+    background:rgba(255,255,255,0.1); color:var(--paper);
+    border:1px solid rgba(255,255,255,0.3); border-radius:999px;
+    padding:5px 10px; font-size:11px; font-family:'Noto Sans JP', sans-serif; cursor:pointer;
+  }
+  .gtbtn.active{ background:var(--marigold); color:var(--ink); border-color:var(--marigold); font-weight:600; }
+
+  .search-wrap{ padding:16px 18px 4px; }
+  .search-box{
+    background:#fff; border:2px solid var(--ink); border-radius:14px;
+    display:flex; align-items:center; gap:10px; padding:12px 14px;
+  }
+  .search-box input{
+    border:none; outline:none; font-family:'Noto Sans JP', sans-serif;
+    font-size:14px; width:100%; background:transparent; color:var(--ink);
+  }
+  .search-box input::placeholder{ color:#9A9284; }
+  .search-icon{ font-size:16px; opacity:0.7; }
+  .search-hint{ font-size:11px; color:#8B8272; margin:6px 4px 0; }
+
+  .dest-result{
+    margin:10px 18px 0; background:var(--teal); color:var(--paper);
+    border-radius:16px; padding:16px; display:none;
+  }
+  .dest-result.show{ display:block; }
+  .dest-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; line-height:1.2; }
+  .dest-jp{ font-size:12px; opacity:0.85; margin-top:2px; }
+  .dest-phrase{
+    margin-top:10px; background:rgba(255,255,255,0.14); border-radius:10px;
+    padding:12px 14px; font-family:'Kanit', sans-serif; font-size:19px; font-weight:600;
+  }
+  .dest-phrase-jp{ font-size:11px; color:rgba(255,255,255,0.75); margin-top:5px; padding:0 2px; }
+  .dest-modes{ display:flex; gap:8px; margin-top:12px; }
+  .mode-btn{
+    flex:1; background:var(--paper); color:var(--teal-deep); border:none;
+    border-radius:10px; padding:9px 4px; font-family:'Noto Sans JP', sans-serif;
+    font-weight:600; font-size:12.5px; cursor:pointer;
+  }
+
+  .section-label{
+    font-size:12px; font-weight:700; color:#8B8272; letter-spacing:1px;
+    margin:20px 18px 8px; display:flex; align-items:center; gap:6px;
+  }
+  .section-label .bar{ width:14px; height:3px; background:var(--marigold); border-radius:2px; }
+  .chip-row{ display:flex; gap:8px; overflow-x:auto; padding:0 18px 4px; scrollbar-width:none; }
+  .chip-row::-webkit-scrollbar{ display:none; }
+  .chip{
+    flex:0 0 auto; background:var(--sand); border:1.5px solid var(--line);
+    border-radius:999px; padding:9px 14px; font-size:12.5px; font-weight:500;
+    display:flex; align-items:center; gap:5px; cursor:pointer; white-space:nowrap;
+    transition:transform .12s ease;
+  }
+  .chip:active{ transform:scale(0.95); background:var(--marigold); border-color:var(--marigold-deep); }
+
+  .situations{ padding:6px 14px 24px; display:flex; flex-direction:column; gap:8px; }
+  .sit-row{
+    display:flex; align-items:center; gap:12px; background:#fff;
+    border:1.5px solid var(--line); border-radius:14px; padding:12px 14px;
+    cursor:pointer; transition:transform .12s ease; position:relative; overflow:hidden;
+  }
+  .sit-row:active{ transform:scale(0.98); }
+  .sit-row::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--accent, var(--teal)); }
+  .sit-icon{
+    width:42px; height:42px; border-radius:11px; background:var(--accent, var(--teal));
+    display:flex; align-items:center; justify-content:center; font-size:20px; flex:0 0 auto; margin-left:4px;
+  }
+  .sit-text{ flex:1; }
+  .sit-title{ font-family:'Kanit', sans-serif; font-weight:600; font-size:15px; }
+  .sit-sub{ font-size:11px; color:#9A9284; margin-top:1px; }
+  .sit-arrow{ font-size:16px; color:#C7BEA9; }
+
+  .overlay{
+    position:absolute; inset:0; background:rgba(23,36,42,0.45);
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:5;
+  }
+  .overlay.show{ opacity:1; pointer-events:auto; }
+  .sheet{
+    position:absolute; left:0; right:0; bottom:0; background:var(--paper);
+    border-radius:22px 22px 0 0; padding:16px 18px 22px;
+    transform:translateY(100%); transition:transform .25s cubic-bezier(.2,.8,.3,1);
+    z-index:6; max-height:78%; overflow-y:auto;
+  }
+  .sheet.show{ transform:translateY(0); }
+  .sheet-handle{ width:36px; height:4px; background:var(--line); border-radius:3px; margin:0 auto 14px; }
+  .sheet-title{ font-family:'Kanit', sans-serif; font-weight:600; font-size:16px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+
+  .phrase-card{ background:var(--sand); border-radius:12px; padding:14px 15px; margin-bottom:9px; }
+  .phrase-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:21px; color:var(--ink); }
+  .phrase-jp{ font-size:12.5px; color:#6B6252; margin-top:4px; }
+
+  .sheet-close{
+    width:100%; margin-top:6px; background:var(--ink); color:var(--paper);
+    border:none; border-radius:10px; padding:12px;
+    font-family:'Noto Sans JP', sans-serif; font-weight:600; font-size:13px; cursor:pointer;
+  }
+
+  /* Full-screen composer (移動する/バス/鉄道/タクシー用) */
+  .composer-screen{
+    position:absolute; inset:0; background:var(--paper);
+    display:flex; flex-direction:column;
+    transform:translateY(100%);
+    transition:transform .25s cubic-bezier(.2,.8,.3,1);
+    z-index:8; pointer-events:none;
+  }
+  .composer-screen.show{ transform:translateY(0); pointer-events:auto; }
+  .composer-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 18px 10px; flex:0 0 auto;
+  }
+  .composer-header .ctitle{ font-family:'Kanit', sans-serif; font-weight:600; font-size:17px; }
+  .composer-close{
+    background:var(--sand); border:1.5px solid var(--line); color:var(--ink);
+    width:32px; height:32px; border-radius:50%; font-size:14px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .composer-fixed{ padding:2px 18px 6px; flex:0 0 auto; }
+  .composer-list{
+    flex:1 1 auto; overflow-y:auto; padding:4px 18px 28px;
+    border-top:1px solid var(--line);
+  }
+
+  .combined-display{ background:var(--teal); color:#fff; border-radius:14px; padding:16px; margin-bottom:16px; }
+  .combined-display.empty{
+    background:transparent; border:1.5px dashed #C7BEA9; color:#9A9284; font-size:12.5px; line-height:1.6;
+  }
+  .combined-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:19px; line-height:1.4; }
+  .combined-jp{ font-size:12.5px; margin-top:6px; opacity:0.85; }
+
+  .dest-anchor{ background:var(--ink); color:var(--paper); border-radius:14px; padding:14px 16px; margin-bottom:10px; cursor:pointer; }
+  .dest-anchor.empty{ background:transparent; border:1.5px dashed #C7BEA9; color:#9A9284; font-size:12.5px; line-height:1.6; cursor:default; }
+  .dest-anchor.collapsed{
+    display:flex; align-items:center; gap:8px;
+    padding:9px 14px; border-radius:999px;
+  }
+  .anchor-pill-icon{ font-size:12px; }
+  .anchor-pill-text{
+    font-family:'Kanit', sans-serif; font-weight:600; font-size:13px; flex:1;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .anchor-pill-arrow{ font-size:10px; opacity:0.6; }
+  .anchor-label{ font-size:10.5px; letter-spacing:1px; color:var(--marigold); font-weight:700; margin-bottom:5px; }
+  .anchor-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:23px; line-height:1.35; }
+  .anchor-jp{ font-size:12.5px; opacity:0.75; margin-top:5px; }
+
+  .selected-phrase{ background:var(--teal); color:#fff; border-radius:14px; padding:18px 16px; margin-bottom:16px; }
+  .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
+  .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.4; }
+  .sp-jp{ font-size:13.5px; margin-top:7px; opacity:0.9; }
+
+  .mode-group-label{ font-size:11px; font-weight:700; color:#8B8272; letter-spacing:1px; margin:14px 2px 6px; }
+  .follow-item{
+    background:var(--sand); border:1.5px solid var(--line); border-radius:12px;
+    padding:11px 13px; margin-bottom:7px; cursor:pointer; transition:all .12s ease;
+  }
+  .follow-item .fi-th{ font-family:'Kanit', sans-serif; font-weight:600; font-size:16px; }
+  .follow-item .fi-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
+  .follow-item.selected{ background:var(--marigold); border-color:var(--marigold-deep); }
+  .follow-item.selected .fi-jp{ color:#5c4415; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <header>
+    <div class="gender-toggle" id="genderToggle">
+      <button class="gtbtn active" data-g="female" onclick="setGender('female')">👩 女性</button>
+      <button class="gtbtn" data-g="male" onclick="setGender('male')">👨 男性</button>
+    </div>
+    <div class="wordmark">指さし<span class="th">タイ語</span></div>
+    <div class="tagline">見せるだけで、伝わる。</div>
+  </header>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="searchInput" type="text" placeholder="行き先をペーストして検索(例: วัดพระแก้ว)">
+    </div>
+    <div class="search-hint">お試し: 「アユタヤ」「チェンマイ」「วัดพระแก้ว」と入力してみてください</div>
+  </div>
+
+  <div class="dest-result" id="destResult">
+    <div class="dest-th" id="destTh"></div>
+    <div class="dest-jp" id="destJp"></div>
+    <div class="dest-phrase" id="destPhrase"></div>
+    <div class="dest-phrase-jp" id="destPhraseJp"></div>
+    <div class="dest-modes">
+      <button class="mode-btn" onclick="openModeList('bus')">🚌 バス</button>
+      <button class="mode-btn" onclick="openModeList('train')">🚆 鉄道</button>
+      <button class="mode-btn" onclick="openModeList('taxi')">🚕 タクシー</button>
+    </div>
+  </div>
+
+  <div class="section-label"><span class="bar"></span>近くの◯◯を伝える</div>
+  <div class="chip-row" id="nearbyRow"></div>
+
+  <div class="section-label"><span class="bar"></span>シチュエーションから探す</div>
+  <div class="situations" id="situationList"></div>
+
+  <div class="overlay" id="overlay" onclick="closeSheet()"></div>
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="sheetTitle"></div>
+    <div id="sheetBody"></div>
+    <button class="sheet-close" onclick="closeSheet()">閉じる</button>
+  </div>
+
+  <div class="composer-screen" id="composerScreen">
+    <div class="composer-header">
+      <div class="ctitle" id="composerTitle"></div>
+      <button class="composer-close" onclick="closeComposer()">✕</button>
+    </div>
+    <div class="composer-fixed" id="composerFixed"></div>
+    <div class="composer-list" id="composerList"></div>
+  </div>
+</div>
+
+<script>
+const genderState = { value: 'female' };
+function particle(type){
+  if(genderState.value === 'male') return 'ครับ';
+  return type === 'q' ? 'คะ' : 'ค่ะ';
+}
+function fullTh(base, type){ return base + particle(type); }
+
+const destinations = [
+  { key:["あゆたや","ayutthaya","อยุธยา"], th:"อยุธยา", jp:"アユタヤ" },
+  { key:["ちぇんまい","chiang mai","เชียงใหม่"], th:"เชียงใหม่", jp:"チェンマイ" },
+  { key:["わっとぷらけお","wat phra kaew","วัดพระแก้ว"], th:"วัดพระแก้ว", jp:"ワット・プラケオ(エメラルド寺院)" },
+];
+
+const transportItems = [
+  {mode:'bus',   base:"รถบัสรอบไหนดี",            type:'q', jp:"何時のバスがいいですか"},
+  {mode:'bus',   base:"ลงป้ายนี้ใช่ไหม",           type:'q', jp:"この停留所で降りればいいですか"},
+  {mode:'train', base:"ขอตั๋วชั้น 2 แบบแอร์",       type:'s', jp:"2等・エアコン付きの切符をください"},
+  {mode:'train', base:"รถไฟออกกี่โมง",             type:'q', jp:"何時に出発しますか"},
+  {mode:'taxi',  base:"ช่วยกดมิเตอร์ด้วย",          type:'s', jp:"メーターを使ってください"},
+  {mode:'taxi',  base:"ประมาณเท่าไหร่",            type:'q', jp:"だいたいいくらですか"},
+  {mode:'taxi',  base:"ไปทางนี้ได้ไหม",             type:'q', jp:"この道で行けますか(ダミー)"},
+  {mode:'taxi',  base:"รอแป๊บนึงได้ไหม",            type:'q', jp:"少し待ってもらえますか(ダミー)"},
+  {mode:'taxi',  base:"จอดตรงนี้",                 type:'s', jp:"ここで停めてください(ダミー)"},
+  {mode:'taxi',  base:"เปิดแอร์หน่อยได้ไหม",         type:'q', jp:"エアコンをつけてもらえますか(ダミー)"},
+  {mode:'taxi',  base:"ขอใบเสร็จด้วย",              type:'s', jp:"領収書をください(ダミー)"},
+  {mode:'taxi',  base:"ไม่ต้องรีบ",                 type:'s', jp:"急がなくて大丈夫です(ダミー)"},
+  {mode:'taxi',  base:"มีที่จอดรถไหม",              type:'q', jp:"駐車場はありますか(ダミー)"},
+  {mode:'taxi',  base:"รับบัตรเครดิตไหม",           type:'q', jp:"クレジットカードは使えますか(ダミー)"},
+  {mode:'taxi',  base:"ไปทางลัดได้ไหม",            type:'q', jp:"(ダミー)近道はできますか"},
+  {mode:'taxi',  base:"รอแป๊บนึงได้ไหม",           type:'q', jp:"(ダミー)少し待ってもらえますか"},
+  {mode:'taxi',  base:"ขอใบเสร็จด้วย",             type:'s', jp:"(ダミー)領収書をください"},
+  {mode:'taxi',  base:"แอร์เย็นไปหน่อย",           type:'s', jp:"(ダミー)冷房が効きすぎています"},
+  {mode:'taxi',  base:"จอดตรงนี้ได้ไหม",           type:'q', jp:"(ダミー)ここで停めてもらえますか"},
+  {mode:'taxi',  base:"ไม่ต้องรีบก็ได้",            type:'s', jp:"(ダミー)急がなくて大丈夫です"},
+  {mode:'taxi',  base:"มีที่ชาร์จโทรศัพท์ไหม",      type:'q', jp:"(ダミー)携帯の充電はできますか"},
+  {mode:'taxi',  base:"ช่วยเปิดกระโปรงท้ายด้วย",    type:'s', jp:"(ダミー)トランクを開けてください"},
+];
+const modeMeta = { bus:{icon:'🚌', label:'バス'}, train:{icon:'🚆', label:'鉄道'}, taxi:{icon:'🚕', label:'タクシー'} };
+
+const nearby = [
+  {icon:"🚉", label:"駅",     base:"สถานีที่ใกล้ที่สุดจากที่นี่",     type:'s', jp:"ここから一番近い駅までお願いします"},
+  {icon:"🏥", label:"病院",   base:"โรงพยาบาลที่ใกล้ที่สุดจากที่นี่", type:'s', jp:"ここから一番近い病院までお願いします"},
+  {icon:"🏪", label:"コンビニ", base:"ร้านสะดวกซื้อที่ใกล้ที่สุด",   type:'s', jp:"ここから一番近いコンビニまでお願いします"},
+  {icon:"🏧", label:"ATM",    base:"ตู้เอทีเอ็มที่ใกล้ที่สุด",       type:'s', jp:"ここから一番近いATMまでお願いします"},
+  {icon:"🚻", label:"トイレ", base:"ห้องน้ำที่ใกล้ที่สุด",           type:'s', jp:"ここから一番近いトイレまでお願いします"},
+  {icon:"💊", label:"薬局",   base:"ร้านขายยาที่ใกล้ที่สุด",         type:'s', jp:"ここから一番近い薬局までお願いします"},
+];
+
+const situations = [
+  { icon:"🚕", title:"移動する", color:"var(--teal)", count:"14", phrases:[] },
+  { icon:"🏨", title:"ホテルにチェックインする", color:"var(--marigold)", count:"8", phrases:[
+    {base:"ต้องการเช็คอิน", type:'s', jp:"チェックインをお願いします"},
+    {base:"ขอเตียงเสริมได้ไหม", type:'q', jp:"エキストラベッドは追加できますか"},
+    {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか"},
+  ]},
+  { icon:"🍜", title:"レストランで注文する", color:"var(--pink)", count:"10", phrases:[
+    {base:"ขอเมนูหน่อย", type:'s', jp:"メニューをください"},
+    {base:"อันนี้เผ็ดไหม", type:'q', jp:"これは辛いですか"},
+    {base:"เก็บเงินด้วย", type:'s', jp:"お会計お願いします"},
+  ]},
+  { icon:"🍢", title:"屋台で注文する", color:"var(--marigold-deep)", count:"9", phrases:[
+    {base:"อันนี้คืออะไร", type:'q', jp:"これは何ですか"},
+    {base:"ไม่ใส่ผักชีนะ", type:'q', jp:"パクチー抜きでお願いします"},
+    {base:"เอาไป", type:'s', jp:"持ち帰りでお願いします"},
+  ]},
+  { icon:"🛍️", title:"市場で買い物する", color:"var(--teal-deep)", count:"12", phrases:[
+    {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
+    {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか"},
+    {base:"ลดได้ไหม", type:'q', jp:"安くなりますか"},
+    {base:"มีสีอื่นไหม", type:'q', jp:"色違いはありますか"},
+    {base:"มีไซส์ใหญ่กว่านี้ไหม", type:'q', jp:"もっと大きいサイズはありますか"},
+    {base:"มีไซส์เล็กกว่านี้ไหม", type:'q', jp:"もっと小さいサイズはありますか"},
+    {base:"ลองได้ไหม", type:'q', jp:"試着してもいいですか"},
+    {base:"เอาอันนี้", type:'s', jp:"これをください"},
+  ]},
+  { icon:"🧭", title:"道をたずねる", color:"var(--teal)", count:"9", phrases:[
+    {base:"ตรงนี้คือที่ไหน", type:'q', jp:"ここはどこですか"},
+    {base:"เดินไปทางไหน", type:'q', jp:"どちらの方向に歩けばいいですか"},
+    {base:"ควรทำอย่างไรดี", type:'q', jp:"どうしたらいいですか"},
+  ]},
+  { icon:"🆘", title:"助けを求める", color:"var(--pink-deep)", count:"6", phrases:[
+    {base:"ช่วยด้วย", type:'s', jp:"助けてください"},
+    {base:"หลงทาง", type:'s', jp:"道に迷いました"},
+    {base:"โทรเรียกตำรวจได้ไหม", type:'q', jp:"警察を呼んでもらえますか"},
+  ]},
+];
+
+let currentDestination = null;
+let selectedFollowUp = null;
+let anchorExpanded = true;
+let openState = null;
+
+function renderNearby(){
+  document.getElementById('nearbyRow').innerHTML = nearby.map((n,i) =>
+    `<div class="chip" onclick="openNearby(${i})">${n.icon} ${n.label}</div>`
+  ).join('');
+}
+function renderSituations(){
+  document.getElementById('situationList').innerHTML = situations.map((s,i) =>
+    `<div class="sit-row" style="--accent:${s.color}" onclick="openSituation(${i})">
+       <div class="sit-icon" style="--accent:${s.color}">${s.icon}</div>
+       <div class="sit-text">
+         <div class="sit-title">${s.title}</div>
+         <div class="sit-sub">${s.count}フレーズ</div>
+       </div>
+       <div class="sit-arrow">›</div>
+     </div>`
+  ).join('');
+}
+
+function openSheet(title, phrases){
+  document.getElementById('sheetTitle').textContent = title;
+  document.getElementById('sheetBody').innerHTML = phrases.map(p =>
+    `<div class="phrase-card"><div class="phrase-th">${p.th}</div><div class="phrase-jp">${p.jp}</div></div>`
+  ).join('');
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('sheet').classList.add('show');
+}
+function closeSheet(){
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('sheet').classList.remove('show');
+  openState = null;
+}
+
+function openNearby(i){
+  openState = {type:'nearby', index:i};
+  const n = nearby[i];
+  openSheet(`近くの${n.label}`, [{ th: fullTh(n.base, n.type), jp: n.jp }]);
+}
+
+function openModeList(mode){
+  openState = {type:'mode', mode};
+  const meta = modeMeta[mode];
+  document.getElementById('composerTitle').textContent = `${meta.icon} ${meta.label}で伝える`;
+  renderComposerFixed();
+  renderComposerList();
+  document.getElementById('composerScreen').classList.add('show');
+}
+
+function openTransportComposer(){
+  openState = {type:'transport'};
+  document.getElementById('composerTitle').textContent = '🚕 移動する';
+  renderComposerFixed();
+  renderComposerList();
+  document.getElementById('composerScreen').classList.add('show');
+}
+function closeComposer(){
+  document.getElementById('composerScreen').classList.remove('show');
+  openState = null;
+}
+function renderComposerFixed(){
+  document.getElementById('composerFixed').innerHTML = renderDestinationAnchor() + renderSelectedPhraseBlock();
+}
+function renderComposerList(){
+  let html = '';
+  if(openState && openState.type === 'mode'){
+    transportItems.forEach((item, idx) => {
+      if(item.mode !== openState.mode) return;
+      const sel = selectedFollowUp === idx ? 'selected' : '';
+      html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
+        <div class="fi-th">${fullTh(item.base, item.type)}</div>
+        <div class="fi-jp">${item.jp}</div>
+      </div>`;
+    });
+  } else {
+    ['bus','train','taxi'].forEach(mode => {
+      const meta = modeMeta[mode];
+      html += `<div class="mode-group-label">${meta.icon} ${meta.label}</div>`;
+      transportItems.forEach((item, idx) => {
+        if(item.mode !== mode) return;
+        const sel = selectedFollowUp === idx ? 'selected' : '';
+        html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
+          <div class="fi-th">${fullTh(item.base, item.type)}</div>
+          <div class="fi-jp">${item.jp}</div>
+        </div>`;
+      });
+    });
+  }
+  document.getElementById('composerList').innerHTML = html;
+}
+function toggleFollowUp(idx){
+  const wasNull = selectedFollowUp === null;
+  selectedFollowUp = (selectedFollowUp === idx) ? null : idx;
+  if(selectedFollowUp === null){
+    anchorExpanded = true;
+  } else if(wasNull){
+    anchorExpanded = false;
+  }
+  renderComposerFixed();
+  renderComposerList();
+}
+function toggleAnchorExpand(){
+  anchorExpanded = !anchorExpanded;
+  renderComposerFixed();
+}
+
+let selectedCategoryIdx = null;
+
+function openSituation(i){
+  const s = situations[i];
+  if(s.title === "移動する"){
+    openTransportComposer();
+  } else {
+    openCategoryComposer(i);
+  }
+}
+
+function openCategoryComposer(i){
+  openState = {type:'category', index:i};
+  selectedCategoryIdx = null;
+  const s = situations[i];
+  document.getElementById('composerTitle').textContent = `${s.icon} ${s.title}`;
+  renderCategoryFixed();
+  renderCategoryList();
+  document.getElementById('composerScreen').classList.add('show');
+}
+function renderCategoryFixed(){
+  const s = situations[openState.index];
+  if(selectedCategoryIdx === null){
+    document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
+  } else {
+    const p = s.phrases[selectedCategoryIdx];
+    document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase">
+      <div class="sp-th">${fullTh(p.base, p.type)}</div>
+      <div class="sp-jp">${p.jp}</div>
+    </div>`;
+  }
+}
+function renderCategoryList(){
+  const s = situations[openState.index];
+  let html = '';
+  s.phrases.forEach((p, idx) => {
+    const sel = selectedCategoryIdx === idx ? 'selected' : '';
+    html += `<div class="follow-item ${sel}" onclick="selectCategoryPhrase(${idx})">
+      <div class="fi-th">${fullTh(p.base, p.type)}</div>
+      <div class="fi-jp">${p.jp}</div>
+    </div>`;
+  });
+  document.getElementById('composerList').innerHTML = html;
+}
+function selectCategoryPhrase(idx){
+  selectedCategoryIdx = (selectedCategoryIdx === idx) ? null : idx;
+  renderCategoryFixed();
+  renderCategoryList();
+}
+
+function renderDestinationAnchor(){
+  if(!currentDestination){
+    return `<div class="dest-anchor empty">先に上の検索窓で行き先を入力すると、ここに表示されます<br>例: อยุธยา / เชียงใหม่ / วัดพระแก้ว</div>`;
+  }
+  const th = "จะไป" + currentDestination.th + particle('s');
+  const jp = currentDestination.jp + "へ行くつもりです";
+  if(!anchorExpanded){
+    return `<div class="dest-anchor collapsed" onclick="toggleAnchorExpand()">
+      <span class="anchor-pill-icon">📍</span><span class="anchor-pill-text">${th}</span><span class="anchor-pill-arrow">タップで表示 ▾</span>
+    </div>`;
+  }
+  return `<div class="dest-anchor" onclick="toggleAnchorExpand()">
+    <div class="anchor-label">行き先(タップで最小化)</div>
+    <div class="anchor-th">${th}</div>
+    <div class="anchor-jp">${jp}</div>
+  </div>`;
+}
+function renderSelectedPhraseBlock(){
+  if(selectedFollowUp === null){
+    return `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
+  }
+  const follow = transportItems[selectedFollowUp];
+  return `<div class="selected-phrase">
+    <div class="sp-th">${fullTh(follow.base, follow.type)}</div>
+    <div class="sp-jp">${follow.jp}</div>
+  </div>`;
+}
+
+
+function setGender(g){
+  genderState.value = g;
+  document.querySelectorAll('.gtbtn').forEach(b => b.classList.toggle('active', b.dataset.g === g));
+  refreshVisible();
+}
+function refreshVisible(){
+  if(currentDestination){
+    document.getElementById('destPhrase').textContent = "จะไป" + currentDestination.th + particle('s');
+    document.getElementById('destPhraseJp').textContent = currentDestination.jp + "へ行くつもりです";
+  }
+  if(!openState) return;
+  if(openState.type === 'transport' || openState.type === 'mode'){
+    renderComposerFixed();
+    renderComposerList();
+  } else if(openState.type === 'category'){
+    renderCategoryFixed();
+    renderCategoryList();
+  } else if(openState.type === 'nearby'){
+    openNearby(openState.index);
+  }
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  const result = document.getElementById('destResult');
+  if(!q){ currentDestination = null; result.classList.remove('show'); return; }
+  const found = destinations.find(d => d.key.some(k => k.toLowerCase().includes(q) || q.includes(k.toLowerCase())));
+  if(found){
+    if(!currentDestination || currentDestination.th !== found.th){
+      selectedFollowUp = null;
+      anchorExpanded = true;
+    }
+    currentDestination = found;
+    document.getElementById('destTh').textContent = found.th;
+    document.getElementById('destJp').textContent = found.jp;
+    document.getElementById('destPhrase').textContent = "จะไป" + found.th + particle('s');
+    document.getElementById('destPhraseJp').textContent = found.jp + "へ行くつもりです";
+    result.classList.add('show');
+  } else {
+    currentDestination = null;
+    result.classList.remove('show');
+  }
+});
+
+renderNearby();
+renderSituations();
+</script>
+
+</body>
+</html>

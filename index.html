@@ -410,6 +410,29 @@
       <div class="nb-key eq" onclick="calcEquals()">=</div>
     </div>
   </div>
+
+  <div class="composer-screen" id="timeBoardScreen" style="z-index:9;">
+    <div class="composer-header">
+      <div class="ctitle">🕐 時刻で答える</div>
+      <button class="composer-close" onclick="closeTimeBoard()">✕</button>
+    </div>
+    <div class="nb-display" id="timeDisplay"></div>
+    <div class="nb-keys">
+      <div class="nb-key" onclick="timeDigit('1')">1</div>
+      <div class="nb-key" onclick="timeDigit('2')">2</div>
+      <div class="nb-key" onclick="timeDigit('3')">3</div>
+      <div class="nb-key" onclick="timeDigit('4')">4</div>
+      <div class="nb-key" onclick="timeDigit('5')">5</div>
+      <div class="nb-key" onclick="timeDigit('6')">6</div>
+      <div class="nb-key" onclick="timeDigit('7')">7</div>
+      <div class="nb-key" onclick="timeDigit('8')">8</div>
+      <div class="nb-key" onclick="timeDigit('9')">9</div>
+      <div class="nb-key action" onclick="timeBackspace()">⌫ 戻す</div>
+      <div class="nb-key" onclick="timeDigit('0')">0</div>
+      <div class="nb-key action" onclick="timeClear()">C</div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -427,10 +450,10 @@ const destinations = [
 ];
 
 const transportItems = [
-  {mode:'bus',   base:"รถบัสรอบไหนดี",            type:'q', jp:"何時のバスがいいですか"},
+  {mode:'bus',   base:"รถบัสรอบไหนดี",            type:'q', jp:"何時のバスがいいですか", timeAnswer:true},
   {mode:'bus',   base:"ลงป้ายนี้ใช่ไหม",           type:'q', jp:"この停留所で降りればいいですか"},
   {mode:'train', base:"ขอตั๋วชั้น 2 แบบแอร์",       type:'s', jp:"2等・エアコン付きの切符をください"},
-  {mode:'train', base:"รถไฟออกกี่โมง",             type:'q', jp:"何時に出発しますか"},
+  {mode:'train', base:"รถไฟออกกี่โมง",             type:'q', jp:"何時に出発しますか", timeAnswer:true},
   {mode:'taxi',  base:"ช่วยกดมิเตอร์ด้วย",          type:'s', jp:"メーターを使ってください"},
   {mode:'taxi',  base:"เท่าไหร่",                  type:'q', jp:"いくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'taxi',  base:"ไปทางนี้ได้ไหม",             type:'q', jp:"この道で行けますか(ダミー)"},
@@ -466,7 +489,7 @@ const situations = [
   { icon:"🏨", title:"ホテルにチェックインする", color:"var(--marigold)", count:"9", phrases:[
     {base:"ต้องการเช็คอิน", type:'s', jp:"チェックインをお願いします"},
     {base:"ขอเตียงเสริมได้ไหม", type:'q', jp:"エキストラベッドは追加できますか"},
-    {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか"},
+    {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか", timeAnswer:true},
     {base:"พักกี่คืน", type:'q', jp:"何泊されますか(ダミー)", numberAnswer:{unit:'คืน', position:'suffix', jpy:false}},
   ]},
   { icon:"🍜", title:"レストランで注文する", color:"var(--pink)", count:"10", phrases:[
@@ -645,7 +668,7 @@ function renderCategoryFixed(){
     document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase">
       <div class="sp-th">${fullTh(p.base, p.type)}</div>
       <div class="sp-jp">${p.jp}</div>
-      ${nbTriggerHtml(p.numberAnswer)}
+      ${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}
     </div>`;
   }
 }
@@ -692,13 +715,49 @@ function renderSelectedPhraseBlock(){
   return `<div class="selected-phrase">
     <div class="sp-th">${fullTh(follow.base, follow.type)}</div>
     <div class="sp-jp">${follow.jp}</div>
-    ${nbTriggerHtml(follow.numberAnswer)}
+    ${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
   </div>`;
 }
 
 function nbTriggerHtml(config){
   if(!config) return '';
   return `<button class="nb-trigger" onclick="openNumberBoard()">🔢 数字で答えてもらう</button>`;
+}
+function timeTriggerHtml(flag){
+  if(!flag) return '';
+  return `<button class="nb-trigger" onclick="openTimeBoard()">🕐 時刻で答えてもらう</button>`;
+}
+let timeHH = '';
+let timeMM = '';
+function openTimeBoard(){
+  timeHH = '';
+  timeMM = '';
+  renderTimeDisplay();
+  document.getElementById('timeBoardScreen').classList.add('show');
+}
+function closeTimeBoard(){
+  document.getElementById('timeBoardScreen').classList.remove('show');
+}
+function timeDigit(d){
+  if(timeHH.length < 2){ timeHH += d; }
+  else if(timeMM.length < 2){ timeMM += d; }
+  renderTimeDisplay();
+}
+function timeBackspace(){
+  if(timeMM.length > 0){ timeMM = timeMM.slice(0, -1); }
+  else if(timeHH.length > 0){ timeHH = timeHH.slice(0, -1); }
+  renderTimeDisplay();
+}
+function timeClear(){
+  timeHH = '';
+  timeMM = '';
+  renderTimeDisplay();
+}
+function renderTimeDisplay(){
+  const hhDisp = (timeHH + '__').slice(0, 2);
+  const mmDisp = (timeMM + '__').slice(0, 2);
+  document.getElementById('timeDisplay').innerHTML =
+    `<div class="calc-value">${hhDisp}:${mmDisp}</div><div class="calc-rate-hint">24時間表記です(例: 14:30)</div>`;
 }
 function openNumberBoard(){
   let config = null;
@@ -724,10 +783,14 @@ function closeRateSheet(){
   document.getElementById('rateOverlay').classList.remove('show');
   document.getElementById('rateModal').classList.remove('show');
 }
+function persistRate(){
+  try{ localStorage.setItem('yubisashi_thb_rate', String(thbToJpyRate)); }catch(e){}
+}
 function saveTopRate(){
   const v = parseFloat(document.getElementById('topRateInput').value);
   if(v && v > 0){
     thbToJpyRate = v;
+    persistRate();
     updateRatePillText();
     calcRender();
   }
@@ -836,10 +899,24 @@ function calcRender(){
       const jpy = Math.round(num * thbToJpyRate).toLocaleString('en-US');
       jpyHtml = `<div class="nb-jpy">≈ ${jpy}円</div>`;
     } else {
-      jpyHtml = `<div class="calc-rate-hint">レート未設定です(トップ画面の「レート設定」から登録できます)</div>`;
+      jpyHtml = `<div class="nb-rate-setup">
+        <span>1บาท=</span>
+        <input type="number" id="calcRateInput" placeholder="例: 4.3" step="0.1" inputmode="decimal">
+        <span>円</span>
+        <button onclick="saveRateFromCalc()">設定</button>
+      </div>`;
     }
   }
   document.getElementById('calcDisplay').innerHTML = `<div class="calc-value">${mainText}</div>${jpyHtml}`;
+}
+function saveRateFromCalc(){
+  const v = parseFloat(document.getElementById('calcRateInput').value);
+  if(v && v > 0){
+    thbToJpyRate = v;
+    persistRate();
+    updateRatePillText();
+    calcRender();
+  }
 }
 
 
@@ -886,6 +963,11 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     result.classList.remove('show');
   }
 });
+
+try{
+  const savedRate = localStorage.getItem('yubisashi_thb_rate');
+  if(savedRate){ thbToJpyRate = parseFloat(savedRate); }
+}catch(e){}
 
 renderNearby();
 renderSituations();

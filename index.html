@@ -276,6 +276,7 @@
     font-family:'Kanit', sans-serif;
   }
   .tp-btn.active{ background:var(--marigold); border-color:var(--marigold-deep); color:var(--ink); }
+  .time-active{ color:var(--marigold); }
 
   .rate-overlay{
     position:absolute; inset:0; background:rgba(23,36,42,0.5);
@@ -438,8 +439,10 @@
       <div class="nb-key" onclick="timeDigit('7')">7</div>
       <div class="nb-key" onclick="timeDigit('8')">8</div>
       <div class="nb-key" onclick="timeDigit('9')">9</div>
-      <div class="nb-key action" onclick="timeBackspace()">⌫ 戻す</div>
       <div class="nb-key" onclick="timeDigit('0')">0</div>
+      <div class="nb-key eq" onclick="timeNextField()"><div>:</div><div style="font-size:10px;font-weight:600;margin-top:2px;">次へ</div></div>
+      <div class="nb-key" onclick="timeDigit('00')">00</div>
+      <div class="nb-key action" style="grid-column:span 2;" onclick="timeBackspace()">⌫ 戻す</div>
       <div class="nb-key action" onclick="timeClear()">C</div>
     </div>
   </div>
@@ -740,10 +743,12 @@ function timeTriggerHtml(flag){
 }
 let timeHH = '';
 let timeMM = '';
+let timeField = 'hh';
 let timePeriod = null;
 function openTimeBoard(){
   timeHH = '';
   timeMM = '';
+  timeField = 'hh';
   timePeriod = null;
   document.getElementById('tpAm').classList.remove('active');
   document.getElementById('tpPm').classList.remove('active');
@@ -760,46 +765,52 @@ function setTimePeriod(p){
   renderTimeDisplay();
 }
 function timeDigit(d){
-  if(timeHH === ''){
-    if(d === '0') return;
-    timeHH = d;
-    renderTimeDisplay();
-    return;
-  }
-  if(timeHH === '1' && timeMM === ''){
-    if(d === '0' || d === '1' || d === '2'){
-      timeHH = '1' + d;
-    } else {
-      timeMM = d;
-    }
-    renderTimeDisplay();
-    return;
-  }
-  if(timeMM.length < 2){
+  if(timeField === 'hh'){
+    if(timeHH.length + d.length > 2) return;
+    const candidate = timeHH + d;
+    if(candidate === '0' || candidate === '00') return;
+    if(parseInt(candidate, 10) <= 12){ timeHH = candidate; }
+  } else {
+    if(timeMM.length + d.length > 2) return;
     const candidate = timeMM + d;
     if(parseInt(candidate, 10) <= 59){ timeMM = candidate; }
   }
   renderTimeDisplay();
 }
+function timeNextField(){
+  if(timeHH === '') return;
+  timeField = 'mm';
+  renderTimeDisplay();
+}
 function timeBackspace(){
-  if(timeMM.length > 0){ timeMM = timeMM.slice(0, -1); }
-  else { timeHH = timeHH.slice(0, -1); }
+  if(timeField === 'mm'){
+    if(timeMM.length > 0){ timeMM = timeMM.slice(0, -1); }
+    else { timeField = 'hh'; }
+  } else {
+    timeHH = timeHH.slice(0, -1);
+  }
   renderTimeDisplay();
 }
 function timeClear(){
   timeHH = '';
   timeMM = '';
+  timeField = 'hh';
   renderTimeDisplay();
 }
 function renderTimeDisplay(){
   const hhDisp = timeHH === '' ? '--' : timeHH;
-  const mmDisp = (timeMM + '--').slice(0, 2);
+  const mmDisp = timeMM === '' ? '--' : timeMM;
+  const hhCls = timeField === 'hh' ? ' time-active' : '';
+  const mmCls = timeField === 'mm' ? ' time-active' : '';
   let periodLabel;
   if(timePeriod === 'am') periodLabel = 'ก่อนเที่ยง(午前)';
   else if(timePeriod === 'pm') periodLabel = 'หลังเที่ยง(午後)';
   else periodLabel = '午前/午後を選んでください 👇';
+  const stepLabel = timeField === 'hh' ? '時を入力→「:次へ」で分の入力へ' : '分を入力してください';
   document.getElementById('timeDisplay').innerHTML =
-    `<div class="calc-value">${hhDisp}:${mmDisp}</div><div class="calc-rate-hint">${periodLabel}</div>`;
+    `<div class="calc-value"><span class="${hhCls}">${hhDisp}</span>:<span class="${mmCls}">${mmDisp}</span></div>
+     <div class="calc-rate-hint">${periodLabel}</div>
+     <div class="calc-rate-hint">${stepLabel}</div>`;
 }
 function openNumberBoard(){
   let config = null;

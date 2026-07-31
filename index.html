@@ -260,14 +260,18 @@
   .nb-keys{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 18px 24px; }
   .nb-key{
     background:var(--sand); border:1.5px solid var(--line); border-radius:14px; padding:20px 0;
-    font-family:'Kanit', sans-serif; font-weight:700; font-size:22px; text-align:center; cursor:pointer;
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; text-align:center; cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
   }
   .nb-key:active{ background:var(--marigold); border-color:var(--marigold-deep); }
   .nb-key.action{ background:var(--ink); color:#fff; font-family:'Noto Sans JP', sans-serif; font-size:14px; font-weight:600; }
+  .nb-key.eq{ background:var(--marigold); color:var(--ink); font-size:28px; }
   .calc-keys{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:0 18px 24px; }
   .nb-key.op{ background:var(--teal); color:#fff; }
-  .nb-key.eq{ background:var(--marigold); color:var(--ink); font-size:24px; }
-  .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:32px; word-break:break-all; }
+  .nb-keys.phase-digits .nb-key:not(.action):not(.eq){
+    background:var(--marigold); border-color:var(--marigold-deep);
+  }
+  .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:38px; word-break:break-all; }
   .calc-rate-hint{ font-size:14px; color:var(--marigold); margin-top:8px; }
   .time-period-toggle{ display:flex; gap:8px; padding:0 18px 16px; }
   .tp-btn{
@@ -275,7 +279,8 @@
     padding:12px 6px; font-size:15px; font-weight:600; cursor:pointer;
     font-family:'Kanit', sans-serif;
   }
-  .tp-btn.active{ background:var(--marigold); border-color:var(--marigold-deep); color:var(--ink); }
+  .tp-btn.phase-active{ background:var(--marigold); border-color:var(--marigold-deep); color:var(--ink); }
+  .tp-btn.selected{ border-color:var(--marigold-deep); border-width:2px; }
   .time-active{ color:var(--marigold); }
   .time-ampm{ color:var(--marigold); font-size:22px; }
 
@@ -430,7 +435,7 @@
       <button class="tp-btn" id="tpAm" onclick="setTimePeriod('am')">ก่อนเที่ยง(午前)</button>
       <button class="tp-btn" id="tpPm" onclick="setTimePeriod('pm')">หลังเที่ยง(午後)</button>
     </div>
-    <div class="nb-keys">
+    <div class="nb-keys" id="timeKeys">
       <div class="nb-key" onclick="timeDigit('1')">1</div>
       <div class="nb-key" onclick="timeDigit('2')">2</div>
       <div class="nb-key" onclick="timeDigit('3')">3</div>
@@ -441,7 +446,7 @@
       <div class="nb-key" onclick="timeDigit('8')">8</div>
       <div class="nb-key" onclick="timeDigit('9')">9</div>
       <div class="nb-key" onclick="timeDigit('0')">0</div>
-      <div class="nb-key eq" onclick="timeNextField()"><div>:</div><div style="font-size:13px;font-weight:600;margin-top:3px;">ถัดไป(次へ)</div></div>
+      <div class="nb-key eq" onclick="timeNextField()">:</div>
       <div class="nb-key" onclick="timeDigit('00')">00</div>
       <div class="nb-key action" style="grid-column:span 2; font-size:16px;" onclick="timeBackspace()">⌫ ย้อนกลับ(戻す)</div>
       <div class="nb-key action" style="font-size:16px;" onclick="timeClear()">C ล้าง</div>
@@ -751,8 +756,8 @@ function openTimeBoard(){
   timeMM = '';
   timeField = 'hh';
   timePeriod = null;
-  document.getElementById('tpAm').classList.remove('active');
-  document.getElementById('tpPm').classList.remove('active');
+  document.getElementById('tpAm').classList.remove('selected');
+  document.getElementById('tpPm').classList.remove('selected');
   renderTimeDisplay();
   document.getElementById('timeBoardScreen').classList.add('show');
 }
@@ -761,8 +766,8 @@ function closeTimeBoard(){
 }
 function setTimePeriod(p){
   timePeriod = p;
-  document.getElementById('tpAm').classList.toggle('active', p === 'am');
-  document.getElementById('tpPm').classList.toggle('active', p === 'pm');
+  document.getElementById('tpAm').classList.toggle('selected', p === 'am');
+  document.getElementById('tpPm').classList.toggle('selected', p === 'pm');
   renderTimeDisplay();
 }
 function timeDigit(d){
@@ -803,6 +808,12 @@ function renderTimeDisplay(){
   const mmDisp = timeMM === '' ? '--' : timeMM;
   const ampmTag = timePeriod === 'am' ? 'AM' : (timePeriod === 'pm' ? 'PM' : '');
   const isComplete = timeHH !== '' && timeMM.length === 2 && timePeriod !== null;
+
+  // phase: 'period' (choosing AM/PM) -> 'digits' (typing hour/minute) -> 'done'
+  const phase = timePeriod === null ? 'period' : (isComplete ? 'done' : 'digits');
+  document.getElementById('tpAm').classList.toggle('phase-active', phase === 'period');
+  document.getElementById('tpPm').classList.toggle('phase-active', phase === 'period');
+  document.getElementById('timeKeys').classList.toggle('phase-digits', phase === 'digits');
 
   let timeLine;
   if(isComplete){

@@ -807,6 +807,9 @@ function timeClear(){
   timeHH = '';
   timeMM = '';
   timeField = 'hh';
+  timePeriod = null;
+  document.getElementById('tpAm').classList.remove('selected');
+  document.getElementById('tpPm').classList.remove('selected');
   renderTimeDisplay();
 }
 function renderTimeDisplay(){

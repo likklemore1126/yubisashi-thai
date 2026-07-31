@@ -247,20 +247,24 @@
     font-family:'Noto Sans JP', sans-serif; font-size:12.5px; font-weight:600; cursor:pointer;
   }
 
-  .nb-display{ background:var(--ink); color:#fff; border-radius:16px; padding:22px 18px; margin:0 18px 18px; text-align:center; }
-  .nb-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:36px; line-height:1.2; }
-  .nb-jpy{ font-size:14px; color:var(--marigold); margin-top:8px; font-weight:600; }
-  .nb-rate-setup{ margin-top:12px; display:flex; gap:6px; align-items:center; justify-content:center; font-size:12px; flex-wrap:wrap; }
+  .nb-display{
+    background:var(--ink); color:#fff; border-radius:16px; padding:24px 18px;
+    margin:0 18px 16px; text-align:center;
+    min-height:34vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:64px; word-break:break-all; line-height:1.1; }
+  .nb-jpy{ font-size:16px; color:var(--marigold); margin-top:10px; font-weight:600; }
+  .nb-rate-setup{ margin-top:14px; display:flex; gap:6px; align-items:center; justify-content:center; font-size:13px; flex-wrap:wrap; }
   .nb-rate-setup span{ opacity:0.8; }
   .nb-rate-setup input{ width:70px; padding:7px 8px; border-radius:8px; border:none; font-size:16px; text-align:center; }
   .nb-rate-setup button{
     background:var(--marigold); border:none; border-radius:8px; padding:7px 12px;
     font-size:12px; font-weight:700; cursor:pointer; color:var(--ink);
   }
-  .nb-keys{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 18px 24px; }
+  .nb-keys{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:0 18px 18px; }
   .nb-key{
-    background:var(--sand); border:1.5px solid var(--line); border-radius:14px; padding:20px 0;
-    font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; text-align:center; cursor:pointer;
+    background:var(--sand); border:1.5px solid var(--line); border-radius:14px; padding:13px 0;
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; text-align:center; cursor:pointer;
     transition:background .15s ease, border-color .15s ease;
   }
   .nb-key:active{ background:var(--marigold); border-color:var(--marigold-deep); }
@@ -272,8 +276,8 @@
   .nb-keys.phase-digits .nb-key:not(.action){
     background:var(--marigold); border-color:var(--marigold-deep);
   }
-  .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:38px; word-break:break-all; }
-  .calc-rate-hint{ font-size:14px; color:var(--marigold); margin-top:8px; }
+  .calc-rate-hint{ font-size:17px; color:var(--marigold); margin-top:8px; font-weight:600; }
+  .calc-rate-hint.confirmed{ color:#fff; }
   .time-period-toggle{ display:flex; gap:8px; padding:0 18px 16px; }
   .tp-btn{
     flex:1; background:var(--sand); border:1.5px solid var(--line); border-radius:10px;
@@ -830,10 +834,11 @@ function renderTimeDisplay(){
   } else {
     const hhCls = (phase === 'digits' && timeField === 'hh') ? ' time-active' : '';
     const mmCls = (phase === 'digits' && timeField === 'mm') ? ' time-active' : '';
+    const colonCls = hhCls;
     const ampmHtml = phase === 'period'
       ? `<span class="time-ampm-placeholder">AM<br>PM</span> `
       : (ampmTag ? `${ampmTag} ` : '');
-    timeLine = `${ampmHtml}<span class="${hhCls}">${hhDisp}</span>:<span class="${mmCls}">${mmDisp}</span>`;
+    timeLine = `${ampmHtml}<span class="${hhCls}">${hhDisp}</span><span class="${colonCls}">:</span><span class="${mmCls}">${mmDisp}</span>`;
   }
 
   let periodLabel;
@@ -843,10 +848,12 @@ function renderTimeDisplay(){
   const stepLabel = isComplete
     ? 'กรอกเสร็จแล้ว(入力完了)'
     : (timeField === 'hh' ? 'กรุณาใส่ชั่วโมง(時を入力してください)' : 'กรุณาใส่นาที(分を入力してください)');
+  const periodCls = timePeriod !== null ? 'calc-rate-hint confirmed' : 'calc-rate-hint';
+  const stepCls = isComplete ? 'calc-rate-hint confirmed' : 'calc-rate-hint';
   document.getElementById('timeDisplay').innerHTML =
     `<div class="calc-value">${timeLine}</div>
-     <div class="calc-rate-hint">${periodLabel}</div>
-     <div class="calc-rate-hint">${stepLabel}</div>`;
+     <div class="${periodCls}">${periodLabel}</div>
+     <div class="${stepCls}">${stepLabel}</div>`;
 }
 function openNumberBoard(){
   let config = null;

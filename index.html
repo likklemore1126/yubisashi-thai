@@ -120,6 +120,7 @@
   .suggestion-item:active{ background:var(--sand); }
   .suggestion-th{ font-family:'Kanit', sans-serif; font-weight:600; font-size:17px; color:var(--ink); }
   .suggestion-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
+  .suggestion-pref{ font-size:11px; color:var(--teal); font-weight:700; margin-top:4px; }
 
   .dest-result{
     margin:10px 18px 0; background:var(--teal); color:var(--paper);
@@ -128,6 +129,7 @@
   .dest-result.show{ display:block; }
   .dest-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; line-height:1.2; }
   .dest-jp{ font-size:12px; opacity:0.85; margin-top:2px; }
+  .dest-pref{ font-size:11.5px; color:var(--marigold); font-weight:700; margin-top:4px; }
   .dest-phrase{
     margin-top:10px; background:rgba(255,255,255,0.14); border-radius:10px;
     padding:12px 14px; font-family:'Kanit', sans-serif; font-size:19px; font-weight:600;
@@ -483,22 +485,22 @@ function particle(type){
 function fullTh(base, type){ return base + particle(type); }
 
 const destinations = [
-  { key:["あゆたや","ayutthaya","อยุธยา"], th:"อยุธยา", jp:"アユタヤ 【アユタヤ県】" },
-  { key:["ちぇんまい","chiang mai","เชียงใหม่"], th:"เชียงใหม่", jp:"チェンマイ 【チェンマイ県】" },
-  { key:["わっとぷらけお","wat phra kaew","วัดพระแก้ว"], th:"วัดพระแก้ว", jp:"ワット・プラケオ(エメラルド寺院) 【バンコク】" },
-  { key:["わっとあるん","wat arun","วัดอรุณ"], th:"วัดอรุณ", jp:"ワット・アルン(暁の寺) 【バンコク】" },
-  { key:["わっとぽー","wat pho","วัดโพธิ์"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺) 【バンコク】" },
-  { key:["ちゃとぅちゃっく","chatuchak","จตุจักร"], th:"ตลาดนัดจตุจักร", jp:"チャトゥチャック・ウィークエンド・マーケット 【バンコク】" },
-  { key:["めーくろーん","maeklong","ตลาดแม่กลอง"], th:"ตลาดแม่กลอง", jp:"メークローン線路市場 【サムットソンクラーム県】" },
-  { key:["あんぱわー","amphawa","อัมพวา"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット(週末のみ開催) 【サムットソンクラーム県】" },
-  { key:["だむぬんさどぅあっく","damnoen saduak","ดำเนินสะดวก"], th:"ตลาดน้ำดำเนินสะดวก", jp:"ダムヌンサドゥアック水上マーケット 【ラーチャブリー県】" },
-  { key:["かおるあん","khao luang","เขาหลวง"], th:"ถ้ำเขาหลวง", jp:"カオルアン洞窟 【ペッチャブリー県】" },
-  { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ"], th:"วัดปากน้ำ", jp:"ワットパクナム 【バンコク】" },
-  { key:["わっとさまーん","wat saman","สมานรัตนาราม"], th:"วัดสมานรัตนาราม", jp:"ワットサマーン・ラッタナーラーム(ピンクガネーシャ) 【チャチューンサオ県】" },
-  { key:["くわいがわてっきょう","river kwai bridge","สะพานข้ามแม่น้ำแคว"], th:"สะพานข้ามแม่น้ำแคว", jp:"クワイ川鉄橋 【カンチャナブリー県】" },
-  { key:["えらわんのたき","erawan waterfall","น้ำตกเอราวัณ"], th:"น้ำตกเอราวัณ", jp:"エラワンの滝 【カンチャナブリー県】" },
-  { key:["ほあひんびーち","hua hin beach","หาดหัวหิน"], th:"หาดหัวหิน", jp:"ホアヒン・ビーチ 【プラチュアップキーリーカン県】" },
-  { key:["ぷらやーなこーんどうくつ","phraya nakhon cave","ถ้ำพระยานคร"], th:"ถ้ำพระยานคร", jp:"プラヤーナコーン洞窟 【プラチュアップキーリーカン県】" },
+  { key:["あゆたや","ayutthaya","อยุธยา"], th:"อยุธยา", jp:"アユタヤ", pref:"アユタヤ県" },
+  { key:["ちぇんまい","chiang mai","เชียงใหม่"], th:"เชียงใหม่", jp:"チェンマイ", pref:"チェンマイ県" },
+  { key:["わっとぷらけお","wat phra kaew","วัดพระแก้ว"], th:"วัดพระแก้ว", jp:"ワット・プラケオ(エメラルド寺院)", pref:"バンコク" },
+  { key:["わっとあるん","wat arun","วัดอรุณ"], th:"วัดอรุณ", jp:"ワット・アルン(暁の寺)", pref:"バンコク" },
+  { key:["わっとぽー","wat pho","วัดโพธิ์"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺)", pref:"バンコク" },
+  { key:["ちゃとぅちゃっく","chatuchak","จตุจักร"], th:"ตลาดนัดจตุจักร", jp:"チャトゥチャック・ウィークエンド・マーケット", pref:"バンコク" },
+  { key:["めーくろーん","maeklong","ตลาดแม่กลอง"], th:"ตลาดแม่กลอง", jp:"メークローン線路市場", pref:"サムットソンクラーム県" },
+  { key:["あんぱわー","amphawa","อัมพวา"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット(週末のみ開催)", pref:"サムットソンクラーム県" },
+  { key:["だむぬんさどぅあっく","damnoen saduak","ดำเนินสะดวก"], th:"ตลาดน้ำดำเนินสะดวก", jp:"ダムヌンサドゥアック水上マーケット", pref:"ラーチャブリー県" },
+  { key:["かおるあん","khao luang","เขาหลวง"], th:"ถ้ำเขาหลวง", jp:"カオルアン洞窟", pref:"ペッチャブリー県" },
+  { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ"], th:"วัดปากน้ำ", jp:"ワットパクナム", pref:"バンコク" },
+  { key:["わっとさまーん","wat saman","สมานรัตนาราม"], th:"วัดสมานรัตนาราม", jp:"ワットサマーン・ラッタナーラーム(ピンクガネーシャ)", pref:"チャチューンサオ県" },
+  { key:["くわいがわてっきょう","river kwai bridge","สะพานข้ามแม่น้ำแคว"], th:"สะพานข้ามแม่น้ำแคว", jp:"クワイ川鉄橋", pref:"カンチャナブリー県" },
+  { key:["えらわんのたき","erawan waterfall","น้ำตกเอราวัณ"], th:"น้ำตกเอราวัณ", jp:"エラワンの滝", pref:"カンチャナブリー県" },
+  { key:["ほあひんびーち","hua hin beach","หาดหัวหิน"], th:"หาดหัวหิน", jp:"ホアヒン・ビーチ", pref:"プラチュアップキーリーカン県" },
+  { key:["ぷらやーなこーんどうくつ","phraya nakhon cave","ถ้ำพระยานคร"], th:"ถ้ำพระยานคร", jp:"プラヤーナコーン洞窟", pref:"プラチュアップキーリーカン県" },
 ];
 
 const transportItems = [
@@ -1068,7 +1070,7 @@ function findMatches(query){
   const nq = normalizeSearch(query);
   if(!nq) return [];
   return destinations.filter(d => {
-    const pool = [...d.key, d.th, d.jp];
+    const pool = [...d.key, d.th, d.jp, d.pref];
     return pool.some(k => normalizeSearch(k).includes(nq));
   }).slice(0, 6);
 }
@@ -1079,6 +1081,7 @@ function renderSuggestions(matches){
     `<div class="suggestion-item" onclick="selectSuggestion(${i})">
        <div class="suggestion-th">${d.th}</div>
        <div class="suggestion-jp">${d.jp}</div>
+       <div class="suggestion-pref">【${d.pref}】</div>
      </div>`
   ).join('');
 }
@@ -1092,7 +1095,7 @@ function selectSuggestion(i){
   }
   currentDestination = found;
   document.getElementById('destTh').textContent = found.th;
-  document.getElementById('destJp').textContent = found.jp;
+  document.getElementById('destJp').innerHTML = `${found.jp}<div class="dest-pref">【${found.pref}】</div>`;
   document.getElementById('destPhrase').textContent = "จะไป" + found.th + particle('s');
   document.getElementById('destPhraseJp').textContent = found.jp + "へ行くつもりです";
   document.getElementById('destResult').classList.add('show');

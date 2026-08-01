@@ -1019,6 +1019,7 @@ function saveRateFromCalc(){
 function setGender(g){
   genderState.value = g;
   document.querySelectorAll('.gtbtn').forEach(b => b.classList.toggle('active', b.dataset.g === g));
+  try{ localStorage.setItem('yubisashi_gender', g); }catch(e){}
   refreshVisible();
 }
 function refreshVisible(){
@@ -1063,6 +1064,14 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 try{
   const savedRate = localStorage.getItem('yubisashi_thb_rate');
   if(savedRate){ thbToJpyRate = parseFloat(savedRate); }
+}catch(e){}
+
+try{
+  const savedGender = localStorage.getItem('yubisashi_gender');
+  if(savedGender === 'male' || savedGender === 'female'){
+    genderState.value = savedGender;
+    document.querySelectorAll('.gtbtn').forEach(b => b.classList.toggle('active', b.dataset.g === savedGender));
+  }
 }catch(e){}
 
 renderNearby();

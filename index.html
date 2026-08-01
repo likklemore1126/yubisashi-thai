@@ -271,7 +271,7 @@
     cursor:pointer;
   }
   .landscape-display.show{ display:flex; }
-  .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(13vw, 96px); line-height:1.2; }
+  .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; }
   .landscape-jp{ font-size:min(4vw, 22px); opacity:0.65; margin-top:18px; }
   .landscape-close{
     position:absolute; top:16px; right:20px; font-size:13px; opacity:0.55;
@@ -870,12 +870,25 @@ function setLastPhrase(th, jp){
   landscapeManuallyClosed = false;
   checkOrientationDisplay();
 }
+function fitLandscapeText(){
+  const el = document.getElementById('landscapeTh');
+  if(!el) return;
+  const maxWidth = window.innerWidth * 0.9;
+  const maxHeight = window.innerHeight * 0.6;
+  let fontSize = 220;
+  el.style.fontSize = fontSize + 'px';
+  while(fontSize > 24 && (el.scrollWidth > maxWidth || el.scrollHeight > maxHeight)){
+    fontSize -= 6;
+    el.style.fontSize = fontSize + 'px';
+  }
+}
 function showFullscreenNow(){
   if(!lastShownPhrase) return;
   landscapeManuallyClosed = false;
   document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
   document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
   document.getElementById('landscapeDisplay').classList.add('show');
+  requestAnimationFrame(fitLandscapeText);
 }
 function fullscreenBtnHtml(){
   return `<button class="fullscreen-btn" onclick="event.stopPropagation(); showFullscreenNow();">🔍 これだけ大きく見せる</button>`;
@@ -888,6 +901,7 @@ function checkOrientationDisplay(){
     document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
     document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
     overlay.classList.add('show');
+    requestAnimationFrame(fitLandscapeText);
   } else {
     overlay.classList.remove('show');
   }

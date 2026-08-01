@@ -215,10 +215,10 @@
   }
   .composer-screen.show{ transform:translateY(0); pointer-events:auto; }
   .composer-header{
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; gap:8px;
     padding:18px 18px 10px; flex:0 0 auto;
   }
-  .composer-header .ctitle{ font-family:'Kanit', sans-serif; font-weight:600; font-size:17px; }
+  .composer-header .ctitle{ font-family:'Kanit', sans-serif; font-weight:600; font-size:17px; flex:1 1 auto; }
   .composer-close{
     background:var(--sand); border:1.5px solid var(--line); color:var(--ink);
     width:32px; height:32px; border-radius:50%; font-size:14px; cursor:pointer;
@@ -452,6 +452,7 @@
   <div class="composer-screen" id="calcScreen" style="z-index:9;">
     <div class="composer-header">
       <div class="ctitle" id="calcTitle">🧮 ฿計算機</div>
+      <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()">🔍 大きく見せる</button>
       <button class="composer-close" onclick="closeCalc()">✕</button>
     </div>
     <div class="nb-display" id="calcDisplay"></div>
@@ -482,6 +483,7 @@
   <div class="composer-screen" id="timeBoardScreen" style="z-index:9;">
     <div class="composer-header">
       <div class="ctitle">🕐 時刻で答える</div>
+      <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()">🔍 大きく見せる</button>
       <button class="composer-close" onclick="closeTimeBoard()">✕</button>
     </div>
     <div class="nb-display" id="timeDisplay"></div>
@@ -1221,6 +1223,7 @@ function renderTimeDisplay(){
   let timeLine;
   if(isComplete){
     timeLine = `${ampmTag} ${hhDisp}:${mmDisp}`;
+    setLastPhrase(timeLine, '');
   } else {
     const hhCls = (phase === 'digits' && timeField === 'hh') ? ' time-active' : '';
     const mmCls = (phase === 'digits' && timeField === 'mm') ? ' time-active' : '';
@@ -1394,6 +1397,7 @@ function calcRender(){
     }
   }
   document.getElementById('calcDisplay').innerHTML = `<div class="calc-value">${mainText}</div>${jpyHtml}`;
+  setLastPhrase(mainText, '');
 }
 function saveRateFromCalc(){
   const v = parseFloat(document.getElementById('calcRateInput').value);

@@ -111,6 +111,12 @@
   }
   .search-box input::placeholder{ color:#9A9284; }
   .search-icon{ font-size:16px; opacity:0.7; }
+  .search-clear{
+    display:none; background:var(--sand); border:none; border-radius:50%;
+    width:24px; height:24px; color:#8B8272; font-size:13px; font-weight:700;
+    cursor:pointer; flex:0 0 auto; align-items:center; justify-content:center;
+  }
+  .search-clear.show{ display:flex; }
   .search-hint{ font-size:11px; color:#8B8272; margin:6px 4px 0; }
   .search-suggestions{ margin:8px 0 0; }
   .suggestion-item{
@@ -361,6 +367,7 @@
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <input id="searchInput" type="text" placeholder="行き先をペーストして検索(例: วัดพระแก้ว)">
+      <button type="button" class="search-clear" id="searchClearBtn" onclick="clearSearch()">✕</button>
     </div>
     <div class="search-hint">お試し: 「アユタヤ」「チェンマイ」「わっとあるん」「あんぱわー」などと入力してみてください</div>
     <div class="search-suggestions" id="searchSuggestions"></div>
@@ -501,6 +508,16 @@ const destinations = [
   { key:["えらわんのたき","erawan waterfall","น้ำตกเอราวัณ"], th:"น้ำตกเอราวัณ", jp:"エラワンの滝", pref:"カンチャナブリー県" },
   { key:["ほあひんびーち","hua hin beach","หาดหัวหิน"], th:"หาดหัวหิน", jp:"ホアヒン・ビーチ", pref:"プラチュアップキーリーカン県" },
   { key:["ぷらやーなこーんどうくつ","phraya nakhon cave","ถ้ำพระยานคร"], th:"ถ้ำพระยานคร", jp:"プラヤーナコーン洞窟", pref:"プラチュアップキーリーカン県" },
+  { key:["さんくちゅありおぶとぅるーす","sanctuary of truth","ปราสาทสัจธรรม"], th:"ปราสาทสัจธรรม", jp:"サンクチュアリ・オブ・トゥルース(全木造の寺院)", pref:"チョンブリー県" },
+  { key:["わっとぷらやい","big buddha pattaya","วัดพระใหญ่"], th:"วัดพระใหญ่", jp:"ワット・プラヤイ(パタヤ・ビッグブッダ)", pref:"チョンブリー県" },
+  { key:["こーらん","koh larn","เกาะล้าน"], th:"เกาะล้าน", jp:"ラン島", pref:"チョンブリー県" },
+  { key:["こーさめっと","koh samet","เกาะเสม็ด"], th:"เกาะเสม็ด", jp:"サメット島", pref:"ラヨーン県" },
+  { key:["どーいすてーぷ","doi suthep","ดอยสุเทพ"], th:"วัดพระธาตุดอยสุเทพ", jp:"ワット・プラタート・ドーイステープ", pref:"チェンマイ県" },
+  { key:["めーりむえれふぁんとほーむ","mae rim elephant home","ปางช้างแม่ริม"], th:"ปางช้างแม่ริม", jp:"メーリムエレファントホーム", pref:"チェンマイ県" },
+  { key:["めーかんぽんむら","mae kampong","แม่กำปอง"], th:"บ้านแม่กำปอง", jp:"メーカンポン村", pref:"チェンマイ県" },
+  { key:["わっとろんくん","white temple","วัดร่องขุ่น"], th:"วัดร่องขุ่น", jp:"ワット・ローンクン(ホワイト・テンプル)", pref:"チェンライ県" },
+  { key:["ごーるでんとらいあんぐる","golden triangle","สามเหลี่ยมทองคำ"], th:"สามเหลี่ยมทองคำ", jp:"ゴールデン・トライアングル", pref:"チェンライ県" },
+  { key:["すこーたいれきしこうえん","sukhothai historical park","อุทยานประวัติศาสตร์สุโขทัย"], th:"อุทยานประวัติศาสตร์สุโขทัย", jp:"スコータイ歴史公園", pref:"スコータイ県" },
 ];
 
 const transportItems = [
@@ -1102,9 +1119,25 @@ function selectSuggestion(i){
   document.getElementById('searchSuggestions').innerHTML = '';
 }
 
+function updateClearBtnVisibility(){
+  const btn = document.getElementById('searchClearBtn');
+  const val = document.getElementById('searchInput').value;
+  btn.classList.toggle('show', val.length > 0);
+}
+function clearSearch(){
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  input.focus();
+  currentDestination = null;
+  document.getElementById('destResult').classList.remove('show');
+  document.getElementById('searchSuggestions').innerHTML = '';
+  currentMatches = [];
+  updateClearBtnVisibility();
+}
 document.getElementById('searchInput').addEventListener('input', (e) => {
   const q = e.target.value.trim();
   const result = document.getElementById('destResult');
+  updateClearBtnVisibility();
   if(!q){
     currentDestination = null;
     result.classList.remove('show');

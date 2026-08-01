@@ -127,6 +127,11 @@
   .suggestion-th{ font-family:'Kanit', sans-serif; font-weight:600; font-size:17px; color:var(--ink); }
   .suggestion-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
   .suggestion-pref{ font-size:11px; color:var(--teal); font-weight:700; margin-top:4px; }
+  .fallback-box{ background:var(--sand); border:1.5px dashed var(--line); border-radius:12px; padding:13px; }
+  .fallback-title{ font-family:'Kanit', sans-serif; font-weight:700; font-size:14px; color:var(--ink); }
+  .fallback-desc{ font-size:11.5px; color:#8B8272; line-height:1.6; margin-top:6px; margin-bottom:10px; }
+  .suggestion-item.fallback{ background:var(--marigold); border-color:var(--marigold-deep); margin-bottom:0; }
+  .suggestion-item.fallback .suggestion-jp{ color:#5c4415; }
 
   .dest-result{
     margin:10px 18px 0; background:var(--teal); color:var(--paper);
@@ -1458,9 +1463,19 @@ function findMatches(query){
     return pool.some(k => normalizeSearch(k).includes(nq));
   }).slice(0, 6);
 }
-function renderSuggestions(matches){
+function renderSuggestions(matches, query){
   const box = document.getElementById('searchSuggestions');
-  if(matches.length === 0){ box.innerHTML = ''; return; }
+  if(matches.length === 0){
+    box.innerHTML = `<div class="fallback-box">
+      <div class="fallback-title">「${query}」は見つかりませんでした</div>
+      <div class="fallback-desc">データベースにまだ無い場所です。もしGoogleマップの正式名称やタイ文字をコピペしたものなら、そのまま使っても現地の方に伝わる可能性が高いです。</div>
+      <div class="suggestion-item fallback" onclick="selectFallback()">
+        <div class="suggestion-th">🔍「${query}」をそのまま使う</div>
+        <div class="suggestion-jp">入力した文字を行き先として使用します</div>
+      </div>
+    </div>`;
+    return;
+  }
   box.innerHTML = matches.map((d, i) =>
     `<div class="suggestion-item" onclick="selectSuggestion(${i})">
        <div class="suggestion-th">${d.th}</div>
@@ -1470,9 +1485,7 @@ function renderSuggestions(matches){
   ).join('');
 }
 let currentMatches = [];
-function selectSuggestion(i){
-  const found = currentMatches[i];
-  if(!found) return;
+function applyDestination(found){
   if(!currentDestination || currentDestination.th !== found.th){
     selectedFollowUp = null;
     anchorExpanded = true;
@@ -1481,13 +1494,24 @@ function selectSuggestion(i){
   }
   currentDestination = found;
   document.getElementById('destTh').textContent = found.th;
-  document.getElementById('destJp').innerHTML = `${found.jp}${found.note ? ' ・ ' + found.note : ''}<div class="dest-pref">【${found.pref}】</div>`;
+  const prefHtml = found.pref ? `<div class="dest-pref">【${found.pref}】</div>` : '';
+  document.getElementById('destJp').innerHTML = `${found.jp}${found.note ? ' ・ ' + found.note : ''}${prefHtml}`;
   const destPhraseTh = "จะไป" + found.th + particle('s');
   document.getElementById('destPhrase').textContent = destPhraseTh;
   document.getElementById('destPhraseJp').textContent = found.jp + "へ行くつもりです";
   document.getElementById('destResult').classList.add('show');
   document.getElementById('searchSuggestions').innerHTML = '';
   setLastPhrase(destPhraseTh, found.jp + "へ行くつもりです");
+}
+function selectSuggestion(i){
+  const found = currentMatches[i];
+  if(!found) return;
+  applyDestination(found);
+}
+function selectFallback(){
+  const raw = document.getElementById('searchInput').value.trim();
+  if(!raw) return;
+  applyDestination({ th: raw, jp: raw, pref: null, note: '入力内容をそのまま使用(未登録の場所)' });
 }
 
 function updateClearBtnVisibility(){
@@ -1517,7 +1541,7 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     return;
   }
   currentMatches = findMatches(q);
-  renderSuggestions(currentMatches);
+  renderSuggestions(currentMatches, q);
   if(currentMatches.length === 0){
     currentDestination = null;
     result.classList.remove('show');
@@ -1527,7 +1551,7 @@ document.getElementById('searchInput').addEventListener('focus', (e) => {
   const q = e.target.value.trim();
   if(q){
     currentMatches = findMatches(q);
-    renderSuggestions(currentMatches);
+    renderSuggestions(currentMatches, q);
   }
 });
 

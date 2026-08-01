@@ -265,6 +265,18 @@
     color:#fff; font-size:20px; font-weight:700; cursor:pointer;
   }
   .ticket-stepper span{ font-family:'Kanit', sans-serif; font-weight:700; font-size:18px; color:#fff; min-width:48px; text-align:center; }
+  .landscape-display{
+    display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
+    flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center;
+    cursor:pointer;
+  }
+  .landscape-display.show{ display:flex; }
+  .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(13vw, 96px); line-height:1.2; }
+  .landscape-jp{ font-size:min(4vw, 22px); opacity:0.65; margin-top:18px; }
+  .landscape-close{
+    position:absolute; top:16px; right:20px; font-size:13px; opacity:0.55;
+    font-family:'Noto Sans JP', sans-serif;
+  }
   .nb-trigger{
     margin-top:12px; background:rgba(255,255,255,0.16); color:#fff;
     border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:9px 13px;
@@ -487,6 +499,12 @@
       <div class="nb-key action" style="grid-column:span 2; font-size:16px;" onclick="timeBackspace()">⌫ ย้อนกลับ(戻す)</div>
       <div class="nb-key action" style="font-size:16px;" onclick="timeClear()">C ล้าง</div>
     </div>
+  </div>
+
+  <div class="landscape-display" id="landscapeDisplay" onclick="closeLandscapeDisplay()">
+    <div class="landscape-close">タップで閉じる ✕</div>
+    <div class="landscape-th" id="landscapeTh"></div>
+    <div class="landscape-jp" id="landscapeJp"></div>
   </div>
 
 </div>
@@ -836,6 +854,35 @@ let anchorExpanded = true;
 let openState = null;
 let ticketSelected = false;
 let ticketCount = 1;
+let lastShownPhrase = null;
+let landscapeManuallyClosed = false;
+
+function setLastPhrase(th, jp){
+  lastShownPhrase = { th, jp };
+  landscapeManuallyClosed = false;
+  checkOrientationDisplay();
+}
+function checkOrientationDisplay(){
+  const overlay = document.getElementById('landscapeDisplay');
+  if(!overlay) return;
+  const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+  if(isLandscape && lastShownPhrase && !landscapeManuallyClosed){
+    document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
+    document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
+    overlay.classList.add('show');
+  } else {
+    overlay.classList.remove('show');
+  }
+}
+function closeLandscapeDisplay(){
+  landscapeManuallyClosed = true;
+  checkOrientationDisplay();
+}
+window.addEventListener('orientationchange', () => setTimeout(checkOrientationDisplay, 150));
+if(window.matchMedia){
+  window.matchMedia('(orientation: landscape)').addEventListener('change', checkOrientationDisplay);
+}
+window.addEventListener('resize', checkOrientationDisplay);
 let thbToJpyRate = null;
 
 function renderNearby(){
@@ -879,6 +926,7 @@ function openNearby(i){
     `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div></div>`;
   document.getElementById('overlay').classList.add('show');
   document.getElementById('sheet').classList.add('show');
+  setLastPhrase(th, n.jp);
 }
 
 function openModeList(mode){
@@ -1001,11 +1049,13 @@ function renderCategoryFixed(){
     document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   } else {
     const p = s.phrases[selectedCategoryIdx];
+    const th = fullTh(p.base, p.type);
     document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase">
-      <div class="sp-th">${fullTh(p.base, p.type)}</div>
+      <div class="sp-th">${th}</div>
       <div class="sp-jp">${p.jp}</div>
       ${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}
     </div>`;
+    setLastPhrase(th, p.jp);
   }
 }
 function renderCategoryList(){
@@ -1048,6 +1098,7 @@ function renderSelectedPhraseBlock(){
     const st = currentDestination.station;
     const th = `ขอตั๋วไป${st.th} ${ticketCount} ใบ${particle('s')}`;
     const jp = `${st.jp}までの乗車券を${ticketCount}枚お願いします`;
+    setLastPhrase(th, jp);
     return `<div class="selected-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
@@ -1062,8 +1113,10 @@ function renderSelectedPhraseBlock(){
     return `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   }
   const follow = transportItems[selectedFollowUp];
+  const followTh = fullTh(follow.base, follow.type);
+  setLastPhrase(followTh, follow.jp);
   return `<div class="selected-phrase">
-    <div class="sp-th">${fullTh(follow.base, follow.type)}</div>
+    <div class="sp-th">${followTh}</div>
     <div class="sp-jp">${follow.jp}</div>
     ${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
   </div>`;
@@ -1394,10 +1447,12 @@ function selectSuggestion(i){
   currentDestination = found;
   document.getElementById('destTh').textContent = found.th;
   document.getElementById('destJp').innerHTML = `${found.jp}${found.note ? ' ・ ' + found.note : ''}<div class="dest-pref">【${found.pref}】</div>`;
-  document.getElementById('destPhrase').textContent = "จะไป" + found.th + particle('s');
+  const destPhraseTh = "จะไป" + found.th + particle('s');
+  document.getElementById('destPhrase').textContent = destPhraseTh;
   document.getElementById('destPhraseJp').textContent = found.jp + "へ行くつもりです";
   document.getElementById('destResult').classList.add('show');
   document.getElementById('searchSuggestions').innerHTML = '';
+  setLastPhrase(destPhraseTh, found.jp + "へ行くつもりです");
 }
 
 function updateClearBtnVisibility(){

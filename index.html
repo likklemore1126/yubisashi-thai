@@ -492,7 +492,7 @@ const destinations = [
   { key:["わっとぽー","wat pho","วัดโพธิ์"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺)", pref:"バンコク" },
   { key:["ちゃとぅちゃっく","chatuchak","จตุจักร"], th:"ตลาดนัดจตุจักร", jp:"チャトゥチャック・ウィークエンド・マーケット", pref:"バンコク" },
   { key:["めーくろーん","maeklong","ตลาดแม่กลอง"], th:"ตลาดแม่กลอง", jp:"メークローン線路市場", pref:"サムットソンクラーム県" },
-  { key:["あんぱわー","amphawa","อัมพวา"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット(週末のみ開催)", pref:"サムットソンクラーム県" },
+  { key:["あんぱわー","amphawa","อัมพวา"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット", note:"週末のみ開催", pref:"サムットソンクラーム県" },
   { key:["だむぬんさどぅあっく","damnoen saduak","ดำเนินสะดวก"], th:"ตลาดน้ำดำเนินสะดวก", jp:"ダムヌンサドゥアック水上マーケット", pref:"ラーチャブリー県" },
   { key:["かおるあん","khao luang","เขาหลวง"], th:"ถ้ำเขาหลวง", jp:"カオルアン洞窟", pref:"ペッチャブリー県" },
   { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ"], th:"วัดปากน้ำ", jp:"ワットパクナム", pref:"バンコク" },
@@ -1080,7 +1080,7 @@ function renderSuggestions(matches){
   box.innerHTML = matches.map((d, i) =>
     `<div class="suggestion-item" onclick="selectSuggestion(${i})">
        <div class="suggestion-th">${d.th}</div>
-       <div class="suggestion-jp">${d.jp}</div>
+       <div class="suggestion-jp">${d.jp}${d.note ? ' ・ ' + d.note : ''}</div>
        <div class="suggestion-pref">【${d.pref}】</div>
      </div>`
   ).join('');
@@ -1095,7 +1095,7 @@ function selectSuggestion(i){
   }
   currentDestination = found;
   document.getElementById('destTh').textContent = found.th;
-  document.getElementById('destJp').innerHTML = `${found.jp}<div class="dest-pref">【${found.pref}】</div>`;
+  document.getElementById('destJp').innerHTML = `${found.jp}${found.note ? ' ・ ' + found.note : ''}<div class="dest-pref">【${found.pref}】</div>`;
   document.getElementById('destPhrase').textContent = "จะไป" + found.th + particle('s');
   document.getElementById('destPhraseJp').textContent = found.jp + "へ行くつもりです";
   document.getElementById('destResult').classList.add('show');

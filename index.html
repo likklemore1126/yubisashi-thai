@@ -1119,6 +1119,13 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     result.classList.remove('show');
   }
 });
+document.getElementById('searchInput').addEventListener('focus', (e) => {
+  const q = e.target.value.trim();
+  if(q){
+    currentMatches = findMatches(q);
+    renderSuggestions(currentMatches);
+  }
+});
 
 try{
   const savedRate = localStorage.getItem('yubisashi_thb_rate');

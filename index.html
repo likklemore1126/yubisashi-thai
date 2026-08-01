@@ -257,6 +257,14 @@
   .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
   .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.4; }
   .sp-jp{ font-size:13.5px; margin-top:7px; opacity:0.9; }
+  .ticket-stepper{
+    margin-top:14px; display:flex; align-items:center; gap:16px; justify-content:center;
+  }
+  .ticket-stepper button{
+    width:38px; height:38px; border-radius:50%; border:none; background:rgba(255,255,255,0.2);
+    color:#fff; font-size:20px; font-weight:700; cursor:pointer;
+  }
+  .ticket-stepper span{ font-family:'Kanit', sans-serif; font-weight:700; font-size:18px; color:#fff; min-width:48px; text-align:center; }
   .nb-trigger{
     margin-top:12px; background:rgba(255,255,255,0.16); color:#fff;
     border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:9px 13px;
@@ -494,15 +502,15 @@ function fullTh(base, type){ return base + particle(type); }
 const destinations = [
   { key:["あゆたや","ayutthaya","อยุธยา"], th:"อยุธยา", jp:"アユタヤ", pref:"アユタヤ県" },
   { key:["ちぇんまい","chiang mai","เชียงใหม่"], th:"เชียงใหม่", jp:"チェンマイ", pref:"チェンマイ県" },
-  { key:["わっとぷらけお","wat phra kaew","วัดพระแก้ว"], th:"วัดพระแก้ว", jp:"ワット・プラケオ(エメラルド寺院)", pref:"バンコク" },
-  { key:["わっとあるん","wat arun","วัดอรุณ"], th:"วัดอรุณ", jp:"ワット・アルン(暁の寺)", pref:"バンコク" },
-  { key:["わっとぽー","wat pho","วัดโพธิ์"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺)", pref:"バンコク" },
-  { key:["ちゃとぅちゃっく","chatuchak","จตุจักร"], th:"ตลาดนัดจตุจักร", jp:"チャトゥチャック・ウィークエンド・マーケット", pref:"バンコク" },
+  { key:["わっとぷらけお","wat phra kaew","วัดพระแก้ว"], th:"วัดพระแก้ว", jp:"ワット・プラケオ(エメラルド寺院)", pref:"バンコク" , station:{th:"สนามไชย", jp:"MRTサナームチャイ駅"} },
+  { key:["わっとあるん","wat arun","วัดอรุณ"], th:"วัดอรุณ", jp:"ワット・アルン(暁の寺)", pref:"バンコク", station:{th:"สนามไชย", jp:"MRTサナームチャイ駅(渡し船で対岸へ)"} },
+  { key:["わっとぽー","wat pho","วัดโพธิ์"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺)", pref:"バンコク" , station:{th:"สนามไชย", jp:"MRTサナームチャイ駅"} },
+  { key:["ちゃとぅちゃっく","chatuchak","จตุจักร"], th:"ตลาดนัดจตุจักร", jp:"チャトゥチャック・ウィークエンド・マーケット", pref:"バンコク" , station:{th:"สวนจตุจักร", jp:"MRTチャトゥチャック・パーク駅"} },
   { key:["めーくろーん","maeklong","ตลาดแม่กลอง"], th:"ตลาดแม่กลอง", jp:"メークローン線路市場", pref:"サムットソンクラーム県" },
   { key:["あんぱわー","amphawa","อัมพวา"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット", note:"週末のみ開催", pref:"サムットソンクラーム県" },
   { key:["だむぬんさどぅあっく","damnoen saduak","ดำเนินสะดวก"], th:"ตลาดน้ำดำเนินสะดวก", jp:"ダムヌンサドゥアック水上マーケット", pref:"ラーチャブリー県" },
   { key:["かおるあん","khao luang","เขาหลวง"], th:"ถ้ำเขาหลวง", jp:"カオルアン洞窟", pref:"ペッチャブリー県" },
-  { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ"], th:"วัดปากน้ำ", jp:"ワットパクナム", pref:"バンコク" },
+  { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ"], th:"วัดปากน้ำ", jp:"ワットパクナム", pref:"バンコク" , station:{th:"บางหว้า", jp:"BTS/MRTバンワー駅"} },
   { key:["わっとさまーん","wat saman","สมานรัตนาราม"], th:"วัดสมานรัตนาราม", jp:"ワットサマーン・ラッタナーラーム(ピンクガネーシャ)", pref:"チャチューンサオ県" },
   { key:["くわいがわてっきょう","river kwai bridge","สะพานข้ามแม่น้ำแคว"], th:"สะพานข้ามแม่น้ำแคว", jp:"クワイ川鉄橋", pref:"カンチャナブリー県" },
   { key:["えらわんのたき","erawan waterfall","น้ำตกเอราวัณ"], th:"น้ำตกเอราวัณ", jp:"エラワンの滝", pref:"カンチャナブリー県" },
@@ -531,17 +539,17 @@ const destinations = [
   { key:["ちゃうぇんびーち","chaweng beach","เฉวง"], th:"หาดเฉวง", jp:"チャウェン・ビーチ(サムイ島)", pref:"スラーターニー県" },
   { key:["あーんとんしょとう","ang thong national park","อ่างทอง"], th:"หมู่เกาะอ่างทอง", jp:"アーントン諸島国立公園", pref:"スラーターニー県" },
   { key:["じぇーむずぼんどとう","james bond island","เกาะตะปู"], th:"เกาะตะปู", jp:"ジェームズ・ボンド島", pref:"パンガー県" },
-  { key:["watsaket","วัดสระเกศ"], th:"วัดสระเกศ", jp:"ワット・サケット(黄金の丘)", pref:"バンコク" },
-  { key:["jimthompson","บ้านจิมทอมป์สัน"], th:"บ้านจิมทอมป์สัน", jp:"ジム・トンプソンの家", pref:"バンコク" },
-  { key:["iconsiam","ไอคอนสยาม"], th:"ไอคอนสยาม", jp:"ICONSIAM(アイコンサイアム)", pref:"バンコク" },
-  { key:["centralworld","เซ็นทรัลเวิลด์"], th:"เซ็นทรัลเวิลด์", jp:"CentralwOrld(セントラルワールド)", pref:"バンコク" },
-  { key:["siamparagon","สยามพารากอน"], th:"สยามพารากอน", jp:"Siam Paragon(サイアム・パラゴン)", pref:"バンコク" },
-  { key:["erawanshrine","ศาลพระพรหมเอราวัณ"], th:"ศาลพระพรหมเอราวัณ", jp:"エラワンの祠", pref:"バンコク" },
-  { key:["asiatique","เอเชียทีค เดอะ ริเวอร์ฟร้อนท์"], th:"เอเชียทีค เดอะ ริเวอร์ฟร้อนท์", jp:"アジアティーク・ザ・リバーフロント", pref:"バンコク" },
-  { key:["lumpinipark","สวนลุมพินี"], th:"สวนลุมพินี", jp:"ルンピニー公園", pref:"バンコク" },
-  { key:["benjakitti","สวนเบญจกิติ"], th:"สวนเบญจกิติ", jp:"ベンジャキティ公園", pref:"バンコク" },
-  { key:["yaowarat","เยาวราช"], th:"เยาวราช", jp:"ヤワラート(バンコク中華街)", pref:"バンコク" },
-  { key:["khaosanroad","ถนนข้าวสาร"], th:"ถนนข้าวสาร", jp:"カオサン通り", pref:"バンコク" },
+  { key:["watsaket","วัดสระเกศ"], th:"วัดสระเกศ", jp:"ワット・サケット(黄金の丘)", pref:"バンコク" , station:{th:"สามยอด", jp:"MRTサームヨート駅"} },
+  { key:["jimthompson","บ้านจิมทอมป์สัน"], th:"บ้านจิมทอมป์สัน", jp:"ジム・トンプソンの家", pref:"バンコク" , station:{th:"สนามกีฬาแห่งชาติ", jp:"BTSナショナルスタジアム駅"} },
+  { key:["iconsiam","ไอคอนสยาม"], th:"ไอคอนสยาม", jp:"ICONSIAM(アイコンサイアム)", pref:"バンコク" , station:{th:"เจริญนคร", jp:"ゴールドラインちゃロンナコーン駅"} },
+  { key:["centralworld","เซ็นทรัลเวิลด์"], th:"เซ็นทรัลเวิลด์", jp:"CentralwOrld(セントラルワールド)", pref:"バンコク" , station:{th:"ชิดลม", jp:"BTSチットロム駅"} },
+  { key:["siamparagon","สยามพารากอน"], th:"สยามพารากอน", jp:"Siam Paragon(サイアム・パラゴン)", pref:"バンコク" , station:{th:"สยาม", jp:"BTSサイアム駅"} },
+  { key:["erawanshrine","ศาลพระพรหมเอราวัณ"], th:"ศาลพระพรหมเอราวัณ", jp:"エラワンの祠", pref:"バンコク" , station:{th:"ชิดลม", jp:"BTSチットロム駅"} },
+  { key:["asiatique","เอเชียทีค เดอะ ริเวอร์ฟร้อนท์"], th:"เอเชียทีค เดอะ ริเวอร์ฟร้อนท์", jp:"アジアティーク・ザ・リバーフロント", pref:"バンコク" , station:{th:"สะพานตากสิน", jp:"BTSサパーンタークシン駅(シャトルボート)"} },
+  { key:["lumpinipark","สวนลุมพินี"], th:"สวนลุมพินี", jp:"ルンピニー公園", pref:"バンコク" , station:{th:"ลุมพินี", jp:"MRTルンピニー駅"} },
+  { key:["benjakitti","สวนเบญจกิติ"], th:"สวนเบญจกิติ", jp:"ベンジャキティ公園", pref:"バンコク" , station:{th:"ศูนย์การประชุมแห่งชาติสิริกิติ์", jp:"MRTクイーンシリキット駅"} },
+  { key:["yaowarat","เยาวราช"], th:"เยาวราช", jp:"ヤワラート(バンコク中華街)", pref:"バンコク" , station:{th:"วัดมังกร", jp:"MRTワットマンコーン駅"} },
+  { key:["khaosanroad","ถนนข้าวสาร"], th:"ถนนข้าวสาร", jp:"カオサン通り", pref:"バンコク" , station:{th:"สามยอด", jp:"MRTサームヨート駅"} },
   { key:["muangboran","เมืองโบราณ"], th:"เมืองโบราณ", jp:"ムアンボーラン(古代都市テーマパーク)", pref:"サムットプラーカーン県" },
   { key:["erawanmuseum","พิพิธภัณฑ์ช้างเอราวัณ"], th:"พิพิธภัณฑ์ช้างเอราวัณ", jp:"エラワン・ミュージアム", pref:"サムットプラーカーン県" },
   { key:["kohkret","เกาะเกร็ด"], th:"เกาะเกร็ด", jp:"クレット島", pref:"ノンタブリー県" },
@@ -826,6 +834,8 @@ let currentDestination = null;
 let selectedFollowUp = null;
 let anchorExpanded = true;
 let openState = null;
+let ticketSelected = false;
+let ticketCount = 1;
 let thbToJpyRate = null;
 
 function renderNearby(){
@@ -890,39 +900,67 @@ function openTransportComposer(){
 function closeComposer(){
   document.getElementById('composerScreen').classList.remove('show');
   openState = null;
+  ticketSelected = false;
 }
 function renderComposerFixed(){
   document.getElementById('composerFixed').innerHTML = renderDestinationAnchor() + renderSelectedPhraseBlock();
+}
+function ticketRowHtml(){
+  if(!currentDestination || !currentDestination.station) return '';
+  const sel = ticketSelected ? 'selected' : '';
+  return `<div class="follow-item ${sel}" onclick="toggleTicket()">
+    <div class="fi-th">🎫 ขอตั๋วไป${currentDestination.station.th}</div>
+    <div class="fi-jp">${currentDestination.station.jp}までの乗車券をお願いします</div>
+  </div>`;
 }
 function renderComposerList(){
   let html = '';
   if(openState && openState.type === 'mode'){
     transportItems.forEach((item, idx) => {
       if(item.mode !== openState.mode) return;
-      const sel = selectedFollowUp === idx ? 'selected' : '';
+      const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
       html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
         <div class="fi-th">${fullTh(item.base, item.type)}</div>
         <div class="fi-jp">${item.jp}</div>
       </div>`;
     });
+    if(openState.mode === 'train') html += ticketRowHtml();
   } else {
     ['bus','train','taxi'].forEach(mode => {
       const meta = modeMeta[mode];
       html += `<div class="mode-group-label">${meta.icon} ${meta.label}</div>`;
       transportItems.forEach((item, idx) => {
         if(item.mode !== mode) return;
-        const sel = selectedFollowUp === idx ? 'selected' : '';
+        const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
         html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
           <div class="fi-th">${fullTh(item.base, item.type)}</div>
           <div class="fi-jp">${item.jp}</div>
         </div>`;
       });
+      if(mode === 'train') html += ticketRowHtml();
     });
   }
   document.getElementById('composerList').innerHTML = html;
 }
+function toggleTicket(){
+  ticketSelected = !ticketSelected;
+  if(ticketSelected){
+    selectedFollowUp = null;
+    ticketCount = 1;
+    anchorExpanded = false;
+  } else {
+    anchorExpanded = true;
+  }
+  renderComposerFixed();
+  renderComposerList();
+}
+function changeTicketCount(delta){
+  ticketCount = Math.max(1, Math.min(20, ticketCount + delta));
+  renderComposerFixed();
+}
 function toggleFollowUp(idx){
-  const wasNull = selectedFollowUp === null;
+  const wasNull = selectedFollowUp === null && !ticketSelected;
+  ticketSelected = false;
   selectedFollowUp = (selectedFollowUp === idx) ? null : idx;
   if(selectedFollowUp === null){
     anchorExpanded = true;
@@ -1006,6 +1044,20 @@ function renderDestinationAnchor(){
   </div>`;
 }
 function renderSelectedPhraseBlock(){
+  if(ticketSelected && currentDestination && currentDestination.station){
+    const st = currentDestination.station;
+    const th = `ขอตั๋วไป${st.th} ${ticketCount} ใบ${particle('s')}`;
+    const jp = `${st.jp}までの乗車券を${ticketCount}枚お願いします`;
+    return `<div class="selected-phrase">
+      <div class="sp-th">${th}</div>
+      <div class="sp-jp">${jp}</div>
+      <div class="ticket-stepper">
+        <button onclick="changeTicketCount(-1)">−</button>
+        <span>${ticketCount}枚</span>
+        <button onclick="changeTicketCount(1)">＋</button>
+      </div>
+    </div>`;
+  }
   if(selectedFollowUp === null){
     return `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   }
@@ -1336,6 +1388,8 @@ function selectSuggestion(i){
   if(!currentDestination || currentDestination.th !== found.th){
     selectedFollowUp = null;
     anchorExpanded = true;
+    ticketSelected = false;
+    ticketCount = 1;
   }
   currentDestination = found;
   document.getElementById('destTh').textContent = found.th;

@@ -282,6 +282,11 @@
     border:1px solid rgba(255,255,255,0.4); border-radius:10px; padding:9px 13px;
     font-family:'Noto Sans JP', sans-serif; font-size:12.5px; font-weight:600; cursor:pointer;
   }
+  .fullscreen-btn{
+    margin-top:12px; margin-right:8px; background:var(--marigold); color:var(--ink);
+    border:none; border-radius:10px; padding:9px 13px;
+    font-family:'Noto Sans JP', sans-serif; font-size:12.5px; font-weight:700; cursor:pointer;
+  }
 
   .nb-display{
     background:var(--ink); color:#fff; border-radius:16px; padding:24px 18px;
@@ -398,6 +403,7 @@
     <div class="dest-jp" id="destJp"></div>
     <div class="dest-phrase" id="destPhrase"></div>
     <div class="dest-phrase-jp" id="destPhraseJp"></div>
+    <button class="fullscreen-btn" onclick="showFullscreenNow()" style="margin-top:10px;">🔍 これだけ大きく見せる</button>
     <div class="dest-modes">
       <button class="mode-btn" onclick="openModeList('bus')">🚌 バス</button>
       <button class="mode-btn" onclick="openModeList('train')">🚆 鉄道</button>
@@ -862,6 +868,16 @@ function setLastPhrase(th, jp){
   landscapeManuallyClosed = false;
   checkOrientationDisplay();
 }
+function showFullscreenNow(){
+  if(!lastShownPhrase) return;
+  landscapeManuallyClosed = false;
+  document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
+  document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
+  document.getElementById('landscapeDisplay').classList.add('show');
+}
+function fullscreenBtnHtml(){
+  return `<button class="fullscreen-btn" onclick="event.stopPropagation(); showFullscreenNow();">🔍 これだけ大きく見せる</button>`;
+}
 function checkOrientationDisplay(){
   const overlay = document.getElementById('landscapeDisplay');
   if(!overlay) return;
@@ -923,7 +939,7 @@ function openNearby(i){
   const th = fullTh(n.base, n.type);
   document.getElementById('sheetTitle').textContent = `近くの${n.label}`;
   document.getElementById('sheetBody').innerHTML =
-    `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div></div>`;
+    `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div>${fullscreenBtnHtml()}</div>`;
   document.getElementById('overlay').classList.add('show');
   document.getElementById('sheet').classList.add('show');
   setLastPhrase(th, n.jp);
@@ -1053,7 +1069,7 @@ function renderCategoryFixed(){
     document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${p.jp}</div>
-      ${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}
+      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}
     </div>`;
     setLastPhrase(th, p.jp);
   }
@@ -1107,6 +1123,7 @@ function renderSelectedPhraseBlock(){
         <span>${ticketCount}枚</span>
         <button onclick="changeTicketCount(1)">＋</button>
       </div>
+      ${fullscreenBtnHtml()}
     </div>`;
   }
   if(selectedFollowUp === null){
@@ -1118,7 +1135,7 @@ function renderSelectedPhraseBlock(){
   return `<div class="selected-phrase">
     <div class="sp-th">${followTh}</div>
     <div class="sp-jp">${follow.jp}</div>
-    ${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
+    ${fullscreenBtnHtml()}${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
   </div>`;
 }
 

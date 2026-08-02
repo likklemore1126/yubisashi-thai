@@ -835,12 +835,11 @@ const transportItems = [
 const modeMeta = { bus:{icon:'🚌', label:'バス'}, train:{icon:'🚆', label:'鉄道'}, taxi:{icon:'🚕', label:'タクシー'} };
 
 const nearby = [
-  {icon:"🚉", label:"駅",     base:"สถานีที่ใกล้ที่สุดจากที่นี่",     type:'s', jp:"ここから一番近い駅までお願いします"},
-  {icon:"🏥", label:"病院",   base:"โรงพยาบาลที่ใกล้ที่สุดจากที่นี่", type:'s', jp:"ここから一番近い病院までお願いします"},
-  {icon:"🏪", label:"コンビニ", base:"ร้านสะดวกซื้อที่ใกล้ที่สุด",   type:'s', jp:"ここから一番近いコンビニまでお願いします"},
-  {icon:"🏧", label:"ATM",    base:"ตู้เอทีเอ็มที่ใกล้ที่สุด",       type:'s', jp:"ここから一番近いATMまでお願いします"},
-  {icon:"🚻", label:"トイレ", base:"ห้องน้ำที่ใกล้ที่สุด",           type:'s', jp:"ここから一番近いトイレまでお願いします"},
-  {icon:"💊", label:"薬局",   base:"ร้านขายยาที่ใกล้ที่สุด",         type:'s', jp:"ここから一番近い薬局までお願いします"},
+  {icon:"🚉", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
+  {icon:"🏪", label:"コンビニ", base:"ร้านสะดวกซื้อแถวนี้อยู่ทางไหน",   type:'q', jp:"近くのコンビニはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
+  {icon:"🏧", label:"ATM",    base:"ตู้เอทีเอ็มแถวนี้อยู่ทางไหน",       type:'q', jp:"近くのATMはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
+  {icon:"🚻", label:"トイレ", base:"ห้องน้ำแถวนี้อยู่ทางไหน",           type:'q', jp:"近くのトイレはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
+  {icon:"💊", label:"薬局",   base:"ร้านขายยาแถวนี้อยู่ทางไหน",         type:'q', jp:"近くの薬局はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
 ];
 
 const situations = [
@@ -876,10 +875,14 @@ const situations = [
     {base:"เดินไปทางไหน", type:'q', jp:"どちらの方向に歩けばいいですか"},
     {base:"ควรทำอย่างไรดี", type:'q', jp:"どうしたらいいですか"},
   ]},
-  { icon:"🆘", title:"助けを求める", color:"var(--pink-deep)", count:"6", phrases:[
+  { icon:"🆘", title:"助けを求める", color:"var(--pink-deep)", count:"7", phrases:[
     {base:"ช่วยด้วย", type:'s', jp:"助けてください"},
     {base:"หลงทาง", type:'s', jp:"道に迷いました"},
     {base:"โทรเรียกตำรวจได้ไหม", type:'q', jp:"警察を呼んでもらえますか"},
+    {base:"รู้สึกไม่สบาย", type:'s', jp:"具合が悪いです"},
+    {base:"บาดเจ็บ", type:'s', jp:"怪我をしました"},
+    {base:"พาไปโรงพยาบาลได้ไหม", type:'q', jp:"病院に連れて行ってもらえますか"},
+    {base:"เรียกรถพยาบาลได้ไหม", type:'q', jp:"救急車を呼んでもらえますか"},
   ]},
 ];
 
@@ -982,7 +985,7 @@ function openNearby(i){
   const th = fullTh(n.base, n.type);
   document.getElementById('sheetTitle').textContent = `近くの${n.label}`;
   document.getElementById('sheetBody').innerHTML =
-    `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div>${fullscreenBtnHtml()}</div>`;
+    `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div>${fullscreenBtnHtml()}${nbTriggerHtml(n.numberAnswer)}</div>`;
   document.getElementById('overlay').classList.add('show');
   document.getElementById('sheet').classList.add('show');
   setLastPhrase(th, n.jp);
@@ -1295,6 +1298,8 @@ function openNumberBoard(){
     config = (selectedFollowUp !== null) ? transportItems[selectedFollowUp].numberAnswer : null;
   } else if(openState.type === 'category'){
     config = (selectedCategoryIdx !== null) ? situations[openState.index].phrases[selectedCategoryIdx].numberAnswer : null;
+  } else if(openState.type === 'nearby'){
+    config = nearby[openState.index].numberAnswer;
   }
   if(!config) return;
   calcMode = 'phrase';

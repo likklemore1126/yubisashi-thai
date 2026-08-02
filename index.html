@@ -323,6 +323,16 @@
     background:var(--marigold); border-color:var(--marigold-deep);
   }
   .calc-rate-hint{ font-size:17px; color:var(--marigold); margin-top:8px; font-weight:600; }
+  .nb-question{ margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.15); }
+  .nb-question-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; color:var(--marigold); }
+  .nb-question-jp{ font-size:15px; color:rgba(255,255,255,0.75); margin-top:6px; }
+  .qmode-row{ display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; justify-content:center; }
+  .qmode-btn{
+    background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.25); color:#fff;
+    border-radius:999px; padding:7px 12px; font-size:12px; font-family:'Noto Sans JP', sans-serif;
+    font-weight:600; cursor:pointer;
+  }
+  .qmode-btn.active{ background:var(--marigold); border-color:var(--marigold); color:var(--ink); }
   .calc-rate-hint.confirmed{ color:#fff; }
   .time-period-toggle{ display:flex; gap:8px; padding:0 18px 16px; }
   .tp-btn{
@@ -834,12 +844,18 @@ const transportItems = [
 ];
 const modeMeta = { bus:{icon:'🚌', label:'バス'}, train:{icon:'🚆', label:'鉄道'}, taxi:{icon:'🚕', label:'タクシー'} };
 
+const travelModes = [
+  {icon:'🚶', label:'徒歩', qBase:'เดินไปกี่นาที', qType:'q', qJp:'徒歩で何分ですか?'},
+  {icon:'🛺', label:'トゥクトゥク', qBase:'นั่งตุ๊กตุ๊กไปกี่นาที', qType:'q', qJp:'トゥクトゥクで何分ですか?'},
+  {icon:'🚕', label:'タクシー', qBase:'นั่งแท็กซี่ไปกี่นาที', qType:'q', qJp:'タクシーで何分ですか?'},
+  {icon:'🏍️', label:'バイクタクシー', qBase:'นั่งมอเตอร์ไซค์ไปกี่นาที', qType:'q', qJp:'バイクタクシーで何分ですか?'},
+];
 const nearby = [
-  {icon:"🚉", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
-  {icon:"🏪", label:"コンビニ", base:"ร้านสะดวกซื้อแถวนี้อยู่ทางไหน",   type:'q', jp:"近くのコンビニはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
-  {icon:"🏧", label:"ATM",    base:"ตู้เอทีเอ็มแถวนี้อยู่ทางไหน",       type:'q', jp:"近くのATMはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
-  {icon:"🚻", label:"トイレ", base:"ห้องน้ำแถวนี้อยู่ทางไหน",           type:'q', jp:"近くのトイレはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
-  {icon:"💊", label:"薬局",   base:"ร้านขายยาแถวนี้อยู่ทางไหน",         type:'q', jp:"近くの薬局はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false}},
+  {icon:"🚉", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, modes:travelModes}},
+  {icon:"🏪", label:"コンビニ", base:"ร้านสะดวกซื้อแถวนี้อยู่ทางไหน",   type:'q', jp:"近くのコンビニはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, modes:travelModes}},
+  {icon:"🏧", label:"ATM",    base:"ตู้เอทีเอ็มแถวนี้อยู่ทางไหน",       type:'q', jp:"近くのATMはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, modes:travelModes}},
+  {icon:"🚻", label:"トイレ", base:"ห้องน้ำแถวนี้อยู่ทางไหน",           type:'q', jp:"近くのトイレはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, modes:travelModes}},
+  {icon:"💊", label:"薬局",   base:"ร้านขายยาแถวนี้อยู่ทางไหน",         type:'q', jp:"近くの薬局はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, modes:travelModes}},
 ];
 
 const situations = [
@@ -1207,8 +1223,21 @@ function openTimeBoard(){
   renderTimeDisplay();
   document.getElementById('timeBoardScreen').classList.add('show');
 }
+function restoreParentPhrase(){
+  if(!openState) return;
+  if(openState.type === 'nearby'){
+    const n = nearby[openState.index];
+    const th = fullTh(n.base, n.type);
+    setLastPhrase(th, n.jp);
+  } else if(openState.type === 'category'){
+    renderCategoryFixed();
+  } else if(openState.type === 'transport' || openState.type === 'mode'){
+    renderComposerFixed();
+  }
+}
 function closeTimeBoard(){
   document.getElementById('timeBoardScreen').classList.remove('show');
+  restoreParentPhrase();
 }
 function setTimePeriod(p){
   timePeriod = p;
@@ -1304,6 +1333,7 @@ function openNumberBoard(){
   if(!config) return;
   calcMode = 'phrase';
   calcPhraseConfig = config;
+  calcSelectedModeIdx = 0;
   document.getElementById('calcTitle').textContent = '🔢 数字で答える';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
@@ -1340,6 +1370,7 @@ function updateRatePillText(){
 
 /* ---------- shared calculator (standalone ฿計算機 / 質問への数字回答の両方で使用) ---------- */
 let calcMode = 'thb'; // 'thb' | 'phrase'
+let calcSelectedModeIdx = 0;
 let calcPhraseConfig = null;
 let calcCurrent = '0';
 let calcPrev = null;
@@ -1355,6 +1386,7 @@ function openCalc(){
 }
 function closeCalc(){
   document.getElementById('calcScreen').classList.remove('show');
+  restoreParentPhrase();
 }
 function calcDigit(d){
   if(calcResetNext){ calcCurrent = '0'; calcResetNext = false; }
@@ -1416,14 +1448,30 @@ function formatCalcDisplay(str){
   const intFormatted = Number(intPart || '0').toLocaleString('en-US');
   return (neg ? '-' : '') + intFormatted + (hasDot ? '.' + fracPart : '');
 }
+function setCalcMode(i){
+  calcSelectedModeIdx = i;
+  calcClearAll();
+}
 function calcRender(){
   const num = parseFloat(calcCurrent) || 0;
   const formatted = formatCalcDisplay(calcCurrent);
-  let mainText, showJpy;
+  let mainText, showJpy, questionHtml = '';
   if(calcMode === 'phrase' && calcPhraseConfig){
     const cfg = calcPhraseConfig;
     mainText = cfg.position === 'prefix' ? `${cfg.unit} ${formatted}` : `${formatted} ${cfg.unit}`;
     showJpy = !!cfg.jpy;
+    if(cfg.modes){
+      const modeBtns = cfg.modes.map((m, i) =>
+        `<button class="qmode-btn ${i===calcSelectedModeIdx ? 'active' : ''}" onclick="event.stopPropagation(); setCalcMode(${i});">${m.icon} ${m.label}</button>`
+      ).join('');
+      const active = cfg.modes[calcSelectedModeIdx];
+      const qTh = fullTh(active.qBase, active.qType);
+      questionHtml = `<div class="qmode-row">${modeBtns}</div>
+        <div class="nb-question"><div class="nb-question-th">${qTh}</div><div class="nb-question-jp">${active.qJp || ''}</div></div>`;
+    } else if(cfg.qBase){
+      const qTh = fullTh(cfg.qBase, cfg.qType);
+      questionHtml = `<div class="nb-question"><div class="nb-question-th">${qTh}</div><div class="nb-question-jp">${cfg.qJp || ''}</div></div>`;
+    }
   } else {
     mainText = `฿ ${formatted}`;
     showJpy = true;
@@ -1442,7 +1490,7 @@ function calcRender(){
       </div>`;
     }
   }
-  document.getElementById('calcDisplay').innerHTML = `<div class="calc-value">${mainText}</div>${jpyHtml}`;
+  document.getElementById('calcDisplay').innerHTML = `${questionHtml}<div class="calc-value">${mainText}</div>${jpyHtml}`;
   setLastPhrase(mainText, '');
 }
 function saveRateFromCalc(){

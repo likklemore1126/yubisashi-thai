@@ -237,6 +237,7 @@
     transform:translateY(100%);
     transition:transform .25s cubic-bezier(.2,.8,.3,1);
     z-index:8; pointer-events:none;
+    overflow-y:auto;
   }
   .composer-screen.show{ transform:translateY(0); pointer-events:auto; }
   .composer-header{
@@ -316,7 +317,8 @@
   .nb-display{
     background:var(--ink); color:#fff; border-radius:16px; padding:24px 18px;
     margin:0 18px 16px; text-align:center;
-    min-height:34vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:28vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    flex-shrink:0;
   }
   .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:64px; word-break:break-all; line-height:1.1; }
   .nb-jpy{ font-size:16px; color:var(--marigold); margin-top:10px; font-weight:600; }
@@ -327,7 +329,7 @@
     background:var(--marigold); border:none; border-radius:8px; padding:7px 12px;
     font-size:12px; font-weight:700; cursor:pointer; color:var(--ink);
   }
-  .nb-keys{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:0 18px 18px; }
+  .nb-keys{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:0 18px 18px; flex-shrink:0; }
   .nb-key{
     background:var(--sand); border:1.5px solid var(--line); border-radius:14px; padding:13px 0;
     font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; text-align:center; cursor:pointer;
@@ -346,7 +348,8 @@
   .nb-question{ margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.15); }
   .nb-question-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; color:var(--marigold); }
   .nb-question-jp{ font-size:18px; color:rgba(255,255,255,0.8); margin-top:8px; }
-  .qmode-row{ display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; justify-content:center; }
+  .qmode-row{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+  .qmode-btn{ width:100%; box-sizing:border-box; justify-content:flex-start; }
   .qmode-btn{
     background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.25); color:#fff;
     border-radius:16px; padding:10px 16px; font-family:'Noto Sans JP', sans-serif;
@@ -910,9 +913,9 @@ function metaIconHtml(meta){
 
 const travelModes = [
   {icon:'walk', label:'徒歩', labelTh:'เดิน', qBase:'เดินไปกี่นาที', qType:'q', qJp:'徒歩で何分ですか?'},
-  {icon:'tuktuk', label:'トゥクトゥク', labelTh:'ตุ๊กตุ๊ก', qBase:'นั่งตุ๊กตุ๊กไปกี่นาที', qType:'q', qJp:'トゥクトゥクで何分ですか?'},
-  {icon:'taxi', label:'タクシー', labelTh:'แท็กซี่', qBase:'นั่งแท็กซี่ไปกี่นาที', qType:'q', qJp:'タクシーで何分ですか?'},
   {icon:'motorbike', label:'バイクタクシー', labelTh:'วินมอเตอร์ไซค์', qBase:'นั่งวินมอเตอร์ไซค์ไปกี่นาที', qType:'q', qJp:'バイクタクシーで何分ですか?'},
+  {icon:'taxi', label:'タクシー', labelTh:'แท็กซี่', qBase:'นั่งแท็กซี่ไปกี่นาที', qType:'q', qJp:'タクシーで何分ですか?'},
+  {icon:'tuktuk', label:'トゥクトゥク', labelTh:'ตุ๊กตุ๊ก', qBase:'นั่งตุ๊กตุ๊กไปกี่นาที', qType:'q', qJp:'トゥクトゥクで何分ですか?'},
 ];
 const nearby = [
   {icon:"train", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
@@ -1526,7 +1529,7 @@ function calcRender(){
     showJpy = !!cfg.jpy;
     if(cfg.modes){
       const modeBtns = cfg.modes.map((m, i) =>
-        `<button class="qmode-btn ${i===calcSelectedModeIdx ? 'active' : ''}" onclick="event.stopPropagation(); setCalcMode(${i});">${iconSvg(m.icon, 22)}<span class="qmode-label"><span class="qmode-jp">${m.label}</span><span class="qmode-th">${m.labelTh}</span></span></button>`
+        `<button class="qmode-btn ${i===calcSelectedModeIdx ? 'active' : ''}" onclick="event.stopPropagation(); setCalcMode(${i});">${iconSvg(m.icon, 28)}<span class="qmode-label"><span class="qmode-jp">${m.label}</span><span class="qmode-th">${m.labelTh}</span></span></button>`
       ).join('');
       const active = cfg.modes[calcSelectedModeIdx];
       const qTh = fullTh(active.qBase, active.qType);

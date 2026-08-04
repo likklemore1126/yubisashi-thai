@@ -322,6 +322,7 @@
   }
   .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:64px; word-break:break-all; line-height:1.1; }
   .calc-value.compact{ font-size:44px; }
+  .calc-value rt{ font-family:'Noto Sans JP', sans-serif; font-size:0.32em; color:var(--marigold); opacity:0.9; }
   .nb-jpy{ font-size:16px; color:var(--marigold); margin-top:10px; font-weight:600; }
   .nb-rate-setup{ margin-top:14px; display:flex; gap:6px; align-items:center; justify-content:center; font-size:13px; flex-wrap:wrap; }
   .nb-rate-setup span{ opacity:0.8; }
@@ -533,9 +534,8 @@
       <div class="nb-key" onclick="calcDigit('1')">1</div>
       <div class="nb-key" onclick="calcDigit('2')">2</div>
       <div class="nb-key" onclick="calcDigit('3')">3</div>
-      <div class="nb-key" onclick="calcDigit('00')">00</div>
-      <div class="nb-key" onclick="calcDigit('0')">0</div>
-      <div class="nb-key action" onclick="calcBackspace()">⌫</div>
+      <div class="nb-key" style="grid-column:span 2;" onclick="calcDigit('0')">0</div>
+      <div class="nb-key action" style="font-size:26px;" onclick="calcBackspace()">⌫</div>
       <div class="nb-key action" style="grid-column:span 3; font-size:16px;" onclick="calcClearAll()">C ล้าง(クリア)</div>
     </div>
   </div>
@@ -1543,10 +1543,11 @@ function setCalcMode(i){
 function calcRender(){
   const num = parseFloat(calcCurrent) || 0;
   const formatted = formatCalcDisplay(calcCurrent);
-  let mainText, showJpy, questionHtml = '';
+  let mainText, mainTextPlain, showJpy, questionHtml = '';
   if(calcMode === 'phrase' && calcPhraseConfig){
     const cfg = calcPhraseConfig;
     mainText = cfg.position === 'prefix' ? `${cfg.unit} ${formatted}` : `${formatted} ${cfg.unit}`;
+    mainTextPlain = mainText;
     showJpy = !!cfg.jpy;
     if(cfg.modes){
       const modeBtns = cfg.modes.map((m, i) =>
@@ -1561,7 +1562,8 @@ function calcRender(){
       questionHtml = `<div class="nb-question"><div class="nb-question-th">${qTh}</div><div class="nb-question-jp">${cfg.qJp || ''}</div></div>`;
     }
   } else {
-    mainText = `฿ ${formatted}`;
+    mainText = `${formatted} <ruby>บาท<rt>バーツ</rt></ruby>`;
+    mainTextPlain = `${formatted} บาท`;
     showJpy = true;
   }
   let jpyHtml = '';
@@ -1581,7 +1583,7 @@ function calcRender(){
     jpyHtml = `<div class="nb-jpy">(${formatted}${calcPhraseConfig.unitJp})</div>`;
   }
   document.getElementById('calcDisplay').innerHTML = `${questionHtml}<div class="calc-value${questionHtml ? ' compact' : ''}">${mainText}</div>${jpyHtml}`;
-  setLastPhrase(mainText, '');
+  setLastPhrase(mainTextPlain, '');
 }
 function saveRateFromCalc(){
   const v = parseFloat(document.getElementById('calcRateInput').value);

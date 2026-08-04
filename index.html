@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>指さしタイ語 - トップ画面</title>
+<title>指さしタイ na - トップ画面</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#17242A">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="指さしタイ語">
+<meta name="apple-mobile-web-app-title" content="指さしタイ na">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,7 +65,7 @@
   header{
     background:var(--ink);
     color:var(--paper);
-    padding:22px 20px 26px;
+    padding:calc(22px + env(safe-area-inset-top)) 20px 26px;
     position:relative;
     overflow:hidden;
   }
@@ -241,7 +241,7 @@
   .composer-screen.show{ transform:translateY(0); pointer-events:auto; }
   .composer-header{
     display:flex; align-items:center; gap:8px;
-    padding:18px 18px 10px; flex:0 0 auto;
+    padding:calc(18px + env(safe-area-inset-top)) 18px 10px; flex:0 0 auto;
   }
   .composer-header .ctitle{ font-family:'Kanit', sans-serif; font-weight:600; font-size:17px; flex:1 1 auto; }
   .composer-close{
@@ -299,7 +299,7 @@
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; }
   .landscape-jp{ font-size:min(4vw, 22px); opacity:0.65; margin-top:18px; }
   .landscape-close{
-    position:absolute; top:16px; right:20px; font-size:13px; opacity:0.55;
+    position:absolute; top:calc(16px + env(safe-area-inset-top)); right:calc(20px + env(safe-area-inset-right)); font-size:13px; opacity:0.55;
     font-family:'Noto Sans JP', sans-serif;
   }
   .nb-trigger{
@@ -416,7 +416,7 @@
       <button class="gtbtn active" data-g="female" onclick="setGender('female')"><span class="icon-slot" data-icon="female" data-size="22"></span> 女性</button>
       <button class="gtbtn" data-g="male" onclick="setGender('male')"><span class="icon-slot" data-icon="male" data-size="22"></span> 男性</button>
     </div>
-    <div class="wordmark">指さし<span class="th">タイ語</span></div>
+    <div class="wordmark">指さしタイ<span class="th"> na</span></div>
     <div class="tagline">見せるだけで、伝わる。</div>
     <div class="header-tools">
       <div class="rate-status" id="rateStatus" onclick="openRateSheet()">💴 レート未設定(タップで設定) ›</div>

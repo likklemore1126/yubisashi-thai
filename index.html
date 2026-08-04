@@ -100,7 +100,7 @@
     background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3);
     border-radius:999px; padding:4px 10px;
   }
-  .gender-toggle{ position:absolute; top:20px; right:16px; display:flex; gap:4px; z-index:2; }
+  .gender-toggle{ position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
   .gtbtn{
     background:rgba(255,255,255,0.1); color:var(--paper);
     border:1px solid rgba(255,255,255,0.3); border-radius:999px;

@@ -501,7 +501,7 @@
       <button class="composer-close" onclick="closeCalc()">✕</button>
     </div>
     <div class="nb-display" id="calcDisplay"></div>
-    <div class="nb-keys calc-keys">
+    <div class="nb-keys calc-keys" id="calcKeysFull">
       <div class="nb-key" onclick="calcClearAll()">C</div>
       <div class="nb-key" onclick="calcBackspace()">⌫</div>
       <div class="nb-key" onclick="calcDigit('.')">.</div>
@@ -522,6 +522,21 @@
       <div class="nb-key" onclick="calcDigit('00')">00</div>
       <div class="nb-key" onclick="calcDigit('0')">0</div>
       <div class="nb-key eq" onclick="calcEquals()">=</div>
+    </div>
+    <div class="nb-keys" id="calcKeysSimple" style="display:none;">
+      <div class="nb-key" onclick="calcDigit('7')">7</div>
+      <div class="nb-key" onclick="calcDigit('8')">8</div>
+      <div class="nb-key" onclick="calcDigit('9')">9</div>
+      <div class="nb-key" onclick="calcDigit('4')">4</div>
+      <div class="nb-key" onclick="calcDigit('5')">5</div>
+      <div class="nb-key" onclick="calcDigit('6')">6</div>
+      <div class="nb-key" onclick="calcDigit('1')">1</div>
+      <div class="nb-key" onclick="calcDigit('2')">2</div>
+      <div class="nb-key" onclick="calcDigit('3')">3</div>
+      <div class="nb-key" onclick="calcDigit('00')">00</div>
+      <div class="nb-key" onclick="calcDigit('0')">0</div>
+      <div class="nb-key action" onclick="calcBackspace()">⌫</div>
+      <div class="nb-key action" style="grid-column:span 3; font-size:16px;" onclick="calcClearAll()">C ล้าง(クリア)</div>
     </div>
   </div>
 
@@ -1403,6 +1418,9 @@ function openNumberBoard(){
   calcPhraseConfig = config;
   calcSelectedModeIdx = 0;
   document.getElementById('calcTitle').innerHTML = `${iconSvg('numpad', 20)}数字で答える`;
+  const useSimpleKeys = !!config.modes;
+  document.getElementById('calcKeysFull').style.display = useSimpleKeys ? 'none' : '';
+  document.getElementById('calcKeysSimple').style.display = useSimpleKeys ? '' : 'none';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
 }
@@ -1449,6 +1467,8 @@ function openCalc(){
   calcMode = 'thb';
   calcPhraseConfig = null;
   document.getElementById('calcTitle').innerHTML = `${iconSvg('calculator', 20)}฿計算機`;
+  document.getElementById('calcKeysFull').style.display = '';
+  document.getElementById('calcKeysSimple').style.display = 'none';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
 }

@@ -315,12 +315,13 @@
   }
 
   .nb-display{
-    background:var(--ink); color:#fff; border-radius:16px; padding:24px 18px;
-    margin:0 18px 16px; text-align:center;
-    min-height:28vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--ink); color:#fff; border-radius:16px; padding:18px 18px;
+    margin:0 18px 12px; text-align:center;
+    min-height:22vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
     flex-shrink:0;
   }
   .calc-value{ font-family:'Kanit', sans-serif; font-weight:700; font-size:64px; word-break:break-all; line-height:1.1; }
+  .calc-value.compact{ font-size:44px; }
   .nb-jpy{ font-size:16px; color:var(--marigold); margin-top:10px; font-weight:600; }
   .nb-rate-setup{ margin-top:14px; display:flex; gap:6px; align-items:center; justify-content:center; font-size:13px; flex-wrap:wrap; }
   .nb-rate-setup span{ opacity:0.8; }
@@ -331,8 +332,8 @@
   }
   .nb-keys{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:0 18px 18px; flex-shrink:0; }
   .nb-key{
-    background:var(--sand); border:1.5px solid var(--line); border-radius:14px; padding:13px 0;
-    font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; text-align:center; cursor:pointer;
+    background:var(--sand); border:1.5px solid var(--line); border-radius:14px; padding:10px 0;
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:22px; text-align:center; cursor:pointer;
     transition:background .15s ease, border-color .15s ease;
   }
   .nb-key:active{ background:var(--marigold); border-color:var(--marigold-deep); }
@@ -345,20 +346,20 @@
     background:var(--marigold); border-color:var(--marigold-deep);
   }
   .calc-rate-hint{ font-size:17px; color:var(--marigold); margin-top:8px; font-weight:600; }
-  .nb-question{ margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.15); }
+  .nb-question{ margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.15); }
   .nb-question-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; color:var(--marigold); }
   .nb-question-jp{ font-size:18px; color:rgba(255,255,255,0.8); margin-top:8px; }
-  .qmode-row{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+  .qmode-row{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
   .qmode-btn{ width:100%; box-sizing:border-box; justify-content:flex-start; }
   .qmode-btn{
     background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.25); color:#fff;
-    border-radius:16px; padding:10px 16px; font-family:'Noto Sans JP', sans-serif;
-    font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px;
+    border-radius:16px; padding:10px 10px; font-family:'Noto Sans JP', sans-serif;
+    font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;
   }
   .qmode-btn .icon-img{ flex:0 0 auto; }
   .qmode-label{ display:flex; flex-direction:column; align-items:flex-start; line-height:1.25; }
-  .qmode-jp{ font-size:15px; }
-  .qmode-th{ font-family:'Kanit', sans-serif; font-size:12.5px; opacity:0.75; }
+  .qmode-jp{ font-size:13px; white-space:nowrap; }
+  .qmode-th{ font-family:'Kanit', sans-serif; font-size:11.5px; opacity:0.75; white-space:nowrap; }
   .qmode-btn.active{ background:var(--marigold); border-color:var(--marigold); color:var(--ink); }
   .qmode-btn.active .qmode-th{ opacity:0.7; }
   .calc-rate-hint.confirmed{ color:#fff; }
@@ -1559,7 +1560,7 @@ function calcRender(){
   } else if(calcMode === 'phrase' && calcPhraseConfig && calcPhraseConfig.unitJp){
     jpyHtml = `<div class="nb-jpy">(${formatted}${calcPhraseConfig.unitJp})</div>`;
   }
-  document.getElementById('calcDisplay').innerHTML = `${questionHtml}<div class="calc-value">${mainText}</div>${jpyHtml}`;
+  document.getElementById('calcDisplay').innerHTML = `${questionHtml}<div class="calc-value${questionHtml ? ' compact' : ''}">${mainText}</div>${jpyHtml}`;
   setLastPhrase(mainText, '');
 }
 function saveRateFromCalc(){

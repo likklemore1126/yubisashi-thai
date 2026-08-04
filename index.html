@@ -345,14 +345,19 @@
   .calc-rate-hint{ font-size:17px; color:var(--marigold); margin-top:8px; font-weight:600; }
   .nb-question{ margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.15); }
   .nb-question-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:24px; color:var(--marigold); }
-  .nb-question-jp{ font-size:15px; color:rgba(255,255,255,0.75); margin-top:6px; }
-  .qmode-row{ display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; justify-content:center; }
+  .nb-question-jp{ font-size:18px; color:rgba(255,255,255,0.8); margin-top:8px; }
+  .qmode-row{ display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; justify-content:center; }
   .qmode-btn{
     background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.25); color:#fff;
-    border-radius:999px; padding:7px 12px; font-size:12px; font-family:'Noto Sans JP', sans-serif;
-    font-weight:600; cursor:pointer;
+    border-radius:16px; padding:10px 16px; font-family:'Noto Sans JP', sans-serif;
+    font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px;
   }
+  .qmode-btn .icon-img{ flex:0 0 auto; }
+  .qmode-label{ display:flex; flex-direction:column; align-items:flex-start; line-height:1.25; }
+  .qmode-jp{ font-size:15px; }
+  .qmode-th{ font-family:'Kanit', sans-serif; font-size:12.5px; opacity:0.75; }
   .qmode-btn.active{ background:var(--marigold); border-color:var(--marigold); color:var(--ink); }
+  .qmode-btn.active .qmode-th{ opacity:0.7; }
   .calc-rate-hint.confirmed{ color:#fff; }
   .time-period-toggle{ display:flex; gap:8px; padding:0 18px 16px; }
   .tp-btn{
@@ -904,10 +909,10 @@ function metaIconHtml(meta){
 }
 
 const travelModes = [
-  {icon:'walk', label:'徒歩', qBase:'เดินไปกี่นาที', qType:'q', qJp:'徒歩で何分ですか?'},
-  {icon:'tuktuk', label:'トゥクトゥク', qBase:'นั่งตุ๊กตุ๊กไปกี่นาที', qType:'q', qJp:'トゥクトゥクで何分ですか?'},
-  {icon:'taxi', label:'タクシー', qBase:'นั่งแท็กซี่ไปกี่นาที', qType:'q', qJp:'タクシーで何分ですか?'},
-  {icon:'motorbike', label:'バイクタクシー', qBase:'นั่งวินมอเตอร์ไซค์ไปกี่นาที', qType:'q', qJp:'バイクタクシーで何分ですか?'},
+  {icon:'walk', label:'徒歩', labelTh:'เดิน', qBase:'เดินไปกี่นาที', qType:'q', qJp:'徒歩で何分ですか?'},
+  {icon:'tuktuk', label:'トゥクトゥク', labelTh:'ตุ๊กตุ๊ก', qBase:'นั่งตุ๊กตุ๊กไปกี่นาที', qType:'q', qJp:'トゥクトゥクで何分ですか?'},
+  {icon:'taxi', label:'タクシー', labelTh:'แท็กซี่', qBase:'นั่งแท็กซี่ไปกี่นาที', qType:'q', qJp:'タクシーで何分ですか?'},
+  {icon:'motorbike', label:'バイクタクシー', labelTh:'วินมอเตอร์ไซค์', qBase:'นั่งวินมอเตอร์ไซค์ไปกี่นาที', qType:'q', qJp:'バイクタクシーで何分ですか?'},
 ];
 const nearby = [
   {icon:"train", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
@@ -1521,7 +1526,7 @@ function calcRender(){
     showJpy = !!cfg.jpy;
     if(cfg.modes){
       const modeBtns = cfg.modes.map((m, i) =>
-        `<button class="qmode-btn ${i===calcSelectedModeIdx ? 'active' : ''}" onclick="event.stopPropagation(); setCalcMode(${i});">${iconSvg(m.icon, 19)} ${m.label}</button>`
+        `<button class="qmode-btn ${i===calcSelectedModeIdx ? 'active' : ''}" onclick="event.stopPropagation(); setCalcMode(${i});">${iconSvg(m.icon, 22)}<span class="qmode-label"><span class="qmode-jp">${m.label}</span><span class="qmode-th">${m.labelTh}</span></span></button>`
       ).join('');
       const active = cfg.modes[calcSelectedModeIdx];
       const qTh = fullTh(active.qBase, active.qType);

@@ -283,6 +283,7 @@
   .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
   .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.4; }
   .sp-jp{ font-size:13.5px; margin-top:7px; opacity:0.9; }
+  .sp-note{ font-size:11.5px; margin-top:6px; opacity:0.7; line-height:1.6; white-space:pre-line; }
   .ticket-stepper{
     margin-top:14px; display:flex; align-items:center; gap:16px; justify-content:center;
   }
@@ -413,6 +414,7 @@
   }
   .follow-item .fi-th{ font-family:'Kanit', sans-serif; font-weight:600; font-size:16px; }
   .follow-item .fi-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
+  .follow-item .fi-note{ font-size:10.5px; color:#B08A4A; margin-top:2px; }
   .follow-item.selected{ background:var(--marigold); border-color:var(--marigold-deep); }
   .follow-item.selected .fi-jp{ color:#5c4415; }
 </style>
@@ -899,28 +901,50 @@ const destinations = [
 ];
 
 const transportItems = [
-  {mode:'bus',   base:"รถบัสรอบไหนดี",            type:'q', jp:"何時のバスがいいですか", timeAnswer:true},
-  {mode:'bus',   base:"ลงป้ายนี้ใช่ไหม",           type:'q', jp:"この停留所で降りればいいですか"},
-  {mode:'train', base:"ขอตั๋วชั้น 2 แบบแอร์",       type:'s', jp:"2等・エアコン付きの切符をください"},
-  {mode:'train', base:"รถไฟออกกี่โมง",             type:'q', jp:"何時に出発しますか", timeAnswer:true},
-  {mode:'taxi',  base:"ช่วยกดมิเตอร์ด้วย",          type:'s', jp:"メーターを使ってください"},
-  {mode:'taxi',  base:"เท่าไหร่",                  type:'q', jp:"いくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
-  {mode:'taxi',  base:"ไปทางนี้ได้ไหม",             type:'q', jp:"この道で行けますか(ダミー)"},
-  {mode:'taxi',  base:"รอแป๊บนึงได้ไหม",            type:'q', jp:"少し待ってもらえますか(ダミー)"},
-  {mode:'taxi',  base:"จอดตรงนี้",                 type:'s', jp:"ここで停めてください(ダミー)"},
-  {mode:'taxi',  base:"เปิดแอร์หน่อยได้ไหม",         type:'q', jp:"エアコンをつけてもらえますか(ダミー)"},
-  {mode:'taxi',  base:"ขอใบเสร็จด้วย",              type:'s', jp:"領収書をください(ダミー)"},
-  {mode:'taxi',  base:"ไม่ต้องรีบ",                 type:'s', jp:"急がなくて大丈夫です(ダミー)"},
-  {mode:'taxi',  base:"มีที่จอดรถไหม",              type:'q', jp:"駐車場はありますか(ダミー)"},
-  {mode:'taxi',  base:"รับบัตรเครดิตไหม",           type:'q', jp:"クレジットカードは使えますか(ダミー)"},
-  {mode:'taxi',  base:"ไปทางลัดได้ไหม",            type:'q', jp:"(ダミー)近道はできますか"},
-  {mode:'taxi',  base:"รอแป๊บนึงได้ไหม",           type:'q', jp:"(ダミー)少し待ってもらえますか"},
-  {mode:'taxi',  base:"ขอใบเสร็จด้วย",             type:'s', jp:"(ダミー)領収書をください"},
-  {mode:'taxi',  base:"แอร์เย็นไปหน่อย",           type:'s', jp:"(ダミー)冷房が効きすぎています"},
-  {mode:'taxi',  base:"จอดตรงนี้ได้ไหม",           type:'q', jp:"(ダミー)ここで停めてもらえますか"},
-  {mode:'taxi',  base:"ไม่ต้องรีบก็ได้",            type:'s', jp:"(ダミー)急がなくて大丈夫です"},
-  {mode:'taxi',  base:"มีที่ชาร์จโทรศัพท์ไหม",      type:'q', jp:"(ダミー)携帯の充電はできますか"},
-  {mode:'taxi',  base:"ช่วยเปิดกระโปรงท้ายด้วย",    type:'s', jp:"(ダミー)トランクを開けてください"},
+  {mode:'bus', base:"รถบัสออกกี่โมง", type:'q', jp:"何時発のバスがありますか？", timeAnswer:true},
+  {mode:'bus', base:"จะไปที่นี่ ต้องลงป้ายนี้ใช่ไหม", type:'q', jp:"ここに行くにはこのバス停で降りればいいですか？"},
+  {mode:'train', base:"ขอเป็นตู้แอร์", type:'s', jp:"エアコン付きの車両が希望です"},
+  {mode:'train', base:"รถไฟออกกี่โมง", type:'q', jp:"何時に出発しますか", timeAnswer:true},
+  {mode:'taxi', base:"ช่วยกดมิเตอร์ด้วย", type:'s', jp:"メーターを使ってください"},
+  {mode:'taxi', base:"เท่าไหร่", type:'q', jp:"いくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'taxi', base:"จอดตรงนี้", type:'s', jp:"ここで停めてください"},
+  {mode:'taxi', base:"จะรีบกลับมา รอตรงนี้แป๊บนึงได้ไหม", type:'q', jp:"直ぐに戻るのでここで少し待ってもらえますか？"},
+  {mode:'taxi', base:"เปิดแอร์หน่อยได้ไหม", type:'q', jp:"エアコンをつけてもらえますか？"},
+  {mode:'taxi', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+  {mode:'taxi', base:"รู้สึกไม่ค่อยสบาย ขับช้าลงหน่อยได้ไหม", type:'q', jp:"体調があまり良くないのでもう少しゆっくり走ってくれますか？"},
+  {mode:'taxi', base:"มีที่จอดรถไหม", type:'q', jp:"駐車場はありますか？"},
+  {mode:'taxi', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか"},
+  {mode:'taxi', base:"รู้สึกไม่ค่อยสบาย ลดแอร์ลงหน่อยได้ไหม", type:'q', jp:"体調があまり良くないのでエアコンを弱くしてもらえますか？"},
+  {mode:'taxi', base:"ขอชาร์จโทรศัพท์ได้ไหม", type:'q', jp:"携帯の充電をさせてもらう事はできますか？"},
+  {mode:'taxi', base:"ขอเอากระเป๋าใส่ท้ายรถได้ไหม", type:'q', jp:"トランクに荷物を載せてもいいですか？"},
+  {mode:'train', base:"ขอตู้พัดลม", type:'s', jp:"扇風機付きの車両が希望です"},
+  {mode:'train', base:"ขอตู้ที่ราคาถูกที่สุด", type:'s', jp:"一番料金が安い車両が希望です"},
+  {mode:'train', base:"ขอห้องส่วนตัว", type:'s', jp:"個室の車両が希望です"},
+  {mode:'taxi', base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
+  {mode:'taxi', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+  {mode:'taxi', base:"อยากไปที่นี่ ไปได้ไหม", type:'q', jp:"ここまで行きたいのですが可能ですか？"},
+  {mode:'taxi', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+  {mode:'taxi', base:"ที่ขึ้นแท็กซี่อยู่ที่ไหน", type:'q', jp:"タクシー乗り場はどこですか？"},
+  {mode:'bus', base:"ที่ขึ้นรถบัสอยู่ที่ไหน", type:'q', jp:"バス乗り場はどこですか？"},
+  {mode:'train', base:"ซื้อตั๋วได้ที่ไหน", type:'q', jp:"乗車券はどこで買えますか？"},
+  {mode:'bus', base:"สถานีขนส่งอยู่ที่ไหน", type:'q', jp:"バスターミナルはどこですか？"},
+  {mode:'bus', base:"ที่ขึ้นรถตู้อยู่ที่ไหน", type:'q', jp:"ロットゥー乗り場はどこですか？"},
+  {mode:'bus', base:"คันนี้ไปถึงที่หมายได้ไหม", type:'q', jp:"これに乗れば目的地まで行けますか？"},
+  {mode:'train', base:"ขอตั๋วไปสถานีนี้", type:'s', jp:"この駅までの乗車券をください"},
+  {mode:'train', base:"ต้องไปช่องไหน", type:'q', jp:"どの窓口に行けばいいですか？"},
+  {mode:'taxi', base:"เปลี่ยนจุดหมายได้ไหม", type:'q', jp:"行き先を変更することは可能ですか？"},
+  {mode:'taxi', base:"ขากลับจะใช้อีก รอได้ไหม", type:'q', jp:"帰りも利用したいので待っていてもらえますか？"},
+  {mode:'taxi', base:"มีแบงก์พันใบเดียว มีเงินทอนไหม", type:'q', jp:"1000バーツ札しか持ってないのですがおつりはありますか？"},
+  {mode:'taxi', base:"แวะร้านสะดวกซื้อระหว่างทางได้ไหม", type:'q', jp:"途中でコンビニに寄ってもらえますか？"},
+  {mode:'taxi', base:"อยากเช่ารถยนต์", type:'s', jp:"車を借りたいです"},
+  {mode:'taxi', base:"อยากเช่ามอเตอร์ไซค์", type:'s', jp:"バイクを借りたいです"},
+  {mode:'train', base:"อยากไปที่นี่ รถไฟขบวนนี้ใช่ไหม", type:'q', jp:"ここに行きたいのですがこの電車であってますか？"},
+  {mode:'bus', base:"อยากไปที่นี่ รถบัสคันนี้ใช่ไหม", type:'q', jp:"ここに行きたいのですがこのバスであってますか？"},
+  {mode:'bus', base:"ท่าเรือเฟอร์รี่อยู่ที่ไหน", type:'q', jp:"フェリー乗り場はどこですか？"},
+  {mode:'bus', base:"ท่าเรือสปีดโบ๊ทอยู่ที่ไหน", type:'q', jp:"スピードボート乗り場はどこですか？"},
+  {mode:'taxi', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'bus', base:"ท่าเรืออยู่ที่ไหน", type:'q', jp:"船の乗り場はどこですか？"},
+  {mode:'bus', base:"ที่ขึ้นสองแถวอยู่ที่ไหน", type:'q', jp:"ソンテウ乗り場はどこですか？"},
 ];
 const modeMeta = { bus:{icon:'bus', label:'バス'}, train:{icon:'train', label:'鉄道'}, taxi:{icon:'taxi', label:'タクシー'} };
 function metaIconHtml(meta){
@@ -942,17 +966,57 @@ const nearby = [
 ];
 
 const situations = [
-  { icon:"taxi", title:"移動する", color:"var(--teal)", count:"14", phrases:[] },
-  { icon:"hotel", title:"ホテルにチェックインする", color:"var(--marigold)", count:"9", phrases:[
+  { icon:"taxi", title:"移動する", color:"var(--teal)", count:"44", phrases:[] },
+  { icon:"hotel", title:"ホテルにチェックインする", color:"var(--marigold)", count:"33", phrases:[
     {base:"ต้องการเช็คอิน", type:'s', jp:"チェックインをお願いします"},
-    {base:"ขอเตียงเสริมได้ไหม", type:'q', jp:"エキストラベッドは追加できますか"},
-    {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか", timeAnswer:true},
-    {base:"พักกี่คืน", type:'q', jp:"何泊されますか(ダミー)", numberAnswer:{unit:'คืน', position:'suffix', jpy:false}},
+    {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか？", timeAnswer:true},
+    {base:"เช็คอินกี่โมง", type:'q', jp:"チェックインは何時ですか？", timeAnswer:true},
+    {base:"ฝากกระเป๋าได้ไหม", type:'q', jp:"荷物を預かっていただけますか？"},
+    {base:"ขอยืมไดร์เป่าผมได้ไหม", type:'q', jp:"ドライヤーを借してもらえますか？"},
+    {base:"ต้องมัดจำไหม", type:'q', jp:"デポジットは必要ですか？"},
+    {base:"ขอต่ออายุการเข้าพักได้ไหม", type:'q', jp:"宿泊を延長することは可能ですか？"},
+    {base:"น้ำอุ่นไม่ออก", type:'s', jp:"お湯が出ません"},
+    {base:"แอร์ไม่ทำงาน", type:'s', jp:"エアコンが動きません"},
+    {base:"ไม่รู้วิธีใช้ ช่วยสอนด้วย", type:'s', jp:"使い方が分からないので教えてください"},
+    {base:"ช่วยทำความสะอาดห้องด้วย", type:'s', jp:"部屋の掃除をお願いします"},
+    {base:"วันนี้ไม่ต้องทำความสะอาดห้อง", type:'s', jp:"今日部屋は掃除しなくていいです"},
+    {base:"ขอน้ำดื่มฟรีด้วย", type:'s', jp:"コンプリメンタリーのお水をください"},
+    {base:"ขอเปลี่ยนผ้าเช็ดตัวด้วย", type:'s', jp:"バスタオルを交換してください"},
+    {base:"เพื่อนพักด้วยกันได้ไหม", type:'q', jp:"友人が一緒に宿泊してもいいですか？"},
+    {base:"มีค่าใช้จ่ายเพิ่มไหม", type:'q', jp:"追加料金がかかりますか？"},
+    {base:"เรียกแท็กซี่ให้หน่อยได้ไหม", type:'q', jp:"タクシーを呼んでいただけますか？"},
+    {base:"ช่วยแนะนำร้านอาหารหน่อย", type:'s', jp:"おすすめのレストランを教えてください"},
+    {base:"มีที่จอดรถไหม", type:'q', jp:"駐車場はありますか？"},
+    {base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
+    {base:"สระว่ายน้ำเปิดกี่โมงถึงกี่โมง", type:'q', jp:"プールは何時から何時まで利用可能ですか？"},
+    {base:"ฟิตเนสเปิดกี่โมงถึงกี่โมง", type:'q', jp:"ジムは何時から何時まで利用可能ですか？"},
+    {base:"แถวนี้มีตลาดนัดกลางคืนไหม", type:'q', jp:"近くにナイトマーケットはありますか？"},
+    {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+    {base:"จ่ายเงินตอนจองแล้ว", type:'s', jp:"予約時に支払い済みです"},
+    {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+    {base:"ห้องอยู่ชั้นไหน", type:'q', jp:"部屋は何階ですか？"},
+    {base:"ขอเปลี่ยนห้องได้ไหม", type:'q', jp:"部屋を変えていただけますか？"},
+    {base:"เสียงดังมาก", type:'s', jp:"騒音がひどいです"},
+    {base:"ห้องข้างๆเสียงดัง", type:'s', jp:"他の部屋がうるさいです"},
+    {base:"มีกลิ่นบุหรี่", type:'s', jp:"煙草臭いです"},
+    {base:"มีแมลงหรือจิ้งจก", type:'s', jp:"虫やトカゲがいます"},
+    {base:"ได้พักอย่างสบายมาก ขอบคุณมากค่ะ", type:'s', jp:"とても快適に過ごすことができ大変お世話になりました"},
   ]},
-  { icon:"bowl", title:"レストランで注文する", color:"var(--pink)", count:"10", phrases:[
+  { icon:"bowl", title:"レストランで注文する", color:"var(--pink)", count:"14", phrases:[
     {base:"ขอเมนูหน่อย", type:'s', jp:"メニューをください"},
     {base:"อันนี้เผ็ดไหม", type:'q', jp:"これは辛いですか"},
     {base:"เก็บเงินด้วย", type:'s', jp:"お会計お願いします"},
+    {base:"มีอะไรแนะนำไหม", type:'q', jp:"おすすめはどれですか？"},
+    {base:"ไม่ใส่พริก", type:'s', jp:"唐辛子を入れないでください"},
+    {base:"ไม่ใส่ผักชี", type:'s', jp:"パクチーを入れないでください"},
+    {base:"ทั้งหมดเท่าไหร่", type:'q', jp:"全部でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+    {base:"เลือกชนิดเส้นได้ไหม", type:'q', jp:"麵の種類は選べますか？"},
+    {base:"ขอเป็นเส้นบะหมี่", type:'s', jp:"セン・バミーでお願いします", note:"中華風の卵麺(黄色い麺)。バミーナーム、バミーヘーンなどで使用"},
+    {base:"ขอเป็นเส้นเล็ก", type:'s', jp:"セン・レックでお願いします", note:"細い米麺。タイで最もよく使われる麺の一つ。パッタイやクイッティアオで定番"},
+    {base:"ขอเป็นเส้นใหญ่", type:'s', jp:"セン・ヤイでお願いします", note:"幅広の米麺。パッシーユーやラートナーで人気"},
+    {base:"ขอเป็นเส้นหมี่ขาว", type:'s', jp:"セン・ミー・カーオでお願いします", note:"極細の米麺(ビーフン)。スープ麺や炒め物に使用"},
+    {base:"ขอเป็นวุ้นเส้น", type:'s', jp:"ウンセンでお願いします", note:"春雨(緑豆でんぷん)。ヤムウンセンやスキーなど"},
+    {base:"ขอเป็นมาม่า", type:'s', jp:"ママーでお願いします", note:"インスタント麺"},
   ]},
   { icon:"cart", title:"屋台で注文する", color:"var(--marigold-deep)", count:"9", phrases:[
     {base:"อันนี้คืออะไร", type:'q', jp:"これは何ですか"},
@@ -1214,6 +1278,7 @@ function renderCategoryFixed(){
     document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${p.jp}</div>
+      ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
       ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}
     </div>`;
     setLastPhrase(th, p.jp);
@@ -1227,6 +1292,7 @@ function renderCategoryList(){
     html += `<div class="follow-item ${sel}" onclick="selectCategoryPhrase(${idx})">
       <div class="fi-th">${fullTh(p.base, p.type)}</div>
       <div class="fi-jp">${p.jp}</div>
+      ${p.note ? `<div class="fi-note">${p.note}</div>` : ''}
     </div>`;
   });
   document.getElementById('composerList').innerHTML = html;

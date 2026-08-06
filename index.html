@@ -407,6 +407,18 @@
   .rate-modal-close{ width:100%; background:transparent; color:#8B8272; border:none; padding:8px; font-size:12.5px; cursor:pointer; }
 
   .mode-group-label{ font-size:11px; font-weight:700; color:#8B8272; letter-spacing:1px; margin:14px 2px 6px; }
+  .transport-tabs{
+    display:flex; gap:6px; margin:2px 2px 14px; position:sticky; top:0; background:var(--paper);
+    padding-top:4px; padding-bottom:8px; z-index:1;
+  }
+  .transport-tab{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:9px 4px;
+    font-family:'Noto Sans JP', sans-serif; font-size:12px; font-weight:600; color:#8B8272; cursor:pointer;
+  }
+  .transport-tab.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .transport-tab .icon-img{ filter:none; }
+  .transport-tab.active .icon-img{ filter:brightness(0) invert(1); }
   .mode-group-label svg{ vertical-align:-3px; margin-right:2px; }
   .follow-item{
     background:var(--sand); border:1.5px solid var(--line); border-radius:12px;
@@ -912,18 +924,18 @@ const transportItems = [
   {mode:'taxi', base:"เปิดแอร์หน่อยได้ไหม", type:'q', jp:"エアコンをつけてもらえますか？"},
   {mode:'taxi', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
   {mode:'taxi', base:"รู้สึกไม่ค่อยสบาย ขับช้าลงหน่อยได้ไหม", type:'q', jp:"体調があまり良くないのでもう少しゆっくり走ってくれますか？"},
-  {mode:'taxi', base:"มีที่จอดรถไหม", type:'q', jp:"駐車場はありますか？"},
-  {mode:'taxi', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか"},
+  {mode:'other', base:"มีที่จอดรถไหม", type:'q', jp:"駐車場はありますか？"},
+  {mode:'other', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか"},
   {mode:'taxi', base:"รู้สึกไม่ค่อยสบาย ลดแอร์ลงหน่อยได้ไหม", type:'q', jp:"体調があまり良くないのでエアコンを弱くしてもらえますか？"},
   {mode:'taxi', base:"ขอชาร์จโทรศัพท์ได้ไหม", type:'q', jp:"携帯の充電をさせてもらう事はできますか？"},
   {mode:'taxi', base:"ขอเอากระเป๋าใส่ท้ายรถได้ไหม", type:'q', jp:"トランクに荷物を載せてもいいですか？"},
   {mode:'train', base:"ขอตู้พัดลม", type:'s', jp:"扇風機付きの車両が希望です"},
   {mode:'train', base:"ขอตู้ที่ราคาถูกที่สุด", type:'s', jp:"一番料金が安い車両が希望です"},
   {mode:'train', base:"ขอห้องส่วนตัว", type:'s', jp:"個室の車両が希望です"},
-  {mode:'taxi', base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
-  {mode:'taxi', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+  {mode:'other', base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
+  {mode:'other', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
   {mode:'taxi', base:"อยากไปที่นี่ ไปได้ไหม", type:'q', jp:"ここまで行きたいのですが可能ですか？"},
-  {mode:'taxi', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+  {mode:'other', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
   {mode:'taxi', base:"ที่ขึ้นแท็กซี่อยู่ที่ไหน", type:'q', jp:"タクシー乗り場はどこですか？"},
   {mode:'bus', base:"ที่ขึ้นรถบัสอยู่ที่ไหน", type:'q', jp:"バス乗り場はどこですか？"},
   {mode:'train', base:"ซื้อตั๋วได้ที่ไหน", type:'q', jp:"乗車券はどこで買えますか？"},
@@ -934,19 +946,19 @@ const transportItems = [
   {mode:'train', base:"ต้องไปช่องไหน", type:'q', jp:"どの窓口に行けばいいですか？"},
   {mode:'taxi', base:"เปลี่ยนจุดหมายได้ไหม", type:'q', jp:"行き先を変更することは可能ですか？"},
   {mode:'taxi', base:"ขากลับจะใช้อีก รอได้ไหม", type:'q', jp:"帰りも利用したいので待っていてもらえますか？"},
-  {mode:'taxi', base:"มีแบงก์พันใบเดียว มีเงินทอนไหม", type:'q', jp:"1000バーツ札しか持ってないのですがおつりはありますか？"},
+  {mode:'other', base:"มีแบงก์พันใบเดียว มีเงินทอนไหม", type:'q', jp:"1000バーツ札しか持ってないのですがおつりはありますか？"},
   {mode:'taxi', base:"แวะร้านสะดวกซื้อระหว่างทางได้ไหม", type:'q', jp:"途中でコンビニに寄ってもらえますか？"},
-  {mode:'taxi', base:"อยากเช่ารถยนต์", type:'s', jp:"車を借りたいです"},
-  {mode:'taxi', base:"อยากเช่ามอเตอร์ไซค์", type:'s', jp:"バイクを借りたいです"},
+  {mode:'other', base:"อยากเช่ารถยนต์", type:'s', jp:"車を借りたいです"},
+  {mode:'other', base:"อยากเช่ามอเตอร์ไซค์", type:'s', jp:"バイクを借りたいです"},
   {mode:'train', base:"อยากไปที่นี่ รถไฟขบวนนี้ใช่ไหม", type:'q', jp:"ここに行きたいのですがこの電車であってますか？"},
   {mode:'bus', base:"อยากไปที่นี่ รถบัสคันนี้ใช่ไหม", type:'q', jp:"ここに行きたいのですがこのバスであってますか？"},
-  {mode:'bus', base:"ท่าเรือเฟอร์รี่อยู่ที่ไหน", type:'q', jp:"フェリー乗り場はどこですか？"},
-  {mode:'bus', base:"ท่าเรือสปีดโบ๊ทอยู่ที่ไหน", type:'q', jp:"スピードボート乗り場はどこですか？"},
-  {mode:'taxi', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
-  {mode:'bus', base:"ท่าเรืออยู่ที่ไหน", type:'q', jp:"船の乗り場はどこですか？"},
+  {mode:'other', base:"ท่าเรือเฟอร์รี่อยู่ที่ไหน", type:'q', jp:"フェリー乗り場はどこですか？"},
+  {mode:'other', base:"ท่าเรือสปีดโบ๊ทอยู่ที่ไหน", type:'q', jp:"スピードボート乗り場はどこですか？"},
+  {mode:'other', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'other', base:"ท่าเรืออยู่ที่ไหน", type:'q', jp:"船の乗り場はどこですか？"},
   {mode:'bus', base:"ที่ขึ้นสองแถวอยู่ที่ไหน", type:'q', jp:"ソンテウ乗り場はどこですか？"},
 ];
-const modeMeta = { bus:{icon:'bus', label:'バス'}, train:{icon:'train', label:'鉄道'}, taxi:{icon:'taxi', label:'タクシー'} };
+const modeMeta = { bus:{icon:'bus', label:'バス'}, train:{icon:'train', label:'鉄道'}, taxi:{icon:'taxi', label:'タクシー'}, other:{icon:'pin', label:'その他'} };
 function metaIconHtml(meta){
   return ICON_DATA[meta.icon] ? iconSvg(meta.icon, 20) : meta.icon;
 }
@@ -1088,6 +1100,7 @@ let anchorExpanded = true;
 let openState = null;
 let ticketSelected = false;
 let ticketCount = 1;
+let transportTab = 'bus';
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
 
@@ -1188,9 +1201,9 @@ function openNearby(i){
 }
 
 function openModeList(mode){
-  openState = {type:'mode', mode};
-  const meta = modeMeta[mode];
-  document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${metaIconHtml(meta)}</span>${meta.label}で伝える`;
+  openState = {type:'transport'};
+  transportTab = mode;
+  document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg('taxi', 22)}</span>移動する`;
   renderComposerFixed();
   renderComposerList();
   document.getElementById('composerScreen').classList.add('show');
@@ -1198,6 +1211,7 @@ function openModeList(mode){
 
 function openTransportComposer(){
   openState = {type:'transport'};
+  transportTab = 'bus';
   document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg('taxi', 22)}</span>移動する`;
   renderComposerFixed();
   renderComposerList();
@@ -1219,32 +1233,29 @@ function ticketRowHtml(){
     <div class="fi-jp">${currentDestination.station.jp}までの乗車券をお願いします</div>
   </div>`;
 }
+function switchTransportTab(mode){
+  transportTab = mode;
+  renderComposerList();
+}
 function renderComposerList(){
   let html = '';
-  if(openState && openState.type === 'mode'){
+  if(openState && openState.type === 'transport'){
+    html += `<div class="transport-tabs">`;
+    ['bus','train','taxi','other'].forEach(mode => {
+      const meta = modeMeta[mode];
+      const active = transportTab === mode ? 'active' : '';
+      html += `<button class="transport-tab ${active}" onclick="switchTransportTab('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
+    });
+    html += `</div>`;
     transportItems.forEach((item, idx) => {
-      if(item.mode !== openState.mode) return;
+      if(item.mode !== transportTab) return;
       const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
       html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
         <div class="fi-th">${fullTh(item.base, item.type)}</div>
         <div class="fi-jp">${item.jp}</div>
       </div>`;
     });
-    if(openState.mode === 'train') html += ticketRowHtml();
-  } else {
-    ['bus','train','taxi'].forEach(mode => {
-      const meta = modeMeta[mode];
-      html += `<div class="mode-group-label">${metaIconHtml(meta)} ${meta.label}</div>`;
-      transportItems.forEach((item, idx) => {
-        if(item.mode !== mode) return;
-        const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
-        html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
-          <div class="fi-th">${fullTh(item.base, item.type)}</div>
-          <div class="fi-jp">${item.jp}</div>
-        </div>`;
-      });
-      if(mode === 'train') html += ticketRowHtml();
-    });
+    if(transportTab === 'train') html += ticketRowHtml();
   }
   document.getElementById('composerList').innerHTML = html;
 }

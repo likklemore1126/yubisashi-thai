@@ -291,6 +291,32 @@
   .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.4; }
   .sp-jp{ font-size:13.5px; margin-top:7px; opacity:0.9; }
   .sp-note{ font-size:11.5px; margin-top:6px; opacity:0.7; line-height:1.6; white-space:pre-line; }
+  .hotel-info-pill{
+    display:flex; align-items:center; gap:8px; background:var(--ink); color:#fff;
+    border-radius:999px; padding:10px 14px; margin-bottom:12px; cursor:pointer; font-size:12.5px;
+  }
+  .hotel-info-pill-text{ flex:1; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .hotel-info-pill-arrow{ font-size:11px; opacity:0.6; flex:0 0 auto; }
+  .hotel-info-card{
+    background:var(--ink); color:#fff; border-radius:14px; padding:14px; margin-bottom:12px;
+  }
+  .hotel-info-card-head{
+    display:flex; justify-content:space-between; align-items:center; font-size:12px;
+    font-weight:700; margin-bottom:10px; opacity:0.85;
+  }
+  .hotel-info-clear{ background:none; border:1px solid rgba(255,255,255,0.4); color:#fff; border-radius:8px; padding:4px 9px; font-size:11px; cursor:pointer; }
+  .hotel-info-label{ font-size:11px; opacity:0.6; display:block; margin:8px 0 4px; }
+  .hotel-info-input{
+    width:100%; border:1.5px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff;
+    border-radius:8px; padding:9px 10px; font-size:14px; font-family:'Noto Sans JP', sans-serif; box-sizing:border-box;
+  }
+  .hotel-info-input::placeholder{ color:rgba(255,255,255,0.35); }
+  .hotel-info-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .hotel-info-nights{ font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; color:var(--marigold); margin-top:12px; text-align:center; }
+  .hotel-info-collapse{
+    width:100%; margin-top:12px; background:rgba(255,255,255,0.1); border:none; color:#fff;
+    border-radius:8px; padding:9px; font-size:12.5px; cursor:pointer;
+  }
   .ticket-stepper{
     margin-top:14px; display:flex; align-items:center; gap:16px; justify-content:center;
   }
@@ -1339,6 +1365,104 @@ function openFavoritesChain(){
 function closeFavChain(){
   document.getElementById('favChainDisplay').classList.remove('show');
 }
+
+// ---------- ホテル情報の保存欄 ----------
+let hotelInfo = {name:'', floor:'', room:'', checkin:'', checkout:''};
+let hotelInfoExpanded = false;
+function loadHotelInfo(){
+  try{
+    const raw = localStorage.getItem('yubisashi_hotel_info');
+    hotelInfo = raw ? JSON.parse(raw) : {name:'', floor:'', room:'', checkin:'', checkout:''};
+  }catch(e){ hotelInfo = {name:'', floor:'', room:'', checkin:'', checkout:''}; }
+  const hasData = hotelInfo.name || hotelInfo.floor || hotelInfo.room || hotelInfo.checkin || hotelInfo.checkout;
+  hotelInfoExpanded = !hasData;
+}
+function saveHotelInfoData(){
+  try{ localStorage.setItem('yubisashi_hotel_info', JSON.stringify(hotelInfo)); }catch(e){}
+}
+function calcNightsText(){
+  if(!hotelInfo.checkin || !hotelInfo.checkout) return '';
+  const d1 = new Date(hotelInfo.checkin);
+  const d2 = new Date(hotelInfo.checkout);
+  const diffDays = Math.round((d2 - d1) / 86400000);
+  if(isNaN(diffDays)) return '';
+  if(diffDays <= 0) return '日付を確認してください';
+  return `${diffDays}泊${diffDays + 1}日`;
+}
+function updateNightsDisplay(){
+  const el = document.getElementById('hotelNightsDisplay');
+  if(el) el.textContent = calcNightsText();
+}
+function hotelInfoSummaryText(){
+  const parts = [];
+  if(hotelInfo.name) parts.push(hotelInfo.name);
+  if(hotelInfo.floor || hotelInfo.room){
+    let loc = '';
+    if(hotelInfo.floor) loc += `${hotelInfo.floor}F`;
+    if(hotelInfo.room) loc += (loc ? ' ' : '') + `${hotelInfo.room}号室`;
+    parts.push(loc);
+  }
+  const nights = calcNightsText();
+  if(nights) parts.push(nights);
+  return parts.length ? parts.join(' ・ ') : 'タップしてホテル名・部屋番号を保存';
+}
+function toggleHotelInfoExpanded(){
+  hotelInfoExpanded = !hotelInfoExpanded;
+  renderCategoryFixed();
+}
+function clearHotelInfo(){
+  hotelInfo = {name:'', floor:'', room:'', checkin:'', checkout:''};
+  saveHotelInfoData();
+  hotelInfoExpanded = true;
+  renderCategoryFixed();
+}
+function hotelInfoBlockHtml(){
+  if(!hotelInfoExpanded){
+    return `<div class="hotel-info-pill" onclick="toggleHotelInfoExpanded()">
+      <span class="hotel-info-pill-icon">${iconSvg('hotel', 16)}</span>
+      <span class="hotel-info-pill-text">${hotelInfoSummaryText()}</span>
+      <span class="hotel-info-pill-arrow">タップで表示 ▾</span>
+    </div>`;
+  }
+  return `<div class="hotel-info-card">
+    <div class="hotel-info-card-head">
+      <span>${iconSvg('hotel', 16)} 宿泊メモ(この端末に保存されます)</span>
+      <button class="hotel-info-clear" onclick="clearHotelInfo()">✕ クリア</button>
+    </div>
+    <label class="hotel-info-label">ホテル名(コピペ可)</label>
+    <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.name)}"
+      placeholder="例: ◯◯ Hotel Bangkok"
+      oninput="hotelInfo.name=this.value; saveHotelInfoData();">
+    <div class="hotel-info-row">
+      <div>
+        <label class="hotel-info-label">階数</label>
+        <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.floor)}"
+          placeholder="例: 5" inputmode="numeric"
+          oninput="hotelInfo.floor=this.value; saveHotelInfoData();">
+      </div>
+      <div>
+        <label class="hotel-info-label">部屋番号</label>
+        <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.room)}"
+          placeholder="例: 512"
+          oninput="hotelInfo.room=this.value; saveHotelInfoData();">
+      </div>
+    </div>
+    <div class="hotel-info-row">
+      <div>
+        <label class="hotel-info-label">チェックイン日</label>
+        <input type="date" class="hotel-info-input" value="${escapeAttr(hotelInfo.checkin)}"
+          onchange="hotelInfo.checkin=this.value; saveHotelInfoData(); updateNightsDisplay();">
+      </div>
+      <div>
+        <label class="hotel-info-label">チェックアウト日</label>
+        <input type="date" class="hotel-info-input" value="${escapeAttr(hotelInfo.checkout)}"
+          onchange="hotelInfo.checkout=this.value; saveHotelInfoData(); updateNightsDisplay();">
+      </div>
+    </div>
+    <div class="hotel-info-nights" id="hotelNightsDisplay">${calcNightsText()}</div>
+    <button class="hotel-info-collapse" onclick="toggleHotelInfoExpanded()">たたむ ▴</button>
+  </div>`;
+}
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
 
@@ -1554,12 +1678,13 @@ function openCategoryComposer(i){
 }
 function renderCategoryFixed(){
   const s = situations[openState.index];
+  const hotelHtml = (s.icon === 'hotel') ? hotelInfoBlockHtml() : '';
   if(selectedCategoryIdx === null){
-    document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
+    document.getElementById('composerFixed').innerHTML = hotelHtml + `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   } else {
     const p = s.phrases[selectedCategoryIdx];
     const th = fullTh(p.base, p.type);
-    document.getElementById('composerFixed').innerHTML = `<div class="selected-phrase">
+    document.getElementById('composerFixed').innerHTML = hotelHtml + `<div class="selected-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${p.jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
@@ -2092,6 +2217,7 @@ document.querySelectorAll('.icon-slot').forEach(el => {
   const size = parseInt(el.dataset.size, 10) || 16;
   el.outerHTML = iconSvg(key, size);
 });
+loadHotelInfo();
 loadFavorites();
 renderNearby();
 renderSituations();

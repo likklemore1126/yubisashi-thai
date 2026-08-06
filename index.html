@@ -311,12 +311,18 @@
   .fav-handle-icon{ font-weight:700; color:var(--ink); }
   .fav-empty{ display:none; text-align:center; font-size:13px; color:#8B8272; padding:40px 20px; }
   .fav-empty.show{ display:block; }
-  .fav-list{ padding:0 18px; overflow-y:auto; flex:1; }
+  .fav-list{ padding:0 18px; overflow-y:auto; flex:1; position:relative; }
   .fav-row{
     display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid var(--line);
     border-radius:12px; padding:11px 12px; margin-bottom:8px; touch-action:pan-y;
   }
-  .fav-row.dragging{ opacity:0.4; }
+  .fav-row.dragging{
+    box-shadow:0 10px 24px rgba(23,36,42,0.25); transform:scale(1.03);
+    border-color:var(--marigold); background:#fff;
+  }
+  .fav-placeholder{
+    border:2px dashed var(--line); border-radius:12px; margin-bottom:8px; background:rgba(0,0,0,0.02);
+  }
   .fav-row-body{ flex:1; min-width:0; }
   .fav-row .fi-th{ font-family:'Kanit', sans-serif; font-size:14px; }
   .fav-row .fi-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
@@ -1238,70 +1244,84 @@ function attachDragHandlers(){
     handle.addEventListener('pointerdown', onDragStart);
   });
 }
-let dragState = null;
+let dragCtx = null;
 function onDragStart(e){
   const idx = parseInt(e.currentTarget.dataset.idx, 10);
   const row = document.querySelector(`.fav-row[data-idx="${idx}"]`);
   if(!row) return;
   const listEl = document.getElementById('favoritesList');
-  const rows = Array.from(listEl.querySelectorAll('.fav-row'));
-  dragState = {
-    fromIdx: idx,
+  const rowRect = row.getBoundingClientRect();
+
+  const placeholder = document.createElement('div');
+  placeholder.className = 'fav-placeholder';
+  placeholder.style.height = rowRect.height + 'px';
+  row.parentNode.insertBefore(placeholder, row);
+
+  dragCtx = {
     row,
-    rows,
-    startY: e.clientY,
-    rowHeight: row.offsetHeight,
+    placeholder,
+    listEl,
+    startClientY: e.clientY,
+    startTop: rowRect.top,
+    startLeft: rowRect.left,
+    width: rowRect.width,
+    height: rowRect.height,
   };
+
+  row.style.position = 'fixed';
+  row.style.left = rowRect.left + 'px';
+  row.style.top = rowRect.top + 'px';
+  row.style.width = rowRect.width + 'px';
+  row.style.zIndex = '999';
   row.classList.add('dragging');
+
   e.currentTarget.setPointerCapture(e.pointerId);
   document.addEventListener('pointermove', onDragMove);
   document.addEventListener('pointerup', onDragEnd);
 }
 function onDragMove(e){
-  if(!dragState) return;
-  const deltaY = e.clientY - dragState.startY;
-  dragState.row.style.transform = `translateY(${deltaY}px)`;
-  dragState.row.style.position = 'relative';
-  dragState.row.style.zIndex = '5';
+  if(!dragCtx) return;
+  const deltaY = e.clientY - dragCtx.startClientY;
+  dragCtx.row.style.top = (dragCtx.startTop + deltaY) + 'px';
+  const rowMidY = e.clientY;
 
-  const currentOrder = Array.from(document.getElementById('favoritesList').querySelectorAll('.fav-row'));
-  const rowRect = dragState.row.getBoundingClientRect();
-  const rowMidY = rowRect.top + rowRect.height / 2;
-
-  currentOrder.forEach(other => {
-    if(other === dragState.row) return;
-    const r = other.getBoundingClientRect();
-    const midY = r.top + r.height / 2;
-    const otherIdx = parseInt(other.dataset.idx, 10);
-    const fromIdx = parseInt(dragState.row.dataset.idx, 10);
-    if(rowMidY > midY && otherIdx > fromIdx){
-      swapFavorites(fromIdx, otherIdx);
-      dragState.row.style.transform = 'translateY(0)';
-      dragState.startY = e.clientY;
-    } else if(rowMidY < midY && otherIdx < fromIdx){
-      swapFavorites(fromIdx, otherIdx);
-      dragState.row.style.transform = 'translateY(0)';
-      dragState.startY = e.clientY;
+  const siblings = Array.from(dragCtx.listEl.children).filter(el => el !== dragCtx.row && el !== dragCtx.placeholder);
+  for(const sib of siblings){
+    const r = sib.getBoundingClientRect();
+    const sibMidY = r.top + r.height / 2;
+    const sibIsAfter = !!(dragCtx.placeholder.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if(sibIsAfter && rowMidY > sibMidY){
+      dragCtx.listEl.insertBefore(dragCtx.placeholder, sib.nextSibling);
+      break;
+    } else if(!sibIsAfter && rowMidY < sibMidY){
+      dragCtx.listEl.insertBefore(dragCtx.placeholder, sib);
+      break;
     }
-  });
-}
-function swapFavorites(i, j){
-  const tmp = favorites[i];
-  favorites[i] = favorites[j];
-  favorites[j] = tmp;
-  saveFavorites();
-  renderFavorites();
-  dragState.row = document.querySelector(`.fav-row[data-idx="${j}"]`);
-  if(dragState.row) dragState.row.classList.add('dragging');
+  }
 }
 function onDragEnd(){
-  if(dragState && dragState.row){
-    dragState.row.style.transform = '';
-    dragState.row.style.position = '';
-    dragState.row.style.zIndex = '';
-    dragState.row.classList.remove('dragging');
-  }
-  dragState = null;
+  if(!dragCtx) return;
+  const { row, placeholder } = dragCtx;
+  placeholder.parentNode.insertBefore(row, placeholder);
+  placeholder.remove();
+
+  row.style.position = '';
+  row.style.left = '';
+  row.style.top = '';
+  row.style.width = '';
+  row.style.zIndex = '';
+  row.classList.remove('dragging');
+
+  const newOrder = [];
+  document.querySelectorAll('#favoritesList .fav-row').forEach(el => {
+    const idx = parseInt(el.dataset.idx, 10);
+    newOrder.push(favorites[idx]);
+  });
+  favorites = newOrder;
+  saveFavorites();
+  renderFavorites();
+
+  dragCtx = null;
   document.removeEventListener('pointermove', onDragMove);
   document.removeEventListener('pointerup', onDragEnd);
 }

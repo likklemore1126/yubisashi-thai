@@ -161,6 +161,13 @@
     font-weight:600; font-size:12.5px; cursor:pointer;
   }
 
+  .fav-entry{
+    display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid var(--marigold);
+    border-radius:14px; padding:13px 14px; margin:16px 0 4px; cursor:pointer;
+  }
+  .fav-entry-star{ font-size:20px; flex:0 0 auto; }
+  .fav-entry-text{ font-family:'Kanit', sans-serif; font-weight:600; font-size:14px; flex:1; }
+  .fav-entry-count{ font-size:11.5px; color:var(--marigold); font-weight:700; background:#FFF6E8; padding:3px 9px; border-radius:999px; flex:0 0 auto; }
   .section-label{
     font-size:12px; font-weight:700; color:#8B8272; letter-spacing:1px;
     margin:20px 18px 8px; display:flex; align-items:center; gap:6px;
@@ -300,6 +307,28 @@
   .landscape-display.show{ display:flex; }
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; }
   .landscape-jp{ font-size:min(4vw, 22px); opacity:0.65; margin-top:18px; }
+  .fav-help{ font-size:12px; color:#8B8272; padding:0 18px 10px; line-height:1.6; }
+  .fav-handle-icon{ font-weight:700; color:var(--ink); }
+  .fav-empty{ display:none; text-align:center; font-size:13px; color:#8B8272; padding:40px 20px; }
+  .fav-empty.show{ display:block; }
+  .fav-list{ padding:0 18px; overflow-y:auto; flex:1; }
+  .fav-row{
+    display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid var(--line);
+    border-radius:12px; padding:11px 12px; margin-bottom:8px; touch-action:pan-y;
+  }
+  .fav-row.dragging{ opacity:0.4; }
+  .fav-row-body{ flex:1; min-width:0; }
+  .fav-row .fi-th{ font-family:'Kanit', sans-serif; font-size:14px; }
+  .fav-row .fi-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
+  .fav-remove{ background:none; border:none; color:#B92D5B; font-size:15px; cursor:pointer; flex:0 0 auto; padding:4px; }
+  .fav-handle{
+    flex:0 0 auto; font-size:20px; color:#C7BEA9; padding:8px 6px; cursor:grab; touch-action:none;
+    user-select:none;
+  }
+  .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:0 8px; }
+  .fav-chain-item{ margin-bottom:26px; text-align:center; }
+  .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; }
+  .fav-chain-jp{ font-size:13px; opacity:0.6; margin-top:6px; }
   .landscape-close{
     position:absolute; top:calc(16px + env(safe-area-inset-top)); right:calc(20px + env(safe-area-inset-right)); font-size:13px; opacity:0.55;
     font-family:'Noto Sans JP', sans-serif;
@@ -422,13 +451,19 @@
   .mode-group-label svg{ vertical-align:-3px; margin-right:2px; }
   .follow-item{
     background:var(--sand); border:1.5px solid var(--line); border-radius:12px;
-    padding:11px 13px; margin-bottom:7px; cursor:pointer; transition:all .12s ease;
+    padding:11px 40px 11px 13px; margin-bottom:7px; cursor:pointer; transition:all .12s ease;
+    position:relative;
   }
   .follow-item .fi-th{ font-family:'Kanit', sans-serif; font-weight:600; font-size:16px; }
   .follow-item .fi-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
   .follow-item .fi-note{ font-size:10.5px; color:#B08A4A; margin-top:2px; }
   .follow-item.selected{ background:var(--marigold); border-color:var(--marigold-deep); }
   .follow-item.selected .fi-jp{ color:#5c4415; }
+  .fav-star{
+    position:absolute; top:8px; right:8px; background:none; border:none; font-size:19px;
+    color:#C7BEA9; cursor:pointer; padding:4px; line-height:1;
+  }
+  .fav-star.active{ color:var(--marigold); }
 </style>
 </head>
 <body>
@@ -469,6 +504,12 @@
       <button class="mode-btn" onclick="openModeList('train')"><span class="icon-slot" data-icon="train" data-size="20"></span> 鉄道</button>
       <button class="mode-btn" onclick="openModeList('taxi')"><span class="icon-slot" data-icon="taxi" data-size="20"></span> タクシー</button>
     </div>
+  </div>
+
+  <div class="fav-entry" onclick="openFavorites()">
+    <span class="fav-entry-star">⭐</span>
+    <span class="fav-entry-text">お気に入り(並び替えて作文できます)</span>
+    <span class="fav-entry-count" id="favCount">0件</span>
   </div>
 
   <div class="section-label"><span class="bar"></span>近くの◯◯を伝える</div>
@@ -581,6 +622,22 @@
       <div class="nb-key action" style="grid-column:span 2; font-size:16px;" onclick="timeBackspace()">⌫ ย้อนกลับ(戻す)</div>
       <div class="nb-key action" style="font-size:16px;" onclick="timeClear()">C ล้าง</div>
     </div>
+  </div>
+
+  <div class="composer-screen" id="favoritesScreen" style="z-index:9;">
+    <div class="composer-header">
+      <div class="ctitle"><span class="fav-entry-star" style="font-size:18px;">⭐</span>お気に入り</div>
+      <button class="fullscreen-btn" style="margin:0;" onclick="openFavoritesChain()">この順番で見せる</button>
+      <button class="composer-close" onclick="closeFavorites()">✕</button>
+    </div>
+    <p class="fav-help">右端の <span class="fav-handle-icon">☰</span> を長押ししたまま上下に動かすと、並び順を変えられます。並べた順番のまま、まとめて見せることができます。</p>
+    <div class="fav-list" id="favoritesList"></div>
+    <div class="fav-empty" id="favEmptyMsg">まだ何も登録されていません。フレーズ画面の ☆ をタップして追加してください。</div>
+  </div>
+
+  <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
+    <div class="landscape-close">タップで閉じる ✕</div>
+    <div class="fav-chain-list" id="favChainList"></div>
   </div>
 
   <div class="landscape-display" id="landscapeDisplay" onclick="closeLandscapeDisplay()">
@@ -1101,6 +1158,167 @@ let openState = null;
 let ticketSelected = false;
 let ticketCount = 1;
 let transportTab = 'bus';
+
+// ---------- お気に入り(並び替え作文) ----------
+function escapeAttr(str){
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+let favorites = [];
+function loadFavorites(){
+  try{
+    const raw = localStorage.getItem('yubisashi_favorites');
+    favorites = raw ? JSON.parse(raw) : [];
+  }catch(e){ favorites = []; }
+  updateFavCount();
+}
+function saveFavorites(){
+  try{ localStorage.setItem('yubisashi_favorites', JSON.stringify(favorites)); }catch(e){}
+  updateFavCount();
+}
+function updateFavCount(){
+  const el = document.getElementById('favCount');
+  if(el) el.textContent = `${favorites.length}件`;
+}
+function isFavorite(th){
+  return favorites.some(f => f.th === th);
+}
+function toggleFavorite(th, jp){
+  const i = favorites.findIndex(f => f.th === th);
+  if(i >= 0){ favorites.splice(i, 1); }
+  else{ favorites.push({th, jp}); }
+  saveFavorites();
+  document.querySelectorAll(`.fav-star[data-th="${CSS.escape(th)}"]`).forEach(btn => {
+    const active = isFavorite(th);
+    btn.textContent = active ? '★' : '☆';
+    btn.classList.toggle('active', active);
+  });
+}
+function toggleFavoriteFromBtn(btn){
+  toggleFavorite(btn.dataset.th, btn.dataset.jp);
+}
+function favStarHtml(th, jp){
+  const active = isFavorite(th) ? 'active' : '';
+  const icon = isFavorite(th) ? '★' : '☆';
+  return `<button class="fav-star ${active}" data-th="${escapeAttr(th)}" data-jp="${escapeAttr(jp)}" onclick="event.stopPropagation(); toggleFavoriteFromBtn(this);">${icon}</button>`;
+}
+
+function openFavorites(){
+  document.getElementById('favoritesScreen').classList.add('show');
+  renderFavorites();
+}
+function closeFavorites(){
+  document.getElementById('favoritesScreen').classList.remove('show');
+}
+function renderFavorites(){
+  const listEl = document.getElementById('favoritesList');
+  const emptyEl = document.getElementById('favEmptyMsg');
+  emptyEl.classList.toggle('show', favorites.length === 0);
+  listEl.innerHTML = favorites.map((f, i) => `
+    <div class="fav-row" data-idx="${i}">
+      <div class="fav-row-body">
+        <div class="fi-th">${f.th}</div>
+        <div class="fi-jp">${f.jp}</div>
+      </div>
+      <button class="fav-remove" onclick="removeFavorite(${i})">✕</button>
+      <div class="fav-handle" data-idx="${i}">☰</div>
+    </div>
+  `).join('');
+  attachDragHandlers();
+}
+function removeFavorite(i){
+  favorites.splice(i, 1);
+  saveFavorites();
+  renderFavorites();
+}
+
+// タッチ/マウス両対応のドラッグ並び替え
+function attachDragHandlers(){
+  const handles = document.querySelectorAll('.fav-handle');
+  handles.forEach(handle => {
+    handle.addEventListener('pointerdown', onDragStart);
+  });
+}
+let dragState = null;
+function onDragStart(e){
+  const idx = parseInt(e.currentTarget.dataset.idx, 10);
+  const row = document.querySelector(`.fav-row[data-idx="${idx}"]`);
+  if(!row) return;
+  const listEl = document.getElementById('favoritesList');
+  const rows = Array.from(listEl.querySelectorAll('.fav-row'));
+  dragState = {
+    fromIdx: idx,
+    row,
+    rows,
+    startY: e.clientY,
+    rowHeight: row.offsetHeight,
+  };
+  row.classList.add('dragging');
+  e.currentTarget.setPointerCapture(e.pointerId);
+  document.addEventListener('pointermove', onDragMove);
+  document.addEventListener('pointerup', onDragEnd);
+}
+function onDragMove(e){
+  if(!dragState) return;
+  const deltaY = e.clientY - dragState.startY;
+  dragState.row.style.transform = `translateY(${deltaY}px)`;
+  dragState.row.style.position = 'relative';
+  dragState.row.style.zIndex = '5';
+
+  const currentOrder = Array.from(document.getElementById('favoritesList').querySelectorAll('.fav-row'));
+  const rowRect = dragState.row.getBoundingClientRect();
+  const rowMidY = rowRect.top + rowRect.height / 2;
+
+  currentOrder.forEach(other => {
+    if(other === dragState.row) return;
+    const r = other.getBoundingClientRect();
+    const midY = r.top + r.height / 2;
+    const otherIdx = parseInt(other.dataset.idx, 10);
+    const fromIdx = parseInt(dragState.row.dataset.idx, 10);
+    if(rowMidY > midY && otherIdx > fromIdx){
+      swapFavorites(fromIdx, otherIdx);
+      dragState.row.style.transform = 'translateY(0)';
+      dragState.startY = e.clientY;
+    } else if(rowMidY < midY && otherIdx < fromIdx){
+      swapFavorites(fromIdx, otherIdx);
+      dragState.row.style.transform = 'translateY(0)';
+      dragState.startY = e.clientY;
+    }
+  });
+}
+function swapFavorites(i, j){
+  const tmp = favorites[i];
+  favorites[i] = favorites[j];
+  favorites[j] = tmp;
+  saveFavorites();
+  renderFavorites();
+  dragState.row = document.querySelector(`.fav-row[data-idx="${j}"]`);
+  if(dragState.row) dragState.row.classList.add('dragging');
+}
+function onDragEnd(){
+  if(dragState && dragState.row){
+    dragState.row.style.transform = '';
+    dragState.row.style.position = '';
+    dragState.row.style.zIndex = '';
+    dragState.row.classList.remove('dragging');
+  }
+  dragState = null;
+  document.removeEventListener('pointermove', onDragMove);
+  document.removeEventListener('pointerup', onDragEnd);
+}
+
+function openFavoritesChain(){
+  if(favorites.length === 0) return;
+  document.getElementById('favChainList').innerHTML = favorites.map(f => `
+    <div class="fav-chain-item">
+      <div class="fav-chain-th">${f.th}</div>
+      <div class="fav-chain-jp">${f.jp}</div>
+    </div>
+  `).join('');
+  document.getElementById('favChainDisplay').classList.add('show');
+}
+function closeFavChain(){
+  document.getElementById('favChainDisplay').classList.remove('show');
+}
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
 
@@ -1250,9 +1468,11 @@ function renderComposerList(){
     transportItems.forEach((item, idx) => {
       if(item.mode !== transportTab) return;
       const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
+      const th = fullTh(item.base, item.type);
       html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
-        <div class="fi-th">${fullTh(item.base, item.type)}</div>
+        <div class="fi-th">${th}</div>
         <div class="fi-jp">${item.jp}</div>
+        ${favStarHtml(th, item.jp)}
       </div>`;
     });
     if(transportTab === 'train') html += ticketRowHtml();
@@ -1333,10 +1553,12 @@ function renderCategoryList(){
   let html = '';
   s.phrases.forEach((p, idx) => {
     const sel = selectedCategoryIdx === idx ? 'selected' : '';
+    const th = fullTh(p.base, p.type);
     html += `<div class="follow-item ${sel}" onclick="selectCategoryPhrase(${idx})">
-      <div class="fi-th">${fullTh(p.base, p.type)}</div>
+      <div class="fi-th">${th}</div>
       <div class="fi-jp">${p.jp}</div>
       ${p.note ? `<div class="fi-note">${p.note}</div>` : ''}
+      ${favStarHtml(th, p.jp)}
     </div>`;
   });
   document.getElementById('composerList').innerHTML = html;
@@ -1850,6 +2072,7 @@ document.querySelectorAll('.icon-slot').forEach(el => {
   const size = parseInt(el.dataset.size, 10) || 16;
   el.outerHTML = iconSvg(key, size);
 });
+loadFavorites();
 renderNearby();
 renderSituations();
 updateRatePillText();

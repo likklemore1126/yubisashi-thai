@@ -317,6 +317,35 @@
     width:100%; margin-top:12px; background:rgba(255,255,255,0.1); border:none; color:#fff;
     border-radius:8px; padding:9px; font-size:12.5px; cursor:pointer;
   }
+  .dish-entry{
+    display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid var(--pink);
+    border-radius:14px; padding:13px 14px; margin-bottom:12px; cursor:pointer;
+  }
+  .dish-entry-emoji{ font-size:19px; flex:0 0 auto; }
+  .dish-entry-text{ font-family:'Kanit', sans-serif; font-weight:600; font-size:13.5px; flex:1; color:var(--ink); }
+  .dish-entry-arrow{ color:var(--pink); font-size:20px; flex:0 0 auto; }
+  .dish-row{
+    display:flex; align-items:center; gap:12px; background:var(--sand); border:1.5px solid var(--line);
+    border-radius:12px; padding:11px 13px; margin-bottom:7px; cursor:pointer;
+  }
+  .dish-row-num{
+    flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--pink); color:#fff;
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center;
+  }
+  .dish-row-body{ flex:1; min-width:0; }
+  .dish-row-arrow{ color:#C7BEA9; font-size:18px; flex:0 0 auto; }
+  .dish-back{
+    width:100%; background:var(--ink); color:#fff; border:none; border-radius:10px;
+    padding:11px; font-size:13px; font-weight:600; cursor:pointer; margin-bottom:10px;
+    font-family:'Noto Sans JP', sans-serif;
+  }
+  .dish-mod-title{ font-size:11.5px; font-weight:700; color:#8B8272; margin:16px 2px 8px; }
+  .dish-mod-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .dish-mod-chip{
+    background:#fff; border:1.5px solid var(--line); border-radius:999px; padding:8px 14px;
+    font-size:12.5px; font-family:'Noto Sans JP', sans-serif; font-weight:600; cursor:pointer; color:var(--ink);
+  }
+  .dish-mod-chip.active{ background:var(--pink); border-color:var(--pink); color:#fff; }
   .ticket-stepper{
     margin-top:14px; display:flex; align-items:center; gap:16px; justify-content:center;
   }
@@ -567,6 +596,15 @@
     </div>
     <div class="composer-fixed" id="composerFixed"></div>
     <div class="composer-list" id="composerList"></div>
+  </div>
+
+  <div class="composer-screen" id="dishScreen" style="z-index:9;">
+    <div class="composer-header">
+      <div class="ctitle" id="dishTitle"><span class="ctitle-icon">🍜</span>料理を選んで注文する</div>
+      <button class="composer-close" onclick="closeDishScreen()">✕</button>
+    </div>
+    <div class="composer-fixed" id="dishFixed"></div>
+    <div class="composer-list" id="dishList"></div>
   </div>
 
   <div class="rate-overlay" id="rateOverlay" onclick="closeRateSheet()"></div>
@@ -1463,6 +1501,123 @@ function hotelInfoBlockHtml(){
     <button class="hotel-info-collapse" onclick="toggleHotelInfoExpanded()">たたむ ▴</button>
   </div>`;
 }
+
+// ---------- 料理を選んで注文する(タイ料理20選) ----------
+const dishes = [
+  { th:'ผัดไทย', jp:'パッタイ', desc:'甘酸っぱいタマリンドソースで炒めた米粉の焼きそば。エビやナッツ、もやしが入った代表的な料理。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่ถั่วงอก', jp:'もやし抜き'}, {th:'ไม่ใส่กุ้ง', jp:'エビ抜き'}, {th:'ใส่ไข่', jp:'卵入りで'} ] },
+  { th:'ผัดกะเพรา', jp:'ガパオライス', desc:'豚や鶏のひき肉をバジルと唐辛子で炒めた、目玉焼きのせた定番ごはん。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて'}, {th:'ใส่กะเพราเยอะๆ', jp:'バジル多めで'}, {th:'เนื้อไก่', jp:'鶏肉で'}, {th:'เนื้อหมู', jp:'豚肉で'} ] },
+  { th:'ข้าวมันไก่', jp:'カオマンガイ', desc:'茹で鶏と鶏の出汁で炊いたご飯のセット。特製ソースをかけて食べる人気料理。',
+    mods:[ {th:'แยกน้ำจิ้ม', jp:'タレを別で'}, {th:'ไม่เอาหนัง', jp:'皮を抜いて'}, {th:'ข้าวน้อย', jp:'ご飯少なめで'} ] },
+  { th:'ข้าวผัด', jp:'カオパッド', desc:'タイ風チャーハン。えびや豚肉が一般的で、ライムを絞ると爽やかな風味に。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'กุ้ง', jp:'エビで'}, {th:'ไก่', jp:'鶏肉で'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて'} ] },
+  { th:'ข้าวซอย', jp:'カオソイ', desc:'チェンマイ名物のココナッツカレーラーメン。生麺の上に揚げ麺がのった独特の一杯。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไก่', jp:'鶏肉で'}, {th:'เนื้อวัว', jp:'牛肉で'} ] },
+  { th:'ก๋วยเตี๋ยว', jp:'クイッティアオ', desc:'タイの定番米粉麺。スープの有無や麺の種類、具材を選べる屋台の人気メニュー。',
+    mods:[ {th:'แห้ง', jp:'汁なしで'}, {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่ถั่วงอก', jp:'もやし抜き'} ] },
+  { th:'ต้มยำกุ้ง', jp:'トムヤムクン', desc:'世界三大スープのひとつ。海老の旨味とレモングラスやハーブが効いた、酸辣と辛味が特徴のスープ。',
+    mods:[ {th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ใส่กะทิ', jp:'ココナッツミルク入りで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'} ] },
+  { th:'ต้มข่าไก่', jp:'トムカーガイ', desc:'鶏肉とココナッツミルクのスープ。まろやかで香り高く、辛さは控えめ。タイ初心者にもおすすめ。',
+    mods:[ {th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'} ] },
+  { th:'แกงเขียวหวาน', jp:'グリーンカレー', desc:'青唐辛子とココナッツミルクの代表的なカレー。辛くて香り豊か。ご飯との相性抜群。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไก่', jp:'鶏肉で'}, {th:'ไม่ใส่มะเขือ', jp:'茄子抜き'} ] },
+  { th:'แกงมัสมั่น', jp:'マッサマンカレー', desc:'イスラム文化の影響を受けたマイルドなカレー。甘みとコクがあり、日本人にも食べやすい味。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'เนื้อวัว', jp:'牛肉で'}, {th:'ไก่', jp:'鶏肉で'} ] },
+  { th:'ปูผัดผงกะหรี่', jp:'プーパッポンカレー', desc:'カニと玉子をカレー粉で炒めた贅沢な一品。ふわとろの卵とカレーの香りが絶妙なシーフード料理。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ใส่ไข่เยอะๆ', jp:'卵多めで'} ] },
+  { th:'ส้มตำ', jp:'ソムタム', desc:'青パパイヤのシャキシャキサラダ。ナンプラー、唐辛子、ライムの酸味と甘酸っぱさがクセになる。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไม่ใส่ถั่ว', jp:'ピーナッツ抜き'}, {th:'ไม่ใส่กุ้งแห้ง', jp:'干しエビ抜き'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'} ] },
+  { th:'ลาบ', jp:'ラープ', desc:'イサーン地方発祥のひき肉サラダ。ライムやハーブ、炒り米粉の香ばしさが食欲をそそる!',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'} ] },
+  { th:'ยำวุ้นเส้น', jp:'ヤムウンセン', desc:'春雨、エビ、ひき肉、野菜を甘酸っぱく和えたサラダ。さっぱりしていて食べやすい人気メニュー。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไม่ใส่กุ้ง', jp:'エビ抜き'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'} ] },
+  { th:'ไก่ย่าง', jp:'ガイヤーン', desc:'ハーブやスパイスに漬け込んで香ばしく焼き上げたタイ風ローストチキン。甘辛のタレが絶品。',
+    mods:[ {th:'แยกน้ำจิ้ม', jp:'タレを別で'}, {th:'ใส่ข้าวเหนียว', jp:'もち米を付けて'} ] },
+  { th:'หมูสะเต๊ะ', jp:'ムーサテ', desc:'ターメリックで黄色く色付けした豚肉の串焼き。濃厚なピーナッツソースをつけて食べるのが定番。',
+    mods:[ {th:'แยกน้ำจิ้ม', jp:'タレを別で'}, {th:'ใส่ซอสถั่วเยอะๆ', jp:'ピーナッツソース多めで'} ] },
+  { th:'หอยทอด', jp:'ホイトート', desc:'カキ(またはムール貝)を卵と粉でカリッと焼き上げたタイ風オムレツ。屋台の人気メニュー!',
+    mods:[ {th:'ไม่ใส่ซอสเผ็ด', jp:'辛いソース抜き'}, {th:'กรอบ', jp:'カリカリで'} ] },
+  { th:'ผัดผักบุ้งไฟแดง', jp:'パックブンファイデーン', desc:'空心菜を強火で一気に炒めた定番野菜料理。ニンニクと唐辛子の香りが食欲をそそる。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ใส่กระเทียมเยอะๆ', jp:'ニンニク多めで'} ] },
+  { th:'หมูปิ้ง', jp:'ムーピン', desc:'甘辛いタレに漬け込んだ豚肉の串焼き。もち米(カオニャオ)と一緒に食べるのがタイ流!',
+    mods:[ {th:'ใส่ข้าวเหนียว', jp:'もち米を付けて'}, {th:'แยกน้ำจิ้ม', jp:'タレを別で'} ] },
+  { th:'ไข่เจียว', jp:'カイジアオ', desc:'タイ風オムレツ。たっぷりの油で揚げ焼きにするので外はカリッと、中はふんわり。ケチャップやスイートチリソースをかけて食べるのが一般的です。',
+    mods:[ {th:'ไม่เผ็ด', jp:'辛くしないで'}, {th:'ไม่ใส่ซอสมะเขือเทศ', jp:'ケチャップ抜き'} ] },
+];
+let dishSelectedIdx = null;
+let dishSelectedMods = [];
+
+function openDishList(){
+  dishSelectedIdx = null;
+  document.getElementById('dishTitle').innerHTML = `<span class="ctitle-icon">🍜</span>料理を選んで注文する`;
+  renderDishList();
+  document.getElementById('dishFixed').innerHTML = '';
+  document.getElementById('dishScreen').classList.add('show');
+}
+function closeDishScreen(){
+  document.getElementById('dishScreen').classList.remove('show');
+}
+function renderDishList(){
+  const html = dishes.map((d, i) => `
+    <div class="dish-row" onclick="openDishDetail(${i})">
+      <div class="dish-row-num">${i + 1}</div>
+      <div class="dish-row-body">
+        <div class="fi-th">${d.th}</div>
+        <div class="fi-jp">${d.jp}</div>
+      </div>
+      <div class="dish-row-arrow">›</div>
+    </div>
+  `).join('');
+  document.getElementById('dishList').innerHTML = html;
+}
+function dishComposedTh(){
+  const d = dishes[dishSelectedIdx];
+  let th = `ขอ${d.th}`;
+  dishSelectedMods.forEach(mi => { th += ' ' + d.mods[mi].th; });
+  return th + particle('s');
+}
+function dishComposedJp(){
+  const d = dishes[dishSelectedIdx];
+  let jp = `${d.jp}をください`;
+  const modsJp = dishSelectedMods.map(mi => d.mods[mi].jp);
+  if(modsJp.length) jp += `(${modsJp.join('・')})`;
+  return jp;
+}
+function openDishDetail(i){
+  dishSelectedIdx = i;
+  dishSelectedMods = [];
+  const d = dishes[i];
+  document.getElementById('dishTitle').innerHTML = `<span class="ctitle-icon">🍜</span>${d.jp}`;
+  renderDishDetail();
+  document.getElementById('dishList').innerHTML = `<button class="dish-back" onclick="openDishList()">‹ 料理一覧に戻る</button>`;
+}
+function toggleDishMod(mi){
+  const idx = dishSelectedMods.indexOf(mi);
+  if(idx >= 0) dishSelectedMods.splice(idx, 1);
+  else dishSelectedMods.push(mi);
+  renderDishDetail();
+}
+function renderDishDetail(){
+  const d = dishes[dishSelectedIdx];
+  const th = dishComposedTh();
+  const jp = dishComposedJp();
+  setLastPhrase(th, jp);
+  const modsHtml = d.mods.map((m, mi) => {
+    const active = dishSelectedMods.includes(mi) ? 'active' : '';
+    return `<button class="dish-mod-chip ${active}" onclick="toggleDishMod(${mi})">${m.jp}</button>`;
+  }).join('');
+  document.getElementById('dishFixed').innerHTML = `
+    <div class="selected-phrase">
+      <div class="sp-th">${th}</div>
+      <div class="sp-jp">${jp}</div>
+      <div class="sp-note">${d.desc}</div>
+      ${fullscreenBtnHtml()}
+    </div>
+    <div class="dish-mod-title">追加の指示(複数選択できます)</div>
+    <div class="dish-mod-chips">${modsHtml}</div>
+  `;
+}
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
 
@@ -1679,12 +1834,17 @@ function openCategoryComposer(i){
 function renderCategoryFixed(){
   const s = situations[openState.index];
   const hotelHtml = (s.icon === 'hotel') ? hotelInfoBlockHtml() : '';
+  const dishEntryHtml = (s.icon === 'bowl') ? `<div class="dish-entry" onclick="openDishList()">
+    <span class="dish-entry-emoji">🍜</span>
+    <span class="dish-entry-text">料理を選んで注文する(全20品・追加指示つき)</span>
+    <span class="dish-entry-arrow">›</span>
+  </div>` : '';
   if(selectedCategoryIdx === null){
-    document.getElementById('composerFixed').innerHTML = hotelHtml + `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
+    document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   } else {
     const p = s.phrases[selectedCategoryIdx];
     const th = fullTh(p.base, p.type);
-    document.getElementById('composerFixed').innerHTML = hotelHtml + `<div class="selected-phrase">
+    document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + `<div class="selected-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${p.jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}

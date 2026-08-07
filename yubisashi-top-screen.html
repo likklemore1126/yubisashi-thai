@@ -1611,6 +1611,7 @@ const dishImagesFull = [
 let dishSelectedIdx = null;
 let dishSelectedMods = [];
 let dishListScrollTop = 0;
+let dishScreenScrollTop = 0;
 
 function openDishList(restoreScroll){
   dishSelectedIdx = null;
@@ -1618,12 +1619,15 @@ function openDishList(restoreScroll){
   renderDishList();
   document.getElementById('dishFixed').innerHTML = '';
   document.getElementById('dishScreen').classList.add('show');
-  const target = restoreScroll ? dishListScrollTop : 0;
+  const list = document.getElementById('dishList');
   const scr = document.getElementById('dishScreen');
-  scr.scrollTop = target;
+  const listTarget = restoreScroll ? dishListScrollTop : 0;
+  const scrTarget = restoreScroll ? dishScreenScrollTop : 0;
+  const applyScroll = () => { list.scrollTop = listTarget; scr.scrollTop = scrTarget; };
+  applyScroll();
   requestAnimationFrame(() => {
-    scr.scrollTop = target;
-    requestAnimationFrame(() => { scr.scrollTop = target; });
+    applyScroll();
+    requestAnimationFrame(applyScroll);
   });
 }
 function closeDishScreen(){
@@ -1666,7 +1670,8 @@ function closeDishPhotoLightbox(){
   document.getElementById('dishPhotoLightbox').classList.remove('show');
 }
 function openDishDetail(i){
-  dishListScrollTop = document.getElementById('dishScreen').scrollTop;
+  dishListScrollTop = document.getElementById('dishList').scrollTop;
+  dishScreenScrollTop = document.getElementById('dishScreen').scrollTop;
   dishSelectedIdx = i;
   dishSelectedMods = [];
   const d = dishes[i];

@@ -1618,7 +1618,13 @@ function openDishList(restoreScroll){
   renderDishList();
   document.getElementById('dishFixed').innerHTML = '';
   document.getElementById('dishScreen').classList.add('show');
-  document.getElementById('dishScreen').scrollTop = restoreScroll ? dishListScrollTop : 0;
+  const target = restoreScroll ? dishListScrollTop : 0;
+  const scr = document.getElementById('dishScreen');
+  scr.scrollTop = target;
+  requestAnimationFrame(() => {
+    scr.scrollTop = target;
+    requestAnimationFrame(() => { scr.scrollTop = target; });
+  });
 }
 function closeDishScreen(){
   document.getElementById('dishScreen').classList.remove('show');
@@ -1667,7 +1673,9 @@ function openDishDetail(i){
   document.getElementById('dishTitle').innerHTML = `<span class="ctitle-icon">🍜</span>${d.jp}`;
   renderDishDetail();
   document.getElementById('dishList').innerHTML = `<button class="dish-back" onclick="openDishList(true)">‹ 料理一覧に戻る</button>`;
-  document.getElementById('dishScreen').scrollTop = 0;
+  const scr = document.getElementById('dishScreen');
+  scr.scrollTop = 0;
+  requestAnimationFrame(() => { scr.scrollTop = 0; });
 }
 function toggleDishMod(mi){
   const idx = dishSelectedMods.indexOf(mi);

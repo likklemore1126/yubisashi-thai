@@ -337,7 +337,17 @@
   }
   .dish-row-body{ flex:1; min-width:0; }
   .dish-row-arrow{ color:#C7BEA9; font-size:18px; flex:0 0 auto; }
-  .dish-detail-photo{ width:100%; height:160px; object-fit:cover; border-radius:14px; margin-bottom:12px; display:block; }
+  .dish-detail-photo{ width:100%; height:160px; object-fit:cover; border-radius:14px; margin-bottom:0; display:block; cursor:pointer; }
+  .dish-desc-box{
+    background:var(--sand); border:1.5px solid var(--line); border-radius:0 0 14px 14px;
+    padding:12px 14px; margin-bottom:12px; font-size:13.5px; line-height:1.7; color:#5c4415;
+  }
+  .photo-lightbox{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:60;
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .photo-lightbox.show{ display:flex; }
+  .photo-lightbox img{ max-width:100%; max-height:80vh; border-radius:10px; object-fit:contain; }
   .dish-back{
     width:100%; background:var(--ink); color:#fff; border:none; border-radius:10px;
     padding:11px; font-size:13px; font-weight:600; cursor:pointer; margin-bottom:10px;
@@ -712,6 +722,11 @@
   <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
     <div class="landscape-close">タップで閉じる ✕</div>
     <div class="fav-chain-list" id="favChainList"></div>
+  </div>
+
+  <div class="photo-lightbox" id="dishPhotoLightbox" onclick="closeDishPhotoLightbox()">
+    <div class="landscape-close">タップで閉じる ✕</div>
+    <img id="dishPhotoLightboxImg" src="" alt="">
   </div>
 
   <div class="landscape-display" id="landscapeDisplay" onclick="closeLandscapeDisplay()">
@@ -1613,6 +1628,13 @@ function dishComposedJp(){
   if(modsJp.length) jp += `(${modsJp.join('・')})`;
   return jp;
 }
+function openDishPhotoLightbox(idx){
+  document.getElementById('dishPhotoLightboxImg').src = dishImages[idx];
+  document.getElementById('dishPhotoLightbox').classList.add('show');
+}
+function closeDishPhotoLightbox(){
+  document.getElementById('dishPhotoLightbox').classList.remove('show');
+}
 function openDishDetail(i){
   dishSelectedIdx = i;
   dishSelectedMods = [];
@@ -1637,11 +1659,11 @@ function renderDishDetail(){
     return `<button class="dish-mod-chip ${active}" onclick="toggleDishMod(${mi})">${m.jp}</button>`;
   }).join('');
   document.getElementById('dishFixed').innerHTML = `
-    <img class="dish-detail-photo" src="${dishImages[dishSelectedIdx]}" alt="${d.jp}">
+    <img class="dish-detail-photo" src="${dishImages[dishSelectedIdx]}" alt="${d.jp}" onclick="event.stopPropagation(); openDishPhotoLightbox(${dishSelectedIdx});">
+    <div class="dish-desc-box">${d.desc}</div>
     <div class="selected-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
-      <div class="sp-note">${d.desc}</div>
       ${fullscreenBtnHtml()}
     </div>
     <div class="dish-mod-title">追加の指示(複数選択できます)</div>

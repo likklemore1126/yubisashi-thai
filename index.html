@@ -286,7 +286,9 @@
   .anchor-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:23px; line-height:1.35; }
   .anchor-jp{ font-size:12.5px; opacity:0.75; margin-top:5px; }
 
-  .selected-phrase{ background:var(--teal); color:#fff; border-radius:14px; padding:18px 16px; margin-bottom:16px; }
+  .selected-phrase{ position:relative; background:var(--teal); color:#fff; border-radius:14px; padding:18px 16px; margin-bottom:16px; }
+  .selected-phrase .fav-star{ color:rgba(255,255,255,0.45); }
+  .selected-phrase .fav-star.active{ color:var(--marigold); }
   .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
   .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.4; }
   .sp-jp{ font-size:13.5px; margin-top:7px; opacity:0.9; }
@@ -365,6 +367,8 @@
   .dish-desc-box.dish-desc-box-flat{ border-radius:0; margin-bottom:0; }
   .dish-recommend-phrase{ position:relative; background:var(--marigold); color:var(--ink); }
   .dish-recommend-phrase .fullscreen-btn{ margin-top:10px; background:var(--ink); color:#fff; }
+  .dish-recommend-phrase .fav-star{ color:rgba(23,36,42,0.35); }
+  .dish-recommend-phrase .fav-star.active{ color:var(--ink); }
   .photo-lightbox{
     display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:60;
     align-items:center; justify-content:center; padding:20px;
@@ -375,6 +379,7 @@
     width:100%; background:var(--ink); color:#fff; border:none; border-radius:10px;
     padding:11px; font-size:13px; font-weight:600; cursor:pointer; margin-bottom:10px;
     font-family:'Noto Sans JP', sans-serif;
+    position:sticky; top:0; z-index:5;
   }
   .dish-mod-title{ font-size:11.5px; font-weight:700; color:#8B8272; margin:16px 2px 8px; }
   .dish-mod-chips{ display:flex; flex-wrap:wrap; gap:8px; }
@@ -1802,6 +1807,7 @@ function renderDishDetail(){
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
       <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishOrderFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+      ${favStarHtml(th, jp)}
     </div>
     <div class="dish-mod-title">追加の指示(複数選択できます)</div>
     <div class="dish-mod-chips">${modsHtml}</div>
@@ -1817,6 +1823,7 @@ function renderDishDetailStandalone(d){
       <div class="sp-th">${p.th}</div>
       <div class="sp-jp">${p.jp}</div>
       <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishSelectedPhraseFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+      ${favStarHtml(p.th, p.jp)}
     </div>`;
   } else {
     selectedBlock = `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
@@ -1892,6 +1899,31 @@ if(window.matchMedia){
   window.matchMedia('(orientation: landscape)').addEventListener('change', checkOrientationDisplay);
 }
 window.addEventListener('resize', checkOrientationDisplay);
+
+// 料理詳細画面: 右スワイプで一覧に戻る
+(function(){
+  let touchStartX = null, touchStartY = null;
+  const dishScreenEl = document.getElementById('dishScreen');
+  if(dishScreenEl){
+    dishScreenEl.addEventListener('touchstart', function(e){
+      if(e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, {passive:true});
+    dishScreenEl.addEventListener('touchend', function(e){
+      if(touchStartX === null) return;
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      touchStartX = null; touchStartY = null;
+      if(dishSelectedIdx === null) return;
+      if(dx > 80 && Math.abs(dy) < 60){
+        openDishList(true);
+      }
+    }, {passive:true});
+  }
+})();
+
 let thbToJpyRate = null;
 
 function renderNearby(){

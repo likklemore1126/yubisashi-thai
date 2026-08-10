@@ -363,6 +363,8 @@
     padding:2px 14px 12px; margin-top:-1px; margin-bottom:12px; line-height:1.4;
   }
   .dish-desc-box.dish-desc-box-flat{ border-radius:0; margin-bottom:0; }
+  .dish-recommend-phrase{ position:relative; background:var(--marigold); color:var(--ink); }
+  .dish-recommend-phrase .fullscreen-btn{ margin-top:10px; background:var(--ink); color:#fff; }
   .photo-lightbox{
     display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:60;
     align-items:center; justify-content:center; padding:20px;
@@ -1756,6 +1758,33 @@ function toggleDishMod(mi){
   else dishSelectedMods.push(mi);
   renderDishDetail();
 }
+const DISH_RECOMMEND_TH = 'มีร้านแนะนำสำหรับกินเมนูนี้ไหม';
+const DISH_RECOMMEND_JP = 'この料理が食べれるおすすめのお店を教えてください';
+function showDishRecommendFullscreen(){
+  setLastPhrase(DISH_RECOMMEND_TH, DISH_RECOMMEND_JP);
+  showFullscreenNow();
+}
+function showDishOrderFullscreen(){
+  setLastPhrase(dishComposedTh(), dishComposedJp());
+  showFullscreenNow();
+}
+function showDishSelectedPhraseFullscreen(){
+  if(dishSelectedPhraseIdx === null) return;
+  const d = dishes[dishSelectedIdx];
+  const p = d.mods[dishSelectedPhraseIdx];
+  setLastPhrase(p.th, p.jp);
+  showFullscreenNow();
+}
+function dishRecommendBlockHtml(){
+  return `
+    <div class="dish-mod-title">お店を尋ねる</div>
+    <div class="selected-phrase dish-recommend-phrase">
+      <div class="sp-th">${DISH_RECOMMEND_TH}</div>
+      <div class="sp-jp">${DISH_RECOMMEND_JP}</div>
+      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishRecommendFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+      ${favStarHtml(DISH_RECOMMEND_TH, DISH_RECOMMEND_JP)}
+    </div>`;
+}
 function renderDishDetail(){
   const d = dishes[dishSelectedIdx];
   if(d.standalone){ renderDishDetailStandalone(d); return; }
@@ -1772,10 +1801,11 @@ function renderDishDetail(){
     <div class="selected-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
-      ${fullscreenBtnHtml()}
+      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishOrderFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
     </div>
     <div class="dish-mod-title">追加の指示(複数選択できます)</div>
     <div class="dish-mod-chips">${modsHtml}</div>
+    ${dishRecommendBlockHtml()}
   `;
 }
 function renderDishDetailStandalone(d){
@@ -1786,7 +1816,7 @@ function renderDishDetailStandalone(d){
     selectedBlock = `<div class="selected-phrase">
       <div class="sp-th">${p.th}</div>
       <div class="sp-jp">${p.jp}</div>
-      ${fullscreenBtnHtml()}
+      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishSelectedPhraseFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
     </div>`;
   } else {
     selectedBlock = `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
@@ -1796,6 +1826,7 @@ function renderDishDetailStandalone(d){
     <div class="dish-desc-box dish-desc-box-flat">${d.desc}</div>
     <div class="dish-standalone-th">${d.th}</div>
     ${selectedBlock}
+    ${dishRecommendBlockHtml()}
   `;
   const listHtml = d.mods.map((p, mi) => {
     const sel = dishSelectedPhraseIdx === mi ? 'selected' : '';

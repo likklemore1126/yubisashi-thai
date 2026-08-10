@@ -258,6 +258,12 @@
     display:flex; align-items:center; justify-content:center; flex:0 0 auto;
   }
   .composer-fixed{ padding:2px 18px 6px; flex:0 0 auto; }
+  .dish-header-back{
+    background:var(--sand); border:1.5px solid var(--line); color:var(--ink);
+    width:32px; height:32px; border-radius:50%; font-size:20px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto; line-height:1; padding:0 0 2px;
+  }
+  #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow:hidden; touch-action:pan-y; }
   .composer-list{
     flex:1 1 auto; overflow-y:auto; padding:4px 18px 28px;
     border-top:1px solid var(--line);
@@ -642,11 +648,14 @@
 
   <div class="composer-screen" id="dishScreen" style="z-index:9;">
     <div class="composer-header">
+      <button class="dish-header-back" id="dishHeaderBack" onclick="goBackToDishList()" style="display:none;">‹</button>
       <div class="ctitle" id="dishTitle"><span class="ctitle-icon">🍜</span>料理を選んで注文する</div>
       <button class="composer-close" onclick="closeDishScreen()">✕</button>
     </div>
-    <div class="composer-fixed" id="dishFixed"></div>
-    <div class="composer-list" id="dishList"></div>
+    <div id="dishContentWrap">
+      <div class="composer-fixed" id="dishFixed"></div>
+      <div class="composer-list" id="dishList"></div>
+    </div>
   </div>
 
   <div class="rate-overlay" id="rateOverlay" onclick="closeRateSheet()"></div>
@@ -1682,12 +1691,34 @@ let dishSelectedPhraseIdx = null;
 let dishListScrollTop = 0;
 let dishScreenScrollTop = 0;
 
+function updateDishHeaderBack(){
+  const btn = document.getElementById('dishHeaderBack');
+  if(btn) btn.style.display = dishSelectedIdx === null ? 'none' : 'flex';
+}
+function goBackToDishList(){
+  const wrap = document.getElementById('dishContentWrap');
+  wrap.style.transition = 'transform .2s ease, opacity .2s ease';
+  wrap.style.transform = 'translateX(100%)';
+  wrap.style.opacity = '0.3';
+  setTimeout(() => {
+    openDishList(true);
+    wrap.style.transition = 'none';
+    wrap.style.transform = 'translateX(-20px)';
+    wrap.style.opacity = '0';
+    requestAnimationFrame(() => {
+      wrap.style.transition = 'transform .2s ease, opacity .2s ease';
+      wrap.style.transform = 'translateX(0)';
+      wrap.style.opacity = '1';
+    });
+  }, 190);
+}
 function openDishList(restoreScroll){
   dishSelectedIdx = null;
   document.getElementById('dishTitle').innerHTML = `<span class="ctitle-icon">🍜</span>料理を選んで注文する`;
   renderDishList();
   document.getElementById('dishFixed').innerHTML = '';
   document.getElementById('dishScreen').classList.add('show');
+  updateDishHeaderBack();
   const list = document.getElementById('dishList');
   const scr = document.getElementById('dishScreen');
   const listTarget = restoreScroll ? dishListScrollTop : 0;
@@ -1747,11 +1778,21 @@ function openDishDetail(i){
   document.getElementById('dishTitle').innerHTML = `<span class="ctitle-icon">🍜</span>${d.jp}`;
   renderDishDetail();
   if(!d.standalone){
-    document.getElementById('dishList').innerHTML = `<button class="dish-back" onclick="openDishList(true)">‹ 料理一覧に戻る</button>`;
+    document.getElementById('dishList').innerHTML = `<button class="dish-back" onclick="goBackToDishList()">‹ 料理一覧に戻る</button>`;
   }
+  updateDishHeaderBack();
   const scr = document.getElementById('dishScreen');
   scr.scrollTop = 0;
   requestAnimationFrame(() => { scr.scrollTop = 0; });
+  const wrap = document.getElementById('dishContentWrap');
+  wrap.style.transition = 'none';
+  wrap.style.transform = 'translateX(24px)';
+  wrap.style.opacity = '0';
+  requestAnimationFrame(() => {
+    wrap.style.transition = 'transform .2s ease, opacity .2s ease';
+    wrap.style.transform = 'translateX(0)';
+    wrap.style.opacity = '1';
+  });
 }
 function selectDishPhrase(mi){
   dishSelectedPhraseIdx = (dishSelectedPhraseIdx === mi) ? null : mi;
@@ -1844,7 +1885,7 @@ function renderDishDetailStandalone(d){
     </div>`;
   }).join('');
   document.getElementById('dishList').innerHTML =
-    `<button class="dish-back" onclick="openDishList(true)">‹ 料理一覧に戻る</button>` + listHtml;
+    `<button class="dish-back" onclick="goBackToDishList()">‹ 料理一覧に戻る</button>` + listHtml;
 }
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
@@ -1900,25 +1941,50 @@ if(window.matchMedia){
 }
 window.addEventListener('resize', checkOrientationDisplay);
 
-// 料理詳細画面: 右スワイプで一覧に戻る
+// 料理詳細画面: 右スワイプで一覧に戻る(指の動きに追従してスライド)
 (function(){
-  let touchStartX = null, touchStartY = null;
-  const dishScreenEl = document.getElementById('dishScreen');
-  if(dishScreenEl){
-    dishScreenEl.addEventListener('touchstart', function(e){
-      if(e.touches.length !== 1) return;
+  let touchStartX = null, touchStartY = null, dragging = false, dragDX = 0;
+  const wrap = document.getElementById('dishContentWrap');
+  if(wrap){
+    wrap.addEventListener('touchstart', function(e){
+      if(e.touches.length !== 1 || dishSelectedIdx === null) { touchStartX = null; return; }
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
+      dragging = false;
+      dragDX = 0;
     }, {passive:true});
-    dishScreenEl.addEventListener('touchend', function(e){
-      if(touchStartX === null) return;
-      const touch = e.changedTouches[0];
+    wrap.addEventListener('touchmove', function(e){
+      if(touchStartX === null || dishSelectedIdx === null) return;
+      const touch = e.touches[0];
       const dx = touch.clientX - touchStartX;
       const dy = touch.clientY - touchStartY;
-      touchStartX = null; touchStartY = null;
-      if(dishSelectedIdx === null) return;
-      if(dx > 80 && Math.abs(dy) < 60){
-        openDishList(true);
+      if(!dragging){
+        if(dx > 10 && Math.abs(dx) > Math.abs(dy) * 1.3){
+          dragging = true;
+        } else if(Math.abs(dy) > 10){
+          touchStartX = null;
+          return;
+        } else {
+          return;
+        }
+      }
+      dragDX = Math.max(0, dx);
+      wrap.style.transition = 'none';
+      wrap.style.transform = `translateX(${dragDX}px)`;
+      wrap.style.opacity = String(Math.max(0.4, 1 - dragDX / 400));
+      e.preventDefault();
+    }, {passive:false});
+    wrap.addEventListener('touchend', function(){
+      if(touchStartX === null) return;
+      const wasDragging = dragging;
+      touchStartX = null; touchStartY = null; dragging = false;
+      if(!wasDragging) return;
+      if(dragDX > 80){
+        goBackToDishList();
+      } else {
+        wrap.style.transition = 'transform .18s ease, opacity .18s ease';
+        wrap.style.transform = 'translateX(0)';
+        wrap.style.opacity = '1';
       }
     }, {passive:true});
   }

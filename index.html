@@ -2036,18 +2036,22 @@ function attachSwipeToClose(screenId, closeFn){
       el.style.opacity = '0.3';
       setTimeout(() => {
         closeFn();
-        el.style.transition = '';
+        el.style.transition = 'none';
         el.style.transform = '';
         el.style.opacity = '';
+        void el.offsetHeight;
+        requestAnimationFrame(() => { el.style.transition = ''; });
       }, 180);
     } else {
       el.style.transition = 'transform .18s ease, opacity .18s ease';
       el.style.transform = 'translateX(0)';
       el.style.opacity = '1';
       setTimeout(() => {
-        el.style.transition = '';
+        el.style.transition = 'none';
         el.style.transform = '';
         el.style.opacity = '';
+        void el.offsetHeight;
+        requestAnimationFrame(() => { el.style.transition = ''; });
       }, 190);
     }
   }, {passive:true});

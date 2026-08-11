@@ -575,6 +575,7 @@
   .follow-item .fi-th{ font-family:'Kanit', sans-serif; font-weight:600; font-size:16px; }
   .follow-item .fi-jp{ font-size:11.5px; color:#8B8272; margin-top:2px; }
   .follow-item .fi-note{ font-size:10.5px; color:#B08A4A; margin-top:2px; }
+  .fi-editable-badge{ display:inline-block; font-size:10.5px; color:var(--teal); margin-top:5px; font-weight:600; }
   .follow-item.selected{ background:var(--marigold); border-color:var(--marigold-deep); }
   .follow-item.selected .fi-jp{ color:#5c4415; }
   .fav-star{
@@ -1190,17 +1191,17 @@ const transportItems = [
   {mode:'bus', base:"ที่ขึ้นสองแถวอยู่ที่ไหน", type:'q', jp:"ソンテウ乗り場はどこですか？"},
   {mode:'taxi', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'taxi', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
-  {mode:'taxi', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง รอไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
+  {mode:'taxi', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง สามารถใช้บริการไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
   {mode:'tuktuk', base:"ไปที่นี่เท่าไหร่", type:'q', jp:"ここまでいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'tuktuk', base:"ลดหน่อยได้ไหม", type:'q', jp:"少し安くしてもらえますか？"},
   {mode:'tuktuk', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'tuktuk', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
-  {mode:'tuktuk', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง รอไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
+  {mode:'tuktuk', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง สามารถใช้บริการไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
   {mode:'songthaew', base:"สองแถวคันนี้ไป {DEST} ไหม", type:'q', jp:"このソンテウは{DEST}へ行きますか？", destInsert:true},
   {mode:'songthaew', base:"เหมาคันได้ไหม {H} ชั่วโมง", type:'q', jp:"{H}時間チャーターは可能ですか？", hourInput:true},
   {mode:'songthaew', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'songthaew', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
-  {mode:'songthaew', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง รอไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
+  {mode:'songthaew', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง สามารถใช้บริการไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
 ];
 const modeMeta = { bus:{icon:'bus', label:'バス'}, train:{icon:'train', label:'電車'}, taxi:{icon:'taxi', label:'タクシー'}, tuktuk:{icon:'tuktuk', label:'トゥクトゥク'}, songthaew:{icon:'songthaew', label:'ソンテウ'}, other:{icon:'pin', label:'その他'} };
 function metaIconHtml(meta){
@@ -2238,11 +2239,14 @@ function renderComposerList(){
       });
     modeIndices.forEach(({item, idx}) => {
       const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
+      const isSelectedNow = !ticketSelected && selectedFollowUp === idx;
       let th = fullTh(item.base, item.type);
       let jp = item.jp;
+      let hourBadge = '';
       if(item.hourInput){
         th = th.replace('{H}', hourCount);
         jp = jp.replace('{H}', hourCount);
+        if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に時間を変更できます</span>`;
       }
       if(item.destInsert){
         const {th: destTh, jp: destJp} = destInsertNames(item.mode);
@@ -2252,6 +2256,7 @@ function renderComposerList(){
       html += `<div class="follow-item ${sel}" onclick="toggleFollowUp(${idx})">
         <div class="fi-th">${th}</div>
         <div class="fi-jp">${jp}</div>
+        ${hourBadge}
         ${favStarHtml(th, jp)}
       </div>`;
     });

@@ -296,6 +296,13 @@
   .anchor-jp{ font-size:12.5px; opacity:0.75; margin-top:5px; }
 
   .selected-phrase{ position:relative; background:var(--teal); color:#fff; border-radius:14px; padding:18px 16px; margin-bottom:16px; }
+  .sp-clear-btn{
+    position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.4);
+    color:#fff; border-radius:999px; padding:5px 10px; font-size:11px; font-weight:600; cursor:pointer;
+    font-family:'Noto Sans JP', sans-serif;
+  }
+  .selected-phrase:has(.sp-clear-btn) .sp-th,
+  .selected-phrase:has(.sp-clear-btn) .sp-jp{ padding-right:76px; }
   .selected-phrase .fav-star{ color:rgba(255,255,255,0.45); }
   .selected-phrase .fav-star.active{ color:var(--marigold); }
   .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
@@ -2399,6 +2406,13 @@ function showDestinationFullscreen(){
   setLastPhrase(th, jp);
   showFullscreenNow();
 }
+function clearSelectedPhrase(){
+  ticketSelected = false;
+  selectedFollowUp = null;
+  anchorExpanded = true;
+  renderComposerFixed();
+  renderComposerList();
+}
 function renderSelectedPhraseBlock(){
   if(ticketSelected && currentDestination && currentDestination.station){
     const st = currentDestination.station;
@@ -2406,6 +2420,7 @@ function renderSelectedPhraseBlock(){
     const jp = `${st.jp}までの乗車券を${ticketCount}枚お願いします`;
     setLastPhrase(th, jp);
     return `<div class="selected-phrase">
+      <button class="sp-clear-btn" onclick="clearSelectedPhrase()">✕ 選択を解除</button>
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
       <div class="ticket-stepper">
@@ -2439,6 +2454,7 @@ function renderSelectedPhraseBlock(){
   }
   setLastPhrase(followTh, followJp);
   return `<div class="selected-phrase">
+    <button class="sp-clear-btn" onclick="clearSelectedPhrase()">✕ 選択を解除</button>
     <div class="sp-th">${followTh}</div>
     <div class="sp-jp">${followJp}</div>
     ${stepperHtml}

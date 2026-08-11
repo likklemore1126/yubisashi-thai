@@ -2179,6 +2179,7 @@ function openNearby(i){
   openState = {type:'nearby', index:i};
   const n = nearby[i];
   const th = fullTh(n.base, n.type);
+  setLastPhrase(th, n.jp);
   document.getElementById('sheetTitle').textContent = `近くの${n.label}`;
   document.getElementById('sheetBody').innerHTML =
     `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div>${fullscreenBtnHtml()}${nbTriggerHtml(n.numberAnswer)}</div>`;
@@ -2424,6 +2425,31 @@ function clearSelectedPhrase(){
   renderComposerFixed();
   renderComposerList();
 }
+function showTicketFullscreen(){
+  if(!(currentDestination && currentDestination.station)) return;
+  const st = currentDestination.station;
+  const th = `ขอตั๋วไป${st.th} ${ticketCount} ใบ${particle('s')}`;
+  const jp = `${st.jp}までの乗車券を${ticketCount}枚お願いします`;
+  setLastPhrase(th, jp);
+  showFullscreenNow();
+}
+function showFollowUpFullscreen(){
+  if(selectedFollowUp === null) return;
+  const follow = transportItems[selectedFollowUp];
+  let followTh = fullTh(follow.base, follow.type);
+  let followJp = follow.jp;
+  if(follow.hourInput){
+    followTh = followTh.replace('{H}', hourCount);
+    followJp = followJp.replace('{H}', hourCount);
+  }
+  if(follow.destInsert){
+    const {th: destTh, jp: destJp} = destInsertNames(follow.mode);
+    followTh = followTh.replace('{DEST}', destTh);
+    followJp = followJp.replace('{DEST}', destJp);
+  }
+  setLastPhrase(followTh, followJp);
+  showFullscreenNow();
+}
 function renderSelectedPhraseBlock(){
   if(ticketSelected && currentDestination && currentDestination.station){
     const st = currentDestination.station;
@@ -2439,7 +2465,7 @@ function renderSelectedPhraseBlock(){
         <span>${ticketCount}枚</span>
         <button onclick="changeTicketCount(1)">＋</button>
       </div>
-      ${fullscreenBtnHtml()}
+      <button class="fullscreen-btn" onclick="showTicketFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
     </div>`;
   }
   if(selectedFollowUp === null){
@@ -2469,7 +2495,7 @@ function renderSelectedPhraseBlock(){
     <div class="sp-th">${followTh}</div>
     <div class="sp-jp">${followJp}</div>
     ${stepperHtml}
-    ${fullscreenBtnHtml()}${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
+    <button class="fullscreen-btn" onclick="showFollowUpFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
   </div>`;
 }
 

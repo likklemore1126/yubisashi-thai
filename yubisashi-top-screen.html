@@ -1153,7 +1153,7 @@ const destinations = [
 
 const transportItems = [
   {mode:'bus', base:"รถบัสออกกี่โมง", type:'q', jp:"何時発のバスがありますか？", timeAnswer:true},
-  {mode:'bus', base:"จะไปที่นี่ ต้องลงป้ายนี้ใช่ไหม", type:'q', jp:"ここに行くにはこのバス停で降りればいいですか？"},
+  {mode:'bus', base:"จะไป {DEST} ต้องลงป้ายนี้ใช่ไหม", type:'q', jp:"{DEST}に行くにはこのバス停で降りればいいですか？", destInsert:true},
   {mode:'train', base:"ขอเป็นตู้แอร์", type:'s', jp:"エアコン付きの車両が希望です"},
   {mode:'train', base:"รถไฟออกกี่โมง", type:'q', jp:"何時に出発しますか", timeAnswer:true},
   {mode:'taxi', base:"ช่วยกดมิเตอร์ด้วย", type:'s', jp:"メーターを使ってください"},
@@ -1173,7 +1173,7 @@ const transportItems = [
   {mode:'train', base:"ขอห้องส่วนตัว", type:'s', jp:"個室の車両が希望です"},
   {mode:'other', base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
   {mode:'other', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
-  {mode:'taxi', base:"อยากไปที่นี่ ไปได้ไหม", type:'q', jp:"ここまで行きたいのですが可能ですか？"},
+  {mode:'taxi', base:"อยากไป {DEST} ไปได้ไหม", type:'q', jp:"{DEST}まで行きたいのですが可能ですか？", destInsert:true},
   {mode:'other', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
   {mode:'taxi', base:"ที่ขึ้นแท็กซี่อยู่ที่ไหน", type:'q', jp:"タクシー乗り場はどこですか？"},
   {mode:'bus', base:"ที่ขึ้นรถบัสอยู่ที่ไหน", type:'q', jp:"バス乗り場はどこですか？"},
@@ -1199,7 +1199,7 @@ const transportItems = [
   {mode:'taxi', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'taxi', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'taxi', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง สามารถใช้บริการไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
-  {mode:'tuktuk', base:"ไปที่นี่เท่าไหร่", type:'q', jp:"ここまでいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'tuktuk', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'tuktuk', base:"ลดหน่อยได้ไหม", type:'q', jp:"少し安くしてもらえますか？"},
   {mode:'tuktuk', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'tuktuk', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
@@ -2256,6 +2256,7 @@ function renderComposerList(){
         const pb = (b.item.destInsert || b.item.hourInput) ? 0 : 1;
         return pa - pb;
       });
+    if(transportTab === 'train') html += ticketRowHtml();
     modeIndices.forEach(({item, idx}) => {
       const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
       const isSelectedNow = !ticketSelected && selectedFollowUp === idx;
@@ -2279,7 +2280,6 @@ function renderComposerList(){
         ${favStarHtml(th, jp)}
       </div>`;
     });
-    if(transportTab === 'train') html += ticketRowHtml();
   }
   document.getElementById('composerList').innerHTML = html;
 }

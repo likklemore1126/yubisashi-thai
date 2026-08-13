@@ -579,6 +579,19 @@
     padding:9px 12px; margin:10px 2px 14px; font-size:12.5px; line-height:1.6; color:#5c4415;
     display:flex; align-items:flex-start; gap:6px;
   }
+  .dest-tour-block{ margin:0 2px 14px; }
+  .dest-tour-label{ font-size:11px; font-weight:700; color:#8B8272; letter-spacing:.5px; margin-bottom:5px; }
+  .dest-tour-link{
+    display:flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--marigold);
+    border-radius:12px; padding:10px 12px; margin-bottom:6px; text-decoration:none; color:var(--ink);
+  }
+  .dest-tour-link:active{ background:var(--sand); }
+  .dest-tour-emoji{ font-size:17px; flex:0 0 auto; }
+  .dest-tour-title{ flex:1; font-size:12.5px; font-weight:600; line-height:1.4; }
+  .dest-tour-pr{
+    flex:0 0 auto; font-size:9.5px; font-weight:700; color:#8B8272; border:1px solid #C7BEA9;
+    border-radius:5px; padding:1px 5px;
+  }
   .transport-tab{
     flex:0 0 auto; min-width:74px; display:flex; flex-direction:column; align-items:center; gap:3px;
     background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:9px 8px;
@@ -640,6 +653,7 @@
     <div class="dest-phrase-jp" id="destPhraseJp"></div>
     <button class="fullscreen-btn" onclick="showFullscreenNow()" style="margin-top:10px;"><span class="icon-slot" data-icon="search" data-size="17"></span> これだけ大きく見せる</button>
     <div class="dest-access-note" id="destAccessNote" style="display:none;"></div>
+    <div class="dest-tour-block" id="destTourBlock" style="display:none;"></div>
     <div class="dest-modes">
       <button class="mode-btn" onclick="openModeList('bus')"><span class="icon-slot" data-icon="bus" data-size="24"></span> バス</button>
       <button class="mode-btn" onclick="openModeList('train')"><span class="icon-slot" data-icon="train" data-size="24"></span> 電車</button>
@@ -861,19 +875,19 @@ const destinations = [
   { key:["わっとあるん","wat arun","วัดอรุณ"], th:"วัดอรุณ", jp:"ワット・アルン(暁の寺)", pref:"バンコク", station:{th:"อิสรภาพ", jp:"MRTイッサラパープ駅", access:"徒歩約15分"} },
   { key:["わっとぽー","wat pho","วัดโพธิ์"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺)", pref:"バンコク" , station:{th:"สนามไชย", jp:"MRTサナームチャイ駅", access:"徒歩約5分"} },
   { key:["ちゃとぅちゃっく","chatuchak","จตุจักร"], th:"ตลาดนัดจตุจักร", jp:"チャトゥチャック・ウィークエンド・マーケット", pref:"バンコク" , station:{th:"สวนจตุจักร", jp:"MRTチャトゥチャック・パーク駅／BTSモーチット駅", access:"徒歩約5分"} },
-  { key:["めーくろーん","maeklong","ตลาดแม่กลอง"], th:"ตลาดแม่กลอง", jp:"メークローン線路市場", pref:"サムットソンクラーム県" , access:"メークローン駅 → 駅直結" },
-  { key:["あんぱわー","amphawa","อัมพวา"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット", note:"週末のみ開催", pref:"サムットソンクラーム県" },
-  { key:["だむぬんさどぅあっく","damnoen saduak","ดำเนินสะดวก"], th:"ตลาดน้ำดำเนินสะดวก", jp:"ダムヌンサドゥアック水上マーケット", pref:"ラーチャブリー県" , access:"ラーチャブリー駅 → タクシー／ミニバス約40～50分" },
+  { key:["めーくろーん","maeklong","ตลาดแม่กลอง"], th:"ตลาดแม่กลอง", jp:"メークローン線路市場", pref:"サムットソンクラーム県" , access:"メークローン駅 → 駅直結" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/2lesvZn', title:'ダムヌンサドゥアック水上マーケット・メークローン鉄道市場ツアー'}] },
+  { key:["あんぱわー","amphawa","อัมพวา"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット", note:"週末のみ開催", pref:"サムットソンクラーム県" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/2lesvZn', title:'ダムヌンサドゥアック水上マーケット・メークローン鉄道市場ツアー'}] },
+  { key:["だむぬんさどぅあっく","damnoen saduak","ดำเนินสะดวก"], th:"ตลาดน้ำดำเนินสะดวก", jp:"ダムヌンサドゥアック水上マーケット", pref:"ラーチャブリー県" , access:"ラーチャブリー駅 → タクシー／ミニバス約40～50分" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/2lesvZn', title:'ダムヌンサドゥアック水上マーケット・メークローン鉄道市場ツアー'}] },
   { key:["かおるあん","khao luang","เขาหลวง"], th:"ถ้ำเขาหลวง", jp:"カオルアン洞窟", pref:"ペッチャブリー県" , access:"ペッチャブリー駅 → タクシー／Grab(配車アプリ)約15～20分" },
   { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ"], th:"วัดปากน้ำ", jp:"ワットパクナム", pref:"バンコク" , station:{th:"บางหว้า", jp:"BTS/MRTバンワー駅"} },
-  { key:["わっとさまーん","wat saman","สมานรัตนาราม"], th:"วัดสมานรัตนาราม", jp:"ワットサマーン・ラッタナーラーム(ピンクガネーシャ)", pref:"チャチューンサオ県" , access:"チャチューンサオ駅 → タクシー／Grab(配車アプリ)約30～40分" },
-  { key:["くわいがわてっきょう","river kwai bridge","สะพานข้ามแม่น้ำแคว"], th:"สะพานข้ามแม่น้ำแคว", jp:"クワイ川鉄橋", pref:"カンチャナブリー県" , station:{th:"สถานีสะพานแม่น้ำแคว", jp:"River Kwai Bridge駅", access:"徒歩約3〜5分"}},
-  { key:["えらわんのたき","erawan waterfall","น้ำตกเอราวัณ"], th:"น้ำตกเอราวัณ", jp:"エラワンの滝", pref:"カンチャナブリー県", access:"カンチャナブリー・バスターミナルからバスで移動" },
+  { key:["わっとさまーん","wat saman","สมานรัตนาราม"], th:"วัดสมานรัตนาราม", jp:"ワットサマーン・ラッタナーラーム(ピンクガネーシャ)", pref:"チャチューンサオ県" , access:"チャチューンサオ駅 → タクシー／Grab(配車アプリ)約30～40分" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/5bvxoHv', title:'バンコク寺院ツアー MyProGuide提供(ワット・パクナム／ピンクガネーシャ／ワット・サマン)'}] },
+  { key:["くわいがわてっきょう","river kwai bridge","สะพานข้ามแม่น้ำแคว"], th:"สะพานข้ามแม่น้ำแคว", jp:"クワイ川鉄橋", pref:"カンチャナブリー県" , station:{th:"สถานีสะพานแม่น้ำแคว", jp:"River Kwai Bridge駅", access:"徒歩約3〜5分"}, tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/22JmQTi', title:'カンチャナブリー サファリパーク・クウェー川鉄橋 日帰りツアー'}] },
+  { key:["えらわんのたき","erawan waterfall","น้ำตกเอราวัณ"], th:"น้ำตกเอราวัณ", jp:"エラワンの滝", pref:"カンチャナブリー県", access:"カンチャナブリー・バスターミナルからバスで移動" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/1LlmKkn', title:'エレファントサンクチュアリ・エラワン滝 1日ツアー'}] },
   { key:["ほあひんびーち","hua hin beach","หาดหัวหิน"], th:"หาดหัวหิน", jp:"ホアヒン・ビーチ", pref:"プラチュアップキーリーカン県" , access:"ホアヒン駅 → 徒歩約10～15分" },
   { key:["ぷらやーなこーんどうくつ","phraya nakhon cave","ถ้ำพระยานคร"], th:"ถ้ำพระยานคร", jp:"プラヤーナコーン洞窟", pref:"プラチュアップキーリーカン県" , access:"ホアヒン・バスターミナル → サームローイヨート方面 → カオサームローイヨート国立公園 → ボート／徒歩" },
-  { key:["さんくちゅありおぶとぅるーす","sanctuary of truth","ปราสาทสัจธรรม"], th:"ปราสาทสัจธรรม", jp:"サンクチュアリ・オブ・トゥルース(全木造の寺院)", pref:"チョンブリー県" , station:{th:"สถานีขนส่งพัทยา", jp:"パタヤ・バスターミナル", access:"タクシー・Grab(配車アプリ)で約15〜20分"}},
+  { key:["さんくちゅありおぶとぅるーす","sanctuary of truth","ปราสาทสัจธรรม"], th:"ปราสาทสัจธรรม", jp:"サンクチュアリ・オブ・トゥルース(全木造の寺院)", pref:"チョンブリー県" , station:{th:"สถานีขนส่งพัทยา", jp:"パタヤ・バスターミナル", access:"タクシー・Grab(配車アプリ)で約15〜20分"}, tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/1QIgKsG', title:'サンクチュアリーオブトゥルース 入場チケット(パタヤ)'}] },
   { key:["わっとぷらやい","big buddha pattaya","วัดพระใหญ่"], th:"วัดพระใหญ่", jp:"ワット・プラヤイ(パタヤ・ビッグブッダ)", pref:"チョンブリー県" , access:"パタヤ・バスターミナル → タクシー／Grab(配車アプリ)約15～20分" },
-  { key:["こーらん","koh larn","เกาะล้าน"], th:"เกาะล้าน", jp:"ラン島", pref:"チョンブリー県" , station:{th:"ท่าเรือบาลีไฮ", jp:"バリハイ・ピア", access:"フェリー・スピードボートで移動"}},
+  { key:["こーらん","koh larn","เกาะล้าน"], th:"เกาะล้าน", jp:"ラン島", pref:"チョンブリー県" , station:{th:"ท่าเรือบาลีไฮ", jp:"バリハイ・ピア", access:"フェリー・スピードボートで移動"}, tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/HseqgS5', title:'パタヤ ラン島 半日アイランドホッピング&シュノーケリングツアー'}] },
   { key:["こーさめっと","koh samet","เกาะเสม็ด"], th:"เกาะเสม็ด", jp:"サメット島", pref:"ラヨーン県" , access:"ラヨーン・バスターミナル → バーンペー・ピア → フェリー約30～40分" },
   { key:["どーいすてーぷ","doi suthep","ดอยสุเทพ"], th:"วัดพระธาตุดอยสุเทพ", jp:"ワット・プラタート・ドーイステープ", pref:"チェンマイ県" , access:"チェンマイ市内 → ソンテウ／タクシー約40～60分" },
   { key:["めーりむえれふぁんとほーむ","mae rim elephant home","ปางช้างแม่ริม"], th:"ปางช้างแม่ริม", jp:"メーリムエレファントホーム", pref:"チェンマイ県" , access:"チェンマイ市内 → タクシー／Grab(配車アプリ)約40～60分" },
@@ -1141,7 +1155,7 @@ const destinations = [
   { key:["ちゃおぷろむいちば","chao phrom market","ตลาดเจ้าพรหม"], th:"ตลาดเจ้าพรหม", jp:"チャオプロム市場", pref:"アユタヤ県", station:{th:"สถานีรถไฟอยุธยา", jp:"アユタヤ駅", access:"トゥクトゥク・タクシーで約5〜10分"} },
   { key:["かんちゃなぶりせんぼつしゃぼち","kanchanaburi war cemetery","สุสานทหารสัมพันธมิตรดอนรัก"], th:"สุสานทหารสัมพันธมิตรดอนรัก", jp:"カンチャナブリ連合軍共同墓地", pref:"カンチャナブリー県", station:{th:"สถานีรถไฟกาญจนบุรี", jp:"カンチャナブリー駅", access:"徒歩約5〜10分"} },
   { key:["じーすせんそうはくぶつかん","jeath war museum","พิพิธภัณฑ์สงคราม เจียท"], th:"พิพิธภัณฑ์สงคราม เจียท", jp:"JEATH War Museum(戦争博物館)", pref:"カンチャナブリー県", station:{th:"สถานีรถไฟกาญจนบุรี", jp:"カンチャナブリー駅", access:"タクシーまたは徒歩約20〜25分"} },
-  { key:["たいめんてつどう","death railway","ทางรถไฟสายมรณะ"], th:"ทางรถไฟสายมรณะ", jp:"泰緬鉄道(デスレイルウェイ)", pref:"カンチャナブリー県", station:{th:"สถานีรถไฟกาญจนบุรี", jp:"カンチャナブリー駅", access:"列車で移動"} },
+  { key:["たいめんてつどう","death railway","ทางรถไฟสายมรณะ"], th:"ทางรถไฟสายมรณะ", jp:"泰緬鉄道(デスレイルウェイ)", pref:"カンチャナブリー県", station:{th:"สถานีรถไฟกาญจนบุรี", jp:"カンチャナブリー駅", access:"列車で移動"} , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/gAaOdPo', title:'バンコク リバークウェー橋 歴史マルチデイツアー'}] },
   { key:["さいよーくのーいのたき","sai yok noi waterfall","น้ำตกไทรโยคน้อย"], th:"น้ำตกไทรโยคน้อย", jp:"サイヨークノーイ滝", pref:"カンチャナブリー県", station:{th:"สถานีน้ำตก", jp:"ナムトック駅", access:"タクシー・ソンテウで約5分"} },
   { key:["さいよーくやいのたき","sai yok yai waterfall","น้ำตกไทรโยคใหญ่"], th:"น้ำตกไทรโยคใหญ่", jp:"サイヨークヤイ滝", pref:"カンチャナブリー県", station:{th:"สถานีน้ำตก", jp:"ナムトック駅", access:"タクシー・ソンテウで移動"} },
   { key:["むあんしんれきしこうえん","mueang sing historical park","อุทยานประวัติศาสตร์เมืองสิงห์"], th:"อุทยานประวัติศาสตร์เมืองสิงห์", jp:"ムアンシン歴史公園", pref:"カンチャナブリー県", station:{th:"ท่ากิเลน", jp:"ター・キレン駅", access:"徒歩またはタクシーで約1.5km"} },
@@ -2375,6 +2389,10 @@ function renderComposerList(){
       const accessText = !st.access ? `${st.jp}` : (st.access === '駅直結' ? `${st.jp}(駅直結)` : `${st.jp}から${st.access}`);
       html += `<div class="dest-access-note">${iconSvg('pin', 14)} 行き方参考: ${accessText}</div>`;
     }
+    if(currentDestination){
+      const tHtml = tourBlockHtml(currentDestination);
+      if(tHtml) html += `<div class="dest-tour-block">${tHtml}</div>`;
+    }
     const modeIndices = transportItems
       .map((item, idx) => ({item, idx}))
       .filter(x => x.item.mode === transportTab)
@@ -3012,6 +3030,19 @@ function renderSuggestions(matches, query){
   ).join('');
 }
 let currentMatches = [];
+function tourBlockHtml(dest){
+  if(!dest || !dest.tours || dest.tours.length === 0) return '';
+  const platformLabel = {klook:'Klook', gyg:'GetYourGuide'};
+  const links = dest.tours.map(t => {
+    const label = platformLabel[t.platform] || t.platform;
+    return `<a class="dest-tour-link" href="${t.url}" target="_blank" rel="noopener">
+      <span class="dest-tour-emoji">🎫</span>
+      <span class="dest-tour-title">${t.title || (dest.jp + 'のツアーを見る')}</span>
+      <span class="dest-tour-pr">PR</span>
+    </a>`;
+  }).join('');
+  return `<div class="dest-tour-label">おすすめツアー</div>${links}`;
+}
 function applyDestination(found){
   if(!currentDestination || currentDestination.th !== found.th){
     selectedFollowUp = null;
@@ -3039,6 +3070,15 @@ function applyDestination(found){
   } else {
     noteEl.style.display = 'none';
     noteEl.innerHTML = '';
+  }
+  const tourEl = document.getElementById('destTourBlock');
+  const tourHtml = tourBlockHtml(found);
+  if(tourHtml){
+    tourEl.innerHTML = tourHtml;
+    tourEl.style.display = '';
+  } else {
+    tourEl.style.display = 'none';
+    tourEl.innerHTML = '';
   }
   setLastPhrase(destPhraseTh, found.jp + "へ行くつもりです");
 }

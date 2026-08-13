@@ -296,13 +296,12 @@
   .anchor-jp{ font-size:12.5px; opacity:0.75; margin-top:5px; }
 
   .selected-phrase{ position:relative; background:var(--teal); color:#fff; border-radius:14px; padding:18px 16px; margin-bottom:16px; }
+  .sp-header{ display:flex; justify-content:flex-end; margin-bottom:8px; }
   .sp-clear-btn{
-    position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.4);
+    background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.4);
     color:#fff; border-radius:999px; padding:5px 10px; font-size:11px; font-weight:600; cursor:pointer;
-    font-family:'Noto Sans JP', sans-serif;
+    font-family:'Noto Sans JP', sans-serif; flex:0 0 auto;
   }
-  .selected-phrase:has(.sp-clear-btn) .sp-th,
-  .selected-phrase:has(.sp-clear-btn) .sp-jp{ padding-right:76px; }
   .selected-phrase .fav-star{ color:rgba(255,255,255,0.45); }
   .selected-phrase .fav-star.active{ color:var(--marigold); }
   .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
@@ -2015,6 +2014,10 @@ function selectDishPhrase(mi){
   dishSelectedPhraseIdx = (dishSelectedPhraseIdx === mi) ? null : mi;
   renderDishDetail();
 }
+function clearDishSelectedPhrase(){
+  dishSelectedPhraseIdx = null;
+  renderDishDetailStandalone(dishes[dishSelectedIdx]);
+}
 function toggleDishMod(mi){
   const idx = dishSelectedMods.indexOf(mi);
   if(idx >= 0) dishSelectedMods.splice(idx, 1);
@@ -2070,6 +2073,7 @@ function renderDishDetail(){
     <img class="dish-detail-photo" src="${dishImagesFull[dishSelectedIdx]}" alt="${d.jp}" onclick="event.stopPropagation(); openDishPhotoLightbox(${dishSelectedIdx});">
     <div class="dish-desc-box">${d.desc}</div>
     <div class="selected-phrase">
+      ${dishSelectedMods.length > 0 ? `<div class="sp-header"><button class="sp-clear-btn" onclick="clearDishMods()">✕ 選択を解除</button></div>` : ''}
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
       <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishOrderFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
@@ -2080,12 +2084,17 @@ function renderDishDetail(){
     ${dishRecommendBlockHtml()}
   `;
 }
+function clearDishMods(){
+  dishSelectedMods = [];
+  renderDishDetail();
+}
 function renderDishDetailStandalone(d){
   let selectedBlock;
   if(dishSelectedPhraseIdx !== null){
     const p = d.mods[dishSelectedPhraseIdx];
     setLastPhrase(p.th, p.jp);
     selectedBlock = `<div class="selected-phrase">
+      <div class="sp-header"><button class="sp-clear-btn" onclick="clearDishSelectedPhrase()">✕ 選択を解除</button></div>
       <div class="sp-th">${p.th}</div>
       <div class="sp-jp">${p.jp}</div>
       <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishSelectedPhraseFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
@@ -2527,6 +2536,7 @@ function renderCategoryFixed(){
     const p = s.phrases[selectedCategoryIdx];
     const th = fullTh(p.base, p.type);
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + `<div class="selected-phrase">
+      <div class="sp-header"><button class="sp-clear-btn" onclick="clearCategoryPhrase()">✕ 選択を解除</button></div>
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${p.jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
@@ -2534,6 +2544,11 @@ function renderCategoryFixed(){
     </div>`;
     setLastPhrase(th, p.jp);
   }
+}
+function clearCategoryPhrase(){
+  selectedCategoryIdx = null;
+  renderCategoryFixed();
+  renderCategoryList();
 }
 function renderCategoryList(){
   const s = situations[openState.index];
@@ -2620,7 +2635,7 @@ function renderSelectedPhraseBlock(){
     const jp = `${st.jp}までの乗車券を${ticketCount}枚お願いします`;
     setLastPhrase(th, jp);
     return `<div class="selected-phrase">
-      <button class="sp-clear-btn" onclick="clearSelectedPhrase()">✕ 選択を解除</button>
+      <div class="sp-header"><button class="sp-clear-btn" onclick="clearSelectedPhrase()">✕ 選択を解除</button></div>
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
       <div class="ticket-stepper">
@@ -2654,7 +2669,7 @@ function renderSelectedPhraseBlock(){
   }
   setLastPhrase(followTh, followJp);
   return `<div class="selected-phrase">
-    <button class="sp-clear-btn" onclick="clearSelectedPhrase()">✕ 選択を解除</button>
+    <div class="sp-header"><button class="sp-clear-btn" onclick="clearSelectedPhrase()">✕ 選択を解除</button></div>
     <div class="sp-th">${followTh}</div>
     <div class="sp-jp">${followJp}</div>
     ${stepperHtml}

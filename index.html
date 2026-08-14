@@ -427,8 +427,10 @@
   .ticket-stepper span{ font-family:'Kanit', sans-serif; font-weight:700; font-size:18px; color:#fff; min-width:48px; text-align:center; }
   .landscape-display{
     display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
-    flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center;
+    flex-direction:column; align-items:center; justify-content:center; text-align:center;
     cursor:pointer;
+    padding:calc(24px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right))
+            calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
   }
   .landscape-display.show{ display:flex; }
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; }
@@ -2131,9 +2133,15 @@ function setLastPhrase(th, jp){
 }
 function fitLandscapeText(){
   const el = document.getElementById('landscapeTh');
-  if(!el) return;
-  const maxWidth = window.innerWidth * 0.9;
-  const maxHeight = window.innerHeight * 0.6;
+  const container = document.getElementById('landscapeDisplay');
+  if(!el || !container) return;
+  const cs = getComputedStyle(container);
+  const padL = parseFloat(cs.paddingLeft) || 0;
+  const padR = parseFloat(cs.paddingRight) || 0;
+  const padT = parseFloat(cs.paddingTop) || 0;
+  const padB = parseFloat(cs.paddingBottom) || 0;
+  const maxWidth = (container.clientWidth - padL - padR) * 0.95;
+  const maxHeight = (container.clientHeight - padT - padB) * 0.85;
   let fontSize = 220;
   el.style.fontSize = fontSize + 'px';
   while(fontSize > 24 && (el.scrollWidth > maxWidth || el.scrollHeight > maxHeight)){

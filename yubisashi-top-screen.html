@@ -581,14 +581,14 @@
     display:flex; align-items:flex-start; gap:6px;
   }
   .dest-tour-block{ margin:0 2px 14px; }
-  .dest-tour-label{ font-size:11px; font-weight:700; color:#8B8272; letter-spacing:.5px; margin-bottom:5px; }
+  .dest-tour-label{ font-size:11px; font-weight:700; color:var(--marigold); letter-spacing:.5px; margin-bottom:5px; }
   .dest-tour-link{
     display:flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--marigold);
     border-radius:12px; padding:10px 12px; margin-bottom:6px; text-decoration:none; color:var(--ink);
   }
   .dest-tour-link:active{ background:var(--sand); }
   .dest-tour-emoji{ font-size:17px; flex:0 0 auto; }
-  .dest-tour-title{ flex:1; font-size:12.5px; font-weight:600; line-height:1.4; }
+  .dest-tour-title{ flex:1; min-width:0; font-size:12.5px; font-weight:600; line-height:1.4; word-break:keep-all; overflow-wrap:anywhere; }
   .dest-tour-pr{
     flex:0 0 auto; font-size:9.5px; font-weight:700; color:#8B8272; border:1px solid #C7BEA9;
     border-radius:5px; padding:1px 5px;
@@ -3053,14 +3053,22 @@ function renderSuggestions(matches, query){
   ).join('');
 }
 let currentMatches = [];
+function wrapTourTitle(title){
+  return String(title)
+    .replace(/／/g, '／<wbr>')
+    .replace(/\(/g, '<wbr>(')
+    .replace(/・/g, '・<wbr>')
+    .replace(/ /g, ' <wbr>');
+}
 function tourBlockHtml(dest){
   if(!dest || !dest.tours || dest.tours.length === 0) return '';
   const platformLabel = {klook:'Klook', gyg:'GetYourGuide'};
   const links = dest.tours.map(t => {
     const label = platformLabel[t.platform] || t.platform;
+    const titleHtml = wrapTourTitle(t.title || (dest.jp + 'のツアーを見る'));
     return `<a class="dest-tour-link" href="${t.url}" target="_blank" rel="noopener">
       <span class="dest-tour-emoji">🎫</span>
-      <span class="dest-tour-title">${t.title || (dest.jp + 'のツアーを見る')}</span>
+      <span class="dest-tour-title">${titleHtml}</span>
       <span class="dest-tour-pr">PR</span>
     </a>`;
   }).join('');

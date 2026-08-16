@@ -3072,6 +3072,14 @@ function isSubsequence(query, target){
   }
   return qi === query.length;
 }
+function matchScore(d, nq){
+  const nJp = normalizeSearch(d.jp);
+  const nTh = normalizeSearch(d.th);
+  if(nJp === nq || nTh === nq) return 100;
+  if(d.key.some(k => normalizeSearch(k) === nq)) return 90;
+  if(nJp.startsWith(nq) || d.key.some(k => normalizeSearch(k).startsWith(nq))) return 50;
+  return 10;
+}
 function findMatches(query){
   const nq = normalizeSearch(query);
   if(!nq) return [];
@@ -3079,7 +3087,10 @@ function findMatches(query){
     const pool = [...d.key, d.th, d.jp, d.pref];
     return pool.some(k => normalizeSearch(k).includes(nq));
   });
-  if(exact.length > 0) return exact.slice(0, 6);
+  if(exact.length > 0){
+    exact.sort((a, b) => matchScore(b, nq) - matchScore(a, nq));
+    return exact.slice(0, 6);
+  }
 
   // 厳密一致が0件の場合だけ、飛び飛びでも順番通りなら一致とみなす緩い検索を試す
   if(nq.length < 3) return [];

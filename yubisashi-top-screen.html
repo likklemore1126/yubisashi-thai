@@ -65,7 +65,7 @@
   header{
     background:var(--ink);
     color:var(--paper);
-    padding:calc(22px + env(safe-area-inset-top)) 20px 26px;
+    padding:calc(16px + env(safe-area-inset-top)) 20px 16px;
     position:relative;
     overflow:hidden;
   }
@@ -101,6 +101,34 @@
     border-radius:999px; padding:4px 10px;
   }
   .gender-toggle{ position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
+  .gender-toggle-single{
+    position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; z-index:2;
+    background:var(--marigold); color:var(--ink); border:none; border-radius:999px;
+    padding:7px 12px; font-size:12px; font-weight:700; font-family:'Noto Sans JP', sans-serif;
+    display:flex; align-items:center; gap:5px; cursor:pointer;
+  }
+  .gender-toggle-single .swap-icon{ font-size:12px; opacity:0.6; }
+  .header-action-btn{
+    flex:1; position:relative; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.28);
+    border-radius:14px; padding:8px 4px 7px; display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:var(--paper); font-family:'Noto Sans JP', sans-serif; cursor:pointer;
+  }
+  .header-action-emoji{ font-size:19px; line-height:1; }
+  .header-action-label{ font-size:10.5px; font-weight:600; letter-spacing:.2px; }
+  .header-action-btn.accent{ background:rgba(230,168,54,0.18); border-color:var(--marigold); }
+  .header-action-btn.accent .header-action-label{ color:var(--marigold); }
+  .header-action-caption{ font-size:8.5px; opacity:0.65; line-height:1.3; text-align:center; }
+  .header-action-badge{
+    position:absolute; top:6px; right:6px; background:var(--marigold); color:var(--ink);
+    font-size:9px; font-weight:700; border-radius:999px; padding:1px 5px; line-height:1.4;
+  }
+  .body-actions-row{ display:flex; gap:8px; padding:0 18px; margin:8px 0; }
+  .body-actions-row .header-action-btn{
+    background:#fff; border:1.5px solid var(--line); color:var(--ink);
+  }
+  .body-actions-row .header-action-btn.accent{ border-color:var(--marigold); background:#fff8ec; }
+  .body-actions-row .header-action-caption{ opacity:0.55; color:var(--ink); }
+
   .gtbtn{
     background:rgba(255,255,255,0.1); color:var(--paper);
     border:1px solid rgba(255,255,255,0.3); border-radius:999px;
@@ -108,7 +136,7 @@
   }
   .gtbtn.active{ background:var(--marigold); color:var(--ink); border-color:var(--marigold); font-weight:600; }
 
-  .search-wrap{ padding:16px 18px 4px; }
+  .search-wrap{ padding:0 18px 0; margin-bottom:8px; }
   .search-box{
     background:#fff; border:2px solid var(--ink); border-radius:14px;
     display:flex; align-items:center; gap:10px; padding:12px 14px;
@@ -172,10 +200,10 @@
   .fav-entry-count{ font-size:11.5px; color:var(--marigold); font-weight:700; background:#FFF6E8; padding:3px 9px; border-radius:999px; flex:0 0 auto; }
   .section-label{
     font-size:12px; font-weight:700; color:#8B8272; letter-spacing:1px;
-    margin:20px 18px 8px; display:flex; align-items:center; gap:6px;
+    margin:0 18px 8px; display:flex; align-items:center; gap:6px;
   }
   .section-label .bar{ width:14px; height:3px; background:var(--marigold); border-radius:2px; }
-  .chip-row{ display:flex; gap:8px; overflow-x:auto; padding:0 18px 4px; scrollbar-width:none; }
+  .chip-row{ display:flex; gap:8px; overflow-x:auto; padding:0 18px; margin-bottom:8px; scrollbar-width:none; }
   .chip-row::-webkit-scrollbar{ display:none; }
   .chip{
     flex:0 0 auto; background:var(--sand); border:1.5px solid var(--line);
@@ -185,7 +213,7 @@
   }
   .chip:active{ transform:scale(0.95); background:var(--marigold); border-color:var(--marigold-deep); }
 
-  .situations{ padding:6px 14px 24px; display:flex; flex-direction:column; gap:8px; }
+  .situations{ padding:0 14px 24px; display:flex; flex-direction:column; gap:8px; }
   .sit-row{
     display:flex; align-items:center; gap:12px; background:#fff;
     border:1.5px solid var(--line); border-radius:14px; padding:12px 14px;
@@ -626,17 +654,32 @@
 <div class="device">
 <div class="page-scroll">
   <header>
-    <div class="gender-toggle" id="genderToggle">
-      <button class="gtbtn active" data-g="female" onclick="setGender('female')"><span class="icon-slot" data-icon="female" data-size="22"></span> 女性</button>
-      <button class="gtbtn" data-g="male" onclick="setGender('male')"><span class="icon-slot" data-icon="male" data-size="22"></span> 男性</button>
-    </div>
+    <button class="gender-toggle-single" id="genderToggleSingle" onclick="toggleGenderSingle()">
+      <span id="genderToggleIconWrap"><span class="icon-slot" data-icon="female" data-size="16"></span></span>
+      <span id="genderToggleLabel">女性語尾</span> <span class="swap-icon">⇄</span>
+    </button>
     <div class="wordmark">指さしタイ<span class="th"> na</span></div>
     <div class="tagline">見せるだけで、伝わる。</div>
-    <div class="header-tools">
-      <div class="rate-status" id="rateStatus" onclick="openRateSheet()">💴 レート未設定(タップで設定) ›</div>
-      <div class="calc-trigger" onclick="openCalc()"><span class="icon-slot" data-icon="calculator" data-size="22"></span> ฿計算機</div>
-    </div>
   </header>
+
+  <div class="body-actions-row">
+    <div class="header-action-btn accent" onclick="openProcedures()">
+      <span class="header-action-emoji">🛂</span>
+      <span class="header-action-label">手続き</span>
+      <span class="header-action-caption">航空券・入国など</span>
+    </div>
+    <div class="header-action-btn" onclick="openFavorites()">
+      <span class="header-action-badge" id="favCount">0件</span>
+      <span class="header-action-emoji">⭐</span>
+      <span class="header-action-label">お気に入り</span>
+      <span class="header-action-caption">並び替えて作文</span>
+    </div>
+    <div class="header-action-btn" onclick="openCalc()">
+      <span class="header-action-emoji">🧮</span>
+      <span class="header-action-label">バーツ計算機</span>
+      <span class="header-action-caption">レート換算</span>
+    </div>
+  </div>
 
   <div class="search-wrap">
     <div class="search-box">
@@ -664,12 +707,6 @@
       <button class="mode-btn" onclick="openModeList('songthaew')"><span class="icon-slot" data-icon="songthaew" data-size="24"></span> ソンテウ</button>
       <button class="mode-btn" onclick="openModeList('other')"><span class="icon-slot" data-icon="pin" data-size="24"></span> その他</button>
     </div>
-  </div>
-
-  <div class="fav-entry" onclick="openFavorites()">
-    <span class="fav-entry-star">⭐</span>
-    <span class="fav-entry-text">お気に入り(並び替えて作文できます)</span>
-    <span class="fav-entry-count" id="favCount">0件</span>
   </div>
 
   <div class="section-label"><span class="bar"></span>近くの◯◯を伝える</div>
@@ -728,6 +765,7 @@
       <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()"><span class="icon-slot" data-icon="search" data-size="17"></span>大きく見せる</button>
       <button class="composer-close" onclick="closeCalc()">✕</button>
     </div>
+    <div class="rate-status" id="rateStatus" onclick="openRateSheet()" style="margin:2px 18px 10px;">💴 レート未設定(タップで設定) ›</div>
     <div class="nb-display" id="calcDisplay"></div>
     <div class="nb-keys calc-keys" id="calcKeysFull">
       <div class="nb-key" onclick="calcClearAll()">C</div>
@@ -805,6 +843,14 @@
     <p class="fav-help">右端の <span class="fav-handle-icon">☰</span> を長押ししたまま上下に動かすと、並び順を変えられます。並べた順番のまま、まとめて見せることができます。</p>
     <div class="fav-list" id="favoritesList"></div>
     <div class="fav-empty" id="favEmptyMsg">まだ何も登録されていません。フレーズ画面の ☆ をタップして追加してください。</div>
+  </div>
+
+  <div class="composer-screen" id="proceduresScreen" style="z-index:9;">
+    <div class="composer-header">
+      <div class="ctitle">🛂 手続き</div>
+      <button class="composer-close" onclick="closeProcedures()">✕</button>
+    </div>
+    <div class="fav-empty">準備中です。渡航前の手続き(航空券・ホテル・入国申請・持ち物チェックリストなど)を、ここにまとめる予定です。</div>
   </div>
 
   <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
@@ -1477,6 +1523,12 @@ function openFavorites(){
 }
 function closeFavorites(){
   document.getElementById('favoritesScreen').classList.remove('show');
+}
+function openProcedures(){
+  document.getElementById('proceduresScreen').classList.add('show');
+}
+function closeProcedures(){
+  document.getElementById('proceduresScreen').classList.remove('show');
 }
 function renderFavorites(){
   const listEl = document.getElementById('favoritesList');
@@ -2346,6 +2398,7 @@ attachSwipeToClose('composerScreen', closeComposer);
 attachSwipeToClose('calcScreen', closeCalc);
 attachSwipeToClose('timeBoardScreen', closeTimeBoard);
 attachSwipeToClose('favoritesScreen', closeFavorites);
+attachSwipeToClose('proceduresScreen', closeProcedures);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
 
@@ -3044,8 +3097,24 @@ function saveRateFromCalc(){
 function setGender(g){
   genderState.value = g;
   document.querySelectorAll('.gtbtn').forEach(b => b.classList.toggle('active', b.dataset.g === g));
+  updateGenderToggleSingle();
   try{ localStorage.setItem('yubisashi_gender', g); }catch(e){}
   refreshVisible();
+}
+function updateGenderToggleSingle(){
+  const iconWrap = document.getElementById('genderToggleIconWrap');
+  const label = document.getElementById('genderToggleLabel');
+  if(!iconWrap || !label) return;
+  if(genderState.value === 'male'){
+    iconWrap.innerHTML = iconSvg('male', 16);
+    label.textContent = '男性語尾';
+  } else {
+    iconWrap.innerHTML = iconSvg('female', 16);
+    label.textContent = '女性語尾';
+  }
+}
+function toggleGenderSingle(){
+  setGender(genderState.value === 'male' ? 'female' : 'male');
 }
 function refreshVisible(){
   if(currentDestination){
@@ -3261,6 +3330,7 @@ try{
     document.querySelectorAll('.gtbtn').forEach(b => b.classList.toggle('active', b.dataset.g === savedGender));
   }
 }catch(e){}
+updateGenderToggleSingle();
 
 document.querySelectorAll('.icon-slot').forEach(el => {
   const key = el.dataset.icon;

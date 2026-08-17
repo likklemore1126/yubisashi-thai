@@ -102,6 +102,23 @@
     background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3);
     border-radius:999px; padding:4px 10px;
   }
+  .boot-splash{
+    position:fixed; inset:0; z-index:9999; background:var(--ink);
+    transition:opacity 0.25s ease;
+  }
+  .boot-splash.hide{ opacity:0; pointer-events:none; }
+  .boot-splash-title{
+    position:absolute; top:calc(16px + env(safe-area-inset-top)); left:20px;
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; color:var(--paper);
+  }
+  .boot-splash-title .th{ color:var(--marigold); }
+  .boot-splash-spinner{
+    position:absolute; left:50%; top:50%; width:32px; height:32px; margin:-16px 0 0 -16px;
+    border:3px solid rgba(255,255,255,0.2); border-top-color:var(--marigold);
+    border-radius:50%; animation:boot-spin 0.8s linear infinite;
+  }
+  @keyframes boot-spin{ to{ transform:rotate(360deg); } }
+
   .gender-toggle{ position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
   .gender-toggle-single{
     position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; z-index:2;
@@ -652,6 +669,11 @@
 </style>
 </head>
 <body>
+
+<div class="boot-splash" id="bootSplash">
+  <div class="boot-splash-title">指さしタイ<span class="th"> na</span></div>
+  <div class="boot-splash-spinner"></div>
+</div>
 
 <div class="device">
 <div class="page-scroll">
@@ -3355,6 +3377,13 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+// iOSのホーム画面アイコンからの起動アニメーション中に、薄い色のテキストが
+// 一瞬消える描画不具合が起きることがあるため、演出が落ち着くまでロゴ画面で隠す
+setTimeout(() => {
+  const splash = document.getElementById('bootSplash');
+  if(splash) splash.classList.add('hide');
+}, 500);
 </script>
 
 </body>

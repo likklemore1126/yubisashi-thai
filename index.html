@@ -103,15 +103,11 @@
     border-radius:999px; padding:4px 10px;
   }
   .boot-splash{
-    position:fixed; inset:0; z-index:9999; background:#fff;
+    position:fixed; top:-15vh; left:-5vw; right:-5vw; bottom:-15vh;
+    z-index:9999; background:#fff;
     transition:opacity 0.25s ease;
   }
   .boot-splash.hide{ opacity:0; pointer-events:none; }
-  .boot-splash-title{
-    position:absolute; top:calc(16px + env(safe-area-inset-top)); left:20px;
-    font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; color:var(--ink);
-  }
-  .boot-splash-title .th{ color:var(--marigold); }
 
   .gender-toggle{ position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
   .gender-toggle-single{
@@ -664,9 +660,7 @@
 </head>
 <body>
 
-<div class="boot-splash" id="bootSplash">
-  <div class="boot-splash-title">指さしタイ<span class="th"> na</span></div>
-</div>
+<div class="boot-splash" id="bootSplash"></div>
 
 <div class="device">
 <div class="page-scroll">
@@ -3376,7 +3370,7 @@ if ('serviceWorker' in navigator) {
 setTimeout(() => {
   const splash = document.getElementById('bootSplash');
   if(splash) splash.classList.add('hide');
-}, 850);
+}, 650);
 </script>
 
 </body>

@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=optional" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#17242A;
@@ -65,7 +65,7 @@
   header{
     background:var(--ink);
     color:var(--paper);
-    padding:max(52px, calc(16px + env(safe-area-inset-top))) 20px 16px;
+    padding:calc(16px + env(safe-area-inset-top)) 20px 16px;
     position:relative;
     overflow:hidden;
   }
@@ -102,9 +102,19 @@
     background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3);
     border-radius:999px; padding:4px 10px;
   }
-  .gender-toggle{ position:absolute; top:max(56px, calc(20px + env(safe-area-inset-top))); right:16px; display:flex; gap:4px; z-index:2; }
+  .boot-splash{
+    position:fixed; inset:0; z-index:9999; background:var(--ink);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition:opacity 0.25s ease;
+  }
+  .boot-splash.hide{ opacity:0; pointer-events:none; }
+  .boot-splash-title{ font-family:'Kanit', sans-serif; font-weight:700; font-size:28px; color:var(--paper); }
+  .boot-splash-title .th{ color:var(--marigold); }
+  .boot-splash-tagline{ font-size:13px; color:var(--paper); opacity:0.7; margin-top:8px; }
+
+  .gender-toggle{ position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
   .gender-toggle-single{
-    position:absolute; top:max(56px, calc(20px + env(safe-area-inset-top))); right:16px; z-index:2;
+    position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; z-index:2;
     background:var(--marigold); color:var(--ink); border:none; border-radius:999px;
     padding:7px 12px; font-size:12px; font-weight:700; font-family:'Noto Sans JP', sans-serif;
     display:flex; align-items:center; gap:5px; cursor:pointer;
@@ -652,6 +662,11 @@
 </style>
 </head>
 <body>
+
+<div class="boot-splash" id="bootSplash">
+  <div class="boot-splash-title">指さしタイ<span class="th"> na</span></div>
+  <div class="boot-splash-tagline">見せるだけで、伝わる。</div>
+</div>
 
 <div class="device">
 <div class="page-scroll">
@@ -3355,6 +3370,13 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+// iOSのホーム画面アイコンからの起動アニメーション中に、薄い色のテキストが
+// 一瞬消える描画不具合が起きることがあるため、演出が落ち着くまでロゴ画面で隠す
+setTimeout(() => {
+  const splash = document.getElementById('bootSplash');
+  if(splash) splash.classList.add('hide');
+}, 500);
 </script>
 
 </body>

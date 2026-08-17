@@ -1467,6 +1467,11 @@ const situations = [
   ]},
 ];
 
+// 「近くの○○」「シチュエーションから探す」は画面上部で見える最初のコンテンツなので、
+// 他の初期化処理(お気に入り読み込み・ホテル情報等)より先に描画してしまう
+renderNearby();
+renderSituations();
+
 let currentDestination = null;
 let selectedFollowUp = null;
 let anchorExpanded = true;
@@ -3341,8 +3346,6 @@ document.querySelectorAll('.icon-slot').forEach(el => {
 });
 loadHotelInfo();
 loadFavorites();
-renderNearby();
-renderSituations();
 updateRatePillText();
 
 if ('serviceWorker' in navigator) {

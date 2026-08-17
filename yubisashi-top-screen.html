@@ -65,7 +65,7 @@
   header{
     background:var(--ink);
     color:var(--paper);
-    padding:calc(16px + env(safe-area-inset-top)) 20px 16px;
+    padding:max(52px, calc(16px + env(safe-area-inset-top))) 20px 16px;
     position:relative;
     overflow:hidden;
   }
@@ -102,9 +102,9 @@
     background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3);
     border-radius:999px; padding:4px 10px;
   }
-  .gender-toggle{ position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
+  .gender-toggle{ position:absolute; top:max(56px, calc(20px + env(safe-area-inset-top))); right:16px; display:flex; gap:4px; z-index:2; }
   .gender-toggle-single{
-    position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; z-index:2;
+    position:absolute; top:max(56px, calc(20px + env(safe-area-inset-top))); right:16px; z-index:2;
     background:var(--marigold); color:var(--ink); border:none; border-radius:999px;
     padding:7px 12px; font-size:12px; font-weight:700; font-family:'Noto Sans JP', sans-serif;
     display:flex; align-items:center; gap:5px; cursor:pointer;

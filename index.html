@@ -707,7 +707,7 @@
     <div class="dest-jp" id="destJp"></div>
     <div class="dest-phrase" id="destPhrase"></div>
     <div class="dest-phrase-jp" id="destPhraseJp"></div>
-    <button class="fullscreen-btn" onclick="showFullscreenNow()" style="margin-top:10px;"><span class="icon-slot" data-icon="search" data-size="17"></span> これだけ大きく見せる</button>
+    <button class="fullscreen-btn" onclick="showFullscreenNow()" style="margin-top:10px;"><span class="icon-slot" data-icon="search" data-size="17"></span> 相手に見せる</button>
     <div class="dest-access-note" id="destAccessNote" style="display:none;"></div>
     <div class="dest-tour-block" id="destTourBlock" style="display:none;"></div>
     <div class="dest-modes">
@@ -773,7 +773,7 @@
   <div class="composer-screen" id="calcScreen" style="z-index:9;">
     <div class="composer-header">
       <div class="ctitle" id="calcTitle"><span class="icon-slot" data-icon="calculator" data-size="20"></span>฿計算機</div>
-      <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()"><span class="icon-slot" data-icon="search" data-size="17"></span>大きく見せる</button>
+      <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()"><span class="icon-slot" data-icon="search" data-size="17"></span>相手に見せる</button>
       <button class="composer-close" onclick="closeCalc()">✕</button>
     </div>
     <div class="rate-status" id="rateStatus" onclick="openRateSheet()" style="margin:2px 18px 10px;">💴 レート未設定(タップで設定) ›</div>
@@ -819,7 +819,7 @@
   <div class="composer-screen" id="timeBoardScreen" style="z-index:9;">
     <div class="composer-header">
       <div class="ctitle"><span class="icon-slot" data-icon="clock" data-size="20"></span>時刻で答える</div>
-      <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()"><span class="icon-slot" data-icon="search" data-size="17"></span>大きく見せる</button>
+      <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()"><span class="icon-slot" data-icon="search" data-size="17"></span>相手に見せる</button>
       <button class="composer-close" onclick="closeTimeBoard()">✕</button>
     </div>
     <div class="nb-display" id="timeDisplay"></div>
@@ -1358,12 +1358,18 @@ const travelModes = [
   {icon:'taxi', label:'タクシー', labelTh:'แท็กซี่', qBase:'นั่งแท็กซี่ไปกี่นาที', qType:'q', qJp:'タクシーで何分ですか?'},
   {icon:'tuktuk', label:'トゥクトゥク', labelTh:'ตุ๊กตุ๊ก', qBase:'นั่งตุ๊กตุ๊กไปกี่นาที', qType:'q', qJp:'トゥクトゥクで何分ですか?'},
 ];
+const priceModes = [
+  {icon:'pointhand', label:'1つ', labelTh:'หนึ่งชิ้น', qBase:'อันนี้ราคาเท่าไหร่', qType:'q', qJp:'これはいくらですか?'},
+  {icon:'cart', label:'全部で', labelTh:'ทั้งหมด', qBase:'ทั้งหมดเท่าไหร่', qType:'q', qJp:'全部でいくらですか?'},
+];
 const nearby = [
   {icon:"train", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
   {icon:"store", label:"コンビニ", base:"ร้านสะดวกซื้อแถวนี้อยู่ทางไหน",   type:'q', jp:"近くのコンビニはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
   {icon:"atm", label:"ATM",    base:"ตู้เอทีเอ็มแถวนี้อยู่ทางไหน",       type:'q', jp:"近くのATMはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
   {icon:"toilet", label:"トイレ", base:"ห้องน้ำแถวนี้อยู่ทางไหน",           type:'q', jp:"近くのトイレはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
   {icon:"cross", label:"薬局",   base:"ร้านขายยาแถวนี้อยู่ทางไหน",         type:'q', jp:"近くの薬局はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"bowl", label:"カフェ",   base:"ร้านกาแฟแถวนี้อยู่ทางไหน",         type:'q', jp:"近くのカフェはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"hand", label:"マッサージ", base:"ร้านนวดแถวนี้อยู่ทางไหน",         type:'q', jp:"近くのマッサージ店はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
 ];
 
 const situations = [
@@ -1432,7 +1438,7 @@ const situations = [
   ]},
   { icon:"bag", title:"市場で買い物する", color:"var(--teal-deep)", count:"17", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
-    {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+    {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか", numberAnswer:{unit:'บาท', position:'suffix', jpy:true, modes:priceModes}},
     {base:"ลดได้ไหม", type:'q', jp:"安くなりますか"},
     {base:"มีสีอื่นไหม", type:'q', jp:"色違いはありますか"},
     {base:"มีไซส์ใหญ่กว่านี้ไหม", type:'q', jp:"もっと大きいサイズはありますか"},
@@ -2176,7 +2182,7 @@ function dishRecommendBlockHtml(){
     <div class="selected-phrase dish-recommend-phrase">
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
-      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishRecommendFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishRecommendFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>
       ${favStarHtml(th, jp)}
     </div>`;
 }
@@ -2197,7 +2203,7 @@ function renderDishDetail(){
       ${dishSelectedMods.length > 0 ? `<div class="sp-header"><button class="sp-clear-btn" onclick="clearDishMods()">✕ 選択を解除</button></div>` : ''}
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
-      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishOrderFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishOrderFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>
       ${favStarHtml(th, jp)}
     </div>
     <div class="dish-mod-title">追加の指示(複数選択できます)</div>
@@ -2218,7 +2224,7 @@ function renderDishDetailStandalone(d){
       <div class="sp-header"><button class="sp-clear-btn" onclick="clearDishSelectedPhrase()">✕ 選択を解除</button></div>
       <div class="sp-th">${p.th}</div>
       <div class="sp-jp">${p.jp}</div>
-      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishSelectedPhraseFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishSelectedPhraseFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>
       ${favStarHtml(p.th, p.jp)}
     </div>`;
   } else {
@@ -2277,7 +2283,7 @@ function showFullscreenNow(){
   requestAnimationFrame(fitLandscapeText);
 }
 function fullscreenBtnHtml(){
-  return `<button class="fullscreen-btn" onclick="event.stopPropagation(); showFullscreenNow();">${iconSvg('search', 16)} これだけ大きく見せる</button>`;
+  return `<button class="fullscreen-btn" onclick="event.stopPropagation(); showFullscreenNow();">${iconSvg('search', 16)} 相手に見せる</button>`;
 }
 function checkOrientationDisplay(){
   const overlay = document.getElementById('landscapeDisplay');
@@ -2714,7 +2720,7 @@ function renderDestinationAnchor(){
     <div class="anchor-label">行き先(タップで最小化)</div>
     <div class="anchor-th">${th}</div>
     <div class="anchor-jp">${jp}</div>
-    <button class="fullscreen-btn" onclick="event.stopPropagation(); showDestinationFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+    <button class="fullscreen-btn" onclick="event.stopPropagation(); showDestinationFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>
   </div>`;
 }
 function showDestinationFullscreen(){
@@ -2771,7 +2777,7 @@ function renderSelectedPhraseBlock(){
         <span>${ticketCount}枚</span>
         <button onclick="changeTicketCount(1)">＋</button>
       </div>
-      <button class="fullscreen-btn" onclick="showTicketFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>
+      <button class="fullscreen-btn" onclick="showTicketFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>
     </div>`;
   }
   if(selectedFollowUp === null){
@@ -2801,7 +2807,7 @@ function renderSelectedPhraseBlock(){
     <div class="sp-th">${followTh}</div>
     <div class="sp-jp">${followJp}</div>
     ${stepperHtml}
-    <button class="fullscreen-btn" onclick="showFollowUpFullscreen();">${iconSvg('search', 16)} これだけ大きく見せる</button>${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
+    <button class="fullscreen-btn" onclick="showFollowUpFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
   </div>`;
 }
 

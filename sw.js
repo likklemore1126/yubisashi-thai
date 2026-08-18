@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-08-14v';
+const SW_VERSION = '2026-08-14w';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -30,20 +30,24 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Network-first: always fetch the latest version when online.
-// Falls back to cache only when offline (no network response).
+// Stale-while-revalidate: 即座にキャッシュを返して高速表示しつつ、
+// 裏側でネットワークから最新版を取得してキャッシュを更新する(次回起動時に反映)。
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        if (response && response.status === 200) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        }
-        return response;
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.match(event.request).then((cachedResponse) => {
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse);
+        return cachedResponse || fetchPromise;
       })
-      .catch(() => caches.match(event.request))
+    )
   );
 });

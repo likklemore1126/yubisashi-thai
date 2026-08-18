@@ -870,7 +870,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="fav-empty show">準備中です。渡航前の手続き(航空券・ホテル・入国申請・持ち物チェックリストなど)を、ここにまとめる予定です。</div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-15a</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-15b</div>
   </div>
 
   <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
@@ -1377,13 +1377,13 @@ const priceModes = [
   {icon:'cart', label:'全部で', labelTh:'ทั้งหมด', qBase:'ทั้งหมดเท่าไหร่', qType:'q', qJp:'全部でいくらですか?'},
 ];
 const nearby = [
-  {icon:"train", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
-  {icon:"store", label:"コンビニ", base:"ร้านสะดวกซื้อแถวนี้อยู่ทางไหน",   type:'q', jp:"近くのコンビニはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
-  {icon:"atm", label:"ATM",    base:"ตู้เอทีเอ็มแถวนี้อยู่ทางไหน",       type:'q', jp:"近くのATMはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
-  {icon:"toilet", label:"トイレ", base:"ห้องน้ำแถวนี้อยู่ทางไหน",           type:'q', jp:"近くのトイレはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
-  {icon:"cross", label:"薬局",   base:"ร้านขายยาแถวนี้อยู่ทางไหน",         type:'q', jp:"近くの薬局はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
-  {icon:"bowl", label:"カフェ",   base:"ร้านกาแฟแถวนี้อยู่ทางไหน",         type:'q', jp:"近くのカフェはどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
-  {icon:"hand", label:"マッサージ", base:"ร้านนวดแถวนี้อยู่ทางไหน",         type:'q', jp:"近くのマッサージ店はどちらですか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"store", label:"コンビニ", base:"ร้านสะดวกซื้อแถวนี้อยู่ทางไหน",   type:'q', jp:"近くのコンビニはどこにありますか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"coffee", label:"カフェ",   base:"ร้านกาแฟแถวนี้อยู่ทางไหน",         type:'q', jp:"近くのカフェはどこにありますか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"atm", label:"ATM",    base:"ตู้เอทีเอ็มแถวนี้อยู่ทางไหน",       type:'q', jp:"近くのATMはどこにありますか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"toilet", label:"トイレ", base:"ห้องน้ำแถวนี้อยู่ทางไหน",           type:'q', jp:"近くのトイレはどこにありますか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"train", label:"駅",     base:"สถานีแถวนี้อยู่ทางไหน",     type:'q', jp:"近くの駅はどこにありますか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"cross", label:"薬局",   base:"ร้านขายยาแถวนี้อยู่ทางไหน",         type:'q', jp:"近くの薬局はどこにありますか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
+  {icon:"hand", label:"マッサージ", base:"ร้านนวดแถวนี้อยู่ทางไหน",         type:'q', jp:"近くのマッサージ店はどこにありますか?", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分', modes:travelModes}},
 ];
 
 const situations = [

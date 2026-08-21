@@ -128,7 +128,7 @@
     border-radius:14px; padding:8px 4px 7px; display:flex; flex-direction:column; align-items:center; gap:3px;
     color:var(--paper); font-family:'Noto Sans JP', sans-serif; cursor:pointer;
   }
-  .header-action-emoji{ font-size:21px; line-height:1; }
+  .header-action-emoji{ font-size:21px; line-height:1; height:38px; display:flex; align-items:center; justify-content:center; }
   .header-action-label{ font-size:12.5px; font-weight:700; letter-spacing:.2px; }
   .header-action-btn.accent{ background:rgba(230,168,54,0.18); border-color:var(--marigold); }
   .header-action-btn.accent .header-action-label{ color:var(--marigold); }
@@ -753,18 +753,18 @@
 
   <div class="body-actions-row">
     <div class="header-action-btn accent" onclick="openProcedures()">
-      <span class="header-action-emoji"><img src="images/icons/suitcase.png" width="22" height="22" alt="" style="display:block;object-fit:contain;"></span>
+      <span class="header-action-emoji"><img src="images/icons/suitcase.png" width="38" height="38" alt="" style="display:block;object-fit:contain;"></span>
       <span class="header-action-label">旅行準備</span>
       <span class="header-action-caption">タイに行くなら必見</span>
     </div>
     <div class="header-action-btn" onclick="openFavorites()">
       <span class="header-action-badge" id="favCount">0件</span>
-      <span class="header-action-emoji"><img src="images/icons/star.png" width="22" height="22" alt="" style="display:block;object-fit:contain;"></span>
+      <span class="header-action-emoji"><img src="images/icons/star.png" width="38" height="38" alt="" style="display:block;object-fit:contain;"></span>
       <span class="header-action-label">お気に入り</span>
       <span class="header-action-caption">並び替えて作文</span>
     </div>
     <div class="header-action-btn" onclick="openCalc()">
-      <span class="header-action-emoji"><img src="images/icons/calc.png" width="22" height="22" alt="" style="display:block;object-fit:contain;"></span>
+      <span class="header-action-emoji"><img src="images/icons/calc.png" width="38" height="38" alt="" style="display:block;object-fit:contain;"></span>
       <span class="header-action-label">バーツ計算機</span>
       <span class="header-action-caption">レート換算</span>
     </div>
@@ -940,7 +940,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21d</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21e</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">

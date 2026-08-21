@@ -693,18 +693,18 @@
 
   <div class="body-actions-row">
     <div class="header-action-btn accent" onclick="openProcedures()">
-      <span class="header-action-emoji">🛂</span>
+      <span class="header-action-emoji"><img src="images/icons/suitcase.png" width="22" height="22" alt="" style="display:block;object-fit:contain;"></span>
       <span class="header-action-label">旅行準備</span>
       <span class="header-action-caption">タイに行くなら必見</span>
     </div>
     <div class="header-action-btn" onclick="openFavorites()">
       <span class="header-action-badge" id="favCount">0件</span>
-      <span class="header-action-emoji">⭐</span>
+      <span class="header-action-emoji"><img src="images/icons/star.png" width="22" height="22" alt="" style="display:block;object-fit:contain;"></span>
       <span class="header-action-label">お気に入り</span>
       <span class="header-action-caption">並び替えて作文</span>
     </div>
     <div class="header-action-btn" onclick="openCalc()">
-      <span class="header-action-emoji">🧮</span>
+      <span class="header-action-emoji"><img src="images/icons/calc.png" width="22" height="22" alt="" style="display:block;object-fit:contain;"></span>
       <span class="header-action-label">バーツ計算機</span>
       <span class="header-action-caption">レート換算</span>
     </div>
@@ -865,7 +865,7 @@
 
   <div class="composer-screen" id="favoritesScreen" style="z-index:9;">
     <div class="composer-header">
-      <div class="ctitle"><span class="fav-entry-star" style="font-size:18px;">⭐</span>お気に入り</div>
+      <div class="ctitle"><span class="icon-slot" data-icon="star" data-size="20"></span>お気に入り</div>
       <button class="fullscreen-btn" style="margin:0;" onclick="openFavoritesChain()">この順番で見せる</button>
       <button class="composer-close" onclick="closeFavorites()">✕</button>
     </div>
@@ -876,11 +876,11 @@
 
   <div class="composer-screen" id="proceduresScreen" style="z-index:9;">
     <div class="composer-header">
-      <div class="ctitle">🛂 旅行準備</div>
+      <div class="ctitle"><span class="icon-slot" data-icon="suitcase" data-size="20"></span>旅行準備</div>
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="fav-empty show">準備中です。渡航前の手続き(航空券・ホテル・入国申請・持ち物チェックリストなど)を、ここにまとめる予定です。</div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-20j</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21a</div>
   </div>
 
   <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
@@ -940,6 +940,9 @@ const ICON_DATA = {
   train: "images/icons/train.png",
   tuktuk: "images/icons/tuktuk.png",
   walk: "images/icons/walk.png",
+  suitcase: "images/icons/suitcase.png",
+  star: "images/icons/star.png",
+  calc: "images/icons/calc.png",
 };
 function iconSvg(key, size){
   const s = size || 24;

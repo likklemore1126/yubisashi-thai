@@ -308,6 +308,48 @@
     width:32px; height:32px; border-radius:50%; font-size:20px; font-weight:700; cursor:pointer;
     display:flex; align-items:center; justify-content:center; flex:0 0 auto; line-height:1; padding:0 0 2px;
   }
+  .composer-back{
+    background:var(--sand); border:1.5px solid var(--line); color:var(--ink);
+    width:32px; height:32px; border-radius:50%; font-size:20px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto; line-height:1; padding:0 0 2px;
+  }
+  .proc-list{ flex:1 1 auto; overflow-y:auto; padding:4px 18px 28px; }
+  .proc-row{
+    display:flex; align-items:center; gap:12px; padding:14px 14px;
+    background:#fff; border:1.5px solid var(--line); border-radius:14px; margin-bottom:10px;
+    position:relative; cursor:pointer;
+  }
+  .proc-row.disabled{ opacity:.5; cursor:default; }
+  .proc-row:active:not(.disabled){ transform:scale(0.98); }
+  .proc-icon{
+    width:40px; height:40px; border-radius:11px; background:var(--teal-deep);
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .proc-icon .icon-img{ filter:brightness(0) invert(1); }
+  .proc-text{ flex:1; }
+  .proc-title{ font-family:'Kanit', sans-serif; font-weight:600; font-size:15px; }
+  .proc-sub{ font-size:11px; color:#9A9284; margin-top:1px; }
+  .proc-badge{
+    font-size:10px; font-weight:700; color:#fff; background:#B5AA92;
+    border-radius:20px; padding:2px 8px; flex:0 0 auto;
+  }
+  .proc-arrow{ font-size:16px; color:#C7BEA9; }
+  .proc-booking-list{ flex:1 1 auto; overflow-y:auto; padding:8px 18px 28px; border-top:1px solid var(--line); }
+  .proc-book-link{
+    display:flex; align-items:center; gap:12px; padding:14px;
+    background:#fff; border:1.5px solid var(--marigold); border-radius:14px; margin-bottom:10px;
+    text-decoration:none; color:var(--ink);
+  }
+  .proc-book-link:active{ background:var(--sand); }
+  .proc-book-link.pending{ border-color:var(--line); opacity:.55; pointer-events:none; }
+  .proc-book-emoji{ font-size:26px; flex:0 0 auto; width:36px; text-align:center; }
+  .proc-book-text{ flex:1; }
+  .proc-book-title{ font-family:'Kanit', sans-serif; font-weight:600; font-size:14.5px; }
+  .proc-book-sub{ font-size:11.5px; color:#9A9284; margin-top:2px; line-height:1.4; }
+  .proc-book-pr{
+    font-size:10px; font-weight:700; color:#fff; background:var(--marigold);
+    border-radius:6px; padding:2px 6px; flex:0 0 auto; align-self:flex-start;
+  }
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
@@ -879,8 +921,17 @@
       <div class="ctitle"><span class="icon-slot" data-icon="suitcase" data-size="20"></span>旅行準備</div>
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
-    <div class="fav-empty show">準備中です。渡航前の手続き(航空券・ホテル・入国申請・持ち物チェックリストなど)を、ここにまとめる予定です。</div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21a</div>
+    <div class="proc-list" id="procList"></div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21c</div>
+  </div>
+
+  <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcBooking()">‹</button>
+      <div class="ctitle">ホテル・ツアーを予約する</div>
+      <button class="composer-close" onclick="closeProcBooking()">✕</button>
+    </div>
+    <div class="proc-booking-list" id="procBookingList"></div>
   </div>
 
   <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
@@ -1595,11 +1646,77 @@ function openFavorites(){
 function closeFavorites(){
   document.getElementById('favoritesScreen').classList.remove('show');
 }
+const PROC_CATEGORIES = [
+  { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:false },
+  { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:false },
+  { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:false },
+  { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
+  { icon:"hotel", title:"ホテル・ツアーを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com", ready:true, onOpen:"openProcBooking()" },
+  { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:false },
+];
+function renderProcList(){
+  document.getElementById('procList').innerHTML = PROC_CATEGORIES.map((p) => {
+    if(p.ready){
+      return `<div class="proc-row" onclick="${p.onOpen}">
+        <div class="proc-icon">${iconSvg(p.icon, 22)}</div>
+        <div class="proc-text">
+          <div class="proc-title">${p.title}</div>
+          <div class="proc-sub">${p.sub}</div>
+        </div>
+        <div class="proc-arrow">›</div>
+      </div>`;
+    }
+    return `<div class="proc-row disabled">
+      <div class="proc-icon">${iconSvg(p.icon, 22)}</div>
+      <div class="proc-text">
+        <div class="proc-title">${p.title}</div>
+        <div class="proc-sub">${p.sub}</div>
+      </div>
+      <div class="proc-badge">準備中</div>
+    </div>`;
+  }).join('');
+}
 function openProcedures(){
+  renderProcList();
   document.getElementById('proceduresScreen').classList.add('show');
 }
 function closeProcedures(){
   document.getElementById('proceduresScreen').classList.remove('show');
+}
+const PROC_BOOKING_LINKS = [
+  { emoji:"🅰️", name:"Agoda", desc:"タイ全土のホテル・宿を検索・予約", url:"https://www.agoda.com/country/thailand.html?cid=1886448", pending:false },
+  { emoji:"🧭", name:"Trip.com", desc:"ホテル・航空券・鉄道チケットをまとめて予約", url:"", pending:true },
+  { emoji:"🎫", name:"Klook", desc:"現地ツアー・アクティビティ・eSIMなど", url:"", pending:true },
+  { emoji:"🎡", name:"GetYourGuide", desc:"現地ツアー・体験チケットの予約", url:"", pending:true },
+];
+function renderProcBooking(){
+  document.getElementById('procBookingList').innerHTML = PROC_BOOKING_LINKS.map(b => {
+    if(b.pending){
+      return `<div class="proc-book-link pending">
+        <div class="proc-book-emoji">${b.emoji}</div>
+        <div class="proc-book-text">
+          <div class="proc-book-title">${b.name}</div>
+          <div class="proc-book-sub">${b.desc}</div>
+        </div>
+        <div class="proc-badge">リンク待ち</div>
+      </div>`;
+    }
+    return `<a class="proc-book-link" href="${b.url}" target="_blank" rel="noopener">
+      <div class="proc-book-emoji">${b.emoji}</div>
+      <div class="proc-book-text">
+        <div class="proc-book-title">${b.name}</div>
+        <div class="proc-book-sub">${b.desc}</div>
+      </div>
+      <div class="proc-book-pr">PR</div>
+    </a>`;
+  }).join('');
+}
+function openProcBooking(){
+  renderProcBooking();
+  document.getElementById('procBookingScreen').classList.add('show');
+}
+function closeProcBooking(){
+  document.getElementById('procBookingScreen').classList.remove('show');
 }
 function renderFavorites(){
   const listEl = document.getElementById('favoritesList');
@@ -2472,6 +2589,7 @@ attachSwipeToClose('calcScreen', closeCalc);
 attachSwipeToClose('timeBoardScreen', closeTimeBoard);
 attachSwipeToClose('favoritesScreen', closeFavorites);
 attachSwipeToClose('proceduresScreen', closeProcedures);
+attachSwipeToClose('procBookingScreen', closeProcBooking);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
 

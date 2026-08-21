@@ -940,7 +940,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21e</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21h</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1711,10 +1711,10 @@ function closeProcedures(){
   document.getElementById('proceduresScreen').classList.remove('show');
 }
 const PROC_BOOKING_LINKS = [
-  { emoji:"🅰️", name:"Agoda", desc:"タイ全土のホテル・宿を検索・予約", url:"https://www.agoda.com/country/thailand.html?cid=1886448", pending:false },
-  { emoji:"🧭", name:"Trip.com", desc:"ホテル・航空券・鉄道チケットをまとめて予約", url:"", pending:true },
-  { emoji:"🎫", name:"Klook", desc:"現地ツアー・アクティビティ・eSIMなど", url:"", pending:true },
-  { emoji:"🎡", name:"GetYourGuide", desc:"現地ツアー・体験チケットの予約", url:"", pending:true },
+  { emoji:"🅰️", name:"Agoda", desc:"タイ全土のホテル・宿を検索・予約", url:"https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&hl=ja-jp&city=9395", pending:false },
+  { emoji:"🧭", name:"Trip.com", desc:"ホテル・航空券・鉄道チケットをまとめて予約", url:"https://www.trip.com/t/JXt874hg1W2", pending:false },
+  { emoji:"🎫", name:"Klook", desc:"現地ツアー・アクティビティ・eSIMなど", url:"https://affiliate.klook.com/sl/jcd4JYZ", pending:false },
+  { emoji:"🎡", name:"GetYourGuide", desc:"現地ツアー・体験チケットの予約", url:"https://gyg.me/APNmkbci", pending:false },
 ];
 function renderProcBooking(){
   document.getElementById('procBookingList').innerHTML = PROC_BOOKING_LINKS.map(b => {

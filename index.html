@@ -350,6 +350,24 @@
     font-size:10px; font-weight:700; color:#fff; background:var(--marigold);
     border-radius:6px; padding:2px 6px; flex:0 0 auto; align-self:flex-start;
   }
+  .proc-section-title{
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:13px; color:var(--teal-deep);
+    margin:18px 0 8px; padding-top:14px; border-top:1px solid var(--line);
+  }
+  .proc-section-title:first-child{ margin-top:0; padding-top:0; border-top:none; }
+  .proc-card-alt{
+    background:#fff; border:1.5px solid var(--marigold); border-radius:14px; padding:14px; margin-bottom:10px;
+  }
+  .proc-card-alt-head{ display:flex; align-items:center; gap:6px; font-family:'Kanit', sans-serif; font-weight:700; font-size:14.5px; margin-bottom:4px; }
+  .proc-card-alt-audience{ font-size:11.5px; color:#9A9284; margin-bottom:10px; line-height:1.5; }
+  .proc-card-alt-features{ list-style:none; padding:0; margin:0 0 12px; }
+  .proc-card-alt-features li{ font-size:12.5px; line-height:1.9; padding-left:16px; position:relative; }
+  .proc-card-alt-features li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); }
+  .proc-card-alt-link{
+    display:block; text-align:center; background:var(--marigold); color:#fff; font-weight:700; font-size:13.5px;
+    border-radius:10px; padding:10px; text-decoration:none;
+  }
+  .proc-card-alt-link:active{ background:var(--marigold-deep); }
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
@@ -922,7 +940,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21c</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21d</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -932,6 +950,15 @@
       <button class="composer-close" onclick="closeProcBooking()">✕</button>
     </div>
     <div class="proc-booking-list" id="procBookingList"></div>
+  </div>
+
+  <div class="composer-screen" id="procPrepScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcPrep()">‹</button>
+      <div class="ctitle">タイ旅行に行く前に準備する</div>
+      <button class="composer-close" onclick="closeProcPrep()">✕</button>
+    </div>
+    <div class="proc-booking-list" id="procPrepList"></div>
   </div>
 
   <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
@@ -1647,7 +1674,7 @@ function closeFavorites(){
   document.getElementById('favoritesScreen').classList.remove('show');
 }
 const PROC_CATEGORIES = [
-  { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:false },
+  { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
   { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:false },
   { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:false },
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
@@ -1717,6 +1744,47 @@ function openProcBooking(){
 }
 function closeProcBooking(){
   document.getElementById('procBookingScreen').classList.remove('show');
+}
+const PROC_PREP_ITEMS = [
+  { title:"パスポート・ビザ", ready:false },
+  { title:"TDACなど入国手続き", ready:false },
+  { title:"在タイ日本国大使館", ready:false },
+  { title:"ツーリストポリス", ready:false },
+];
+const PROC_INSURANCE_ALT = {
+  emoji:"🟡",
+  name:"楽天プレミアムカード",
+  audience:"海外旅行をよくする人・空港ラウンジを使いたい人向け",
+  features:["海外旅行関連の付帯サービス", "空港ラウンジ", "プライオリティ・パス"],
+  url:"https://a.r10.to/hFO1f2",
+};
+function renderProcPrep(){
+  const itemsHtml = PROC_PREP_ITEMS.map(it =>
+    `<div class="proc-book-link pending">
+      <div class="proc-book-text">
+        <div class="proc-book-title">${it.title}</div>
+      </div>
+      <div class="proc-badge">準備中</div>
+    </div>`
+  ).join('');
+  const alt = PROC_INSURANCE_ALT;
+  const insuranceHtml = `
+    <div class="proc-section-title">海外旅行保険の代わりの構成</div>
+    <div class="proc-card-alt">
+      <div class="proc-card-alt-head"><span>${alt.emoji}</span>${alt.name}</div>
+      <div class="proc-card-alt-audience">「${alt.audience}」</div>
+      <ul class="proc-card-alt-features">${alt.features.map(f => `<li>${f}</li>`).join('')}</ul>
+      <a class="proc-card-alt-link" href="${alt.url}" target="_blank" rel="noopener">詳しく見る</a>
+    </div>`;
+  document.getElementById('procPrepList').innerHTML =
+    `<div class="proc-section-title" style="margin-top:0;padding-top:0;border-top:none;">パスポート・入国関連</div>${itemsHtml}${insuranceHtml}`;
+}
+function openProcPrep(){
+  renderProcPrep();
+  document.getElementById('procPrepScreen').classList.add('show');
+}
+function closeProcPrep(){
+  document.getElementById('procPrepScreen').classList.remove('show');
 }
 function renderFavorites(){
   const listEl = document.getElementById('favoritesList');
@@ -2590,6 +2658,7 @@ attachSwipeToClose('timeBoardScreen', closeTimeBoard);
 attachSwipeToClose('favoritesScreen', closeFavorites);
 attachSwipeToClose('proceduresScreen', closeProcedures);
 attachSwipeToClose('procBookingScreen', closeProcBooking);
+attachSwipeToClose('procPrepScreen', closeProcPrep);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
 

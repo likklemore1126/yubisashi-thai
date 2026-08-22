@@ -357,16 +357,26 @@
   .proc-book-features li{ font-size:12px; line-height:1.9; padding-left:16px; position:relative; color:#5c4415; }
   .proc-book-features li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); }
   .proc-manner-list{ flex:1 1 auto; overflow-y:auto; padding:14px 18px 28px; }
-  .proc-manner-intro{ font-size:12.5px; line-height:1.8; color:#5c4415; margin-bottom:18px; }
+  .proc-manner-intro{ font-size:15px; line-height:1.8; color:#5c4415; margin-bottom:20px; font-weight:500; }
+  .proc-manner-topic{ margin-bottom:26px; }
   .proc-manner-img{
     width:100%; display:block; border-radius:12px; border:1.5px solid var(--line);
-    margin-bottom:16px; cursor:zoom-in;
+    margin-bottom:12px; cursor:zoom-in;
   }
+  .proc-manner-topic-title{
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; color:var(--teal-deep);
+    margin-bottom:6px;
+  }
+  .proc-manner-lead{ font-size:14px; line-height:1.7; color:#5c4415; margin-bottom:8px; }
+  .proc-manner-bullets{ list-style:none; padding:0; margin:0; }
+  .proc-manner-bullets li{ font-size:14.5px; line-height:2; padding-left:18px; position:relative; color:var(--ink); }
+  .proc-manner-bullets li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); font-weight:700; }
+  .proc-manner-para{ font-size:14px; line-height:1.85; color:var(--ink); margin-bottom:10px; }
   .proc-manner-outro-title{
-    font-family:'Kanit', sans-serif; font-weight:700; font-size:14px; color:var(--teal-deep);
-    margin:6px 0 8px;
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:16px; color:var(--teal-deep);
+    margin:10px 0 10px; padding-top:14px; border-top:1.5px solid var(--line);
   }
-  .proc-manner-outro{ font-size:12.5px; line-height:1.85; color:#5c4415; margin-bottom:10px; }
+  .proc-manner-outro{ font-size:14px; line-height:1.9; color:#5c4415; margin-bottom:12px; }
   .manner-lightbox{
     position:fixed; inset:0; background:rgba(10,20,20,0.92); z-index:50;
     display:none; align-items:center; justify-content:center; padding:16px;
@@ -963,7 +973,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21q</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21r</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1841,11 +1851,24 @@ function closeProcPrep(){
   document.getElementById('procPrepScreen').classList.remove('show');
 }
 const PROC_MANNER_INTRO = "旅行中に気をつけたいNG行動など。タイ旅行で特に覚えておきたいマナーや注意事項をまとめました。";
-const PROC_MANNER_IMAGES = [
-  { src:"images/manners/manner_head_feet.jpg", alt:"頭と足に注意" },
-  { src:"images/manners/manner_temple.jpg", alt:"寺院や仏像では敬意を" },
-  { src:"images/manners/manner_royal.jpg", alt:"王室や紙幣を軽く扱わない" },
-  { src:"images/manners/manner_food.jpg", alt:"トラブルでも怒鳴らない・ワイは無理にしなくてもOK・食事はスプーンとフォークがメイン" },
+const PROC_MANNER_TOPICS = [
+  { img:"images/manners/manner_head_feet.jpg", emoji:"🦶", title:"頭と足に注意",
+    lead:"タイでは頭は大切な場所、足は低いものと考えられています。",
+    bullets:["人の頭を気軽に触らない", "足で人や物を指さない", "足の裏を人や仏像に向けない", "足で物を動かさない"] },
+  { img:"images/manners/manner_temple.jpg", emoji:"🛕", title:"寺院や仏像では敬意を",
+    lead:"寺院は観光地であると同時に、大切な信仰の場です。",
+    bullets:["露出の多い服装は避ける", "仏像によじ登ったり、不敬なポーズで写真を撮らない", "大声で騒がない", "靴を脱ぐ場所では周囲に合わせる", "お坊さんに必要以上に近づいたり触れたりしない"] },
+  { img:"images/manners/manner_royal.jpg", emoji:"👑", title:"王室や紙幣を軽く扱わない",
+    lead:"タイでは王室への敬意がとても大切にされています。",
+    bullets:["王室を侮辱したり、冗談のネタにしない", "王室に関する軽率なSNS投稿をしない", "国王の肖像がある紙幣を足で踏まない・粗末に扱わない"] },
+  { img:"images/manners/manner_food.jpg", emoji:"😌🙏🍽️", title:"トラブル・ワイ・食事のマナー",
+    lead:"",
+    bullets:[],
+    paragraphs:[
+      "【トラブルでも怒鳴らない】言葉が通じないなど、旅行中にトラブルが起きても大声で怒鳴るのは逆効果です。できるだけ落ち着いて話しましょう。日本ではないということを常に念頭に置き冷静に行動しましょう。",
+      "【ワイは無理にしなくてもOK】タイの挨拶「ワイ」は、旅行者が全員にする必要はありません。相手からワイをされたら、笑顔で返すくらいで十分です。",
+      "【食事はスプーンとフォークがメイン】一般的なタイ料理は、スプーンとフォークで食べる事が多いです。フォークで料理をスプーンに乗せて食べます。麺類では箸をつかいますが、麺を直接啜らずにレンゲにのせて口に運ぶスタイルで食べる方が多いです。麺をズルズル啜ったりスープを音を立てて飲むのはマナー的にNGです。",
+    ] },
 ];
 const PROC_MANNER_OUTRO_TITLE = "迷ったら現地の方に合わせよう";
 const PROC_MANNER_OUTRO = [
@@ -1853,13 +1876,22 @@ const PROC_MANNER_OUTRO = [
   "国・人・宗教・王室への敬意を忘れず、迷ったときは周りの現地の方の行動に合わせる。日本の普通のマナーに加えこれだけ覚えておけば、タイ旅行ではあまり心配することはありません。",
 ];
 function renderProcManner(){
-  const imagesHtml = PROC_MANNER_IMAGES.map(m =>
-    `<img class="proc-manner-img" src="${m.src}" alt="${m.alt}" onclick="openMannerLightbox('${m.src}')">`
-  ).join('');
+  const topicsHtml = PROC_MANNER_TOPICS.map(t => {
+    const leadHtml = t.lead ? `<div class="proc-manner-lead">${t.lead}</div>` : '';
+    const bulletsHtml = t.bullets && t.bullets.length ? `<ul class="proc-manner-bullets">${t.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
+    const paraHtml = t.paragraphs ? t.paragraphs.map(p => `<div class="proc-manner-para">${p}</div>`).join('') : '';
+    return `<div class="proc-manner-topic">
+      <img class="proc-manner-img" src="${t.img}" alt="${t.title}" onclick="openMannerLightbox('${t.img}')">
+      <div class="proc-manner-topic-title">${t.emoji} ${t.title}</div>
+      ${leadHtml}
+      ${bulletsHtml}
+      ${paraHtml}
+    </div>`;
+  }).join('');
   const outroHtml = PROC_MANNER_OUTRO.map(p => `<div class="proc-manner-outro">${p}</div>`).join('');
   document.getElementById('procMannerList').innerHTML =
     `<div class="proc-manner-intro">${PROC_MANNER_INTRO}</div>
-     ${imagesHtml}
+     ${topicsHtml}
      <div class="proc-manner-outro-title">${PROC_MANNER_OUTRO_TITLE}</div>
      ${outroHtml}`;
 }

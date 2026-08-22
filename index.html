@@ -401,6 +401,42 @@
     border-radius:10px; padding:10px; text-decoration:none;
   }
   .proc-card-alt-link:active{ background:var(--marigold-deep); }
+  .proc-prep-note{
+    font-size:12.5px; line-height:1.7; color:#8B5A2B; background:var(--sand);
+    border-radius:8px; padding:8px 10px; margin-top:10px;
+  }
+  .proc-prep-source{
+    display:block; font-size:11px; color:#9A8F7A; margin-top:8px; text-decoration:underline;
+  }
+  .proc-collapsible{ padding:14px; }
+  .proc-collapsible-head{ display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+  .proc-collapse-chevron{
+    font-size:20px; color:#C7BEA9; transform:rotate(90deg); transition:transform 0.2s; flex:0 0 auto; padding-left:10px;
+  }
+  .proc-collapse-chevron.open{ transform:rotate(-90deg); }
+  .proc-collapsible-body{ display:none; margin-top:10px; }
+  .proc-collapsible-body.show{ display:block; }
+  .proc-inline-link{ color:var(--teal-deep); font-weight:700; text-decoration:underline; }
+  .proc-phone-rows{ margin:6px 0 2px; }
+  .proc-phone-row{ margin-bottom:10px; }
+  .proc-phone-row-label{ font-size:13px; font-weight:600; color:var(--ink); margin-bottom:5px; }
+  .proc-phone-numbers{ display:flex; gap:8px; flex-wrap:wrap; }
+  .proc-phone-chip{
+    display:inline-block; background:var(--sand); border:1.3px solid var(--marigold);
+    border-radius:20px; padding:6px 12px; font-size:13.5px; font-weight:600; color:var(--teal-deep);
+    text-decoration:none;
+  }
+  .proc-phone-chip:active{ background:var(--marigold); color:#fff; }
+  .proc-link-chip{
+    display:inline-block; background:var(--teal-deep); border:1.3px solid var(--teal-deep);
+    border-radius:20px; padding:6px 12px; font-size:13px; font-weight:600; color:#fff;
+    text-decoration:none;
+  }
+  .proc-link-chip:active{ background:#083530; }
+  .proc-link-chip-source{
+    display:block; width:fit-content; margin-top:12px; background:#fff; color:var(--teal-deep);
+    border:1.3px solid var(--line); font-weight:500; font-size:12px;
+  }
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
@@ -973,7 +1009,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21s</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21z</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1810,10 +1846,101 @@ function closeProcBooking(){
   document.getElementById('procBookingScreen').classList.remove('show');
 }
 const PROC_PREP_ITEMS = [
-  { title:"パスポート・ビザ", ready:false },
-  { title:"TDACなど入国手続き", ready:false },
-  { title:"在タイ日本国大使館", ready:false },
-  { title:"ツーリストポリス", ready:false },
+  { title:"パスポート・ビザ", ready:true,
+    lead:"日本国籍者は観光目的なら「ビザ免除」で入国できますが、制度が変更中のため要注意です。",
+    bullets:[
+      "パスポート残存有効期間は6か月以上を推奨(念のため)",
+      "2026年8月時点、ビザ免除滞在は60日間。ただし2026年内に30日間へ短縮予定(施行日未定)",
+      "現地で1回だけ30日延長可能(手数料1,900バーツ)、延長すれば最大60日に",
+      "陸路でのビザなし入国は暦年で2回まで(3回目以降は原則拒否)",
+      "出国便(帰国便)チケットの提示や、20,000バーツ相当の所持金証明を求められることがある",
+    ],
+    note:"制度変更の途中なので、出発直前に最新情報を必ず確認してください。" },
+  { title:"TDACなど入国手続き", ready:true,
+    lead:"2025年5月からタイ入国には「TDAC(タイ・デジタル入国カード)」のオンライン提出が必須になりました(紙のTM6は廃止)。",
+    bullets:[
+      "登録は到着予定日の3日前(72時間前)から可能、登録は無料",
+      "入国のたびに毎回登録が必要(乗継のみでタイに入国しない場合は不要)",
+      "偽サイトが多数出回っており、料金請求やクレジットカード情報入力を求められるトラブルが発生中。公式サイトはクレジットカード情報も料金も一切不要",
+      "入国審査で、登録時に発行されるQRコードをスマホ画面のまま提示すればOK(印刷不要)",
+    ],
+    links:[{ label:"TDAC公式サイトで登録", url:"https://tdac.immigration.go.th/" }],
+    note:"⚠️ 必ず上の公式サイトからのみ登録してください。" },
+  { title:"入国時の持ち込み制限", ready:true,
+    lead:"知らずに法律違反にならないよう、持ち込み品の制限も確認しておきましょう。",
+    bullets:[
+      "⚠️ 電子タバコ(加熱式タバコ・IQOS等を含む)は持ち込み・所持・使用すべて全面禁止。摘発されると最大50万バーツの罰金や機器の没収、拘留の対象になることも",
+      "たばこの免税範囲は紙巻き200本まで、酒類は1リットルまで。超える持ち込みには税関申告が必要",
+      "現金・外貨は合計15,000米ドル(または45万バーツ)相当額を超える持ち込み・持ち出しに税関申告が必要",
+    ],
+    note:"電子タバコの取り締まりは特に強化されています。IQOSなどの加熱式タバコも対象になるので要注意です。",
+    source:{ label:"タイ国政府観光庁 公式サイト", url:"https://www.thailandtravel.or.jp/about/basic/" } },
+  { title:"在タイ日本国大使館(バンコク管轄)", ready:true,
+    lead:"パスポート紛失やトラブルなど、いざという時のために連絡先を控えておきましょう。",
+    bullets:[
+      "住所: 177 Witthayu Road, Lumphini, Pathum Wan, Bangkok 10330(ウィタユ通り、ルンピニー警察署とMRTルンピニー駅のほぼ中間)",
+    ],
+    phoneRows:[
+      { label:"代表番号", numbers:["02-207-8500", "02-696-3000"] },
+      { label:"旅券・証明・在外選挙等", numbers:["02-207-8501", "02-696-3001"] },
+      { label:"邦人援護(トラブル時)", numbers:["02-207-8502", "02-696-3002"] },
+      { label:"査証", numbers:["02-207-8503", "02-696-3003"] },
+      { label:"緊急連絡(夜間・休館日)", numbers:["02-207-8500", "02-696-3000"] },
+    ],
+    bullets2:[
+      "窓口受付: 8:30〜12:00、13:30〜16:00(土・日曜閉館、その他休館日は公式サイト参照)",
+    ],
+    note:"一般照会は窓口受付時間内にお願いします。",
+    source:{ label:"在タイ日本国大使館 公式サイト", url:"https://www.th.emb-japan.go.jp/itpr_ja/embassy_embassy.html" } },
+  { title:"在チェンマイ日本国総領事館(北部管轄)", ready:true,
+    lead:"チェンマイ・チェンライなどタイ北部9県は、バンコクの大使館ではなくこちらの総領事館の管轄です。",
+    bullets:[
+      "住所: Airport Business Park, 90 Mahidol Rd., T.Haiya, A.Muang, Chiang Mai 50100",
+      "管轄地域: チェンマイ県・チェンライ県・ランパーン県・ランプーン県・パヤオ県・メーホンソーン県・ナーン県・プレー県・ウタラディット県",
+    ],
+    phoneRows:[
+      { label:"代表番号(夜間休日はコールセンターに接続)", numbers:["052-012-500"] },
+    ],
+    bullets2:[
+      "旅券・証明班: 代表番号に電話し内線103(または音声案内で2)",
+      "査証班: 代表番号に電話し内線102(または音声案内で1)",
+      "電話受付: 8:30〜12:00、13:00〜16:30",
+      "旅券・証明窓口: 8:30〜12:00(申請)、13:30〜16:30(交付)",
+      "査証窓口: 8:30〜11:30(申請)、13:30〜16:30(交付)",
+      "チェンマイ観光警察: 1155、または053-212-146〜8",
+    ],
+    note:"代表番号は自動音声応答です。日本語(1)→査証(1)/旅券・証明(2)/その他(3)の順で選ぶと繋がりやすくなります。",
+    source:{ label:"在チェンマイ日本国総領事館 公式サイト", url:"https://www.chiangmai.th.emb-japan.go.jp/itpr_ja/annai_top.html" } },
+  { title:"たびレジ(海外旅行登録)", ready:true,
+    lead:"外務省が無料で提供する、3か月未満の短期渡航者向けの安全情報配信・登録サービスです。出発前に登録しておくのがおすすめです。",
+    bullets:[
+      "現地で大規模な事件・災害・感染症などが発生した時、外務省・在外公館から緊急一斉通報メールが届く",
+      "登録した滞在先・連絡先をもとに、いざという時の安否確認に使われる",
+      "渡航先に関する最新の安全情報や注意喚起も随時届く",
+      "登録は名前・連絡先・渡航期間の入力だけで数分で完了、費用は無料",
+      "メールだけでなくLINE連携での受信も可能",
+    ],
+    note:"タイは地震や政情不安などのニュースも時々あるので、短期旅行でも登録しておくと安心です。",
+    source:{ label:"外務省 たびレジ", url:"https://www.ezairyu.mofa.go.jp/" } },
+  { title:"ツーリストポリス", ready:true,
+    lead:"観光客向けのトラブル対応窓口です。英語で対応してもらえます。",
+    phoneRows:[
+      { label:"ツーリストポリス(24時間・英語可)", numbers:["1155"] },
+      { label:"警察(一般・救急車要請も可)", numbers:["191"] },
+      { label:"消防", numbers:["199"] },
+    ],
+    note:"ぼったくり・盗難・詐欺などのトラブルは、まず1155に連絡するのが安心です。" },
+  { title:"Visit Japan Web(日本帰国時に便利)", ready:true,
+    lead:"タイからの入国とは逆に、日本へ「帰国」する時の入国審査・税関申告をウェブで済ませられる、日本政府のサービスです。",
+    bullets:[
+      "海外から日本に帰国する日本人も利用できる(外国人の入国者専用ではない)",
+      "入国審査・税関申告に必要な情報を事前に登録しておける",
+      "帰国時は登録済みの二次元コードを提示するだけでスムーズに手続きできる",
+      "情報の登録自体はPCからでも可能",
+      "ただし手続き時の二次元コード提示は、スマートフォンかタブレットが必要",
+    ],
+    note:"タイ旅行に出発する前に登録しておけば、帰国時の空港での手続きが早くなります。",
+    source:{ label:"Visit Japan Web(デジタル庁)", url:"https://services.digital.go.jp/visit-japan-web/" } },
 ];
 const PROC_INSURANCE_ALT = {
   emoji:"🟡",
@@ -1823,14 +1950,34 @@ const PROC_INSURANCE_ALT = {
   url:"https://a.r10.to/hFO1f2",
 };
 function renderProcPrep(){
-  const itemsHtml = PROC_PREP_ITEMS.map(it =>
-    `<div class="proc-book-link pending">
-      <div class="proc-book-text">
-        <div class="proc-book-title">${it.title}</div>
+  const itemsHtml = PROC_PREP_ITEMS.map((it, i) => {
+    const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
+    const linksHtml = it.links ? `<div class="proc-phone-numbers" style="margin:8px 0 4px;">${it.links.map(l => `<a class="proc-link-chip" href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label}</a>`).join('')}</div>` : '';
+    const bullets2Html = it.bullets2 ? `<ul class="proc-manner-bullets">${it.bullets2.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
+    const phoneRowsHtml = it.phoneRows ? `<div class="proc-phone-rows">${it.phoneRows.map(r =>
+      `<div class="proc-phone-row">
+        <div class="proc-phone-row-label">${r.label}</div>
+        <div class="proc-phone-numbers">${r.numbers.map(n => `<a class="proc-phone-chip" href="tel:${n.replace(/-/g,'')}">📞 ${n}</a>`).join('')}</div>
+      </div>`
+    ).join('')}</div>` : '';
+    const noteHtml = it.note ? `<div class="proc-prep-note">${it.note}</div>` : '';
+    const sourceHtml = it.source ? `<a class="proc-link-chip proc-link-chip-source" href="${it.source.url}" target="_blank" rel="noopener">🔗 出典: ${it.source.label}</a>` : '';
+    return `<div class="proc-card-alt proc-collapsible" style="border-color:var(--line); margin-bottom:12px;">
+      <div class="proc-collapsible-head" onclick="togglePrepItem(${i})">
+        <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}</div>
+        <span class="proc-collapse-chevron" id="prepChevron${i}">›</span>
       </div>
-      <div class="proc-badge">準備中</div>
-    </div>`
-  ).join('');
+      <div class="proc-collapsible-body" id="prepBody${i}">
+        <div class="proc-manner-lead">${it.lead}</div>
+        ${bulletsHtml}
+        ${linksHtml}
+        ${phoneRowsHtml}
+        ${bullets2Html}
+        ${noteHtml}
+        ${sourceHtml}
+      </div>
+    </div>`;
+  }).join('');
   const alt = PROC_INSURANCE_ALT;
   const insuranceHtml = `
     <div class="proc-section-title">海外旅行保険の代わりの構成</div>
@@ -1842,6 +1989,12 @@ function renderProcPrep(){
     </div>`;
   document.getElementById('procPrepList').innerHTML =
     `<div class="proc-section-title" style="margin-top:0;padding-top:0;border-top:none;">パスポート・入国関連</div>${itemsHtml}${insuranceHtml}`;
+}
+function togglePrepItem(i){
+  const body = document.getElementById('prepBody' + i);
+  const chevron = document.getElementById('prepChevron' + i);
+  const isOpen = body.classList.toggle('show');
+  chevron.classList.toggle('open', isOpen);
 }
 function openProcPrep(){
   renderProcPrep();

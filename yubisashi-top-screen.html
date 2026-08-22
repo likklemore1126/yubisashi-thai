@@ -946,7 +946,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21m</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21n</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1031,6 +1031,7 @@ const ICON_DATA = {
   trip: "images/icons/trip.png",
   klook: "images/icons/klook.png",
   getyourguide: "images/icons/getyourguide.png",
+  twelvego: "images/icons/12go.png",
 };
 function iconSvg(key, size){
   const s = size || 24;
@@ -1729,7 +1730,7 @@ const PROC_BOOKING_LINKS = [
     features:["eSIMがそのまま購入できる", "現地ツアー・体験の品揃えが豊富", "QRコードでそのまま入場できるものが多い"] },
   { icon:"getyourguide", name:"GetYourGuide", desc:"現地ツアー・体験チケットの予約", url:"https://gyg.me/APNmkbci", pending:false,
     features:["現地ツアー・アクティビティ・体験系に強い", "前日キャンセル無料のプランが多い", "レビュー件数が多く比較しやすい"] },
-  { icon:"train", name:"12GO", desc:"タイ国内のバス・電車・フェリーを予約", url:"https://12go.asia/?z=16726565", pending:false,
+  { icon:"twelvego", name:"12GO", desc:"タイ国内のバス・電車・フェリーを予約", url:"https://12go.asia/?z=16726565", pending:false,
     features:["タイ国内のバス・電車・フェリーをまとめて検索", "出発時刻・座席タイプを比較して予約", "eチケットをそのままスマホで提示できる"] },
 ];
 function renderProcBooking(){

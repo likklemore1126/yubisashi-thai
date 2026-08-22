@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-08-21m';
+const SW_VERSION = '2026-08-21n';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -152,6 +152,7 @@ const PRECACHE_URLS = [
   './images/icons/trip.png',
   './images/icons/klook.png',
   './images/icons/getyourguide.png',
+  './images/icons/12go.png',
 ];
 
 self.addEventListener('install', (event) => {

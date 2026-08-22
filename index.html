@@ -437,6 +437,10 @@
     display:block; width:fit-content; margin-top:12px; background:#fff; color:var(--teal-deep);
     border:1.3px solid var(--line); font-weight:500; font-size:12px;
   }
+  .proc-info-chip{
+    display:inline-block; background:var(--sand); border:1.3px solid var(--line);
+    border-radius:20px; padding:6px 12px; font-size:13.5px; font-weight:600; color:var(--ink);
+  }
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
@@ -1009,7 +1013,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21z</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22c</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1880,6 +1884,7 @@ const PROC_PREP_ITEMS = [
     bullets:[
       "住所: 177 Witthayu Road, Lumphini, Pathum Wan, Bangkok 10330(ウィタユ通り、ルンピニー警察署とMRTルンピニー駅のほぼ中間)",
     ],
+    links:[{ label:"地図で見る", url:"https://www.google.com/maps/search/?api=1&query=177+Witthayu+Road+Lumphini+Pathum+Wan+Bangkok+10330" }],
     phoneRows:[
       { label:"代表番号", numbers:["02-207-8500", "02-696-3000"] },
       { label:"旅券・証明・在外選挙等", numbers:["02-207-8501", "02-696-3001"] },
@@ -1888,7 +1893,10 @@ const PROC_PREP_ITEMS = [
       { label:"緊急連絡(夜間・休館日)", numbers:["02-207-8500", "02-696-3000"] },
     ],
     bullets2:[
-      "窓口受付: 8:30〜12:00、13:30〜16:00(土・日曜閉館、その他休館日は公式サイト参照)",
+      "土・日曜閉館(その他休館日は公式サイト参照)",
+    ],
+    infoRows:[
+      { label:"窓口受付", values:["8:30〜12:00", "13:30〜16:00"] },
     ],
     note:"一般照会は窓口受付時間内にお願いします。",
     source:{ label:"在タイ日本国大使館 公式サイト", url:"https://www.th.emb-japan.go.jp/itpr_ja/embassy_embassy.html" } },
@@ -1898,18 +1906,21 @@ const PROC_PREP_ITEMS = [
       "住所: Airport Business Park, 90 Mahidol Rd., T.Haiya, A.Muang, Chiang Mai 50100",
       "管轄地域: チェンマイ県・チェンライ県・ランパーン県・ランプーン県・パヤオ県・メーホンソーン県・ナーン県・プレー県・ウタラディット県",
     ],
+    links:[{ label:"地図で見る", url:"https://www.google.com/maps/search/?api=1&query=Airport+Business+Park+90+Mahidol+Road+Chiang+Mai+50100" }],
     phoneRows:[
       { label:"代表番号(夜間休日はコールセンターに接続)", numbers:["052-012-500"] },
     ],
-    bullets2:[
-      "旅券・証明班: 代表番号に電話し内線103(または音声案内で2)",
-      "査証班: 代表番号に電話し内線102(または音声案内で1)",
-      "電話受付: 8:30〜12:00、13:00〜16:30",
-      "旅券・証明窓口: 8:30〜12:00(申請)、13:30〜16:30(交付)",
-      "査証窓口: 8:30〜11:30(申請)、13:30〜16:30(交付)",
-      "チェンマイ観光警察: 1155、または053-212-146〜8",
+    infoRows:[
+      { label:"旅券・証明班(音声案内2)", values:["内線103"] },
+      { label:"査証班(音声案内1)", values:["内線102"] },
+      { label:"電話受付", values:["8:30〜12:00", "13:00〜16:30"] },
+      { label:"旅券・証明窓口(申請／交付)", values:["8:30〜12:00", "13:30〜16:30"] },
+      { label:"査証窓口(申請／交付)", values:["8:30〜11:30", "13:30〜16:30"] },
     ],
-    note:"代表番号は自動音声応答です。日本語(1)→査証(1)/旅券・証明(2)/その他(3)の順で選ぶと繋がりやすくなります。",
+    phoneRows2:[
+      { label:"チェンマイ観光警察", numbers:["1155", "053-212-146"] },
+    ],
+    note:"代表番号は自動音声応答です。日本語(1)→査証(1)/旅券・証明(2)/その他(3)の順で選ぶと繋がりやすくなります。観光警察は053-212-146〜8のどの番号でもOKです。",
     source:{ label:"在チェンマイ日本国総領事館 公式サイト", url:"https://www.chiangmai.th.emb-japan.go.jp/itpr_ja/annai_top.html" } },
   { title:"たびレジ(海外旅行登録)", ready:true,
     lead:"外務省が無料で提供する、3か月未満の短期渡航者向けの安全情報配信・登録サービスです。出発前に登録しておくのがおすすめです。",
@@ -1950,16 +1961,21 @@ const PROC_INSURANCE_ALT = {
   url:"https://a.r10.to/hFO1f2",
 };
 function renderProcPrep(){
+  const renderChipRows = (rows, chipClass, isTel) => rows ? `<div class="proc-phone-rows">${rows.map(r =>
+    `<div class="proc-phone-row">
+      <div class="proc-phone-row-label">${r.label}</div>
+      <div class="proc-phone-numbers">${(r.numbers || r.values).map(n =>
+        isTel ? `<a class="${chipClass}" href="tel:${n.replace(/-/g,'')}">📞 ${n}</a>` : `<span class="${chipClass}">${n}</span>`
+      ).join('')}</div>
+    </div>`
+  ).join('')}</div>` : '';
   const itemsHtml = PROC_PREP_ITEMS.map((it, i) => {
     const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
     const linksHtml = it.links ? `<div class="proc-phone-numbers" style="margin:8px 0 4px;">${it.links.map(l => `<a class="proc-link-chip" href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label}</a>`).join('')}</div>` : '';
     const bullets2Html = it.bullets2 ? `<ul class="proc-manner-bullets">${it.bullets2.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
-    const phoneRowsHtml = it.phoneRows ? `<div class="proc-phone-rows">${it.phoneRows.map(r =>
-      `<div class="proc-phone-row">
-        <div class="proc-phone-row-label">${r.label}</div>
-        <div class="proc-phone-numbers">${r.numbers.map(n => `<a class="proc-phone-chip" href="tel:${n.replace(/-/g,'')}">📞 ${n}</a>`).join('')}</div>
-      </div>`
-    ).join('')}</div>` : '';
+    const phoneRowsHtml = renderChipRows(it.phoneRows, 'proc-phone-chip', true);
+    const infoRowsHtml = renderChipRows(it.infoRows, 'proc-info-chip', false);
+    const phoneRows2Html = renderChipRows(it.phoneRows2, 'proc-phone-chip', true);
     const noteHtml = it.note ? `<div class="proc-prep-note">${it.note}</div>` : '';
     const sourceHtml = it.source ? `<a class="proc-link-chip proc-link-chip-source" href="${it.source.url}" target="_blank" rel="noopener">🔗 出典: ${it.source.label}</a>` : '';
     return `<div class="proc-card-alt proc-collapsible" style="border-color:var(--line); margin-bottom:12px;">
@@ -1972,6 +1988,8 @@ function renderProcPrep(){
         ${bulletsHtml}
         ${linksHtml}
         ${phoneRowsHtml}
+        ${infoRowsHtml}
+        ${phoneRows2Html}
         ${bullets2Html}
         ${noteHtml}
         ${sourceHtml}

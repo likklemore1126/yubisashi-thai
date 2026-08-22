@@ -356,6 +356,23 @@
   }
   .proc-book-features li{ font-size:12px; line-height:1.9; padding-left:16px; position:relative; color:#5c4415; }
   .proc-book-features li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); }
+  .proc-manner-list{ flex:1 1 auto; overflow-y:auto; padding:14px 18px 28px; }
+  .proc-manner-intro{ font-size:12.5px; line-height:1.8; color:#5c4415; margin-bottom:18px; }
+  .proc-manner-img{
+    width:100%; display:block; border-radius:12px; border:1.5px solid var(--line);
+    margin-bottom:16px; cursor:zoom-in;
+  }
+  .proc-manner-outro-title{
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:14px; color:var(--teal-deep);
+    margin:6px 0 8px;
+  }
+  .proc-manner-outro{ font-size:12.5px; line-height:1.85; color:#5c4415; margin-bottom:10px; }
+  .manner-lightbox{
+    position:fixed; inset:0; background:rgba(10,20,20,0.92); z-index:50;
+    display:none; align-items:center; justify-content:center; padding:16px;
+  }
+  .manner-lightbox.show{ display:flex; }
+  .manner-lightbox img{ max-width:100%; max-height:100%; border-radius:8px; }
   .proc-section-title{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:13px; color:var(--teal-deep);
     margin:18px 0 8px; padding-top:14px; border-top:1px solid var(--line);
@@ -946,7 +963,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21n</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21q</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -965,6 +982,19 @@
       <button class="composer-close" onclick="closeProcPrep()">✕</button>
     </div>
     <div class="proc-booking-list" id="procPrepList"></div>
+  </div>
+
+  <div class="composer-screen" id="procMannerScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcManner()">‹</button>
+      <div class="ctitle">タイのマナー・習慣</div>
+      <button class="composer-close" onclick="closeProcManner()">✕</button>
+    </div>
+    <div class="proc-manner-list" id="procMannerList"></div>
+  </div>
+
+  <div class="manner-lightbox" id="mannerLightbox" onclick="closeMannerLightbox()">
+    <img id="mannerLightboxImg" src="" alt="">
   </div>
 
   <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
@@ -1690,7 +1720,7 @@ const PROC_CATEGORIES = [
   { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:false },
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
-  { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:false },
+  { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
 ];
 function renderProcList(){
   document.getElementById('procList').innerHTML = PROC_CATEGORIES.map((p) => {
@@ -1809,6 +1839,43 @@ function openProcPrep(){
 }
 function closeProcPrep(){
   document.getElementById('procPrepScreen').classList.remove('show');
+}
+const PROC_MANNER_INTRO = "旅行中に気をつけたいNG行動など。タイ旅行で特に覚えておきたいマナーや注意事項をまとめました。";
+const PROC_MANNER_IMAGES = [
+  { src:"images/manners/manner_head_feet.jpg", alt:"頭と足に注意" },
+  { src:"images/manners/manner_temple.jpg", alt:"寺院や仏像では敬意を" },
+  { src:"images/manners/manner_royal.jpg", alt:"王室や紙幣を軽く扱わない" },
+  { src:"images/manners/manner_food.jpg", alt:"トラブルでも怒鳴らない・ワイは無理にしなくてもOK・食事はスプーンとフォークがメイン" },
+];
+const PROC_MANNER_OUTRO_TITLE = "迷ったら現地の方に合わせよう";
+const PROC_MANNER_OUTRO = [
+  "細かいマナーをすべて覚える必要はありません。日本と同様に電車では静かに・混雑時はリュックを前にする・飲食禁止、これらはタイも同じです。また、優先席もありますし年配の方や妊婦さんや体の不自由な方へ席を譲るのは日本と同様ですが、タイの場合さらにお坊さんや子どもにも進んで席を譲るマナーがあります。日本の新幹線のように指定席などのある鉄道では飲食できたりするので、分からない時は事前に確認しましょう。",
+  "国・人・宗教・王室への敬意を忘れず、迷ったときは周りの現地の方の行動に合わせる。日本の普通のマナーに加えこれだけ覚えておけば、タイ旅行ではあまり心配することはありません。",
+];
+function renderProcManner(){
+  const imagesHtml = PROC_MANNER_IMAGES.map(m =>
+    `<img class="proc-manner-img" src="${m.src}" alt="${m.alt}" onclick="openMannerLightbox('${m.src}')">`
+  ).join('');
+  const outroHtml = PROC_MANNER_OUTRO.map(p => `<div class="proc-manner-outro">${p}</div>`).join('');
+  document.getElementById('procMannerList').innerHTML =
+    `<div class="proc-manner-intro">${PROC_MANNER_INTRO}</div>
+     ${imagesHtml}
+     <div class="proc-manner-outro-title">${PROC_MANNER_OUTRO_TITLE}</div>
+     ${outroHtml}`;
+}
+function openProcManner(){
+  renderProcManner();
+  document.getElementById('procMannerScreen').classList.add('show');
+}
+function closeProcManner(){
+  document.getElementById('procMannerScreen').classList.remove('show');
+}
+function openMannerLightbox(src){
+  document.getElementById('mannerLightboxImg').src = src;
+  document.getElementById('mannerLightbox').classList.add('show');
+}
+function closeMannerLightbox(){
+  document.getElementById('mannerLightbox').classList.remove('show');
 }
 function renderFavorites(){
   const listEl = document.getElementById('favoritesList');
@@ -2683,6 +2750,7 @@ attachSwipeToClose('favoritesScreen', closeFavorites);
 attachSwipeToClose('proceduresScreen', closeProcedures);
 attachSwipeToClose('procBookingScreen', closeProcBooking);
 attachSwipeToClose('procPrepScreen', closeProcPrep);
+attachSwipeToClose('procMannerScreen', closeProcManner);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
 

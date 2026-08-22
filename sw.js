@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-08-21n';
+const SW_VERSION = '2026-08-21q';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -153,6 +153,10 @@ const PRECACHE_URLS = [
   './images/icons/klook.png',
   './images/icons/getyourguide.png',
   './images/icons/12go.png',
+  './images/manners/manner_head_feet.jpg',
+  './images/manners/manner_temple.jpg',
+  './images/manners/manner_royal.jpg',
+  './images/manners/manner_food.jpg',
 ];
 
 self.addEventListener('install', (event) => {

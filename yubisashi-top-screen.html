@@ -336,13 +336,14 @@
   .proc-arrow{ font-size:16px; color:#C7BEA9; }
   .proc-booking-list{ flex:1 1 auto; overflow-y:auto; padding:8px 18px 28px; border-top:1px solid var(--line); }
   .proc-book-link{
-    display:flex; align-items:center; gap:12px; padding:14px;
-    background:#fff; border:1.5px solid var(--marigold); border-radius:14px; margin-bottom:10px;
+    display:block; padding:16px;
+    background:#fff; border:1.5px solid var(--marigold); border-radius:14px; margin-bottom:12px;
     text-decoration:none; color:var(--ink);
   }
   .proc-book-link:active{ background:var(--sand); }
   .proc-book-link.pending{ border-color:var(--line); opacity:.55; pointer-events:none; }
-  .proc-book-emoji{ font-size:26px; flex:0 0 auto; width:36px; height:36px; display:flex; align-items:center; justify-content:center; }
+  .proc-book-top{ display:flex; align-items:center; gap:12px; }
+  .proc-book-emoji{ font-size:26px; flex:0 0 auto; width:56px; height:56px; display:flex; align-items:center; justify-content:center; }
   .proc-book-text{ flex:1; }
   .proc-book-title{ font-family:'Kanit', sans-serif; font-weight:600; font-size:14.5px; }
   .proc-book-sub{ font-size:11.5px; color:#9A9284; margin-top:2px; line-height:1.4; }
@@ -350,6 +351,11 @@
     font-size:10px; font-weight:700; color:#fff; background:var(--marigold);
     border-radius:6px; padding:2px 6px; flex:0 0 auto; align-self:flex-start;
   }
+  .proc-book-features{
+    list-style:none; padding:0; margin:12px 0 0; border-top:1px dashed var(--line); padding-top:10px;
+  }
+  .proc-book-features li{ font-size:12px; line-height:1.9; padding-left:16px; position:relative; color:#5c4415; }
+  .proc-book-features li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); }
   .proc-section-title{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:13px; color:var(--teal-deep);
     margin:18px 0 8px; padding-top:14px; border-top:1px solid var(--line);
@@ -940,13 +946,13 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21i</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-21m</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
     <div class="composer-header">
       <button class="composer-back" onclick="closeProcBooking()">‹</button>
-      <div class="ctitle">ホテル・ツアーを予約する</div>
+      <div class="ctitle">ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する</div>
       <button class="composer-close" onclick="closeProcBooking()">✕</button>
     </div>
     <div class="proc-booking-list" id="procBookingList"></div>
@@ -1682,7 +1688,7 @@ const PROC_CATEGORIES = [
   { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:false },
   { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:false },
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
-  { icon:"hotel", title:"ホテル・ツアーを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com", ready:true, onOpen:"openProcBooking()" },
+  { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:false },
 ];
 function renderProcList(){
@@ -1715,30 +1721,43 @@ function closeProcedures(){
   document.getElementById('proceduresScreen').classList.remove('show');
 }
 const PROC_BOOKING_LINKS = [
-  { icon:"agoda", name:"Agoda", desc:"タイ全土のホテル・宿を検索・予約", url:"https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&hl=ja-jp&city=9395", pending:false },
-  { icon:"trip", name:"Trip.com", desc:"ホテル・航空券・鉄道チケットをまとめて予約", url:"https://www.trip.com/t/JXt874hg1W2", pending:false },
-  { icon:"klook", name:"Klook", desc:"現地ツアー・アクティビティ・eSIMなど", url:"https://affiliate.klook.com/sl/jcd4JYZ", pending:false },
-  { icon:"getyourguide", name:"GetYourGuide", desc:"現地ツアー・体験チケットの予約", url:"https://gyg.me/APNmkbci", pending:false },
+  { icon:"agoda", name:"Agoda", desc:"タイのホテル・宿を検索・予約", url:"https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&hl=ja-jp&city=9395", pending:false,
+    features:["世界最大級の掲載軒数、口コミ・写真が豊富", "現地飛び込みより安いことが多い", "無料キャンセル可のプランも多数"] },
+  { icon:"trip", name:"Trip.com", desc:"航空券・ホテル・レンタカーをまとめて予約", url:"https://www.trip.com/t/JXt874hg1W2", pending:false,
+    features:["航空券・ホテルを一括比較できる", "タイ国内の鉄道チケットも購入可能", "日本語サポートあり"] },
+  { icon:"klook", name:"Klook", desc:"eSIM・現地ツアー・アクティビティなどを予約", url:"https://affiliate.klook.com/sl/jcd4JYZ", pending:false,
+    features:["eSIMがそのまま購入できる", "現地ツアー・体験の品揃えが豊富", "QRコードでそのまま入場できるものが多い"] },
+  { icon:"getyourguide", name:"GetYourGuide", desc:"現地ツアー・体験チケットの予約", url:"https://gyg.me/APNmkbci", pending:false,
+    features:["現地ツアー・アクティビティ・体験系に強い", "前日キャンセル無料のプランが多い", "レビュー件数が多く比較しやすい"] },
+  { icon:"train", name:"12GO", desc:"タイ国内のバス・電車・フェリーを予約", url:"https://12go.asia/?z=16726565", pending:false,
+    features:["タイ国内のバス・電車・フェリーをまとめて検索", "出発時刻・座席タイプを比較して予約", "eチケットをそのままスマホで提示できる"] },
 ];
 function renderProcBooking(){
   document.getElementById('procBookingList').innerHTML = PROC_BOOKING_LINKS.map(b => {
+    const featuresHtml = b.features ? `<ul class="proc-book-features">${b.features.map(f => `<li>${f}</li>`).join('')}</ul>` : '';
     if(b.pending){
       return `<div class="proc-book-link pending">
-        <div class="proc-book-emoji">${iconSvg(b.icon, 30)}</div>
+        <div class="proc-book-top">
+          <div class="proc-book-emoji">${iconSvg(b.icon, 50)}</div>
+          <div class="proc-book-text">
+            <div class="proc-book-title">${b.name}</div>
+            <div class="proc-book-sub">${b.desc}</div>
+          </div>
+          <div class="proc-badge">リンク待ち</div>
+        </div>
+        ${featuresHtml}
+      </div>`;
+    }
+    return `<a class="proc-book-link" href="${b.url}" target="_blank" rel="noopener">
+      <div class="proc-book-top">
+        <div class="proc-book-emoji">${iconSvg(b.icon, 50)}</div>
         <div class="proc-book-text">
           <div class="proc-book-title">${b.name}</div>
           <div class="proc-book-sub">${b.desc}</div>
         </div>
-        <div class="proc-badge">リンク待ち</div>
-      </div>`;
-    }
-    return `<a class="proc-book-link" href="${b.url}" target="_blank" rel="noopener">
-      <div class="proc-book-emoji">${iconSvg(b.icon, 30)}</div>
-      <div class="proc-book-text">
-        <div class="proc-book-title">${b.name}</div>
-        <div class="proc-book-sub">${b.desc}</div>
+        <div class="proc-book-pr">PR</div>
       </div>
-      <div class="proc-book-pr">PR</div>
+      ${featuresHtml}
     </a>`;
   }).join('');
 }

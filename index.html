@@ -441,6 +441,11 @@
     display:inline-block; background:var(--sand); border:1.3px solid var(--line);
     border-radius:20px; padding:6px 12px; font-size:13.5px; font-weight:600; color:var(--ink);
   }
+  .proc-sub-heading{
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:14.5px; color:var(--marigold-deep);
+    margin:14px 0 6px;
+  }
+  .proc-sub-heading:first-child{ margin-top:0; }
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
@@ -1013,7 +1018,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22c</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22d</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1850,6 +1855,40 @@ function closeProcBooking(){
   document.getElementById('procBookingScreen').classList.remove('show');
 }
 const PROC_PREP_ITEMS = [
+  { title:"持ち物チェックリスト", ready:true,
+    lead:"タイ旅行に日本から持っていくと便利なものをまとめました。",
+    sections:[
+      { heading:"⭐ 絶対に忘れたくないもの", items:[
+        "パスポート(残存期間を事前に確認。写真やコピーをスマホにも保存しておくと安心)",
+        "クレジットカード(Visa/Mastercardが使いやすい。2枚あると安心、1枚は財布・もう1枚は別の場所に分けて保管)",
+        "現金(到着直後の交通費・食事用に少し。日本円を持参して現地で両替する方法でもOK)",
+        "スマホ・充電器(eSIM/SIMを利用する場合も事前準備しておくと到着後が楽)",
+        "モバイルバッテリー(必ず機内持ち込みで、座席背面の物入れなど見えるところに置く。航空会社ごとのルールも要確認)",
+      ]},
+      { heading:"👕 タイ旅行で特に便利なもの", items:[
+        "薄手の羽織りもの(BTS・MRT車内やバス、モール、飛行機、レストランなどは冷房が強いことがある。寺院では露出を控える必要があるので1枚あると便利)",
+        "長ズボンまたは膝下まで隠れる服(寺院観光用。短パン・タンクトップ・サンダルでは入場できない寺院もある)",
+        "歩きやすい靴(寺院巡り・ナイトマーケット・BTS駅の乗り換え・チャトゥチャックなどの市場は意外と歩く)",
+      ]},
+      { heading:"🧴 日本から持って行くと安心なもの", items:[
+        "日焼け止め(タイの日差しは強いので必須級)",
+        "虫よけ(ビーチリゾート・郊外・夜の屋外・雨季はあると安心)",
+        "ウェットティッシュ(食事前や屋台で手を拭きたい時に便利)",
+        "常備薬(必要日数+少し余裕を持って。処方薬は処方箋や英文の説明書類があると安心)",
+        "胃腸薬・下痢止め(辛い料理や慣れない食事でお腹の調子を崩すことがある)",
+      ]},
+      { heading:"🔌 電子機器", items:[
+        "変換プラグ(日本のAタイプがそのまま使える場所も多いが要確認)",
+        "タイの電圧は基本220V。充電器が「100〜240V対応」か確認(スマホ・PC・カメラの充電器は対応していることが多い、非対応の日本専用家電は要注意)",
+      ]},
+      { heading:"✈️ あると便利", items:[
+        "ジップロック・小分け袋(濡れた服・水着・液体物・お菓子・充電ケーブルの整理に便利)",
+        "小さめのショルダーバッグ(パスポート・スマホ・財布をすぐ取り出せるものがおすすめ)",
+        "折りたたみ傘(特に雨季の5月〜10月は短時間の雨が多い)",
+      ]},
+    ],
+    note:"⚠️ 電子タバコ・加熱式タバコおよび関連付属品は、タイへの持ち込みが禁止されています。詳しくは「入国時の持ち込み制限」の項目もご確認ください。",
+    source:{ label:"タイ観光案内サイト(タイ国政府観光庁公式)", url:"https://www.thailandtravel.or.jp/" } },
   { title:"パスポート・ビザ", ready:true,
     lead:"日本国籍者は観光目的なら「ビザ免除」で入国できますが、制度が変更中のため要注意です。",
     bullets:[
@@ -1971,6 +2010,10 @@ function renderProcPrep(){
   ).join('')}</div>` : '';
   const itemsHtml = PROC_PREP_ITEMS.map((it, i) => {
     const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
+    const sectionsHtml = it.sections ? it.sections.map(s =>
+      `<div class="proc-sub-heading">${s.heading}</div>
+       <ul class="proc-manner-bullets">${s.items.map(b => `<li>${b}</li>`).join('')}</ul>`
+    ).join('') : '';
     const linksHtml = it.links ? `<div class="proc-phone-numbers" style="margin:8px 0 4px;">${it.links.map(l => `<a class="proc-link-chip" href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label}</a>`).join('')}</div>` : '';
     const bullets2Html = it.bullets2 ? `<ul class="proc-manner-bullets">${it.bullets2.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
     const phoneRowsHtml = renderChipRows(it.phoneRows, 'proc-phone-chip', true);
@@ -1986,6 +2029,7 @@ function renderProcPrep(){
       <div class="proc-collapsible-body" id="prepBody${i}">
         <div class="proc-manner-lead">${it.lead}</div>
         ${bulletsHtml}
+        ${sectionsHtml}
         ${linksHtml}
         ${phoneRowsHtml}
         ${infoRowsHtml}

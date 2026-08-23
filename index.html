@@ -457,19 +457,26 @@
   .pack-hide{
     font-size:13px; color:#C7BEA9; flex:0 0 auto; padding:4px 4px 4px 8px; cursor:pointer;
   }
-  .pack-add-row{ display:flex; gap:8px; margin-top:16px; }
+  .pack-add-row{ display:flex; align-items:stretch; gap:8px; margin-top:16px; }
   .pack-add-input{
-    flex:1; border:1.5px solid var(--line); border-radius:10px; padding:9px 12px; font-size:14px;
+    flex:1 1 auto; min-width:0; border:1.5px solid var(--line); border-radius:10px; padding:9px 12px; font-size:14px;
     background:#fff; color:var(--ink); font-family:inherit;
   }
   .pack-add-input:focus{ outline:none; border-color:var(--marigold); }
   .pack-add-btn{
+    flex:0 0 auto; white-space:nowrap;
     background:var(--teal-deep); color:#fff; border:none; border-radius:10px; padding:0 18px;
     font-size:14px; font-weight:700; cursor:pointer;
   }
   .pack-restore{
     text-align:center; font-size:12px; color:#9A8F7A; text-decoration:underline; margin-top:14px; cursor:pointer;
   }
+  .pack-restore-top{
+    display:block; text-align:center; font-size:13px; font-weight:700; color:var(--marigold-deep);
+    background:#fff8ec; border:1.3px solid var(--marigold); border-radius:10px; padding:9px; margin-top:14px;
+    cursor:pointer;
+  }
+  .pack-restore-top:active{ background:var(--sand); }
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
@@ -1042,7 +1049,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22j</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22m</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -2065,7 +2072,7 @@ function renderPackingChecklist(){
     : '';
   const hiddenCount = Object.keys(state.hidden).length;
   const restoreHtml = hiddenCount
-    ? `<div class="pack-restore" onclick="restorePackItems()">非表示にした${hiddenCount}件を再表示</div>`
+    ? `<div class="pack-restore-top" onclick="restorePackItems()">🔄 非表示にした${hiddenCount}件を再表示</div>`
     : '';
   el.innerHTML = `
     ${sectionsHtml}

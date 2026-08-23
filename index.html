@@ -446,6 +446,30 @@
     margin:14px 0 6px;
   }
   .proc-sub-heading:first-child{ margin-top:0; }
+  .pack-row{
+    display:flex; align-items:flex-start; gap:8px; padding:9px 0; border-bottom:1px solid var(--line);
+  }
+  .pack-row:last-of-type{ border-bottom:none; }
+  .pack-check{ font-size:19px; line-height:1.3; flex:0 0 auto; cursor:pointer; padding-top:1px; }
+  .pack-text{ flex:1; font-size:14px; font-weight:600; color:var(--ink); cursor:pointer; line-height:1.4; }
+  .pack-row.checked .pack-text{ color:#B5AA92; text-decoration:line-through; }
+  .pack-note{ font-size:12px; font-weight:400; color:#9A8F7A; margin-top:2px; line-height:1.5; text-decoration:none; }
+  .pack-hide{
+    font-size:13px; color:#C7BEA9; flex:0 0 auto; padding:4px 4px 4px 8px; cursor:pointer;
+  }
+  .pack-add-row{ display:flex; gap:8px; margin-top:16px; }
+  .pack-add-input{
+    flex:1; border:1.5px solid var(--line); border-radius:10px; padding:9px 12px; font-size:14px;
+    background:#fff; color:var(--ink); font-family:inherit;
+  }
+  .pack-add-input:focus{ outline:none; border-color:var(--marigold); }
+  .pack-add-btn{
+    background:var(--teal-deep); color:#fff; border:none; border-radius:10px; padding:0 18px;
+    font-size:14px; font-weight:700; cursor:pointer;
+  }
+  .pack-restore{
+    text-align:center; font-size:12px; color:#9A8F7A; text-decoration:underline; margin-top:14px; cursor:pointer;
+  }
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
@@ -1018,7 +1042,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22i</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22j</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1854,39 +1878,39 @@ function openProcBooking(){
 function closeProcBooking(){
   document.getElementById('procBookingScreen').classList.remove('show');
 }
+const PACKING_SECTIONS = [
+  { heading:"⭐ 絶対に忘れたくないもの", items:[
+    { id:"pp_passport", text:"パスポート", note:"残存期間を事前に確認。写真やコピーをスマホにも保存しておくと安心" },
+    { id:"pp_card", text:"クレジットカード", note:"Visa/Mastercardが使いやすい。2枚あると安心、1枚は財布・もう1枚は別の場所に分けて保管" },
+    { id:"pp_cash", text:"現金", note:"到着直後の交通費・食事用に少し。日本円を持参して現地で両替する方法でもOK" },
+    { id:"pp_phone", text:"スマホ・充電器", note:"eSIM/SIMを利用する場合も事前準備しておくと到着後が楽" },
+    { id:"pp_battery", text:"モバイルバッテリー", note:"必ず機内持ち込みで、座席背面の物入れなど見えるところに置く。航空会社ごとのルールも要確認" },
+  ]},
+  { heading:"👕 タイ旅行で特に便利なもの", items:[
+    { id:"tw_layer", text:"薄手の羽織りもの", note:"BTS・MRT車内やバス、モール、飛行機、レストランは冷房が強いことがある。寺院では露出を控える必要があるので1枚あると便利" },
+    { id:"tw_pants", text:"長ズボンまたは膝下まで隠れる服", note:"寺院観光用。短パン・タンクトップ・サンダルでは入場できない寺院もある" },
+    { id:"tw_shoes", text:"歩きやすい靴", note:"寺院巡り・ナイトマーケット・BTS駅の乗り換え・チャトゥチャックなどの市場は意外と歩く" },
+  ]},
+  { heading:"🧴 日本から持って行くと安心なもの", items:[
+    { id:"hc_sunscreen", text:"日焼け止め", note:"タイの日差しは強いので必須級" },
+    { id:"hc_bugspray", text:"虫よけ", note:"ビーチリゾート・郊外・夜の屋外・雨季はあると安心" },
+    { id:"hc_wet", text:"ウェットティッシュ", note:"食事前や屋台で手を拭きたい時に便利" },
+    { id:"hc_med", text:"常備薬", note:"必要日数+少し余裕を持って。処方薬は処方箋や英文の説明書類があると安心" },
+    { id:"hc_stomach", text:"胃腸薬・下痢止め", note:"辛い料理や慣れない食事でお腹の調子を崩すことがある" },
+  ]},
+  { heading:"🔌 電子機器", items:[
+    { id:"el_adapter", text:"変換プラグ", note:"日本のAタイプがそのまま使える場所も多いが要確認" },
+    { id:"el_voltage", text:"充電器の電圧対応を確認", note:"タイの電圧は基本220V。「100〜240V対応」ならOK(非対応の日本専用家電は要注意)" },
+  ]},
+  { heading:"✈️ あると便利", items:[
+    { id:"us_ziplock", text:"ジップロック・小分け袋", note:"濡れた服・水着・液体物・お菓子・充電ケーブルの整理に便利" },
+    { id:"us_bag", text:"小さめのショルダーバッグ", note:"パスポート・スマホ・財布をすぐ取り出せるものがおすすめ" },
+    { id:"us_umbrella", text:"折りたたみ傘", note:"特に雨季の5月〜10月は短時間の雨が多い" },
+  ]},
+];
 const PROC_PREP_ITEMS = [
-  { title:"持ち物チェックリスト", ready:true,
-    lead:"タイ旅行に日本から持っていくと便利なものをまとめました。",
-    sections:[
-      { heading:"⭐ 絶対に忘れたくないもの", items:[
-        "パスポート(残存期間を事前に確認。写真やコピーをスマホにも保存しておくと安心)",
-        "クレジットカード(Visa/Mastercardが使いやすい。2枚あると安心、1枚は財布・もう1枚は別の場所に分けて保管)",
-        "現金(到着直後の交通費・食事用に少し。日本円を持参して現地で両替する方法でもOK)",
-        "スマホ・充電器(eSIM/SIMを利用する場合も事前準備しておくと到着後が楽)",
-        "モバイルバッテリー(必ず機内持ち込みで、座席背面の物入れなど見えるところに置く。航空会社ごとのルールも要確認)",
-      ]},
-      { heading:"👕 タイ旅行で特に便利なもの", items:[
-        "薄手の羽織りもの(BTS・MRT車内やバス、モール、飛行機、レストランなどは冷房が強いことがある。寺院では露出を控える必要があるので1枚あると便利)",
-        "長ズボンまたは膝下まで隠れる服(寺院観光用。短パン・タンクトップ・サンダルでは入場できない寺院もある)",
-        "歩きやすい靴(寺院巡り・ナイトマーケット・BTS駅の乗り換え・チャトゥチャックなどの市場は意外と歩く)",
-      ]},
-      { heading:"🧴 日本から持って行くと安心なもの", items:[
-        "日焼け止め(タイの日差しは強いので必須級)",
-        "虫よけ(ビーチリゾート・郊外・夜の屋外・雨季はあると安心)",
-        "ウェットティッシュ(食事前や屋台で手を拭きたい時に便利)",
-        "常備薬(必要日数+少し余裕を持って。処方薬は処方箋や英文の説明書類があると安心)",
-        "胃腸薬・下痢止め(辛い料理や慣れない食事でお腹の調子を崩すことがある)",
-      ]},
-      { heading:"🔌 電子機器", items:[
-        "変換プラグ(日本のAタイプがそのまま使える場所も多いが要確認)",
-        "タイの電圧は基本220V。充電器が「100〜240V対応」か確認(スマホ・PC・カメラの充電器は対応していることが多い、非対応の日本専用家電は要注意)",
-      ]},
-      { heading:"✈️ あると便利", items:[
-        "ジップロック・小分け袋(濡れた服・水着・液体物・お菓子・充電ケーブルの整理に便利)",
-        "小さめのショルダーバッグ(パスポート・スマホ・財布をすぐ取り出せるものがおすすめ)",
-        "折りたたみ傘(特に雨季の5月〜10月は短時間の雨が多い)",
-      ]},
-    ],
+  { title:"持ち物チェックリスト", ready:true, checklist:true,
+    lead:"タイ旅行に日本から持っていくと便利なものをまとめました。タップでチェック、✕で自分に不要な項目を消せます。",
     note:"⚠️ 電子タバコ・加熱式タバコおよび関連付属品は、タイへの持ち込みが禁止されています。詳しくは「入国時の持ち込み制限」の項目もご確認ください。",
     source:{ label:"タイ観光案内サイト(タイ国政府観光庁公式)", url:"https://www.thailandtravel.or.jp/" } },
   { title:"パスポート・ビザ", ready:true,
@@ -2009,6 +2033,90 @@ const PROC_INSURANCE_ALT = {
   features:["海外旅行関連の付帯サービス", "空港ラウンジ", "プライオリティ・パス"],
   url:"https://a.r10.to/hFO1f2",
 };
+function loadPackingState(){
+  try{
+    const raw = localStorage.getItem('yubisashi_packing_v1');
+    const parsed = raw ? JSON.parse(raw) : null;
+    return parsed || { checked:{}, hidden:{}, custom:[] };
+  }catch(e){ return { checked:{}, hidden:{}, custom:[] }; }
+}
+function savePackingState(state){
+  try{ localStorage.setItem('yubisashi_packing_v1', JSON.stringify(state)); }catch(e){}
+}
+function renderPackingChecklist(){
+  const el = document.getElementById('packingChecklistBody');
+  if(!el) return;
+  const state = loadPackingState();
+  const rowHtml = (id, text, note, isCustom) => {
+    const checked = isCustom ? state.custom.find(c => c.id === id).checked : !!state.checked[id];
+    return `<div class="pack-row${checked ? ' checked' : ''}">
+      <div class="pack-check" onclick="${isCustom ? `toggleCustomPackItem('${id}')` : `togglePackItem('${id}')`}">${checked ? '☑️' : '⬜️'}</div>
+      <div class="pack-text" onclick="${isCustom ? `toggleCustomPackItem('${id}')` : `togglePackItem('${id}')`}">${text}${note ? `<div class="pack-note">${note}</div>` : ''}</div>
+      <div class="pack-hide" onclick="${isCustom ? `removeCustomPackItem('${id}')` : `hidePackItem('${id}')`}">✕</div>
+    </div>`;
+  };
+  const sectionsHtml = PACKING_SECTIONS.map(s => {
+    const visibleItems = s.items.filter(it => !state.hidden[it.id]);
+    if(visibleItems.length === 0) return '';
+    return `<div class="proc-sub-heading">${s.heading}</div>${visibleItems.map(it => rowHtml(it.id, it.text, it.note, false)).join('')}`;
+  }).join('');
+  const customHtml = state.custom.length
+    ? `<div class="proc-sub-heading">✏️ 自分で追加した項目</div>${state.custom.map(c => rowHtml(c.id, c.text, '', true)).join('')}`
+    : '';
+  const hiddenCount = Object.keys(state.hidden).length;
+  const restoreHtml = hiddenCount
+    ? `<div class="pack-restore" onclick="restorePackItems()">非表示にした${hiddenCount}件を再表示</div>`
+    : '';
+  el.innerHTML = `
+    ${sectionsHtml}
+    ${customHtml}
+    <div class="pack-add-row">
+      <input type="text" id="packAddInput" class="pack-add-input" placeholder="持ち物を追加...">
+      <button class="pack-add-btn" onclick="addPackItem()">追加</button>
+    </div>
+    ${restoreHtml}
+  `;
+}
+function togglePackItem(id){
+  const s = loadPackingState();
+  s.checked[id] = !s.checked[id];
+  savePackingState(s);
+  renderPackingChecklist();
+}
+function hidePackItem(id){
+  const s = loadPackingState();
+  s.hidden[id] = true;
+  savePackingState(s);
+  renderPackingChecklist();
+}
+function restorePackItems(){
+  const s = loadPackingState();
+  s.hidden = {};
+  savePackingState(s);
+  renderPackingChecklist();
+}
+function addPackItem(){
+  const input = document.getElementById('packAddInput');
+  const text = input.value.trim();
+  if(!text) return;
+  const s = loadPackingState();
+  s.custom.push({ id:'custom_' + Date.now(), text, checked:false });
+  savePackingState(s);
+  renderPackingChecklist();
+}
+function toggleCustomPackItem(id){
+  const s = loadPackingState();
+  const item = s.custom.find(c => c.id === id);
+  if(item) item.checked = !item.checked;
+  savePackingState(s);
+  renderPackingChecklist();
+}
+function removeCustomPackItem(id){
+  const s = loadPackingState();
+  s.custom = s.custom.filter(c => c.id !== id);
+  savePackingState(s);
+  renderPackingChecklist();
+}
 function renderProcPrep(){
   const renderChipRows = (rows, chipClass, isTel) => rows ? `<div class="proc-phone-rows">${rows.map(r =>
     `<div class="proc-phone-row">
@@ -2020,10 +2128,10 @@ function renderProcPrep(){
   ).join('')}</div>` : '';
   const itemsHtml = PROC_PREP_ITEMS.map((it, i) => {
     const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
-    const sectionsHtml = it.sections ? it.sections.map(s =>
+    const sectionsHtml = it.checklist ? `<div id="packingChecklistBody"></div>` : (it.sections ? it.sections.map(s =>
       `<div class="proc-sub-heading">${s.heading}</div>
        <ul class="proc-manner-bullets">${s.items.map(b => `<li>${b}</li>`).join('')}</ul>`
-    ).join('') : '';
+    ).join('') : '');
     const linksLabelHtml = it.linksLabel ? `<div class="proc-sub-heading" style="margin-top:14px;">${it.linksLabel}</div>` : '';
     const linksHtml = it.links ? `<div class="proc-phone-numbers" style="margin:${it.linksLabel ? '0' : '8px'} 0 4px;">${it.links.map(l => `<a class="proc-link-chip" href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label}</a>`).join('')}</div>` : '';
     const bullets2Html = it.bullets2 ? `<ul class="proc-manner-bullets">${it.bullets2.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
@@ -2063,6 +2171,7 @@ function renderProcPrep(){
     </div>`;
   document.getElementById('procPrepList').innerHTML =
     `<div class="proc-section-title" style="margin-top:0;padding-top:0;border-top:none;">パスポート・入国関連</div>${itemsHtml}${insuranceHtml}`;
+  renderPackingChecklist();
 }
 function togglePrepItem(i){
   const body = document.getElementById('prepBody' + i);

@@ -1018,7 +1018,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22d</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22i</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1972,14 +1972,24 @@ const PROC_PREP_ITEMS = [
     ],
     note:"タイは地震や政情不安などのニュースも時々あるので、短期旅行でも登録しておくと安心です。",
     source:{ label:"外務省 たびレジ", url:"https://www.ezairyu.mofa.go.jp/" } },
-  { title:"ツーリストポリス", ready:true,
-    lead:"観光客向けのトラブル対応窓口です。英語で対応してもらえます。",
+  { title:"タイランド ツーリストポリス", ready:true,
+    lead:"タイ観光警察による観光客向けのトラブル対応窓口です。",
+    bullets:[
+      "「Thailand Tourist Police」アプリなら、ワンタップでGPS位置情報付きの緊急SOSを1155に通報できる",
+      "24時間いつでもオンラインで日本語の翻訳・通訳サポートに対応",
+      "周辺の危険エリア警告や、最寄りの警察署検索もアプリ内でできる",
+    ],
+    linksLabel:"📲 アプリのダウンロードはこちら",
+    links:[
+      { label:"Thailand Tourist Police(iOS)", url:"https://apps.apple.com/jp/app/thailand-tourist-police/id6479636779" },
+      { label:"Thailand Tourist Police(Android)", url:"https://play.google.com/store/apps/details?id=tourist.police.app" },
+    ],
     phoneRows:[
       { label:"ツーリストポリス(24時間・英語可)", numbers:["1155"] },
       { label:"警察(一般・救急車要請も可)", numbers:["191"] },
       { label:"消防", numbers:["199"] },
     ],
-    note:"ぼったくり・盗難・詐欺などのトラブルは、まず1155に連絡するのが安心です。" },
+    note:"ぼったくり・盗難・詐欺などのトラブルは、まず1155に連絡するのが安心です。事前にアプリを入れておくと、いざという時に位置情報付きで通報できます。" },
   { title:"Visit Japan Web(日本帰国時に便利)", ready:true,
     lead:"タイからの入国とは逆に、日本へ「帰国」する時の入国審査・税関申告をウェブで済ませられる、日本政府のサービスです。",
     bullets:[
@@ -2014,7 +2024,8 @@ function renderProcPrep(){
       `<div class="proc-sub-heading">${s.heading}</div>
        <ul class="proc-manner-bullets">${s.items.map(b => `<li>${b}</li>`).join('')}</ul>`
     ).join('') : '';
-    const linksHtml = it.links ? `<div class="proc-phone-numbers" style="margin:8px 0 4px;">${it.links.map(l => `<a class="proc-link-chip" href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label}</a>`).join('')}</div>` : '';
+    const linksLabelHtml = it.linksLabel ? `<div class="proc-sub-heading" style="margin-top:14px;">${it.linksLabel}</div>` : '';
+    const linksHtml = it.links ? `<div class="proc-phone-numbers" style="margin:${it.linksLabel ? '0' : '8px'} 0 4px;">${it.links.map(l => `<a class="proc-link-chip" href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label}</a>`).join('')}</div>` : '';
     const bullets2Html = it.bullets2 ? `<ul class="proc-manner-bullets">${it.bullets2.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
     const phoneRowsHtml = renderChipRows(it.phoneRows, 'proc-phone-chip', true);
     const infoRowsHtml = renderChipRows(it.infoRows, 'proc-info-chip', false);
@@ -2030,6 +2041,7 @@ function renderProcPrep(){
         <div class="proc-manner-lead">${it.lead}</div>
         ${bulletsHtml}
         ${sectionsHtml}
+        ${linksLabelHtml}
         ${linksHtml}
         ${phoneRowsHtml}
         ${infoRowsHtml}

@@ -446,6 +446,7 @@
     margin:14px 0 6px;
   }
   .proc-sub-heading:first-child{ margin-top:0; }
+  .proc-sub-subnote{ font-size:11.5px; color:#9A8F7A; margin:-3px 0 8px; padding-left:30px; padding-right:34px; line-height:1.5; }
   .pack-row{
     display:flex; align-items:flex-start; gap:8px; padding:9px 0; border-bottom:1px solid var(--line);
   }
@@ -1049,7 +1050,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22m</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22q</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1898,7 +1899,7 @@ const PACKING_SECTIONS = [
     { id:"tw_pants", text:"長ズボンまたは膝下まで隠れる服", note:"寺院観光用。短パン・タンクトップ・サンダルでは入場できない寺院もある" },
     { id:"tw_shoes", text:"歩きやすい靴", note:"寺院巡り・ナイトマーケット・BTS駅の乗り換え・チャトゥチャックなどの市場は意外と歩く" },
   ]},
-  { heading:"🧴 日本から持って行くと安心なもの", items:[
+  { heading:"🧴 日本から持って行くと安心なもの", subnote:"タイのコンビニ等でも簡単に手に入りますが、肌に直接塗るものなどは使い慣れた物は持参するのがおすすめ", items:[
     { id:"hc_sunscreen", text:"日焼け止め", note:"タイの日差しは強いので必須級" },
     { id:"hc_bugspray", text:"虫よけ", note:"ビーチリゾート・郊外・夜の屋外・雨季はあると安心" },
     { id:"hc_wet", text:"ウェットティッシュ", note:"食事前や屋台で手を拭きたい時に便利" },
@@ -1906,7 +1907,7 @@ const PACKING_SECTIONS = [
     { id:"hc_stomach", text:"胃腸薬・下痢止め", note:"辛い料理や慣れない食事でお腹の調子を崩すことがある" },
   ]},
   { heading:"🔌 電子機器", items:[
-    { id:"el_adapter", text:"変換プラグ", note:"日本のAタイプがそのまま使える場所も多いが要確認" },
+    { id:"el_adapter", text:"変換プラグ", note:"日本のAタイプがそのまま使える場所も多いが要確認。タイはCタイプ" },
     { id:"el_voltage", text:"充電器の電圧対応を確認", note:"タイの電圧は基本220V。「100〜240V対応」ならOK(非対応の日本専用家電は要注意)" },
   ]},
   { heading:"✈️ あると便利", items:[
@@ -2065,7 +2066,8 @@ function renderPackingChecklist(){
   const sectionsHtml = PACKING_SECTIONS.map(s => {
     const visibleItems = s.items.filter(it => !state.hidden[it.id]);
     if(visibleItems.length === 0) return '';
-    return `<div class="proc-sub-heading">${s.heading}</div>${visibleItems.map(it => rowHtml(it.id, it.text, it.note, false)).join('')}`;
+    const subnoteHtml = s.subnote ? `<div class="proc-sub-subnote">${s.subnote}</div>` : '';
+    return `<div class="proc-sub-heading">${s.heading}</div>${subnoteHtml}${visibleItems.map(it => rowHtml(it.id, it.text, it.note, false)).join('')}`;
   }).join('');
   const customHtml = state.custom.length
     ? `<div class="proc-sub-heading">✏️ 自分で追加した項目</div>${state.custom.map(c => rowHtml(c.id, c.text, '', true)).join('')}`

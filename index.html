@@ -1050,7 +1050,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22q</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22t</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1078,6 +1078,15 @@
       <button class="composer-close" onclick="closeProcManner()">✕</button>
     </div>
     <div class="proc-manner-list" id="procMannerList"></div>
+  </div>
+
+  <div class="composer-screen" id="procMoneyScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcMoney()">‹</button>
+      <div class="ctitle">お金・支払い</div>
+      <button class="composer-close" onclick="closeProcMoney()">✕</button>
+    </div>
+    <div class="proc-booking-list" id="procMoneyList"></div>
   </div>
 
   <div class="manner-lightbox" id="mannerLightbox" onclick="closeMannerLightbox()">
@@ -1803,7 +1812,7 @@ function closeFavorites(){
 }
 const PROC_CATEGORIES = [
   { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
-  { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:false },
+  { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:true, onOpen:"openProcMoney()" },
   { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:false },
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
@@ -1915,6 +1924,67 @@ const PACKING_SECTIONS = [
     { id:"us_bag", text:"小さめのショルダーバッグ", note:"パスポート・スマホ・財布をすぐ取り出せるものがおすすめ" },
     { id:"us_umbrella", text:"折りたたみ傘", note:"特に雨季の5月〜10月は短時間の雨が多い" },
   ]},
+];
+const PROC_MONEY_ITEMS = [
+  { title:"両替 vs デビットカード引き出し", ready:true,
+    lead:"現金の作り方は主に「両替」と「ATMでの引き出し」の2通り。まとまった額を用意するか、必要な分だけ引き出すかで向き不向きが変わります。",
+    bullets:[
+      "両替: 空港の両替所はレートが悪いことが多い。市中の両替商(SuperRichなど)やショッピングモール内の両替所の方がレートが良い傾向",
+      "まとまった金額を一度に両替すると、少額を何度も両替するよりレートが有利になりやすい",
+      "ATM引き出し: 海外発行カードの場合、現地銀行が徴収する「ATMオーナー手数料」が1回あたり220バーツ前後かかる(引き出し額に関わらず定額)",
+      "引き出し回数をまとめる(滞在中1〜2回にする)ことで、220バーツ×回数のロスを抑えられる",
+    ],
+    note:"目安: 短期・少額の旅行なら両替の手軽さで十分。1週間以上の滞在やまとまった金額が必要なら、レート面でATM引き出しが有利になりやすいです。",
+    source:{ label:"タイのATM引き出し手数料に関する情報", url:"https://www.card-user.net/7160.html" } },
+  { title:"クレジットカード", ready:true,
+    lead:"Visa・Mastercardのどちらかがあれば、大抵の場面で困りません。",
+    bullets:[
+      "国際ブランドはVisa・Mastercardの2択が一番使いやすい(JCB/Amexは非対応の店がまだ多い)",
+      "ショッピングモール・チェーン系レストラン・ホテルではほぼ問題なく使える",
+      "屋台・ローカル食堂・小規模店・市場は現金のみのことが多い",
+    ],
+    note:"💡豆知識: レジで「JPY(日本円)で決済しますか？」と通貨を選ばされることがあります(DCC)。ほぼ確実に現地通貨(THB)を選んだ方がレートが良くお得です。" },
+  { title:"海外旅行保険について", ready:true,
+    lead:"海外旅行保険は、旅行中の病気・ケガの治療費や、盗難・破損などのトラブルに備える保険です。代表的な保険会社には東京海上日動や損保ジャパン(off!)などがあり、単体で加入する場合はアジア圏5日間で1,500〜2,500円程度が目安です。",
+    bullets:[
+      "実は、今使っているクレジットカードに海外旅行保険が付帯していることも多いので、新しく入る前に一度確認してみるのがおすすめ",
+      "海外旅行によく行くなら、保険が付帯したクレジットカードを1枚持っておくと便利",
+      "「利用付帯」: そのカードで旅行代金(航空券やツアー代など)を支払った場合のみ保険が有効になるタイプ",
+      "「自動付帯」: カードを持っているだけで保険が有効になるタイプ(支払いに使う必要なし)",
+      "複数枚のカードを持っていると、それぞれの補償額が合算される「補償の上乗せ」ができる場合もある",
+      "楽天プレミアムカードは「自動付帯」なので、持っているだけで保険が有効。スマホやカメラを盗まれた、スーツケースが破損した、現地の病院で治療を受けた、といった場面でも補償の対象になり得る",
+      "プライオリティ・パスも付帯していて、海外空港ラウンジを年5回まで無料利用できる",
+    ],
+    linksLabel:"🔗 詳しく見る",
+    links:[{ label:"楽天プレミアムカード", url:"https://a.r10.to/hFO1f2" }],
+    note:"⚠️ 補償される金額や条件はカード会社の見直しで変わることがあるので、正確な金額は公式サイトで最新の内容を確認してください。" },
+  { title:"Wise(ワイズ)", ready:true,
+    lead:"日本にいるうちに円→タイバーツへ両替しておき、現地のATMでそのままバーツを引き出せるサービスです。",
+    bullets:[
+      "Wiseデビットカードを事前に日本で発行(物理カード発行手数料1,200円、年会費は無料)",
+      "ATM引き出しはWise側の手数料が月合計25,000円相当まで無料、それを超えると1.75%+100円",
+      "ただしタイ現地ATMの「ATMオーナー手数料」約220バーツは、Wiseでもクレカでも共通してかかる(タイの銀行が徴収するので回避できない)",
+      "日本発行クレジットカードでのキャッシングは、この220バーツが免除されることが多い代わりに、利息と日本側手数料(110〜220円)がかかる",
+      "タイに友人・知人がいるなら、Wiseの送金機能で直接タイバーツを送るのにも便利。銀行の海外送金より手数料が安く、レートも実勢レートに近い",
+    ],
+    linksLabel:"🔗 詳しく見る",
+    links:[{ label:"Wise公式サイト", url:"https://wise.com/jp/" }],
+    note:"どちらも一長一短です。少額〜中額を1〜2回で引き出すならWiseが有利になりやすく、繰上返済できるならクレカキャッシングが有利になるケースもあります。レートや手数料は変わることがあるので、最新情報は公式サイトで確認してください。" },
+  { title:"QR決済(TAGTHAi)", ready:true,
+    lead:"タイ国内はQRコード決済が主流で、小銭のやり取りが減り会計もスムーズです。旅行者でも使えるのが「TAGTHAi Easy Pay」というサービスです。",
+    bullets:[
+      "タイ国政府観光庁とカシコン銀行(KBank)が提携した、外国人旅行者向けのQR決済サービス",
+      "アプリのダウンロード・登録・プリペイドカード(PAY&TOUR)の発行はすべて無料",
+      "ショッピングモール・レストラン・BTS(電車)・一部コンビニなどで利用できる",
+      "現状、チャージ(入金)はカシコン銀行の両替ブース窓口でのみ可能(クレジットカードからの直接チャージは未対応)",
+      "余った残高は初回チャージから15日以内なら、同じレートで日本円に払い戻し可能",
+    ],
+    note:"窓口でのチャージが必須なため、短期旅行だとやや手間に感じる場合もあります。タッチ決済に対応したクレジットカードも増えているので、QR決済にこだわらずカードのタッチ決済と使い分けるのも一つの手です。",
+    linksLabel:"📲 アプリのダウンロードはこちら",
+    links:[
+      { label:"TAGTHAi(iOS)", url:"https://apps.apple.com/jp/app/tagthai/id1457643150" },
+      { label:"TAGTHAi(Android)", url:"https://play.google.com/store/apps/details?id=com.thaidigitalplatform.tagthai&hl=ja" },
+    ] },
 ];
 const PROC_PREP_ITEMS = [
   { title:"持ち物チェックリスト", ready:true, checklist:true,
@@ -2126,8 +2196,8 @@ function removeCustomPackItem(id){
   savePackingState(s);
   renderPackingChecklist();
 }
-function renderProcPrep(){
-  const renderChipRows = (rows, chipClass, isTel) => rows ? `<div class="proc-phone-rows">${rows.map(r =>
+function renderChipRowsShared(rows, chipClass, isTel){
+  return rows ? `<div class="proc-phone-rows">${rows.map(r =>
     `<div class="proc-phone-row">
       <div class="proc-phone-row-label">${r.label}</div>
       <div class="proc-phone-numbers">${(r.numbers || r.values).map(n =>
@@ -2135,26 +2205,29 @@ function renderProcPrep(){
       ).join('')}</div>
     </div>`
   ).join('')}</div>` : '';
-  const itemsHtml = PROC_PREP_ITEMS.map((it, i) => {
+}
+function buildAccordionItemsHtml(items, idPrefix){
+  return items.map((it, i) => {
     const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
-    const sectionsHtml = it.checklist ? `<div id="packingChecklistBody"></div>` : (it.sections ? it.sections.map(s =>
-      `<div class="proc-sub-heading">${s.heading}</div>
-       <ul class="proc-manner-bullets">${s.items.map(b => `<li>${b}</li>`).join('')}</ul>`
-    ).join('') : '');
+    const sectionsHtml = it.checklist ? `<div id="packingChecklistBody"></div>` : (it.sections ? it.sections.map(s => {
+      const subnoteHtml = s.subnote ? `<div class="proc-sub-subnote">${s.subnote}</div>` : '';
+      return `<div class="proc-sub-heading">${s.heading}</div>${subnoteHtml}
+       <ul class="proc-manner-bullets">${s.items.map(b => `<li>${b}</li>`).join('')}</ul>`;
+    }).join('') : '');
     const linksLabelHtml = it.linksLabel ? `<div class="proc-sub-heading" style="margin-top:14px;">${it.linksLabel}</div>` : '';
     const linksHtml = it.links ? `<div class="proc-phone-numbers" style="margin:${it.linksLabel ? '0' : '8px'} 0 4px;">${it.links.map(l => `<a class="proc-link-chip" href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label}</a>`).join('')}</div>` : '';
     const bullets2Html = it.bullets2 ? `<ul class="proc-manner-bullets">${it.bullets2.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
-    const phoneRowsHtml = renderChipRows(it.phoneRows, 'proc-phone-chip', true);
-    const infoRowsHtml = renderChipRows(it.infoRows, 'proc-info-chip', false);
-    const phoneRows2Html = renderChipRows(it.phoneRows2, 'proc-phone-chip', true);
+    const phoneRowsHtml = renderChipRowsShared(it.phoneRows, 'proc-phone-chip', true);
+    const infoRowsHtml = renderChipRowsShared(it.infoRows, 'proc-info-chip', false);
+    const phoneRows2Html = renderChipRowsShared(it.phoneRows2, 'proc-phone-chip', true);
     const noteHtml = it.note ? `<div class="proc-prep-note">${it.note}</div>` : '';
     const sourceHtml = it.source ? `<a class="proc-link-chip proc-link-chip-source" href="${it.source.url}" target="_blank" rel="noopener">🔗 出典: ${it.source.label}</a>` : '';
     return `<div class="proc-card-alt proc-collapsible" style="border-color:var(--line); margin-bottom:12px;">
-      <div class="proc-collapsible-head" onclick="togglePrepItem(${i})">
+      <div class="proc-collapsible-head" onclick="toggleAccordionItem('${idPrefix}', ${i})">
         <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}</div>
-        <span class="proc-collapse-chevron" id="prepChevron${i}">›</span>
+        <span class="proc-collapse-chevron" id="${idPrefix}Chevron${i}">›</span>
       </div>
-      <div class="proc-collapsible-body" id="prepBody${i}">
+      <div class="proc-collapsible-body" id="${idPrefix}Body${i}">
         <div class="proc-manner-lead">${it.lead}</div>
         ${bulletsHtml}
         ${sectionsHtml}
@@ -2169,6 +2242,15 @@ function renderProcPrep(){
       </div>
     </div>`;
   }).join('');
+}
+function toggleAccordionItem(idPrefix, i){
+  const body = document.getElementById(idPrefix + 'Body' + i);
+  const chevron = document.getElementById(idPrefix + 'Chevron' + i);
+  const isOpen = body.classList.toggle('show');
+  chevron.classList.toggle('open', isOpen);
+}
+function renderProcPrep(){
+  const itemsHtml = buildAccordionItemsHtml(PROC_PREP_ITEMS, 'prep');
   const alt = PROC_INSURANCE_ALT;
   const insuranceHtml = `
     <div class="proc-section-title">海外旅行保険の代わりの構成</div>
@@ -2182,18 +2264,23 @@ function renderProcPrep(){
     `<div class="proc-section-title" style="margin-top:0;padding-top:0;border-top:none;">パスポート・入国関連</div>${itemsHtml}${insuranceHtml}`;
   renderPackingChecklist();
 }
-function togglePrepItem(i){
-  const body = document.getElementById('prepBody' + i);
-  const chevron = document.getElementById('prepChevron' + i);
-  const isOpen = body.classList.toggle('show');
-  chevron.classList.toggle('open', isOpen);
-}
 function openProcPrep(){
   renderProcPrep();
   document.getElementById('procPrepScreen').classList.add('show');
 }
 function closeProcPrep(){
   document.getElementById('procPrepScreen').classList.remove('show');
+}
+function renderProcMoney(){
+  const itemsHtml = buildAccordionItemsHtml(PROC_MONEY_ITEMS, 'money');
+  document.getElementById('procMoneyList').innerHTML = itemsHtml;
+}
+function openProcMoney(){
+  renderProcMoney();
+  document.getElementById('procMoneyScreen').classList.add('show');
+}
+function closeProcMoney(){
+  document.getElementById('procMoneyScreen').classList.remove('show');
 }
 const PROC_MANNER_INTRO = "旅行中に気をつけたいNG行動など。タイ旅行で特に覚えておきたいマナーや注意事項をまとめました。";
 const PROC_MANNER_TOPICS = [
@@ -3128,6 +3215,7 @@ attachSwipeToClose('proceduresScreen', closeProcedures);
 attachSwipeToClose('procBookingScreen', closeProcBooking);
 attachSwipeToClose('procPrepScreen', closeProcPrep);
 attachSwipeToClose('procMannerScreen', closeProcManner);
+attachSwipeToClose('procMoneyScreen', closeProcMoney);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
 

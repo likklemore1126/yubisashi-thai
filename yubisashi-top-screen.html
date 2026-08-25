@@ -1054,7 +1054,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-25a</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-25c</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1826,7 +1826,7 @@ function closeFavorites(){
 const PROC_CATEGORIES = [
   { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
   { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:true, onOpen:"openProcMoney()" },
-  { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:true, onOpen:"openProcPhone()" },
+  { icon:"numpad", title:"スマホ・通信", sub:"SIM・eSIM・ポケットWiFi", ready:true, onOpen:"openProcPhone()" },
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
@@ -2254,7 +2254,7 @@ function renderChipRowsShared(rows, chipClass, isTel){
     </div>`
   ).join('')}</div>` : '';
 }
-function buildAccordionItemsHtml(items, idPrefix){
+function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
   return items.map((it, i) => {
     const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
     const sectionsHtml = it.checklist ? `<div id="packingChecklistBody"></div>` : (it.sections ? it.sections.map(s => {
@@ -2270,13 +2270,7 @@ function buildAccordionItemsHtml(items, idPrefix){
     const phoneRows2Html = renderChipRowsShared(it.phoneRows2, 'proc-phone-chip', true);
     const noteHtml = it.note ? `<div class="proc-prep-note">${it.note}</div>` : '';
     const sourceHtml = it.source ? `<a class="proc-link-chip proc-link-chip-source" href="${it.source.url}" target="_blank" rel="noopener">🔗 出典: ${it.source.label}</a>` : '';
-    return `<div class="proc-card-alt proc-collapsible" style="border-color:var(--line); margin-bottom:12px;">
-      <div class="proc-collapsible-head" onclick="toggleAccordionItem('${idPrefix}', ${i})">
-        <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}</div>
-        <span class="proc-collapse-chevron" id="${idPrefix}Chevron${i}">›</span>
-      </div>
-      <div class="proc-collapsible-body" id="${idPrefix}Body${i}">
-        <div class="proc-manner-lead">${it.lead}</div>
+    const bodyInner = `<div class="proc-manner-lead">${it.lead}</div>
         ${bulletsHtml}
         ${sectionsHtml}
         ${linksLabelHtml}
@@ -2286,7 +2280,20 @@ function buildAccordionItemsHtml(items, idPrefix){
         ${phoneRows2Html}
         ${bullets2Html}
         ${noteHtml}
-        ${sourceHtml}
+        ${sourceHtml}`;
+    if(alwaysOpen){
+      return `<div class="proc-card-alt" style="border-color:var(--line); margin-bottom:12px;">
+        <div class="proc-card-alt-head" style="color:var(--teal-deep);">${it.title}</div>
+        ${bodyInner}
+      </div>`;
+    }
+    return `<div class="proc-card-alt proc-collapsible" style="border-color:var(--line); margin-bottom:12px;">
+      <div class="proc-collapsible-head" onclick="toggleAccordionItem('${idPrefix}', ${i})">
+        <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}</div>
+        <span class="proc-collapse-chevron" id="${idPrefix}Chevron${i}">›</span>
+      </div>
+      <div class="proc-collapsible-body" id="${idPrefix}Body${i}">
+        ${bodyInner}
       </div>
     </div>`;
   }).join('');
@@ -2322,7 +2329,7 @@ function closeProcMoney(){
   document.getElementById('procMoneyScreen').classList.remove('show');
 }
 function renderProcPhone(){
-  const itemsHtml = buildAccordionItemsHtml(PROC_PHONE_ITEMS, 'phone');
+  const itemsHtml = buildAccordionItemsHtml(PROC_PHONE_ITEMS, 'phone', true);
   document.getElementById('procPhoneList').innerHTML = itemsHtml;
 }
 function openProcPhone(){

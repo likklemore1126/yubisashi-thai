@@ -1054,7 +1054,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22v</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22w</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -2265,17 +2265,8 @@ function toggleAccordionItem(idPrefix, i){
 }
 function renderProcPrep(){
   const itemsHtml = buildAccordionItemsHtml(PROC_PREP_ITEMS, 'prep');
-  const alt = PROC_INSURANCE_ALT;
-  const insuranceHtml = `
-    <div class="proc-section-title">海外旅行保険の代わりの構成</div>
-    <div class="proc-card-alt">
-      <div class="proc-card-alt-head"><span>${alt.emoji}</span>${alt.name}</div>
-      <div class="proc-card-alt-audience">「${alt.audience}」</div>
-      <ul class="proc-card-alt-features">${alt.features.map(f => `<li>${f}</li>`).join('')}</ul>
-      <a class="proc-card-alt-link" href="${alt.url}" target="_blank" rel="noopener">詳しく見る</a>
-    </div>`;
   document.getElementById('procPrepList').innerHTML =
-    `<div class="proc-section-title" style="margin-top:0;padding-top:0;border-top:none;">パスポート・入国関連</div>${itemsHtml}${insuranceHtml}`;
+    `<div class="proc-section-title" style="margin-top:0;padding-top:0;border-top:none;">パスポート・入国関連</div>${itemsHtml}`;
   renderPackingChecklist();
 }
 function openProcPrep(){

@@ -1054,7 +1054,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22z</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-25a</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1091,6 +1091,15 @@
       <button class="composer-close" onclick="closeProcMoney()">✕</button>
     </div>
     <div class="proc-booking-list" id="procMoneyList"></div>
+  </div>
+
+  <div class="composer-screen" id="procPhoneScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcPhone()">‹</button>
+      <div class="ctitle">スマホ・通信</div>
+      <button class="composer-close" onclick="closeProcPhone()">✕</button>
+    </div>
+    <div class="proc-booking-list" id="procPhoneList"></div>
   </div>
 
   <div class="manner-lightbox" id="mannerLightbox" onclick="closeMannerLightbox()">
@@ -1817,7 +1826,7 @@ function closeFavorites(){
 const PROC_CATEGORIES = [
   { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
   { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:true, onOpen:"openProcMoney()" },
-  { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:false },
+  { icon:"numpad", title:"スマホ・通信", sub:"eSIM・必要なアプリ", ready:true, onOpen:"openProcPhone()" },
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
@@ -1932,6 +1941,30 @@ const PACKING_SECTIONS = [
     { id:"us_bag", text:"小さめのショルダーバッグ", note:"パスポート・スマホ・財布をすぐ取り出せるものがおすすめ" },
     { id:"us_umbrella", text:"折りたたみ傘", note:"特に雨季の5月〜10月は短時間の雨が多い" },
   ]},
+];
+const PROC_PHONE_ITEMS = [
+  { title:"SIM・eSIM・ポケットWiFi、どれがいい？", ready:true,
+    lead:"タイでスマホを使う方法は主に3つ。それぞれの特徴を知っておくと選びやすくなります。",
+    sections:[
+      { heading:"📶 物理SIM(現地購入)", items:[
+        "空港のカウンターでスタッフがその場で設定してくれるので操作は簡単",
+        "デュアルSIM非対応の機種だと、日本のSIMを一時的に抜くことになる(日本の番号に電話・SMSが来なくなる)",
+        "到着後に購入・設定の待ち時間が発生する(混雑時は列に並ぶことも)",
+      ]},
+      { heading:"📲 eSIM(事前購入)", items:[
+        "SIMカードの入れ替えが不要。多くの機種でデュアルSIM運用ができ、日本の番号を残したまま使える",
+        "出発前にオンラインで購入・設定しておける",
+        "対応機種が必要(iPhoneならXS以降、Androidも比較的新しい機種が中心)",
+      ]},
+      { heading:"📡 ポケットWiFi", items:[
+        "複数人・複数台で1台を共有できる",
+        "持ち歩く端末と充電の手間が1つ増える",
+        "空港での受け取り・返却の手間がある(返却忘れのリスクも)",
+      ]},
+    ],
+    note:"最近はSIMフリー端末が一般的になってきたこともあり、eSIMが便利な場面が増えています。現地SIMは空港スタッフが設定してくれて楽な反面、事前にeSIMを入れておけば、飛行機が着陸してドアが開くまでの間にスマホが使える状態になります。「入国審査でスマホが必要なのに繋がらない、空港Wi-Fiを探して焦る」ということが起きにくいのは大きなメリットです。",
+    linksLabel:"🔗 eSIMを購入する",
+    links:[{ label:"Klook eSIM", url:"https://affiliate.klook.com/sl/2f6dePa" }] },
 ];
 const PROC_MONEY_ITEMS = [
   { title:"両替 vs デビットカード引き出し", ready:true,
@@ -2287,6 +2320,17 @@ function openProcMoney(){
 }
 function closeProcMoney(){
   document.getElementById('procMoneyScreen').classList.remove('show');
+}
+function renderProcPhone(){
+  const itemsHtml = buildAccordionItemsHtml(PROC_PHONE_ITEMS, 'phone');
+  document.getElementById('procPhoneList').innerHTML = itemsHtml;
+}
+function openProcPhone(){
+  renderProcPhone();
+  document.getElementById('procPhoneScreen').classList.add('show');
+}
+function closeProcPhone(){
+  document.getElementById('procPhoneScreen').classList.remove('show');
 }
 const PROC_MANNER_INTRO = "旅行中に気をつけたいNG行動など。タイ旅行で特に覚えておきたいマナーや注意事項をまとめました。";
 const PROC_MANNER_TOPICS = [
@@ -3222,6 +3266,7 @@ attachSwipeToClose('procBookingScreen', closeProcBooking);
 attachSwipeToClose('procPrepScreen', closeProcPrep);
 attachSwipeToClose('procMannerScreen', closeProcManner);
 attachSwipeToClose('procMoneyScreen', closeProcMoney);
+attachSwipeToClose('procPhoneScreen', closeProcPhone);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
 

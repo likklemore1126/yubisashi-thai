@@ -1054,7 +1054,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22u</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-22v</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1923,9 +1923,9 @@ const PACKING_SECTIONS = [
     { id:"el_adapter", text:"変換プラグ(Aタイプ→Cタイプ)", note:"タイはCタイプ。日本で買っていくか、タイのコンビニでも購入できる(電圧を変換するものではないので注意)" },
     { id:"el_voltage", text:"充電器の電圧対応を確認", note:"タイの電圧は基本220V。「100〜240V対応」ならそのままOK(非対応の日本専用家電は変圧器が必要。スマホ・PC・カメラの充電器はほぼ対応)" },
   ], images:[
-    { src:"images/packing/plug_a_to_c.jpg", caption:"日本で買えるA→C変換プラグ" },
-    { src:"images/packing/plug_c_thai.jpg", caption:"タイのコンビニでも買えるCタイプ" },
-    { src:"images/packing/outlet_thai.jpg", caption:"タイの実際のコンセント" },
+    { src:"images/packing/plug_a_to_c.jpg", caption:"日本で買える<br>A→C変換プラグ" },
+    { src:"images/packing/plug_c_thai.jpg", caption:"タイのコンビニでも<br>買えるCタイプ" },
+    { src:"images/packing/outlet_thai.jpg", caption:"タイの実際の<br>コンセント" },
   ] },
   { heading:"✈️ あると便利", items:[
     { id:"us_ziplock", text:"ジップロック・小分け袋", note:"濡れた服・水着・液体物・お菓子・充電ケーブルの整理に便利" },
@@ -2147,7 +2147,7 @@ function renderPackingChecklist(){
     const subnoteHtml = s.subnote ? `<div class="proc-sub-subnote">${s.subnote}</div>` : '';
     const imagesHtml = s.images ? `<div class="pack-photo-row">${s.images.map(img =>
       `<div class="pack-photo" onclick="openMannerLightbox('${img.src}')">
-        <img src="${img.src}" alt="${img.caption}">
+        <img src="${img.src}" alt="${img.caption.replace(/<br>/g, '')}">
         <div class="pack-photo-caption">${img.caption}</div>
       </div>`
     ).join('')}</div>` : '';

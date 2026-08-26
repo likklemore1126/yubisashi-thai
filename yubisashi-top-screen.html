@@ -1102,6 +1102,15 @@
     <div class="proc-booking-list" id="procPhoneList"></div>
   </div>
 
+  <div class="composer-screen" id="procAppsScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcApps()">‹</button>
+      <div class="ctitle">タイ旅行で便利なアプリ</div>
+      <button class="composer-close" onclick="closeProcApps()">✕</button>
+    </div>
+    <div class="proc-booking-list" id="procAppsList"></div>
+  </div>
+
   <div class="manner-lightbox" id="mannerLightbox" onclick="closeMannerLightbox()">
     <img id="mannerLightboxImg" src="" alt="">
   </div>
@@ -1827,7 +1836,7 @@ const PROC_CATEGORIES = [
   { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
   { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:true, onOpen:"openProcMoney()" },
   { icon:"numpad", title:"スマホ・通信", sub:"SIM・eSIM・ポケットWiFi", ready:true, onOpen:"openProcPhone()" },
-  { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Bangkok Metro・ViaBus・Grab", ready:false },
+  { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Grab・バンコクメトロ・ViaBus・ツーリストポリス", ready:true, onOpen:"openProcApps()" },
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
 ];
@@ -1965,6 +1974,67 @@ const PROC_PHONE_ITEMS = [
     note:"最近はSIMフリー端末が一般的になってきたこともあり、eSIMが便利な場面が増えています。現地SIMは空港スタッフが設定してくれて楽な反面、事前にeSIMを入れておけば、飛行機が着陸してドアが開くまでの間にスマホが使える状態になります。「入国審査でスマホが必要なのに繋がらない、空港Wi-Fiを探して焦る」ということが起きにくいのは大きなメリットです。",
     linksLabel:"🔗 eSIMを購入する",
     links:[{ label:"Klook eSIM", url:"https://affiliate.klook.com/sl/2f6dePa" }] },
+];
+const PROC_APP_ITEMS = [
+  { title:"Grab(タクシー配車)", ready:true,
+    lead:"目的地入力・料金確認までアプリ内で完結する配車サービス。タイ語が話せなくても迷わず使えます。",
+    bullets:[
+      "目的地を入力して乗車位置を指定するだけでタクシーを呼べる",
+      "およその料金を予約前に確認できるので、ぼったくりの心配がない",
+      "タイ語が話せなくてもアプリ上でドライバーに目的地が伝わる",
+      "事前にクレジットカードを登録しておけば、現金のやり取りなしで決済できる",
+    ],
+    linksLabel:"📲 アプリのダウンロードはこちら",
+    links:[
+      { label:"Grab(iOS)", url:"https://apps.apple.com/us/app/grab-taxi-ride-food-delivery/id647268330" },
+      { label:"Grab(Android)", url:"https://play.google.com/store/apps/details?id=com.grabtaxi.passenger" },
+    ],
+    note:"無料アプリ・4.9★(25万件超の評価)と、東南アジア全域で圧倒的な実績があります。" },
+  { title:"電車(iPhone:バンコクメトロ／Android:バンコク路線図 BTS MRT ARL)", ready:true,
+    lead:"BTS・MRT・ARL(空港鉄道)を横断してルート検索できるアプリです。OSによっておすすめのアプリが異なります。",
+    bullets:[
+      "出発駅から到着駅までのルートと料金を確認できる",
+      "SIMなし・オフラインでも使えるので通信が不安な時も安心",
+      "駅の施設や周辺情報も調べられる",
+    ],
+    linksLabel:"📲 アプリのダウンロードはこちら",
+    links:[
+      { label:"バンコクメトロ(iOS)", url:"https://apps.apple.com/jp/app/バンコクメトロ/id1095112370" },
+      { label:"バンコク路線図 BTS MRT ARL(Android)", url:"https://play.google.com/store/apps/details?id=dev.softing.transportation.bangkok" },
+    ],
+    note:"iPhoneの「バンコクメトロ」は無料・日本語対応・4.6★(1,710件の評価)と実績十分。Android版は同一アプリが存在しないため、代替アプリを案内しています。" },
+  { title:"ViaBus(バス)", ready:true,
+    lead:"バスの現在地をリアルタイムで確認できる、ローカルバス移動の心強い味方です。",
+    bullets:[
+      "バスの現在地をリアルタイムで地図上で確認できる",
+      "出発地から目的地までのバスルート・乗るべき系統を検索できる",
+      "バス停や路線を簡単に調べられるので、路線図が読めなくても使いやすい",
+      "ボートなど、バス以外の交通機関にも対応",
+    ],
+    linksLabel:"📲 アプリのダウンロードはこちら",
+    links:[
+      { label:"ViaBus(iOS)", url:"https://apps.apple.com/us/app/viabus/id1074208600" },
+      { label:"ViaBus(Android)", url:"https://play.google.com/store/apps/details?id=com.indyzalab.transitia" },
+    ],
+    note:"無料アプリ(一部課金あり)・4.7★(1,600件超の評価)。" },
+  { title:"タイランド ツーリストポリス", ready:true,
+    lead:"タイ観光警察による観光客向けのトラブル対応窓口です。",
+    bullets:[
+      "「Thailand Tourist Police」アプリなら、ワンタップでGPS位置情報付きの緊急SOSを1155に通報できる",
+      "24時間いつでもオンラインで日本語の翻訳・通訳サポートに対応",
+      "周辺の危険エリア警告や、最寄りの警察署検索もアプリ内でできる",
+    ],
+    linksLabel:"📲 アプリのダウンロードはこちら",
+    links:[
+      { label:"Thailand Tourist Police(iOS)", url:"https://apps.apple.com/jp/app/thailand-tourist-police/id6479636779" },
+      { label:"Thailand Tourist Police(Android)", url:"https://play.google.com/store/apps/details?id=tourist.police.app" },
+    ],
+    phoneRows:[
+      { label:"ツーリストポリス(24時間・英語可)", numbers:["1155"] },
+      { label:"警察(一般・救急車要請も可)", numbers:["191"] },
+      { label:"消防", numbers:["199"] },
+    ],
+    note:"ぼったくり・盗難・詐欺などのトラブルは、まず1155に連絡するのが安心です。事前にアプリを入れておくと、いざという時に位置情報付きで通報できます。" },
 ];
 const PROC_MONEY_ITEMS = [
   { title:"両替 vs デビットカード引き出し", ready:true,
@@ -2116,24 +2186,6 @@ const PROC_PREP_ITEMS = [
     ],
     note:"タイは地震や政情不安などのニュースも時々あるので、短期旅行でも登録しておくと安心です。",
     source:{ label:"外務省 たびレジ", url:"https://www.ezairyu.mofa.go.jp/" } },
-  { title:"タイランド ツーリストポリス", ready:true,
-    lead:"タイ観光警察による観光客向けのトラブル対応窓口です。",
-    bullets:[
-      "「Thailand Tourist Police」アプリなら、ワンタップでGPS位置情報付きの緊急SOSを1155に通報できる",
-      "24時間いつでもオンラインで日本語の翻訳・通訳サポートに対応",
-      "周辺の危険エリア警告や、最寄りの警察署検索もアプリ内でできる",
-    ],
-    linksLabel:"📲 アプリのダウンロードはこちら",
-    links:[
-      { label:"Thailand Tourist Police(iOS)", url:"https://apps.apple.com/jp/app/thailand-tourist-police/id6479636779" },
-      { label:"Thailand Tourist Police(Android)", url:"https://play.google.com/store/apps/details?id=tourist.police.app" },
-    ],
-    phoneRows:[
-      { label:"ツーリストポリス(24時間・英語可)", numbers:["1155"] },
-      { label:"警察(一般・救急車要請も可)", numbers:["191"] },
-      { label:"消防", numbers:["199"] },
-    ],
-    note:"ぼったくり・盗難・詐欺などのトラブルは、まず1155に連絡するのが安心です。事前にアプリを入れておくと、いざという時に位置情報付きで通報できます。" },
   { title:"Visit Japan Web(日本帰国時に便利)", ready:true,
     lead:"タイからの入国とは逆に、日本へ「帰国」する時の入国審査・税関申告をウェブで済ませられる、日本政府のサービスです。",
     bullets:[
@@ -2338,6 +2390,17 @@ function openProcPhone(){
 }
 function closeProcPhone(){
   document.getElementById('procPhoneScreen').classList.remove('show');
+}
+function renderProcApps(){
+  const itemsHtml = buildAccordionItemsHtml(PROC_APP_ITEMS, 'apps');
+  document.getElementById('procAppsList').innerHTML = itemsHtml;
+}
+function openProcApps(){
+  renderProcApps();
+  document.getElementById('procAppsScreen').classList.add('show');
+}
+function closeProcApps(){
+  document.getElementById('procAppsScreen').classList.remove('show');
 }
 const PROC_MANNER_INTRO = "旅行中に気をつけたいNG行動など。タイ旅行で特に覚えておきたいマナーや注意事項をまとめました。";
 const PROC_MANNER_TOPICS = [
@@ -3274,6 +3337,7 @@ attachSwipeToClose('procPrepScreen', closeProcPrep);
 attachSwipeToClose('procMannerScreen', closeProcManner);
 attachSwipeToClose('procMoneyScreen', closeProcMoney);
 attachSwipeToClose('procPhoneScreen', closeProcPhone);
+attachSwipeToClose('procAppsScreen', closeProcApps);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
 

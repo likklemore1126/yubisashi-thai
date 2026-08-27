@@ -1080,7 +1080,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-27e</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;" id="appVersionDisplay">バージョン確認中…</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -4472,6 +4472,30 @@ if ('serviceWorker' in navigator) {
       console.log('Service Worker registration failed:', err);
     });
   });
+}
+
+// 実際に有効なService WorkerのキャッシュDから、今動いているバージョンを読み取って表示する
+// (このテキストを手動で書き換える運用は更新忘れが起きやすいため廃止)
+async function updateVersionDisplay(){
+  const el = document.getElementById('appVersionDisplay');
+  if(!el) return;
+  try{
+    if(!('caches' in window)){ el.textContent = ''; return; }
+    const keys = await caches.keys();
+    const key = keys.find(k => k.startsWith('yubisashi-thai-'));
+    if(key){
+      const v = key.replace('yubisashi-thai-', '');
+      el.textContent = '現在のバージョン: ' + v;
+    } else {
+      el.textContent = '';
+    }
+  }catch(e){
+    el.textContent = '';
+  }
+}
+updateVersionDisplay();
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', updateVersionDisplay);
 }
 
 // iOSのホーム画面アイコンからの起動アニメーション(アイコン→フルスクリーンへの拡大)が

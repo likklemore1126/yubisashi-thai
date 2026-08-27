@@ -329,6 +329,14 @@
   .proc-text{ flex:1; }
   .proc-title{ font-family:'Kanit', sans-serif; font-weight:600; font-size:15px; }
   .proc-sub{ font-size:11px; color:#9A9284; margin-top:1px; }
+  .proc-card-category{ font-size:12px; color:var(--teal-deep); font-weight:600; margin:2px 0 1px; }
+  .proc-os-badge{
+    display:inline-block; font-size:10px; font-weight:700; color:#fff;
+    border-radius:20px; padding:2px 9px; vertical-align:middle;
+    white-space:nowrap; flex:0 0 auto;
+  }
+  .proc-os-badge.ios{ background:var(--teal); }
+  .proc-os-badge.android{ background:var(--marigold-deep); }
   .proc-badge{
     font-size:10px; font-weight:700; color:#fff; background:#B5AA92;
     border-radius:20px; padding:2px 8px; flex:0 0 auto;
@@ -391,7 +399,7 @@
   .proc-card-alt{
     background:#fff; border:1.5px solid var(--marigold); border-radius:14px; padding:14px; margin-bottom:10px;
   }
-  .proc-card-alt-head{ display:flex; align-items:center; gap:6px; font-family:'Kanit', sans-serif; font-weight:700; font-size:14.5px; margin-bottom:4px; }
+  .proc-card-alt-head{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-family:'Kanit', sans-serif; font-weight:700; font-size:14.5px; margin-bottom:4px; }
   .proc-card-alt-audience{ font-size:11.5px; color:#9A9284; margin-bottom:10px; line-height:1.5; }
   .proc-card-alt-features{ list-style:none; padding:0; margin:0 0 12px; }
   .proc-card-alt-features li{ font-size:12.5px; line-height:1.9; padding-left:16px; position:relative; }
@@ -1054,7 +1062,7 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-25c</div>
+    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;">現在のバージョン: 2026-08-27c</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -1976,13 +1984,16 @@ const PROC_PHONE_ITEMS = [
     links:[{ label:"Klook eSIM", url:"https://affiliate.klook.com/sl/2f6dePa" }] },
 ];
 const PROC_APP_ITEMS = [
-  { title:"Grab(タクシー配車)", ready:true,
+  { title:"Grab", ready:true,
+    category:"タクシー配車アプリ",
+    sub:"配車前に料金がわかるので安心。現金のやり取りなしでもOK",
     lead:"目的地入力・料金確認までアプリ内で完結する配車サービス。タイ語が話せなくても迷わず使えます。",
     bullets:[
       "目的地を入力して乗車位置を指定するだけでタクシーを呼べる",
       "およその料金を予約前に確認できるので、ぼったくりの心配がない",
       "タイ語が話せなくてもアプリ上でドライバーに目的地が伝わる",
       "事前にクレジットカードを登録しておけば、現金のやり取りなしで決済できる",
+      "配車だけでなく「GrabFood」(料理宅配)や「GrabExpress」(荷物配送)も同じアプリ内で使える",
     ],
     linksLabel:"📲 アプリのダウンロードはこちら",
     links:[
@@ -1990,26 +2001,47 @@ const PROC_APP_ITEMS = [
       { label:"Grab(Android)", url:"https://play.google.com/store/apps/details?id=com.grabtaxi.passenger" },
     ],
     note:"無料アプリ・4.9★(25万件超の評価)と、東南アジア全域で圧倒的な実績があります。" },
-  { title:"電車(iPhone:バンコクメトロ／Android:バンコク路線図 BTS MRT ARL)", ready:true,
-    lead:"BTS・MRT・ARL(空港鉄道)を横断してルート検索できるアプリです。OSによっておすすめのアプリが異なります。",
+  { title:"バンコクメトロ", ready:true,
+    os:"ios",
+    category:"電車ルート検索アプリ",
+    sub:"BTS・MRT・ARLの経路と料金をまとめて検索できる",
+    lead:"iPhone向けの定番アプリ。BTS・MRT・ARL(空港鉄道)を横断してルート検索できます。",
     bullets:[
       "出発駅から到着駅までのルートと料金を確認できる",
       "SIMなし・オフラインでも使えるので通信が不安な時も安心",
       "駅の施設や周辺情報も調べられる",
+      "アプリはあくまで経路・料金の検索用。切符自体は駅の券売機やRabbitカードのタッチで購入する",
     ],
     linksLabel:"📲 アプリのダウンロードはこちら",
     links:[
       { label:"バンコクメトロ(iOS)", url:"https://apps.apple.com/jp/app/バンコクメトロ/id1095112370" },
+    ],
+    note:"無料・日本語対応・4.6★(1,710件の評価)と実績十分。Android版は同一アプリが存在しないため、Androidをお使いの方は下のアプリをご利用ください。" },
+  { title:"バンコク路線図 BTS MRT ARL", ready:true,
+    os:"android",
+    category:"電車ルート検索アプリ",
+    sub:"「バンコクメトロ」のAndroid向け代替アプリ",
+    lead:"「バンコクメトロ」にAndroid版が存在しないため、代替として案内しているアプリです。BTS・MRT・ARLを横断してルート検索できます。",
+    bullets:[
+      "出発駅から到着駅までのルートと料金を確認できる",
+      "駅の施設や周辺情報も調べられる",
+      "アプリはあくまで経路・料金の検索用。切符自体は駅の券売機やRabbitカードのタッチで購入する",
+    ],
+    linksLabel:"📲 アプリのダウンロードはこちら",
+    links:[
       { label:"バンコク路線図 BTS MRT ARL(Android)", url:"https://play.google.com/store/apps/details?id=dev.softing.transportation.bangkok" },
     ],
-    note:"iPhoneの「バンコクメトロ」は無料・日本語対応・4.6★(1,710件の評価)と実績十分。Android版は同一アプリが存在しないため、代替アプリを案内しています。" },
-  { title:"ViaBus(バス)", ready:true,
+    note:"広告表示あり・インストール数はまだ少なめですが、Android版の代替として案内しています。" },
+  { title:"ViaBus", ready:true,
+    category:"バス位置情報アプリ",
+    sub:"バスの現在地をリアルタイム表示。路線が読めなくても迷わない",
     lead:"バスの現在地をリアルタイムで確認できる、ローカルバス移動の心強い味方です。",
     bullets:[
       "バスの現在地をリアルタイムで地図上で確認できる",
       "出発地から目的地までのバスルート・乗るべき系統を検索できる",
       "バス停や路線を簡単に調べられるので、路線図が読めなくても使いやすい",
       "ボートなど、バス以外の交通機関にも対応",
+      "対応エリアはバンコク中心部が中心。地方都市では対応路線が少ない場合がある",
     ],
     linksLabel:"📲 アプリのダウンロードはこちら",
     links:[
@@ -2018,11 +2050,14 @@ const PROC_APP_ITEMS = [
     ],
     note:"無料アプリ(一部課金あり)・4.7★(1,600件超の評価)。" },
   { title:"タイランド ツーリストポリス", ready:true,
+    category:"観光警察 通報アプリ",
+    sub:"トラブル時はまず1155。位置情報付きでSOS通報できる",
     lead:"タイ観光警察による観光客向けのトラブル対応窓口です。",
     bullets:[
       "「Thailand Tourist Police」アプリなら、ワンタップでGPS位置情報付きの緊急SOSを1155に通報できる",
       "24時間いつでもオンラインで日本語の翻訳・通訳サポートに対応",
       "周辺の危険エリア警告や、最寄りの警察署検索もアプリ内でできる",
+      "アプリを入れていなくても、1155に直接電話するだけで同じ窓口につながる",
     ],
     linksLabel:"📲 アプリのダウンロードはこちら",
     links:[
@@ -2112,7 +2147,8 @@ const PROC_PREP_ITEMS = [
       "陸路でのビザなし入国は暦年で2回まで(3回目以降は原則拒否)",
       "出国便(帰国便)チケットの提示や、20,000バーツ相当の所持金証明を求められることがある",
     ],
-    note:"制度変更の途中なので、出発直前に最新情報を必ず確認してください。" },
+    note:"制度変更の途中なので、出発直前に最新情報を必ず確認してください。",
+    source:{ label:"外務省 海外安全ホームページ(タイ 安全対策基礎データ)", url:"https://www.anzen.mofa.go.jp/info/pcsafetymeasure_007.html" } },
   { title:"TDACなど入国手続き", ready:true,
     lead:"2025年5月からタイ入国には「TDAC(タイ・デジタル入国カード)」のオンライン提出が必須になりました(紙のTM6は廃止)。",
     bullets:[
@@ -2322,6 +2358,9 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
     const phoneRows2Html = renderChipRowsShared(it.phoneRows2, 'proc-phone-chip', true);
     const noteHtml = it.note ? `<div class="proc-prep-note">${it.note}</div>` : '';
     const sourceHtml = it.source ? `<a class="proc-link-chip proc-link-chip-source" href="${it.source.url}" target="_blank" rel="noopener">🔗 出典: ${it.source.label}</a>` : '';
+    const categoryHtml = it.category ? `<div class="proc-card-category">${it.category}</div>` : '';
+    const subHtml = it.sub ? `<div class="proc-sub">${it.sub}</div>` : '';
+    const osBadgeHtml = it.os ? `<span class="proc-os-badge ${it.os}">${it.os === 'ios' ? 'iPhone専用' : 'Android専用'}</span>` : '';
     const bodyInner = `<div class="proc-manner-lead">${it.lead}</div>
         ${bulletsHtml}
         ${sectionsHtml}
@@ -2335,13 +2374,19 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
         ${sourceHtml}`;
     if(alwaysOpen){
       return `<div class="proc-card-alt" style="border-color:var(--line); margin-bottom:12px;">
-        <div class="proc-card-alt-head" style="color:var(--teal-deep);">${it.title}</div>
+        <div class="proc-card-alt-head" style="color:var(--teal-deep);">${it.title}${osBadgeHtml}</div>
+        ${categoryHtml}
+        ${subHtml}
         ${bodyInner}
       </div>`;
     }
     return `<div class="proc-card-alt proc-collapsible" style="border-color:var(--line); margin-bottom:12px;">
       <div class="proc-collapsible-head" onclick="toggleAccordionItem('${idPrefix}', ${i})">
-        <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}</div>
+        <div style="flex:1; min-width:0;">
+          <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}${osBadgeHtml}</div>
+          ${categoryHtml}
+          ${subHtml}
+        </div>
         <span class="proc-collapse-chevron" id="${idPrefix}Chevron${i}">›</span>
       </div>
       <div class="proc-collapsible-body" id="${idPrefix}Body${i}">

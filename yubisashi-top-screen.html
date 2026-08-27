@@ -3604,12 +3604,6 @@ function renderComposerList(){
     } else if(currentDestination && transportBlockHtml(currentDestination)){
       html += `<div class="dest-access-note">${transportBlockHtml(currentDestination)}</div>`;
     }
-    if(currentDestination){
-      const hHtml = hotelBlockHtml(currentDestination);
-      if(hHtml) html += `<div class="dest-tour-block">${hHtml}</div>`;
-      const tHtml = tourBlockHtml(currentDestination);
-      if(tHtml) html += `<div class="dest-tour-block">${tHtml}</div>`;
-    }
     const modeIndices = transportItems
       .map((item, idx) => ({item, idx}))
       .filter(x => x.item.mode === transportTab)

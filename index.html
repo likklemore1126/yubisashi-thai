@@ -386,6 +386,10 @@
     margin:10px 0 10px; padding-top:14px; border-top:1.5px solid var(--line);
   }
   .proc-manner-outro{ font-size:14px; line-height:1.9; color:#5c4415; margin-bottom:12px; }
+  .proc-manner-extra-title{
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:16px; color:var(--teal-deep);
+    margin:10px 0 12px; padding-top:14px; border-top:1.5px solid var(--line);
+  }
   .manner-lightbox{
     position:fixed; inset:0; background:rgba(10,20,20,0.92); z-index:50;
     display:none; align-items:center; justify-content:center; padding:16px;
@@ -1094,6 +1098,15 @@
       <button class="composer-close" onclick="closeProcManner()">✕</button>
     </div>
     <div class="proc-manner-list" id="procMannerList"></div>
+  </div>
+
+  <div class="composer-screen" id="procSafetyScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcSafety()">‹</button>
+      <div class="ctitle">知っておきたい注意点</div>
+      <button class="composer-close" onclick="closeProcSafety()">✕</button>
+    </div>
+    <div class="proc-booking-list" id="procSafetyList"></div>
   </div>
 
   <div class="composer-screen" id="procMoneyScreen" style="z-index:10;">
@@ -1851,6 +1864,7 @@ const PROC_CATEGORIES = [
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Grab・バンコクメトロ・ViaBus・ツーリストポリス", ready:true, onOpen:"openProcApps()" },
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
+  { icon:"cross", title:"知っておきたい注意点", sub:"お酒の販売規制・詐欺・水/トイレ事情", ready:true, onOpen:"openProcSafety()" },
 ];
 function renderProcList(){
   document.getElementById('procList').innerHTML = PROC_CATEGORIES.map((p) => {
@@ -2154,6 +2168,10 @@ const PROC_MONEY_ITEMS = [
 const PROC_PREP_ITEMS = [
   { title:"持ち物チェックリスト", ready:true, checklist:true,
     lead:"タイ旅行に日本から持っていくと便利なものをまとめました。タップでチェック、✕で自分に不要な項目を消せます。",
+    bullets:[
+      "日本との時差は-2時間(日本が正午なら、タイは午前10時)",
+      "年間を通して暑い(平均最高気温30℃前後)。雨季(6〜10月)は夕方頃にスコールが降りやすいので、折りたたみ傘やレインコートがあると安心",
+    ],
     note:"⚠️ 電子タバコ・加熱式タバコおよび関連付属品は、タイへの持ち込みが禁止されています。詳しくは「入国時の持ち込み制限」の項目もご確認ください。",
     source:{ label:"タイ観光案内サイト(タイ国政府観光庁公式)", url:"https://www.thailandtravel.or.jp/" } },
   { title:"パスポート・ビザ", ready:true,
@@ -2252,6 +2270,8 @@ const PROC_PREP_ITEMS = [
     ],
     note:"タイ旅行に出発する前に登録しておけば、帰国時の空港での手続きが早くなります。",
     links:[{ label:"Visit Japan Webで登録", url:"https://services.digital.go.jp/visit-japan-web/" }] },
+];
+const PROC_MANNER_EXTRA_ITEMS = [
   { title:"お酒の販売時間ルール", ready:true,
     lead:"2026年5月29日、タイの酒類販売規制が大きく緩和されました。とはいえ今でも法律で決まった時間・場所以外では買えないので要注意です。",
     bullets:[
@@ -2279,9 +2299,33 @@ const PROC_PREP_ITEMS = [
       "水道水はそのまま飲めない。歯磨き・うがい程度なら気にしすぎなくても大丈夫だが、気になる場合は近くのコンビニでミネラルウォーターを買っておくと安心",
       "ホテル宿泊なら通常1人あたり無料の飲料水が2本ほど付いてくることが多い(ホステルなど施設によっては給水設備がない場合もある)",
       "「氷でお腹を壊す」という話は昔ほど気にしなくても大丈夫(飲料水・氷の供給環境は改善されている)。お腹が弱い方や気になる方は、注文時に氷なし(マイサイ・ナムケーン)と伝えると安心",
-      "トイレットペーパーは基本的に便器に流せない(配管が詰まる原因になるため)。使用後は個室内のゴミ箱に捨てる。モールやホテルなど一部施設は流せる場合もあるが、迷ったらゴミ箱へ",
+      "トイレットペーパーは基本的に便器に流せない(配管が詰まる原因になるため)。使用後は個室内のゴミ箱に捨てる。モールやホテルなど一部施設では流せる場合もあるが、そういう施設はむしろ珍しく、「流してください」という注意書きが個室内に貼られているのが目印。注意書きがなければゴミ箱へ",
     ],
     note:"特別に覚えることは少ないので、「郷に入っては郷に従え」くらいの感覚で大丈夫です。" },
+  { title:"チップの習慣", ready:true,
+    lead:"タイに元々チップの制度はありませんでしたが、観光客の増加とともに一部の場面ではチップを渡すのが一般的なマナーになっています。義務ではないので身構えすぎなくて大丈夫です。",
+    bullets:[
+      "【レストラン】会計に「Service Charge(10%程度)」が別途加算されている場合は、それがチップ代わりなので追加は不要。加算されていない高級店・エアコン完備の店では、会計の5〜10%か端数のおつりを置いていくとスマート。屋台やフードコートでは不要",
+      "【マッサージ・スパ】チップはほぼ必須の習慣。料金は前払いのことが多く、施術後に更衣室を出るタイミングや店を出る際に、担当者へ直接手渡す(紙幣で)。1時間の施術なら基本100バーツが目安、よほど施術が微妙だった場合だけ50バーツ程度でも仕方ない",
+      "【ホテル】ベルボーイや荷物運びには20〜50バーツ。ベッドメイキングには1泊ごとに20〜50バーツを枕元に置く(現金をそのまま部屋に置いておくとチップと勘違いされて持っていかれることがあるので注意)。コンシェルジュへの特別な依頼には50〜100バーツが目安",
+      "【タクシー】チップは必須ではない。メーターのおつり(5〜10バーツ程度の端数)は受け取らずにそのままチップとして渡す程度で十分。途中で寄り道してもらったり、交渉制のチャーターで利用したりした場合は、決めた金額にプラスでチップを渡し、連絡先を交換しておくと次回以降も利用しやすくなる",
+      "【不要な場面】コンビニ・スーパー・市場・屋台などでは基本的にチップは不要",
+    ],
+    note:"迷ったら「サービス料が会計に含まれているかどうか」を確認するのが一番の目安です。おつりをそのまま渡す場面以外でチップを渡す時は、コインではなく紙幣で渡すのが一般的。金額が50バーツ程度でも、紙幣で渡す方が感謝の気持ちが伝わりやすいです。" },
+  { title:"緊急連絡先クイックリファレンス", ready:true,
+    lead:"いざという時、番号だけサッと確認できるようにまとめました。",
+    phoneRows:[
+      { label:"警察", numbers:["191"] },
+      { label:"救急車", numbers:["1669"] },
+      { label:"ツーリストポリス(観光警察・24時間)", numbers:["1155"] },
+      { label:"在タイ日本国大使館 邦人援護(バンコク管轄)", numbers:["02-207-8502", "02-696-3002"] },
+      { label:"在タイ日本国大使館 夜間・休館日", numbers:["02-207-8500", "02-696-3000"] },
+      { label:"在チェンマイ日本国総領事館(北部管轄)", numbers:["052-012-500"] },
+    ],
+    bullets:[
+      "北部9県(チェンマイ・チェンライなど)はバンコクの大使館ではなくチェンマイ総領事館の管轄。詳しい住所・受付時間は「在タイ日本国大使館」「在チェンマイ日本国総領事館」の各カードを参照",
+    ],
+    note:"パスポート紛失など緊急性の低い相談は、大使館・総領事館の窓口受付時間内に連絡するのがスムーズです。" },
 ];
 const PROC_INSURANCE_ALT = {
   emoji:"🟡",
@@ -2547,6 +2591,17 @@ function openProcManner(){
 }
 function closeProcManner(){
   document.getElementById('procMannerScreen').classList.remove('show');
+}
+function renderProcSafety(){
+  const itemsHtml = buildAccordionItemsHtml(PROC_MANNER_EXTRA_ITEMS, 'safety');
+  document.getElementById('procSafetyList').innerHTML = itemsHtml;
+}
+function openProcSafety(){
+  renderProcSafety();
+  document.getElementById('procSafetyScreen').classList.add('show');
+}
+function closeProcSafety(){
+  document.getElementById('procSafetyScreen').classList.remove('show');
 }
 function openMannerLightbox(src){
   document.getElementById('mannerLightboxImg').src = src;
@@ -2865,9 +2920,9 @@ const dishes = [
   { th:'ขนมเบื้อง', jp:'カノム・ブアン', desc:'パリパリに焼いた小ぶりの薄い生地に、甘いメレンゲと刻んだ卵黄のシロップ煮を挟んだタイ風の小さなタコス。', cat:'sweet',
     mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
   { th:'ชานมเย็น', jp:'チャーノムイェン', desc:'バニラやスパイスの香りが広がるオレンジ色のタイ式ミルクティー。濃く抽出した紅茶に練乳をたっぷり加えた甘く濃厚な定番ドリンク。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘く強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘く強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'นมเย็น', jp:'ノムイェン', desc:'「サラ」のフレーバーシロップ(ヘイルズブルーボーイ)に牛乳を混ぜたピンク色のミルク。イチゴミルクのような見た目と甘さが人気。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'ชามะนาว', jp:'チャーマナオ', desc:'タイの紅茶に新鮮なマナオ(タイライム)の果汁と甘みを加えたアイスティー。甘酸っぱくすっきりとした味わい。', cat:'drink',
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'มะม่วงปั่น', jp:'マムアンパン', desc:'完熟マンゴーの濃厚な甘みと果汁をそのまま閉じ込めた大人気スムージー。とろけるような口当たり。', cat:'drink',
@@ -2877,17 +2932,17 @@ const dishes = [
   { th:'สับปะรดปั่น', jp:'サパロットパン', desc:'甘酸っぱいパイナップルを贅沢に使ったフローズンドリンク。爽やかな酸味とすっきりした甘み。', cat:'drink',
     mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'น้ำมะพร้าว', jp:'ナムマプラオ', desc:'ココナッツの実を割ってそのまま飲む天然の果汁。やさしい甘みと電解質が豊富で、暑いタイでの水分補給に欠かせない。', cat:'drink',
-    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'น้ำอ้อย', jp:'ナムオーイ', desc:'サトウキビの茎をその場で絞ったフレッシュジュース。自然でまろやかな甘みと、青々とした香ばしい風味。', cat:'drink',
-    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'น้ำส้ม', jp:'ナムソム', desc:'小ぶりなタイのオレンジを丸ごと絞った果汁100%ジュース。果肉感たっぷりで、甘みとほどよい酸味が絶妙。', cat:'drink',
-    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'น้ำทับทิม', jp:'ナムタプティム', desc:'屋台の絞り器でその場で抽出される贅沢な生搾りザクロジュース。深紅の美しい色合いと、甘酸っぱく濃厚な果汁。', cat:'drink',
-    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'อเมริกาโน่น้ำส้ม', jp:'アメリカーノ・ソム', desc:'フレッシュなオレンジジュースの上にエスプレッソショットを注いだカフェの人気メニュー。フルーティーな甘みとコーヒーの苦みがマッチ。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'โอเลี้ยง', jp:'オーリアン', desc:'ロブスタ種のコーヒー豆にトウモロコシやゴマ、タマリンドの種などをブレンドし、布フィルターで濃く抽出したタイの昔ながらのアイスコーヒー。たっぷりの砂糖と氷で提供される。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ใส่นม', jp:'ミルクを入れて'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่นม', jp:'ミルクを入れて'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
 ];
 const dishImages = [
   "images/dishes/thumb_00.jpg",
@@ -3429,6 +3484,7 @@ attachSwipeToClose('proceduresScreen', closeProcedures);
 attachSwipeToClose('procBookingScreen', closeProcBooking);
 attachSwipeToClose('procPrepScreen', closeProcPrep);
 attachSwipeToClose('procMannerScreen', closeProcManner);
+attachSwipeToClose('procSafetyScreen', closeProcSafety);
 attachSwipeToClose('procMoneyScreen', closeProcMoney);
 attachSwipeToClose('procPhoneScreen', closeProcPhone);
 attachSwipeToClose('procAppsScreen', closeProcApps);

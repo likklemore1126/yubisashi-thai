@@ -668,7 +668,9 @@
   }
   .landscape-display.show{ display:flex; }
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; }
+  .landscape-th::before{ content:"🇹🇭 "; }
   .landscape-jp{ font-size:min(4vw, 22px); opacity:0.65; margin-top:18px; }
+  .landscape-jp::before{ content:"🇯🇵 "; }
   .fav-help{ font-size:12px; color:#8B8272; padding:0 18px 10px; line-height:1.6; }
   .fav-handle-icon{ font-weight:700; color:var(--ink); }
   .fav-empty{ display:none; text-align:center; font-size:13px; color:#8B8272; padding:40px 20px; }
@@ -2312,7 +2314,7 @@ const PROC_MANNER_EXTRA_ITEMS = [
       "【不要な場面】コンビニ・スーパー・市場・屋台などでは基本的にチップは不要",
     ],
     note:"迷ったら「サービス料が会計に含まれているかどうか」を確認するのが一番の目安です。おつりをそのまま渡す場面以外でチップを渡す時は、コインではなく紙幣で渡すのが一般的。金額が50バーツ程度でも、紙幣で渡す方が感謝の気持ちが伝わりやすいです。" },
-  { title:"緊急連絡先クイックリファレンス", ready:true,
+  { title:"緊急連絡先一覧", ready:true,
     lead:"いざという時、番号だけサッと確認できるようにまとめました。",
     phoneRows:[
       { label:"警察", numbers:["191"] },

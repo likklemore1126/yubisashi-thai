@@ -671,11 +671,14 @@
     color:var(--ink); font-size:18px; font-weight:700; cursor:pointer;
   }
   .pharmacy-qty-num{ font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; color:var(--ink); min-width:28px; text-align:center; }
-  .pharmacy-followup{ display:flex; gap:8px; margin-top:10px; justify-content:center; }
+  .pharmacy-followup{ display:flex; gap:10px; margin-top:14px; }
   .pharmacy-followup-btn{
-    background:#F7F1E1; border:1.5px solid var(--line); border-radius:999px; padding:7px 12px;
-    font-size:12px; font-family:'Noto Sans JP', sans-serif; font-weight:600; cursor:pointer; color:var(--ink);
+    flex:1; background:#F7F1E1; border:1.5px solid var(--line); border-radius:14px; padding:14px 10px;
+    cursor:pointer; color:var(--ink); display:flex; flex-direction:column; align-items:center; gap:2px;
   }
+  .pharmacy-followup-btn:active{ background:var(--sand); transform:scale(0.97); }
+  .pharmacy-followup-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; }
+  .pharmacy-followup-jp{ font-size:12px; font-weight:600; color:#8B8272; }
   .pharmacy-store-block{ margin:2px 0 12px; }
   .pharmacy-store-badges{ display:flex; gap:9px; }
   .pharmacy-store-badge{
@@ -3543,8 +3546,8 @@ function renderDishDetailStandalone(d){
       <button class="pharmacy-qty-btn" onclick="event.stopPropagation(); changePharmacyQty(1);">＋</button>
     </div>` : '';
     const followUpHtml = p.followUpQty ? `<div class="pharmacy-followup">
-      <button class="pharmacy-followup-btn" onclick="event.stopPropagation(); jumpToPharmacyQtyMod('box');">📦 箱で</button>
-      <button class="pharmacy-followup-btn" onclick="event.stopPropagation(); jumpToPharmacyQtyMod('sheet');">🧾 シートで</button>
+      <button class="pharmacy-followup-btn" onclick="event.stopPropagation(); jumpToPharmacyQtyMod('box');">📦<span class="pharmacy-followup-th">กล่อง</span><span class="pharmacy-followup-jp">箱で</span></button>
+      <button class="pharmacy-followup-btn" onclick="event.stopPropagation(); jumpToPharmacyQtyMod('sheet');">🧾<span class="pharmacy-followup-th">แผง</span><span class="pharmacy-followup-jp">シートで</span></button>
     </div>` : '';
     selectedBlock = `<div class="selected-phrase">
       <div class="sp-header"><button class="sp-clear-btn" onclick="clearDishSelectedPhrase()">✕ 選択を解除</button></div>

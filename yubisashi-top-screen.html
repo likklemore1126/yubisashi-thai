@@ -676,14 +676,13 @@
     background:#F7F1E1; border:1.5px solid var(--line); border-radius:999px; padding:7px 12px;
     font-size:12px; font-family:'Noto Sans JP', sans-serif; font-weight:600; cursor:pointer; color:var(--ink);
   }
-  .pharmacy-store-block{ margin-top:14px; }
+  .pharmacy-store-block{ margin:2px 0 12px; }
   .pharmacy-store-badges{ display:flex; gap:9px; }
   .pharmacy-store-badge{
     display:inline-flex; align-items:center; gap:5px; border-radius:999px; padding:8px 16px;
     font-size:13px; font-family:'Noto Sans JP', sans-serif; font-weight:700;
+    background:var(--marigold); color:#fff;
   }
-  .pharmacy-store-badge.active{ background:var(--teal-deep); color:#fff; }
-  .pharmacy-store-badge.inactive{ background:transparent; border:1.5px solid var(--line); color:#B5AA92; }
   .ticket-stepper{
     margin-top:14px; display:flex; align-items:center; gap:16px; justify-content:center;
   }
@@ -1916,6 +1915,16 @@ const situations = [
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
   ]},
   { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"11", phrases:[
+    {base:"ปวดหัว", type:'s', jp:"頭が痛いです"},
+    {base:"เป็นไข้", type:'s', jp:"熱があります"},
+    {base:"น้ำมูกไหล", type:'s', jp:"鼻水が出ます"},
+    {base:"จามบ่อย", type:'s', jp:"くしゃみが出ます"},
+    {base:"ท้องเสีย", type:'s', jp:"下痢をしています"},
+    {base:"แสบร้อนกลางอก", type:'s', jp:"胸焼けがします"},
+    {base:"ท้องอืด มีแก๊สในท้อง", type:'s', jp:"お腹が張ってガスがたまっています"},
+    {base:"เจ็บคอ", type:'s', jp:"喉が痛いです"},
+    {base:"ไอ", type:'s', jp:"咳が出ます"},
+    {base:"ปวดท้อง", type:'s', jp:"お腹が痛いです"},
     {base:"มีแผ่นแปะแก้ปวดกล้ามเนื้อไหม", type:'q', jp:"筋肉痛用の張り薬(湿布)はありますか？"},
     {base:"มียานอนหลับไหม", type:'q', jp:"睡眠導入剤はありますか？"},
   ]},
@@ -2998,53 +3007,6 @@ function hotelInfoBlockHtml(){
 }
 
 // ---------- 料理を選んで注文する(タイ料理30選) ----------
-const PHARMACY_SYMPTOM_PHRASES = [
-  {th:'ปวดหัว', jp:'頭が痛いです'},
-  {th:'เป็นไข้', jp:'熱があります'},
-  {th:'น้ำมูกไหล', jp:'鼻水が出ます'},
-  {th:'จามบ่อย', jp:'くしゃみが出ます'},
-  {th:'ท้องเสีย', jp:'下痢をしています'},
-  {th:'แสบร้อนกลางอก', jp:'胸焼けがします'},
-  {th:'ท้องอืด มีแก๊สในท้อง', jp:'お腹が張ってガスがたまっています'},
-  {th:'เจ็บคอ', jp:'喉が痛いです'},
-  {th:'ไอ', jp:'咳が出ます'},
-  {th:'ปวดท้อง', jp:'お腹が痛いです'},
-];
-let pharmacySymptomIdx = null;
-function selectPharmacySymptom(idx){
-  pharmacySymptomIdx = (pharmacySymptomIdx === idx) ? null : idx;
-  renderCategoryFixed();
-}
-function showPharmacySymptomFullscreen(){
-  if(pharmacySymptomIdx === null) return;
-  const p = PHARMACY_SYMPTOM_PHRASES[pharmacySymptomIdx];
-  setLastPhrase(p.th, p.jp);
-  showFullscreenNow();
-}
-function pharmacySymptomBlockHtml(){
-  const items = PHARMACY_SYMPTOM_PHRASES.map((p, idx) => {
-    const sel = pharmacySymptomIdx === idx ? 'selected' : '';
-    return `<div class="follow-item ${sel}" onclick="selectPharmacySymptom(${idx})">
-      <div class="fi-th">${p.th}</div>
-      <div class="fi-jp">${p.jp}</div>
-      ${favStarHtml(p.th, p.jp)}
-    </div>`;
-  }).join('');
-  let selectedHtml = '';
-  if(pharmacySymptomIdx !== null){
-    const p = PHARMACY_SYMPTOM_PHRASES[pharmacySymptomIdx];
-    setLastPhrase(p.th, p.jp);
-    selectedHtml = `<div class="selected-phrase">
-      <div class="sp-header"><button class="sp-clear-btn" onclick="selectPharmacySymptom(${pharmacySymptomIdx})">✕ 選択を解除</button></div>
-      <div class="sp-th">${p.th}</div>
-      <div class="sp-jp">${p.jp}</div>
-      <button class="fullscreen-btn" onclick="event.stopPropagation(); showPharmacySymptomFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>
-      ${favStarHtml(p.th, p.jp)}
-    </div>`;
-  }
-  return `${items}
-    ${selectedHtml}`;
-}
 function pharmacyMods(drugTh, drugJp){
   return [
     {th:`มี${drugTh}ขายไหม`, jp:`${drugJp}はありますか？`},
@@ -3368,7 +3330,6 @@ function goBackToDishList(){
 }
 function openDishList(restoreScroll, cat){
   dishSelectedIdx = null;
-  if(cat && cat !== dishCategory){ pharmacySymptomIdx = null; }
   if(cat) dishCategory = cat;
   const meta = DISH_CATEGORY_META[dishCategory] || DISH_CATEGORY_META.food;
   document.getElementById('dishTitle').innerHTML = `<span class="ctitle-icon">${meta.emoji}</span>${meta.label}を選んで注文する`;
@@ -3560,14 +3521,12 @@ function jumpToPharmacyQtyMod(qtyType){
   if(mi >= 0) selectDishPhrase(mi);
 }
 function pharmacyStoreBadgeHtml(stores){
-  if(!stores) return '';
-  const has = (k) => stores.includes(k);
+  if(!stores || !stores.length) return '';
+  const labels = { convenience:'🏪 コンビニ', pharmacy:'💊 薬局' };
+  const badges = stores.map(k => `<span class="pharmacy-store-badge">${labels[k]}</span>`).join('');
   return `<div class="pharmacy-store-block">
     <div class="dish-mod-title">買えるお店</div>
-    <div class="pharmacy-store-badges">
-      <span class="pharmacy-store-badge ${has('convenience') ? 'active' : 'inactive'}">🏪 コンビニ</span>
-      <span class="pharmacy-store-badge ${has('pharmacy') ? 'active' : 'inactive'}">💊 薬局</span>
-    </div>
+    <div class="pharmacy-store-badges">${badges}</div>
   </div>`;
 }
 function renderDishDetailStandalone(d){
@@ -3601,8 +3560,8 @@ function renderDishDetailStandalone(d){
   }
   document.getElementById('dishFixed').innerHTML = `
     <img class="dish-detail-photo" src="${dishImagesFull[dishSelectedIdx]}" alt="${d.jp}" onclick="event.stopPropagation(); openDishPhotoLightbox(${dishSelectedIdx});">
-    <div class="dish-desc-box dish-desc-box-flat">${d.desc}</div>
     ${isMedicine ? pharmacyStoreBadgeHtml(d.stores) : ''}
+    <div class="dish-desc-box dish-desc-box-flat">${d.desc}</div>
     <div class="dish-standalone-th">${d.th}</div>
     ${selectedBlock}
     ${isMedicine ? '' : dishRecommendBlockHtml()}
@@ -4049,7 +4008,6 @@ function renderCategoryFixed(){
       </div>
       <span class="pharmacy-browse-arrow">›</span>
     </div>
-    ${pharmacySymptomBlockHtml()}
   ` : '';
   if(selectedCategoryIdx === null){
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + pharmacyEntryHtml + `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;

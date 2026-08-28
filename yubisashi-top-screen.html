@@ -585,6 +585,16 @@
   .dish-category-emoji{ font-size:24px; }
   .dish-category-text{ font-family:'Kanit', sans-serif; font-weight:600; font-size:12px; color:var(--ink); line-height:1.3; }
   .dish-category-count{ font-size:10.5px; color:#8B8272; }
+  .pharmacy-browse-banner{
+    display:flex; align-items:center; gap:12px; background:#fff; border:1.5px solid var(--pink);
+    border-radius:14px; padding:14px; margin-bottom:14px; cursor:pointer;
+  }
+  .pharmacy-browse-banner:active{ transform:scale(0.98); background:var(--sand); }
+  .pharmacy-browse-emoji{ font-size:30px; flex:0 0 auto; }
+  .pharmacy-browse-text{ flex:1; min-width:0; }
+  .pharmacy-browse-title{ font-family:'Kanit', sans-serif; font-weight:700; font-size:14.5px; color:var(--ink); }
+  .pharmacy-browse-desc{ font-size:11.5px; color:#8B8272; line-height:1.5; margin-top:3px; }
+  .pharmacy-browse-arrow{ color:#C7BEA9; font-size:22px; flex:0 0 auto; }
   .dish-empty-state{
     background:var(--sand); border:1.5px solid var(--line); border-radius:12px;
     padding:24px 16px; text-align:center; font-size:13px; color:#8B8272; line-height:1.6;
@@ -614,10 +624,11 @@
     font-family:'Kanit', sans-serif; font-weight:700; font-size:10.5px; display:flex; align-items:center; justify-content:center;
     box-shadow:0 1px 3px rgba(0,0,0,0.3);
   }
-  .dish-card-body{ padding:6px 7px 8px; }
-  .dish-card-th{ font-family:'Kanit', sans-serif; font-size:11px; color:#8B8272; line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .dish-card-jp{ font-family:'Kanit', sans-serif; font-weight:600; font-size:12.5px; color:var(--ink); line-height:1.3; margin-top:1px; }
-  .dish-card-symptom{ font-size:10.5px; color:var(--teal-deep); line-height:1.35; margin-top:3px; }
+  .dish-card-body{ padding:7px 8px 9px; }
+  .dish-card-th{ font-family:'Kanit', sans-serif; font-size:11px; color:#8B8272; line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dish-card-jp{ font-family:'Kanit', sans-serif; font-weight:600; font-size:12.5px; color:var(--ink); line-height:1.35; margin-top:3px; }
+  .dish-card-symptom{ font-size:10.5px; color:var(--teal-deep); line-height:1.45; margin-top:5px; }
+  .dish-card[data-cat="medicine"] .dish-card-th{ white-space:normal; }
   .dish-detail-photo{ width:100%; height:160px; object-fit:cover; border-radius:14px; margin-bottom:0; display:block; cursor:pointer; }
   .dish-desc-box{
     background:var(--sand); border:1.5px solid var(--line); border-radius:0 0 14px 14px;
@@ -1897,8 +1908,8 @@ const situations = [
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
   ]},
   { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"11", phrases:[
-    {base:"ร้านขายยาอยู่ที่ไหน", type:'q', jp:"薬局はどこですか？"},
-    {base:"มีเภสัชกรไหม", type:'q', jp:"薬剤師はいますか？"},
+    {base:"มีแผ่นแปะแก้ปวดกล้ามเนื้อไหม", type:'q', jp:"筋肉痛用の張り薬(湿布)はありますか？"},
+    {base:"มียานอนหลับไหม", type:'q', jp:"睡眠導入剤はありますか？"},
   ]},
   { icon:"compass", title:"道をたずねる", color:"var(--teal)", count:"4", phrases:[
     {base:"ตรงนี้คือที่ไหน", type:'q', jp:"ここはどこですか"},
@@ -2984,13 +2995,9 @@ const PHARMACY_SYMPTOM_PHRASES = [
   {th:'เป็นไข้', jp:'熱があります'},
   {th:'น้ำมูกไหล', jp:'鼻水が出ます'},
   {th:'จามบ่อย', jp:'くしゃみが出ます'},
-  {th:'เป็นภูมิแพ้', jp:'アレルギーがあります'},
   {th:'ท้องเสีย', jp:'下痢をしています'},
-  {th:'อาเจียน', jp:'嘔吐しました'},
-  {th:'คลื่นไส้', jp:'吐き気がします'},
   {th:'แสบร้อนกลางอก', jp:'胸焼けがします'},
   {th:'ท้องอืด มีแก๊สในท้อง', jp:'お腹が張ってガスがたまっています'},
-  {th:'เมารถ', jp:'乗り物酔いしました'},
   {th:'เจ็บคอ', jp:'喉が痛いです'},
   {th:'ไอ', jp:'咳が出ます'},
   {th:'ปวดท้อง', jp:'お腹が痛いです'},
@@ -2998,7 +3005,7 @@ const PHARMACY_SYMPTOM_PHRASES = [
 let pharmacySymptomIdx = null;
 function selectPharmacySymptom(idx){
   pharmacySymptomIdx = (pharmacySymptomIdx === idx) ? null : idx;
-  document.getElementById('dishFixed').innerHTML = pharmacySymptomBlockHtml();
+  renderCategoryFixed();
 }
 function showPharmacySymptomFullscreen(){
   if(pharmacySymptomIdx === null) return;
@@ -3383,7 +3390,7 @@ function renderDishList(){
     return;
   }
   const html = `<div class="dish-grid">` + filtered.map(({d, i}, displayIdx) => `
-    <div class="dish-card" onclick="openDishDetail(${i})">
+    <div class="dish-card" data-cat="${dishCategoryOf(d)}" onclick="openDishDetail(${i})">
       <div class="dish-card-thumb-wrap">
         <img class="dish-card-thumb" src="${dishImages[i]}" alt="${d.jp}">
         <span class="dish-card-num">${displayIdx + 1}</span>
@@ -3396,9 +3403,6 @@ function renderDishList(){
     </div>
   `).join('') + `</div>`;
   document.getElementById('dishList').innerHTML = html;
-  if(dishCategory === 'medicine'){
-    document.getElementById('dishFixed').innerHTML = pharmacySymptomBlockHtml();
-  }
 }
 function dishComposedTh(){
   const d = dishes[dishSelectedIdx];
@@ -4013,13 +4017,17 @@ function renderCategoryFixed(){
       <span class="dish-category-count">${dishCategoryCount('drink')}品</span>
     </div>
   </div>` : '';
-  const pharmacyEntryHtml = (s.icon === 'cross' && s.title === '薬局・コンビニで薬を買う') ? `<div class="dish-category-grid">
-    <div class="dish-category-card" onclick="openDishList(false,'medicine')">
-      <span class="dish-category-emoji">💊</span>
-      <span class="dish-category-text">薬を探す</span>
-      <span class="dish-category-count">${dishCategoryCount('medicine')}品</span>
+  const pharmacyEntryHtml = (s.icon === 'cross' && s.title === '薬局・コンビニで薬を買う') ? `
+    <div class="pharmacy-browse-banner" onclick="openDishList(false,'medicine')">
+      <span class="pharmacy-browse-emoji">💊</span>
+      <div class="pharmacy-browse-text">
+        <div class="pharmacy-browse-title">薬を探す(${dishCategoryCount('medicine')}品)</div>
+        <div class="pharmacy-browse-desc">症状に合う薬を写真付きで選んで、そのまま画面を見せて買えます</div>
+      </div>
+      <span class="pharmacy-browse-arrow">›</span>
     </div>
-  </div>` : '';
+    ${pharmacySymptomBlockHtml()}
+  ` : '';
   if(selectedCategoryIdx === null){
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + pharmacyEntryHtml + `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   } else {

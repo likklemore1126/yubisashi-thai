@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-08-27ak';
+const SW_VERSION = '2026-08-27an';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -157,6 +157,30 @@ const PRECACHE_URLS = [
   './images/manners/manner_temple.jpg',
   './images/manners/manner_royal.jpg',
   './images/manners/manner_food.jpg',
+  './images/medicines/thumb_panadol.jpg',
+  './images/medicines/full_panadol.jpg',
+  './images/medicines/thumb_sara.jpg',
+  './images/medicines/full_sara.jpg',
+  './images/medicines/thumb_zyrtec.jpg',
+  './images/medicines/full_zyrtec.jpg',
+  './images/medicines/thumb_clarityne.jpg',
+  './images/medicines/full_clarityne.jpg',
+  './images/medicines/thumb_delyte_ors.jpg',
+  './images/medicines/full_delyte_ors.jpg',
+  './images/medicines/thumb_dicotil.jpg',
+  './images/medicines/full_dicotil.jpg',
+  './images/medicines/thumb_eno.jpg',
+  './images/medicines/full_eno.jpg',
+  './images/medicines/thumb_airx.jpg',
+  './images/medicines/full_airx.jpg',
+  './images/medicines/thumb_navamed.jpg',
+  './images/medicines/full_navamed.jpg',
+  './images/medicines/thumb_strepsils.jpg',
+  './images/medicines/full_strepsils.jpg',
+  './images/medicines/thumb_dextromethorphan.jpg',
+  './images/medicines/full_dextromethorphan.jpg',
+  './images/medicines/thumb_dainox.jpg',
+  './images/medicines/full_dainox.jpg',
   './images/packing/plug_a_to_c.jpg',
   './images/packing/plug_c_thai.jpg',
   './images/packing/outlet_thai.jpg',

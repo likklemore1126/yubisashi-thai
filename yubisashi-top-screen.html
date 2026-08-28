@@ -3014,9 +3014,13 @@ function showPharmacySymptomFullscreen(){
   showFullscreenNow();
 }
 function pharmacySymptomBlockHtml(){
-  const chips = PHARMACY_SYMPTOM_PHRASES.map((p, idx) => {
-    const active = pharmacySymptomIdx === idx ? 'active' : '';
-    return `<button class="dish-mod-chip ${active}" onclick="selectPharmacySymptom(${idx})">${p.jp}</button>`;
+  const items = PHARMACY_SYMPTOM_PHRASES.map((p, idx) => {
+    const sel = pharmacySymptomIdx === idx ? 'selected' : '';
+    return `<div class="follow-item ${sel}" onclick="selectPharmacySymptom(${idx})">
+      <div class="fi-th">${p.th}</div>
+      <div class="fi-jp">${p.jp}</div>
+      ${favStarHtml(p.th, p.jp)}
+    </div>`;
   }).join('');
   let selectedHtml = '';
   if(pharmacySymptomIdx !== null){
@@ -3030,8 +3034,7 @@ function pharmacySymptomBlockHtml(){
       ${favStarHtml(p.th, p.jp)}
     </div>`;
   }
-  return `<div class="dish-mod-title">症状を伝える(下から選んでください)</div>
-    <div class="dish-mod-chips">${chips}</div>
+  return `${items}
     ${selectedHtml}`;
 }
 function pharmacyMods(drugTh, drugJp){

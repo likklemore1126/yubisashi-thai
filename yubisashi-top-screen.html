@@ -676,6 +676,14 @@
     background:#F7F1E1; border:1.5px solid var(--line); border-radius:999px; padding:7px 12px;
     font-size:12px; font-family:'Noto Sans JP', sans-serif; font-weight:600; cursor:pointer; color:var(--ink);
   }
+  .pharmacy-store-block{ margin-top:14px; }
+  .pharmacy-store-badges{ display:flex; gap:9px; }
+  .pharmacy-store-badge{
+    display:inline-flex; align-items:center; gap:5px; border-radius:999px; padding:8px 16px;
+    font-size:13px; font-family:'Noto Sans JP', sans-serif; font-weight:700;
+  }
+  .pharmacy-store-badge.active{ background:var(--teal-deep); color:#fff; }
+  .pharmacy-store-badge.inactive{ background:transparent; border:1.5px solid var(--line); color:#B5AA92; }
   .ticket-stepper{
     margin-top:14px; display:flex; align-items:center; gap:16px; justify-content:center;
   }
@@ -3159,29 +3167,29 @@ const dishes = [
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
   { th:'โอเลี้ยง', jp:'オーリアン', desc:'ロブスタ種のコーヒー豆にトウモロコシやゴマ、タマリンドの種などをブレンドし、布フィルターで濃く抽出したタイの昔ながらのアイスコーヒー。たっぷりの砂糖と氷で提供される。', cat:'drink',
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่นม', jp:'ミルクを入れて'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
-  { th:'พานาดอล', jp:'パナドーン(Panadol)', desc:'成分はパラセタモール(Paracetamol)。コンビニ・薬局どちらでも買える、タイで非常に一般的な解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', cat:'medicine', standalone:true,
+  { th:'พานาดอล', jp:'パナドーン(Panadol)', desc:'成分はパラセタモール(Paracetamol)。タイで非常に一般的な解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('พานาดอล','パナドーン') },
-  { th:'ซาร่า', jp:'サーラー(Sara)', desc:'成分はパラセタモール(Paracetamol)。コンビニ・薬局どちらでも買える、Panadolと同成分の定番解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', cat:'medicine', standalone:true,
+  { th:'ซาร่า', jp:'サーラー(Sara)', desc:'成分はパラセタモール(Paracetamol)。Panadolと同成分の定番解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ซาร่า','サーラー') },
-  { th:'เซอร์เทค', jp:'サーテック(Zyrtec)', desc:'成分はセチリジン(Cetirizine)。薬局で購入。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', cat:'medicine', standalone:true,
+  { th:'เซอร์เทค', jp:'サーテック(Zyrtec)', desc:'成分はセチリジン(Cetirizine)。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('เซอร์เทค','サーテック') },
-  { th:'คลาริทีน', jp:'クラリティン(Clarityne)', desc:'成分はロラタジン(Loratadine)。薬局で購入。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', cat:'medicine', standalone:true,
+  { th:'คลาริทีน', jp:'クラリティン(Clarityne)', desc:'成分はロラタジン(Loratadine)。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('คลาริทีน','クラリティン') },
-  { th:'ดีไลท์ โออาร์เอส', jp:'ディライトORS(DELYTE ORS)', desc:'経口補水用の電解質・糖分などを含む粉末。薬局で購入。「ORS(โออาร์เอส)」と伝えると通じやすい。', symptom:'下痢・嘔吐後の水分・電解質補給に', cat:'medicine', standalone:true,
+  { th:'ดีไลท์ โออาร์เอส', jp:'ディライトORS(DELYTE ORS)', desc:'経口補水用の電解質・糖分などを含む粉末。「ORS(โออาร์เอส)」と伝えると通じやすい。', symptom:'下痢・嘔吐後の水分・電解質補給に', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ดีไลท์ โออาร์เอส','ディライトORS') },
-  { th:'ไดโคทิล', jp:'ダイコティル(DICOTIL)', desc:'成分はロペラミド(Loperamide)2mg。薬局で購入。発熱・血便・強い腹痛がある場合は自己判断で飲まず、薬剤師や医療機関に相談してください。', symptom:'急な下痢に', cat:'medicine', standalone:true,
+  { th:'ไดโคทิล', jp:'ダイコティル(DICOTIL)', desc:'成分はロペラミド(Loperamide)2mg。発熱・血便・強い腹痛がある場合は自己判断で飲まず、薬剤師や医療機関に相談してください。', symptom:'急な下痢に', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ไดโคทิล','ダイコティル') },
-  { th:'อีโน', jp:'イーノー(ENO)', desc:'水に溶かして飲むタイプの制酸薬(胃薬)。コンビニで見つかることもあるが基本は薬局。', symptom:'胸焼け・食べ過ぎ・胃のムカつきに', cat:'medicine', standalone:true,
+  { th:'อีโน', jp:'イーノー(ENO)', desc:'水に溶かして飲むタイプの制酸薬(胃薬)。', symptom:'胸焼け・食べ過ぎ・胃のムカつきに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('อีโน','イーノー') },
-  { th:'แอร์-เอ็กซ์', jp:'エアーエックス(Air-X)', desc:'成分はシメチコン(Simethicone)。薬局で購入(店舗によってはコンビニにも)。', symptom:'お腹の張り・ガスによる膨満感に', cat:'medicine', standalone:true,
+  { th:'แอร์-เอ็กซ์', jp:'エアーエックス(Air-X)', desc:'成分はシメチコン(Simethicone)。', symptom:'お腹の張り・ガスによる膨満感に', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('แอร์-เอ็กซ์','エアーエックス') },
-  { th:'นาวาเมด', jp:'ナーワーメッド(NAVAMED)', desc:'成分はジメンヒドリナート(Dimenhydrinate)50mg。コンビニ・薬局どちらでも買える。眠くなることがあるため服用後の運転に注意。', symptom:'車・バス・船・飛行機酔いに', cat:'medicine', standalone:true,
+  { th:'นาวาเมด', jp:'ナーワーメッド(NAVAMED)', desc:'成分はジメンヒドリナート(Dimenhydrinate)50mg。眠くなることがあるため服用後の運転に注意。', symptom:'車・バス・船・飛行機酔いに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('นาวาเมด','ナーワーメッド') },
-  { th:'สเตร็ปซิลส์', jp:'ストレップシルス(Strepsils)', desc:'のど飴タイプの喉の薬。7-Elevenなどコンビニでも比較的見つけやすい。種類によって成分が異なる。', symptom:'喉の痛み・違和感に', cat:'medicine', standalone:true,
+  { th:'สเตร็ปซิลส์', jp:'ストレップシルス(Strepsils)', desc:'のど飴タイプの喉の薬。種類によって成分が異なる。', symptom:'喉の痛み・違和感に', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('สเตร็ปซิลส์','ストレップシルス') },
-  { th:'ยาแก้ไอที่มีเดกซ์โทรเมทอร์แฟน', jp:'デキストロメトルファン配合の咳止め', desc:'成分はデキストロメトルファン(Dextromethorphan)。薬局で購入。商品名が複数あるため、薬局で症状を伝えて選んでもらうのがおすすめ。「咳の薬」はタイ語で ยาแก้ไอ(ヤー・ゲー・アイ)。', symptom:'軽い咳・乾いた咳に', cat:'medicine', standalone:true,
+  { th:'ยาแก้ไอที่มีเดกซ์โทรเมทอร์แฟน', jp:'デキストロメトルファン配合の咳止め', desc:'成分はデキストロメトルファン(Dextromethorphan)。商品名が複数あるため、薬局で症状を伝えて選んでもらうのがおすすめ。「咳の薬」はタイ語で ยาแก้ไอ(ヤー・ゲー・アイ)。', symptom:'軽い咳・乾いた咳に', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ยาแก้ไอที่มีเดกซ์โทรเมทอร์แฟน','デキストロメトルファンの咳止め') },
-  { th:'ไดน็อกซ์', jp:'ダイノックス(DAINOX)', desc:'成分はロペラミド塩酸塩(Loperamide Hydrochloride)2mg。ダイコティルと同じ成分の下痢止め。発熱・血便・強い腹痛がある場合は自己判断で飲まず、薬剤師や医療機関に相談してください。', symptom:'急な下痢に', cat:'medicine', standalone:true,
+  { th:'ไดน็อกซ์', jp:'ダイノックス(DAINOX)', desc:'成分はロペラミド塩酸塩(Loperamide Hydrochloride)2mg。ダイコティルと同じ成分の下痢止め。発熱・血便・強い腹痛がある場合は自己判断で飲まず、薬剤師や医療機関に相談してください。', symptom:'急な下痢に', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ไดน็อกซ์','ダイノックス') },
 ];
 const dishImages = [
@@ -3551,6 +3559,17 @@ function jumpToPharmacyQtyMod(qtyType){
   const mi = d.mods.findIndex(m => m.qtyType === qtyType);
   if(mi >= 0) selectDishPhrase(mi);
 }
+function pharmacyStoreBadgeHtml(stores){
+  if(!stores) return '';
+  const has = (k) => stores.includes(k);
+  return `<div class="pharmacy-store-block">
+    <div class="dish-mod-title">買えるお店</div>
+    <div class="pharmacy-store-badges">
+      <span class="pharmacy-store-badge ${has('convenience') ? 'active' : 'inactive'}">🏪 コンビニ</span>
+      <span class="pharmacy-store-badge ${has('pharmacy') ? 'active' : 'inactive'}">💊 薬局</span>
+    </div>
+  </div>`;
+}
 function renderDishDetailStandalone(d){
   const isMedicine = dishCategoryOf(d) === 'medicine';
   const meta = DISH_CATEGORY_META[dishCategoryOf(d)] || DISH_CATEGORY_META.food;
@@ -3583,6 +3602,7 @@ function renderDishDetailStandalone(d){
   document.getElementById('dishFixed').innerHTML = `
     <img class="dish-detail-photo" src="${dishImagesFull[dishSelectedIdx]}" alt="${d.jp}" onclick="event.stopPropagation(); openDishPhotoLightbox(${dishSelectedIdx});">
     <div class="dish-desc-box dish-desc-box-flat">${d.desc}</div>
+    ${isMedicine ? pharmacyStoreBadgeHtml(d.stores) : ''}
     <div class="dish-standalone-th">${d.th}</div>
     ${selectedBlock}
     ${isMedicine ? '' : dishRecommendBlockHtml()}

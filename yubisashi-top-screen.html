@@ -89,7 +89,7 @@
   }
   .wordmark span.th{ color:var(--marigold); font-size:26px; }
   .tagline{ font-size:12.5px; opacity:0.75; letter-spacing:0.5px; }
-  .tagline-row{ display:flex; align-items:baseline; margin-top:4px; }
+  .tagline-row{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-top:4px; }
   .header-tools{ display:flex; align-items:center; gap:14px; margin-top:10px; flex-wrap:wrap; }
   .rate-status{
     font-size:15px; color:var(--marigold); font-weight:700;
@@ -125,8 +125,7 @@
   }
   .gender-toggle-single .swap-icon{ font-size:12px; opacity:0.6; }
   .header-version{
-    position:absolute; right:16px; top:calc(52px + env(safe-area-inset-top)); z-index:2;
-    font-size:9.5px; color:rgba(255,255,255,0.4); white-space:nowrap;
+    font-size:9.5px; color:rgba(255,255,255,0.4); white-space:nowrap; flex:0 0 auto;
   }
   .header-action-btn{
     flex:1; position:relative; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.28);
@@ -4632,20 +4631,6 @@ function updateGenderToggleSingle(){
     iconWrap.innerHTML = iconSvg('female', 16);
     label.textContent = '女性語尾';
   }
-  positionHeaderVersion();
-}
-function positionHeaderVersion(){
-  try{
-    const btn = document.getElementById('genderToggleSingle');
-    const tagline = document.querySelector('.tagline');
-    const el = document.getElementById('appVersionDisplay');
-    if(!btn || !tagline || !el) return;
-    el.style.position = 'absolute';
-    el.style.top = tagline.offsetTop + 'px';
-    el.style.right = 'auto';
-    el.style.left = (btn.offsetLeft + btn.offsetWidth / 2) + 'px';
-    el.style.transform = 'translateX(-50%)';
-  }catch(e){}
 }
 function toggleGenderSingle(){
   setGender(genderState.value === 'male' ? 'female' : 'male');
@@ -4933,8 +4918,6 @@ async function updateVersionDisplay(){
   }
 }
 updateVersionDisplay();
-positionHeaderVersion();
-requestAnimationFrame(positionHeaderVersion);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('controllerchange', updateVersionDisplay);
 }

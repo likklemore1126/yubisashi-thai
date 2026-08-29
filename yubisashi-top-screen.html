@@ -527,16 +527,16 @@
   .anchor-jp{ font-size:12.5px; opacity:0.75; margin-top:5px; }
 
   .selected-phrase{ position:relative; background:var(--teal); color:#fff; border-radius:14px; padding:14px 16px; margin-bottom:12px; }
-  .sp-header{ display:flex; justify-content:flex-end; margin-bottom:6px; }
+  .sp-header{ display:flex; justify-content:flex-end; margin-bottom:6px; padding-right:34px; }
   .sp-clear-btn{
     background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.4);
     color:#fff; border-radius:999px; padding:5px 10px; font-size:11px; font-weight:600; cursor:pointer;
     font-family:'Noto Sans JP', sans-serif; flex:0 0 auto;
   }
-  .selected-phrase .fav-star{ color:rgba(255,255,255,0.45); }
+  .selected-phrase .fav-star{ top:13px; color:rgba(255,255,255,0.45); }
   .selected-phrase .fav-star.active{ color:var(--marigold); }
   .selected-phrase.empty{ background:var(--sand); color:#9A9284; border:1.5px dashed var(--line); font-size:13px; }
-  .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.3; }
+  .sp-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; line-height:1.3; padding-right:34px; }
   .sp-jp{ font-size:13.5px; margin-top:5px; opacity:0.9; }
   .sp-note{ font-size:11.5px; margin-top:6px; opacity:0.7; line-height:1.6; white-space:pre-line; }
   .hotel-info-pill{
@@ -3606,8 +3606,7 @@ function renderDishDetailStandalone(d){
       <div class="sp-th">${disp.th}</div>
       <div class="sp-jp">${disp.jp}</div>
       ${qtyStepperHtml}
-      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishSelectedPhraseFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${nbTriggerHtml(p.numberAnswer)}
-      ${favStarHtml(disp.th, disp.jp)}
+      <button class="fullscreen-btn" onclick="event.stopPropagation(); showDishSelectedPhraseFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${nbTriggerHtml(p.numberAnswer)}${favStarHtml(disp.th, disp.jp)}
       ${followUpHtml}
       ${quickAnswerHtml}
     </div>`;

@@ -323,7 +323,7 @@
   .proc-row.disabled{ opacity:.5; cursor:default; }
   .proc-row:active:not(.disabled){ transform:scale(0.98); }
   .proc-icon{
-    width:40px; height:40px; border-radius:11px; background:var(--teal-deep);
+    width:52px; height:52px; border-radius:14px; background:var(--teal-deep);
     display:flex; align-items:center; justify-content:center; flex:0 0 auto;
   }
   .proc-icon .icon-img{ filter:brightness(0) invert(1); }
@@ -2089,7 +2089,7 @@ function renderProcList(){
   document.getElementById('procList').innerHTML = PROC_CATEGORIES.map((p) => {
     if(p.ready){
       return `<div class="proc-row" onclick="${p.onOpen}">
-        <div class="proc-icon">${iconSvg(p.icon, 28)}</div>
+        <div class="proc-icon">${iconSvg(p.icon, 36)}</div>
         <div class="proc-text">
           <div class="proc-title">${p.title}</div>
           <div class="proc-sub">${p.sub}</div>
@@ -2098,7 +2098,7 @@ function renderProcList(){
       </div>`;
     }
     return `<div class="proc-row disabled">
-      <div class="proc-icon">${iconSvg(p.icon, 28)}</div>
+      <div class="proc-icon">${iconSvg(p.icon, 36)}</div>
       <div class="proc-text">
         <div class="proc-title">${p.title}</div>
         <div class="proc-sub">${p.sub}</div>

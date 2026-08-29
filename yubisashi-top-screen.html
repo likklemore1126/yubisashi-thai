@@ -1292,6 +1292,10 @@ const ICON_DATA = {
   booking: "images/icons/booking.png",
   caution: "images/icons/caution.png",
   foodwarn: "images/icons/foodwarn.png",
+  passport: "images/icons/passport.png",
+  payment: "images/icons/payment.png",
+  simcard: "images/icons/simcard.png",
+  mannericon: "images/icons/mannericon.png",
 };
 function iconSvg(key, size){
   const s = size || 24;
@@ -2072,12 +2076,12 @@ function closeFavorites(){
   document.getElementById('favoritesScreen').classList.remove('show');
 }
 const PROC_CATEGORIES = [
-  { icon:"ticket", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
-  { icon:"money", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:true, onOpen:"openProcMoney()" },
-  { icon:"numpad", title:"スマホ・通信", sub:"SIM・eSIM・ポケットWiFi", ready:true, onOpen:"openProcPhone()" },
+  { icon:"passport", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
+  { icon:"payment", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:true, onOpen:"openProcMoney()" },
+  { icon:"simcard", title:"スマホ・通信", sub:"SIM・eSIM・ポケットWiFi", ready:true, onOpen:"openProcPhone()" },
   { icon:"appicon", title:"タイ旅行で便利なアプリ", sub:"Grab・バンコクメトロ・ViaBus・ツーリストポリス", ready:true, onOpen:"openProcApps()" },
   { icon:"booking", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
-  { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
+  { icon:"mannericon", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
   { icon:"caution", title:"日本とは違う気を付けたいタイ事情", sub:"お酒の販売規制・詐欺・水/トイレ事情", ready:true, onOpen:"openProcSafety()" },
   { icon:"foodwarn", title:"食べ合わせ・飲み合わせで注意したいこと", sub:"ドリアン×お酒・薬×お酒・グレープフルーツなど", ready:true, onOpen:"openProcFoodPairing()" },
 ];

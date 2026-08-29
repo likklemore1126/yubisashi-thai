@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-08-27bi';
+const SW_VERSION = '2026-08-27bo';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -181,6 +181,13 @@ const PRECACHE_URLS = [
   './images/medicines/full_dextromethorphan.jpg',
   './images/medicines/thumb_dainox.jpg',
   './images/medicines/full_dainox.jpg',
+  './images/food-pairing/durian_alcohol.jpg',
+  './images/food-pairing/alcohol_energy.jpg',
+  './images/food-pairing/medicine_alcohol.jpg',
+  './images/food-pairing/grapefruit_medicine.jpg',
+  './images/food-pairing/raw_seafood.jpg',
+  './images/food-pairing/spicy_alcohol.jpg',
+  './images/food-pairing/superstition.jpg',
   './images/packing/plug_a_to_c.jpg',
   './images/packing/plug_c_thai.jpg',
   './images/packing/outlet_thai.jpg',

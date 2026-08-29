@@ -377,6 +377,7 @@
     margin-bottom:6px;
   }
   .proc-manner-lead{ font-size:14px; line-height:1.7; color:#5c4415; margin-bottom:8px; }
+  .proc-card-image{ width:100%; border-radius:10px; margin-bottom:10px; display:block; }
   .proc-manner-bullets{ list-style:none; padding:0; margin:0; }
   .proc-manner-bullets li{ font-size:14.5px; line-height:2; padding-left:18px; position:relative; color:var(--ink); }
   .proc-manner-bullets li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); font-weight:700; }
@@ -647,6 +648,14 @@
   .dish-detail-symptom{
     margin-top:9px; padding-top:9px; border-top:1px dashed var(--line);
     font-size:14px; font-weight:700; color:var(--teal-deep);
+  }
+  .dish-alcohol-warning{
+    margin-top:9px; padding-top:9px; border-top:1px dashed var(--line);
+    font-size:13px; font-weight:700; color:#B0292E;
+  }
+  .pharmacy-common-note{
+    background:#FBEAEA; border:1.5px solid #E3B4B4; border-radius:12px; padding:11px 13px;
+    font-size:12.5px; font-weight:700; color:#B0292E; margin-bottom:12px; line-height:1.5;
   }
   .dish-recommend-phrase{ position:relative; background:var(--marigold); color:var(--ink); }
   .dish-recommend-phrase .fullscreen-btn{ margin-top:10px; background:var(--ink); color:#fff; }
@@ -1172,6 +1181,15 @@
       <button class="composer-close" onclick="closeProcSafety()">✕</button>
     </div>
     <div class="proc-booking-list" id="procSafetyList"></div>
+  </div>
+
+  <div class="composer-screen" id="procFoodPairingScreen" style="z-index:10;">
+    <div class="composer-header">
+      <button class="composer-back" onclick="closeProcFoodPairing()">‹</button>
+      <div class="ctitle">気をつけたい食べ合わせ・飲み合わせ</div>
+      <button class="composer-close" onclick="closeProcFoodPairing()">✕</button>
+    </div>
+    <div class="proc-booking-list" id="procFoodPairingList"></div>
   </div>
 
   <div class="composer-screen" id="procMoneyScreen" style="z-index:10;">
@@ -2057,6 +2075,7 @@ const PROC_CATEGORIES = [
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
   { icon:"cross", title:"知っておきたい注意点", sub:"お酒の販売規制・詐欺・水/トイレ事情", ready:true, onOpen:"openProcSafety()" },
+  { icon:"cross", title:"気をつけたい食べ合わせ・飲み合わせ", sub:"ドリアン×お酒・薬×お酒・グレープフルーツなど", ready:true, onOpen:"openProcFoodPairing()" },
 ];
 function renderProcList(){
   document.getElementById('procList').innerHTML = PROC_CATEGORIES.map((p) => {
@@ -2633,6 +2652,7 @@ function renderChipRowsShared(rows, chipClass, isTel){
 }
 function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
   return items.map((it, i) => {
+    const imageHtml = it.image ? `<img class="proc-card-image" src="${it.image}" alt="${it.title}">` : '';
     const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
     const sectionsHtml = it.checklist ? `<div id="packingChecklistBody"></div>` : (it.sections ? it.sections.map(s => {
       const subnoteHtml = s.subnote ? `<div class="proc-sub-subnote">${s.subnote}</div>` : '';
@@ -2650,7 +2670,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
     const categoryHtml = it.category ? `<div class="proc-card-category">${it.category}</div>` : '';
     const subHtml = it.sub ? `<div class="proc-sub">${it.sub}</div>` : '';
     const osBadgeHtml = it.os ? `<span class="proc-os-badge ${it.os}">${it.os === 'ios' ? 'iPhone専用' : 'Android専用'}</span>` : '';
-    const bodyInner = `<div class="proc-manner-lead">${it.lead}</div>
+    const bodyInner = `${imageHtml}<div class="proc-manner-lead">${it.lead}</div>
         ${bulletsHtml}
         ${sectionsHtml}
         ${linksLabelHtml}
@@ -2798,6 +2818,47 @@ function openProcSafety(){
 }
 function closeProcSafety(){
   document.getElementById('procSafetyScreen').classList.remove('show');
+}
+const PROC_FOOD_PAIRING_ITEMS = [
+  { title:"🍺 ドリアン × アルコール", ready:true, image:"images/food-pairing/durian_alcohol.jpg",
+    lead:"タイでは有名な組み合わせです。ドリアンを食べた後に、ビールやウイスキーなどのお酒を大量に飲むのは避けましょう。体調不良や脱水につながる可能性があります。",
+    bullets:[
+      "タイでは、ドリアンとアルコールの組み合わせについて、保健当局などからも注意喚起されています。特に大量の飲酒との組み合わせは避けることがすすめられています。",
+      "また、ドリアン×コーラについても、タイでは「危険な組み合わせ」として紹介されることがあります。医学的に「少量でも危険」「必ず中毒になる」と確立されているわけではありませんが、糖分やカロリーの多いドリアンと甘い清涼飲料を大量に組み合わせることはおすすめできません。",
+    ],
+    note:"👉 ドリアンを食べる日は、アルコールやコーラなどの甘い飲み物を大量に一緒に摂るのは避けましょう。" },
+  { title:"🍺 アルコール × エナジードリンク", ready:true, image:"images/food-pairing/alcohol_energy.jpg",
+    lead:"タイではエナジードリンクを飲む機会も多いですが、お酒と一緒に飲むのはおすすめできません。カフェインによって眠気などを感じにくくなり、結果的にお酒を飲み過ぎてしまう可能性があります。",
+    note:"👉 お酒とエナジードリンクの組み合わせは避けましょう。" },
+  { title:"💊 薬 × アルコール", ready:true, image:"images/food-pairing/medicine_alcohol.jpg",
+    lead:"旅行中に薬を服用する場合は、お酒との併用に注意しましょう。特に、以下の成分はアルコールによって眠気などが強くなる可能性があります。",
+    bullets:[
+      "セチリジン(Cetirizine)",
+      "ロラタジン(Loratadine)",
+      "ジメンヒドリナート(Dimenhydrinate)",
+      "デキストロメトルファン(Dextromethorphan)",
+    ],
+    note:"👉 薬を服用している場合は、飲酒を控えるか、薬剤師に確認しましょう。" },
+  { title:"🍊 グレープフルーツ × 一部の薬", ready:true, image:"images/food-pairing/grapefruit_medicine.jpg",
+    lead:"グレープフルーツやグレープフルーツジュースは、一部の薬の作用に影響することがあります。特に、薬を継続して服用している人は注意が必要です。",
+    note:"👉 薬を服用している場合は、グレープフルーツジュースとの併用について薬剤師に確認しましょう。" },
+  { title:"🦐 生・半生の魚介類の食中毒リスク", ready:true, image:"images/food-pairing/raw_seafood.jpg",
+    lead:"タイでは生牡蠣、半生の魚介類などを食べる機会があります。「お酒を一緒に飲めば食中毒を防げる」という考えは誤解で、アルコールで食中毒の原因となる細菌やウイルスを確実に防ぐことはできません。",
+    note:"👉 生・半生の魚介類は、十分に加熱されたものを選ぶ方が安心です。" },
+  { title:"🌶️ 激辛料理 × 大量のアルコール", ready:true, image:"images/food-pairing/spicy_alcohol.jpg",
+    lead:"タイ料理に慣れていない人は、激辛料理と大量のアルコールを組み合わせると、胃腸への負担や脱水につながることがあります。特に暑い時期は、水分不足にも注意しましょう。",
+    note:"👉 辛さは無理せず、水分もしっかり取りましょう。" },
+];
+function renderProcFoodPairing(){
+  const itemsHtml = buildAccordionItemsHtml(PROC_FOOD_PAIRING_ITEMS, 'foodpairing', true);
+  document.getElementById('procFoodPairingList').innerHTML = itemsHtml;
+}
+function openProcFoodPairing(){
+  renderProcFoodPairing();
+  document.getElementById('procFoodPairingScreen').classList.add('show');
+}
+function closeProcFoodPairing(){
+  document.getElementById('procFoodPairingScreen').classList.remove('show');
 }
 function openMannerLightbox(src){
   document.getElementById('mannerLightboxImg').src = src;
@@ -3156,9 +3217,9 @@ const dishes = [
     mods:pharmacyMods('พานาดอล','パナドーン') },
   { th:'ซาร่า', jp:'サーラー(Sara)', desc:'成分はパラセタモール(Paracetamol)。Panadolと同成分の定番解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ซาร่า','サーラー') },
-  { th:'เซอร์เทค', jp:'サーテック(Zyrtec)', desc:'成分はセチリジン(Cetirizine)。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', stores:['pharmacy'], cat:'medicine', standalone:true,
+  { th:'เซอร์เทค', jp:'サーテック(Zyrtec)', desc:'成分はセチリジン(Cetirizine)。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', stores:['pharmacy'], alcoholWarning:true, cat:'medicine', standalone:true,
     mods:pharmacyMods('เซอร์เทค','サーテック') },
-  { th:'คลาริทีน', jp:'クラリティン(Clarityne)', desc:'成分はロラタジン(Loratadine)。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', stores:['pharmacy'], cat:'medicine', standalone:true,
+  { th:'คลาริทีน', jp:'クラリティン(Clarityne)', desc:'成分はロラタジン(Loratadine)。薬によって眠気が出ることがある。', symptom:'鼻水・くしゃみ・アレルギー・かゆみに', stores:['pharmacy'], alcoholWarning:true, cat:'medicine', standalone:true,
     mods:pharmacyMods('คลาริทีน','クラリティン') },
   { th:'ดีไลท์ โออาร์เอส', jp:'ディライトORS(DELYTE ORS)', desc:'経口補水用の電解質・糖分などを含む粉末。「ORS(โออาร์เอส)」と伝えると通じやすい。', symptom:'下痢・嘔吐後の水分・電解質補給に', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ดีไลท์ โออาร์เอส','ディライトORS') },
@@ -3168,11 +3229,11 @@ const dishes = [
     mods:pharmacyMods('อีโน','イーノー') },
   { th:'แอร์-เอ็กซ์', jp:'エアーエックス(Air-X)', desc:'成分はシメチコン(Simethicone)。', symptom:'お腹の張り・ガスによる膨満感に', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('แอร์-เอ็กซ์','エアーエックス') },
-  { th:'นาวาเมด', jp:'ナーワーメッド(NAVAMED)', desc:'成分はジメンヒドリナート(Dimenhydrinate)50mg。眠くなることがあるため服用後の運転に注意。', symptom:'車・バス・船・飛行機酔いに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
+  { th:'นาวาเมด', jp:'ナーワーメッド(NAVAMED)', desc:'成分はジメンヒドリナート(Dimenhydrinate)50mg。眠くなることがあるため服用後の運転に注意。', symptom:'車・バス・船・飛行機酔いに', stores:['convenience','pharmacy'], alcoholWarning:true, cat:'medicine', standalone:true,
     mods:pharmacyMods('นาวาเมด','ナーワーメッド') },
   { th:'สเตร็ปซิลส์', jp:'ストレップシルス(Strepsils)', desc:'のど飴タイプの喉の薬。種類によって成分が異なる。', symptom:'喉の痛み・違和感に', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('สเตร็ปซิลส์','ストレップシルス') },
-  { th:'ยาแก้ไอที่มีเดกซ์โทรเมทอร์แฟน', jp:'デキストロメトルファン配合の咳止め', desc:'成分はデキストロメトルファン(Dextromethorphan)。商品名が複数あるため、薬局で症状を伝えて選んでもらうのがおすすめ。「咳の薬」はタイ語で ยาแก้ไอ(ヤー・ゲー・アイ)。', symptom:'軽い咳・乾いた咳に', stores:['pharmacy'], cat:'medicine', standalone:true,
+  { th:'ยาแก้ไอที่มีเดกซ์โทรเมทอร์แฟน', jp:'デキストロメトルファン配合の咳止め', desc:'成分はデキストロメトルファン(Dextromethorphan)。商品名が複数あるため、薬局で症状を伝えて選んでもらうのがおすすめ。「咳の薬」はタイ語で ยาแก้ไอ(ヤー・ゲー・アイ)。', symptom:'軽い咳・乾いた咳に', stores:['pharmacy'], alcoholWarning:true, cat:'medicine', standalone:true,
     mods:pharmacyMods('ยาแก้ไอที่มีเดกซ์โทรเมทอร์แฟน','デキストロメトルファンの咳止め') },
   { th:'ไดน็อกซ์', jp:'ダイノックス(DAINOX)', desc:'成分はロペラミド塩酸塩(Loperamide Hydrochloride)2mg。ダイコティルと同じ成分の下痢止め。発熱・血便・強い腹痛がある場合は自己判断で飲まず、薬剤師や医療機関に相談してください。', symptom:'急な下痢に', stores:['pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('ไดน็อกซ์','ダイノックス') },
@@ -3356,7 +3417,9 @@ function openDishList(restoreScroll, cat){
   if(cat) dishCategory = cat;
   const meta = DISH_CATEGORY_META[dishCategory] || DISH_CATEGORY_META.food;
   document.getElementById('dishTitle').innerHTML = `<span class="ctitle-icon">${meta.emoji}</span>${meta.label}を選んで注文する`;
-  document.getElementById('dishFixed').innerHTML = '';
+  document.getElementById('dishFixed').innerHTML = (dishCategory === 'medicine')
+    ? `<div class="pharmacy-common-note">⚠️ 服用中はお酒を控え、眠気が出る薬を飲んだ後は運転しないでください</div>`
+    : '';
   renderDishList();
   document.getElementById('dishScreen').classList.add('show');
   updateDishHeaderBack();
@@ -3620,6 +3683,7 @@ function renderDishDetailStandalone(d){
     <div class="dish-desc-box dish-desc-box-flat">
       ${d.desc}
       ${isMedicine && d.symptom ? `<div class="dish-detail-symptom">🩺 <span>${d.symptom}</span></div>` : ''}
+      ${isMedicine && d.alcoholWarning ? `<div class="dish-alcohol-warning">⚠️ お酒と一緒に飲まない方がいい薬です</div>` : ''}
     </div>
     ${isMedicine ? '' : `<div class="dish-standalone-th">${d.th}</div>`}
     ${selectedBlock}
@@ -3821,6 +3885,7 @@ attachSwipeToClose('procBookingScreen', closeProcBooking);
 attachSwipeToClose('procPrepScreen', closeProcPrep);
 attachSwipeToClose('procMannerScreen', closeProcManner);
 attachSwipeToClose('procSafetyScreen', closeProcSafety);
+attachSwipeToClose('procFoodPairingScreen', closeProcFoodPairing);
 attachSwipeToClose('procMoneyScreen', closeProcMoney);
 attachSwipeToClose('procPhoneScreen', closeProcPhone);
 attachSwipeToClose('procAppsScreen', closeProcApps);
@@ -3868,7 +3933,7 @@ function openNearby(i){
   setLastPhrase(th, n.jp);
   document.getElementById('sheetTitle').textContent = `近くの${n.label}`;
   document.getElementById('sheetBody').innerHTML =
-    `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div>${fullscreenBtnHtml()}${nbTriggerHtml(n.numberAnswer)}</div>`;
+    `<div class="selected-phrase"><div class="sp-th">${th}</div><div class="sp-jp">${n.jp}</div>${fullscreenBtnHtml()}${nbTriggerHtml(n.numberAnswer)}${favStarHtml(th, n.jp)}</div>`;
   document.getElementById('overlay').classList.add('show');
   document.getElementById('sheet').classList.add('show');
   setLastPhrase(th, n.jp);
@@ -4078,7 +4143,7 @@ function renderCategoryFixed(){
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${p.jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
-      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}
+      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${favStarHtml(th, p.jp)}
     </div>`;
     setLastPhrase(th, p.jp);
   }
@@ -4181,7 +4246,7 @@ function renderSelectedPhraseBlock(){
         <span>${ticketCount}枚</span>
         <button onclick="changeTicketCount(1)">＋</button>
       </div>
-      <button class="fullscreen-btn" onclick="showTicketFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>
+      <button class="fullscreen-btn" onclick="showTicketFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${favStarHtml(th, jp)}
     </div>`;
   }
   if(selectedFollowUp === null){
@@ -4211,7 +4276,7 @@ function renderSelectedPhraseBlock(){
     <div class="sp-th">${followTh}</div>
     <div class="sp-jp">${followJp}</div>
     ${stepperHtml}
-    <button class="fullscreen-btn" onclick="showFollowUpFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}
+    <button class="fullscreen-btn" onclick="showFollowUpFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}${favStarHtml(followTh, followJp)}
   </div>`;
 }
 

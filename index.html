@@ -4930,7 +4930,6 @@ async function updateVersionDisplay(){
 }
 updateVersionDisplay();
 positionHeaderVersion();
-window.addEventListener('resize', positionHeaderVersion);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('controllerchange', updateVersionDisplay);
 }

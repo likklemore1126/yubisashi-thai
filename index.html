@@ -2078,7 +2078,7 @@ function closeFavorites(){
 const PROC_CATEGORIES = [
   { icon:"passport", title:"タイ旅行に行く前に準備する", sub:"パスポート・ビザ・TDACなど", ready:true, onOpen:"openProcPrep()" },
   { icon:"payment", title:"お金・支払い", sub:"両替・クレカ・デビット・Wise・TAGTHAi", ready:true, onOpen:"openProcMoney()" },
-  { icon:"simcard", title:"スマホ・通信", sub:"SIM・eSIM・ポケットWiFi", ready:true, onOpen:"openProcPhone()" },
+  { icon:"simcard", title:"スマホ・通信", sub:"SIM・eSIM・海外ローミング・ポケットWiFi", ready:true, onOpen:"openProcPhone()" },
   { icon:"appicon", title:"タイ旅行で便利なアプリ", sub:"Grab・バンコクメトロ・ViaBus・ツーリストポリス", ready:true, onOpen:"openProcApps()" },
   { icon:"booking", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"mannericon", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
@@ -2114,46 +2114,31 @@ function openProcedures(){
 function closeProcedures(){
   document.getElementById('proceduresScreen').classList.remove('show');
 }
-const PROC_BOOKING_LINKS = [
-  { icon:"agoda", name:"Agoda", desc:"タイのホテル・宿を検索・予約", url:"https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&hl=ja-jp&city=9395", pending:false,
-    features:["世界最大級の掲載軒数、口コミ・写真が豊富", "現地飛び込みより安いことが多い", "無料キャンセル可のプランも多数"] },
-  { icon:"trip", name:"Trip.com", desc:"航空券・ホテル・レンタカーをまとめて予約", url:"https://www.trip.com/t/JXt874hg1W2", pending:false,
-    features:["航空券・ホテルを一括比較できる", "タイ国内の鉄道チケットも購入可能", "日本語サポートあり"] },
-  { icon:"klook", name:"Klook", desc:"eSIM・現地ツアー・アクティビティなどを予約", url:"https://affiliate.klook.com/sl/jcd4JYZ", pending:false,
-    features:["eSIMがそのまま購入できる", "現地ツアー・体験の品揃えが豊富", "QRコードでそのまま入場できるものが多い"] },
-  { icon:"getyourguide", name:"GetYourGuide", desc:"現地ツアー・体験チケットの予約", url:"https://gyg.me/APNmkbci", pending:false,
-    features:["現地ツアー・アクティビティ・体験系に強い", "前日キャンセル無料のプランが多い", "レビュー件数が多く比較しやすい"] },
-  { icon:"twelvego", name:"12GO", desc:"タイ国内のバス・電車・フェリーを予約", url:"https://12go.asia/?z=16726565", pending:false,
-    features:["タイ国内のバス・電車・フェリーをまとめて検索", "出発時刻・座席タイプを比較して予約", "eチケットをそのままスマホで提示できる"] },
+const PROC_BOOKING_ITEMS = [
+  { title:"Agoda", category:"ホテル予約サイト", sub:"タイのホテル・宿を検索・予約(PR)", ready:true,
+    bullets:["世界最大級の掲載軒数、口コミ・写真が豊富", "現地飛び込みより安いことが多い", "無料キャンセル可のプランも多数"],
+    linksLabel:"🔗 予約サイトを見る",
+    links:[{ label:"Agodaで見る", url:"https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&hl=ja-jp&city=9395" }] },
+  { title:"Trip.com", category:"航空券・ホテル予約サイト", sub:"航空券・ホテル・レンタカーをまとめて予約(PR)", ready:true,
+    bullets:["航空券・ホテルを一括比較できる", "タイ国内の鉄道チケットも購入可能", "日本語サポートあり"],
+    linksLabel:"🔗 予約サイトを見る",
+    links:[{ label:"Trip.comで見る", url:"https://www.trip.com/t/JXt874hg1W2" }] },
+  { title:"Klook", category:"現地ツアー・eSIM予約サイト", sub:"eSIM・現地ツアー・アクティビティなどを予約(PR)", ready:true,
+    bullets:["eSIMがそのまま購入できる", "現地ツアー・体験の品揃えが豊富", "QRコードでそのまま入場できるものが多い"],
+    linksLabel:"🔗 予約サイトを見る",
+    links:[{ label:"Klookで見る", url:"https://affiliate.klook.com/sl/jcd4JYZ" }] },
+  { title:"GetYourGuide", category:"現地ツアー予約サイト", sub:"現地ツアー・体験チケットの予約(PR)", ready:true,
+    bullets:["現地ツアー・アクティビティ・体験系に強い", "前日キャンセル無料のプランが多い", "レビュー件数が多く比較しやすい"],
+    linksLabel:"🔗 予約サイトを見る",
+    links:[{ label:"GetYourGuideで見る", url:"https://gyg.me/APNmkbci" }] },
+  { title:"12GO", category:"交通機関予約サイト", sub:"タイ国内のバス・電車・フェリーを予約(PR)", ready:true,
+    bullets:["タイ国内のバス・電車・フェリーをまとめて検索", "出発時刻・座席タイプを比較して予約", "eチケットをそのままスマホで提示できる"],
+    linksLabel:"🔗 予約サイトを見る",
+    links:[{ label:"12GOで見る", url:"https://12go.asia/?z=16726565" }] },
 ];
 function renderProcBooking(){
-  document.getElementById('procBookingList').innerHTML = PROC_BOOKING_LINKS.map(b => {
-    const featuresHtml = b.features ? `<ul class="proc-book-features">${b.features.map(f => `<li>${f}</li>`).join('')}</ul>` : '';
-    if(b.pending){
-      return `<div class="proc-book-link pending">
-        <div class="proc-book-top">
-          <div class="proc-book-emoji">${iconSvg(b.icon, 50)}</div>
-          <div class="proc-book-text">
-            <div class="proc-book-title">${b.name}</div>
-            <div class="proc-book-sub">${b.desc}</div>
-          </div>
-          <div class="proc-badge">リンク待ち</div>
-        </div>
-        ${featuresHtml}
-      </div>`;
-    }
-    return `<a class="proc-book-link" href="${b.url}" target="_blank" rel="noopener">
-      <div class="proc-book-top">
-        <div class="proc-book-emoji">${iconSvg(b.icon, 50)}</div>
-        <div class="proc-book-text">
-          <div class="proc-book-title">${b.name}</div>
-          <div class="proc-book-sub">${b.desc}</div>
-        </div>
-        <div class="proc-book-pr">PR</div>
-      </div>
-      ${featuresHtml}
-    </a>`;
-  }).join('');
+  const itemsHtml = buildAccordionItemsHtml(PROC_BOOKING_ITEMS, 'booking', false);
+  document.getElementById('procBookingList').innerHTML = itemsHtml;
 }
 function openProcBooking(){
   renderProcBooking();
@@ -2197,32 +2182,48 @@ const PACKING_SECTIONS = [
   ]},
 ];
 const PROC_PHONE_ITEMS = [
-  { title:"SIM・eSIM・ポケットWiFi、どれがいい？", ready:true,
-    lead:"コロナ前はポケットWiFiが主流でしたが、今はeSIMの普及で選択肢が増えました。タイでスマホを使う方法は主に3つ、それぞれの特徴を知っておくと選びやすくなります。",
-    sections:[
-      { heading:"📡 ポケットWiFi", items:[
-        "複数人・複数台で1台を共有できる",
-        "持ち歩く端末と充電の手間が1つ増える",
-        "空港での受け取り・返却の手間がある(返却忘れのリスクも)",
-      ]},
-      { heading:"📶 物理SIM(現地購入)", items:[
-        "入国審査を終え、預け荷物を受け取って到着ロビーに出ると、SIM販売店やレンタカー会社のカウンターがずらりと並んでいる",
-        "販売店はAIS(エーアイエス)・True(トゥルー)・dtac(ディータック)の3社。2023年末にTrueがdtacを買収・統合しており、現在はTrueブランドに一本化されつつあるため、実質「AISかTrue」の二択と考えて良い",
-        "【スワンナプーム空港】到着ロビーは2階。AIS・Trueのカウンターは24時間営業、dtacは7:00〜22:00のみ(深夜・早朝到着便はAISかTrue優先)。預け荷物を待っている間にバゲージクレーム(荷物受取エリア)のSIMカウンターで購入・設定できることもある",
-        "【ドンムアン空港】LCC(格安航空会社)の便はこちらに到着することが多い。ターミナル1(国際線)の到着ロビーにAIS・True・dtacの3社ブースがある。ターミナル1とターミナル2(国内線)を結ぶ1階の通路にも3社のブースがあり、到着ロビーより空いていることが多い(所要時間はターミナル間徒歩3〜5分程度)。AIS・Trueは24時間営業、dtacは朝〜深夜のみの営業(店舗により異なる)",
-        "空港のカウンターでスタッフがその場で設定してくれるので操作は簡単",
-        "デュアルSIM非対応の機種だと、日本のSIMを一時的に抜くことになる(日本の番号に電話・SMSが来なくなる)",
-        "到着後に購入・設定の待ち時間が発生する(混雑時は列に並ぶことも)",
-      ]},
-      { heading:"📲 eSIM(事前購入)", items:[
-        "SIMカードの入れ替えが不要。多くの機種でデュアルSIM運用ができ、日本の番号を残したまま使える",
-        "出発前にオンラインで購入・設定しておける",
-        "対応機種が必要(iPhoneならXS以降、Androidも比較的新しい機種が中心)",
-      ]},
+  { title:"物理SIM(現地購入)", category:"現地SIMカード", sub:"空港到着後にその場で購入・設定。実質AISかTrueの二択", ready:true,
+    bullets:[
+      "入国審査を終え、預け荷物を受け取って到着ロビーに出ると、SIM販売店やレンタカー会社のカウンターがずらりと並んでいる",
+      "販売店はAIS(エーアイエス)・True(トゥルー)・dtac(ディータック)の3社。2023年末にTrueがdtacを買収・統合しており、現在はTrueブランドに一本化されつつあるため、実質「AISかTrue」の二択と考えて良い",
+      "【スワンナプーム空港】到着ロビーは2階。AIS・Trueのカウンターは24時間営業、dtacは7:00〜22:00のみ(深夜・早朝到着便はAISかTrue優先)。預け荷物を待っている間にバゲージクレーム(荷物受取エリア)のSIMカウンターで購入・設定できることもある",
+      "【ドンムアン空港】LCC(格安航空会社)の便はこちらに到着することが多い。ターミナル1(国際線)の到着ロビーにAIS・True・dtacの3社ブースがある。ターミナル1とターミナル2(国内線)を結ぶ1階の通路にも3社のブースがあり、到着ロビーより空いていることが多い(所要時間はターミナル間徒歩3〜5分程度)。AIS・Trueは24時間営業、dtacは朝〜深夜のみの営業(店舗により異なる)",
+      "空港のカウンターでスタッフがその場で設定してくれるので操作は簡単",
+      "デュアルSIM非対応の機種だと、日本のSIMを一時的に抜くことになる(日本の番号に電話・SMSが来なくなる)",
+      "到着後に購入・設定の待ち時間が発生する(混雑時は列に並ぶことも)",
+    ] },
+  { title:"eSIM(事前購入)", category:"デジタルSIM", sub:"出発前にオンラインで購入。日本の番号を残したまま使える", ready:true,
+    bullets:[
+      "SIMカードの入れ替えが不要。物理的な抜き差しがないので紛失の心配もない",
+      "多くの機種でデュアルSIM運用ができ、日本の番号を残したまま海外用の回線を追加できる(着信やSMS認証も普段通り受け取れる)",
+      "出発前にオンラインで購入・設定しておける。Klookなど各社からデータ容量・日数別のプランを選べる",
+      "購入後に届くQRコードをカメラで読み込むだけで設定が完了する。Wi-Fi環境があれば数分で終わる",
+      "対応機種が必要(iPhoneならXS以降、Androidも比較的新しい機種が中心)。購入前に自分の端末が対応しているか確認しておく",
+      "多くはデータ容量(1GB/5GB/10GBなど)や利用日数で選ぶプラン。容量を使い切ると追加購入や速度制限になる場合がある",
+      "多くのプランは電話番号での発着信には対応しておらず、データ通信専用と考えたほうがよい",
     ],
     note:"最近はSIMフリー端末が一般的になってきたこともあり、eSIMが便利な場面が増えています。現地SIMは空港スタッフが設定してくれて楽な反面、事前にeSIMを入れておけば、飛行機が着陸してドアが開くまでの間にスマホが使える状態になります。「入国審査でスマホが必要なのに繋がらない、空港Wi-Fiを探して焦る」ということが起きにくいのは大きなメリットです。",
     linksLabel:"🔗 eSIMを購入する",
     links:[{ label:"Klook eSIM", url:"https://affiliate.klook.com/sl/2f6dePa" }] },
+  { title:"海外ローミング", category:"日本のSIMのまま使う方法", sub:"日本のSIMのまま使えるが、料金プランの事前確認が必須", ready:true,
+    lead:"日本で契約しているSIMをそのまま使い、現地の通信会社のネットワークに接続する方法です。到着後にスマホの「データローミング」をONにするだけで、普段の電話番号のまま使えます。",
+    bullets:[
+      "SIMカードの交換が不要。今使っているSIMのまま使える",
+      "対応プランならデータローミングをONにするだけで使えて設定が簡単",
+      "普段の電話番号のまま使えるので、SMS認証など日本の番号が必要な場面にも便利",
+      "ポケットWiFiのような専用端末を持ち歩く・充電する手間がない",
+    ],
+    note:"一番注意したいのは料金です。携帯電話会社やプランによって「無料」「一定期間無料」「1日単位で料金発生」「データ容量で変動」「海外用オプションが別途必要」など大きく異なります。「データローミングをONにしたら高額請求された」を避けるため、旅行前に契約している携帯電話会社の海外利用条件を必ず確認しましょう。また海外では通信環境が日本より悪い場所もあり、ローミングだから必ず高速通信できるとは限りません。" },
+  { title:"ポケットWiFi", category:"レンタルWiFiルーター", sub:"複数人でシェアできるが、機器の持ち歩きと返却の手間がある", ready:true,
+    bullets:[
+      "複数人・複数台で1台を共有できるため、グループ旅行や家族連れでは1台あたりのコストを抑えやすい",
+      "持ち歩く端末と充電の手間が1つ増える(モバイルバッテリーがあると安心)",
+      "空港での受け取り・返却の手間がある(返却忘れのリスクや、延滞・破損時の追加料金にも注意)",
+      "日本出発前の空港カウンターや宅配レンタルのほか、現地到着後に空港でレンタルできる業者もある",
+      "端末の電池が切れると、同行者全員が同時にネット接続を失うリスクがある",
+      "混雑したエリアや同時接続台数が多いと、通信速度が落ちやすい",
+      "料金は1日あたりの定額制が主流で、レンタル日数が長いほど1日あたりの単価が下がるプランもある",
+    ] },
 ];
 const PROC_APP_ITEMS = [
   { title:"Grab", ready:true,
@@ -2389,7 +2390,7 @@ const PROC_MONEY_ITEMS = [
     ] },
 ];
 const PROC_PREP_ITEMS = [
-  { title:"持ち物チェックリスト", ready:true, checklist:true,
+  { title:"持ち物チェックリスト", sub:"タップでチェックできる持ち物リスト", ready:true, checklist:true,
     lead:"タイ旅行に日本から持っていくと便利なものをまとめました。タップでチェック、✕で自分に不要な項目を消せます。",
     bullets:[
       "日本との時差は-2時間(日本が正午なら、タイは午前10時)",
@@ -2397,7 +2398,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"⚠️ 電子タバコ・加熱式タバコおよび関連付属品は、タイへの持ち込みが禁止されています。詳しくは「入国時の持ち込み制限」の項目もご確認ください。",
     source:{ label:"タイ観光案内サイト(タイ国政府観光庁公式)", url:"https://www.thailandtravel.or.jp/" } },
-  { title:"パスポート・ビザ", ready:true,
+  { title:"パスポート・ビザ", sub:"観光目的ならビザ免除。制度変更中なので要確認", ready:true,
     lead:"日本国籍者は観光目的なら「ビザ免除」で入国できますが、制度が変更中のため要注意です。",
     bullets:[
       "パスポート残存有効期間は6か月以上を推奨(念のため)",
@@ -2408,7 +2409,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"制度変更の途中なので、出発直前に最新情報を必ず確認してください。",
     source:{ label:"外務省 海外安全ホームページ(タイ 安全対策基礎データ)", url:"https://www.anzen.mofa.go.jp/info/pcsafetymeasure_007.html" } },
-  { title:"TDACなど入国手続き", ready:true,
+  { title:"TDACなど入国手続き", sub:"オンライン入国カードの登録が必須", ready:true,
     lead:"2025年5月からタイ入国には「TDAC(タイ・デジタル入国カード)」のオンライン提出が必須になりました(紙のTM6は廃止)。",
     bullets:[
       "登録は到着予定日の3日前(72時間前)から可能、登録は無料",
@@ -2419,7 +2420,7 @@ const PROC_PREP_ITEMS = [
     ],
     links:[{ label:"TDAC公式サイトで登録", url:"https://tdac.immigration.go.th/" }],
     note:"⚠️ TDACは必ず上の公式サイトからのみ登録してください。自動化ゲートの運用開始時期や対象条件は変更される可能性があるため、渡航直前に最新情報を確認してください。" },
-  { title:"入国時の持ち込み制限", ready:true,
+  { title:"入国時の持ち込み制限", sub:"電子タバコは全面禁止など、税関ルールに注意", ready:true,
     lead:"知らずに法律違反にならないよう、持ち込み品の制限も確認しておきましょう。",
     bullets:[
       "⚠️ 電子タバコ(加熱式タバコ・IQOS等を含む)は持ち込み・所持・使用すべて全面禁止。摘発されると最大50万バーツの罰金や機器の没収、拘留の対象になることも",
@@ -2428,7 +2429,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"電子タバコの取り締まりは特に強化されています。IQOSなどの加熱式タバコも対象になるので要注意です。",
     source:{ label:"タイ国政府観光庁 公式サイト", url:"https://www.thailandtravel.or.jp/about/basic/" } },
-  { title:"在タイ日本国大使館(バンコク管轄)", ready:true,
+  { title:"在タイ日本国大使館(バンコク管轄)", sub:"パスポート紛失などトラブル時の連絡先", ready:true,
     lead:"パスポート紛失やトラブルなど、いざという時のために連絡先を控えておきましょう。",
     bullets:[
       "住所: 177 Witthayu Road, Lumphini, Pathum Wan, Bangkok 10330(ウィタユ通り、ルンピニー警察署とMRTルンピニー駅のほぼ中間)",
@@ -2449,7 +2450,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"一般照会は窓口受付時間内にお願いします。",
     source:{ label:"在タイ日本国大使館 公式サイト", url:"https://www.th.emb-japan.go.jp/itpr_ja/embassy_embassy.html" } },
-  { title:"在チェンマイ日本国総領事館(北部管轄)", ready:true,
+  { title:"在チェンマイ日本国総領事館(北部管轄)", sub:"タイ北部9県はこちらが管轄", ready:true,
     lead:"チェンマイ・チェンライなどタイ北部9県は、バンコクの大使館ではなくこちらの総領事館の管轄です。",
     bullets:[
       "住所: Airport Business Park, 90 Mahidol Rd., T.Haiya, A.Muang, Chiang Mai 50100",
@@ -2471,7 +2472,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"代表番号は自動音声応答です。日本語(1)→査証(1)/旅券・証明(2)/その他(3)の順で選ぶと繋がりやすくなります。観光警察は053-212-146〜8のどの番号でもOKです。",
     source:{ label:"在チェンマイ日本国総領事館 公式サイト", url:"https://www.chiangmai.th.emb-japan.go.jp/itpr_ja/annai_top.html" } },
-  { title:"たびレジ(海外旅行登録)", ready:true,
+  { title:"たびレジ(海外旅行登録)", sub:"緊急時の安否確認・安全情報配信に登録", ready:true,
     lead:"外務省が無料で提供する、3か月未満の短期渡航者向けの安全情報配信・登録サービスです。出発前に登録しておくのがおすすめです。",
     bullets:[
       "現地で大規模な事件・災害・感染症などが発生した時、外務省・在外公館から緊急一斉通報メールが届く",
@@ -2482,7 +2483,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"タイは地震や政情不安などのニュースも時々あるので、短期旅行でも登録しておくと安心です。",
     links:[{ label:"たびレジで登録", url:"https://www.ezairyu.mofa.go.jp/" }] },
-  { title:"Visit Japan Web(日本帰国時に便利)", ready:true,
+  { title:"Visit Japan Web(日本帰国時に便利)", sub:"日本帰国時の入国審査・税関申告をウェブで完結", ready:true,
     lead:"タイからの入国とは逆に、日本へ「帰国」する時の入国審査・税関申告をウェブで済ませられる、日本政府のサービスです。",
     bullets:[
       "海外から日本に帰国する日本人も利用できる(外国人の入国者専用ではない)",
@@ -2495,7 +2496,7 @@ const PROC_PREP_ITEMS = [
     links:[{ label:"Visit Japan Webで登録", url:"https://services.digital.go.jp/visit-japan-web/" }] },
 ];
 const PROC_MANNER_EXTRA_ITEMS = [
-  { title:"お酒の販売時間ルール", ready:true,
+  { title:"お酒の販売時間ルール", category:"法律・規制", sub:"2026年5月の規制緩和後も時間・場所のルールに注意", ready:true,
     lead:"2026年5月29日、タイの酒類販売規制が大きく緩和されました。とはいえ今でも法律で決まった時間・場所以外では買えないので要注意です。",
     bullets:[
       "コンビニ・スーパーでの販売時間は原則11:00〜24:00(1972年から続いていた14:00〜17:00の販売禁止は2026年5月29日に正式撤廃)",
@@ -2506,7 +2507,7 @@ const PROC_MANNER_EXTRA_ITEMS = [
     ],
     note:"規制は最近も変更されたばかりなので、渡航直前に最新情報を確認するのがおすすめです。",
     source:{ label:"タイ国政府観光庁(公式)", url:"https://www.thailandtravel.or.jp/news/164154/" } },
-  { title:"ぼったくり・詐欺の注意点", ready:true,
+  { title:"ぼったくり・詐欺の注意点", category:"治安・詐欺対策", sub:"タクシー・親切な声かけなど定番パターンを知っておく", ready:true,
     lead:"観光客、特に「衝突を避けて温和に対応しがち」な日本人は、海外で詐欺の標的にされやすい傾向があります。パターンを知っておくだけでほとんど回避できます。",
     bullets:[
       "【タクシー】道路脇に停車して客待ちしているタクシーは選ばない。メーターを使わず金額を先に提示してくることが多い",
@@ -2516,7 +2517,7 @@ const PROC_MANNER_EXTRA_ITEMS = [
       "【お金を見せる詐欺】観光客の多いエリアで、外国人(中東系の人物を含む)が日本人を狙って声をかけ、お金や貴重品を見せるよう仕向けてくるケースが報告されている。求められても人前で財布やお金を見せない",
     ],
     note:"「怪しいな」と思ったら、はっきり断ってその場を離れるのが一番の対策です。" },
-  { title:"水道水・氷・トイレの注意点", ready:true,
+  { title:"水道水・氷・トイレの注意点", category:"生活インフラ", sub:"水道水は飲めない、トイレットペーパーは流せないなど", ready:true,
     lead:"現地生活で最初に戸惑いやすい、水まわりの基本ルールをまとめました。",
     bullets:[
       "水道水はそのまま飲めない。歯磨き・うがい程度なら気にしすぎなくても大丈夫だが、気になる場合は近くのコンビニでミネラルウォーターを買っておくと安心",
@@ -2525,7 +2526,7 @@ const PROC_MANNER_EXTRA_ITEMS = [
       "トイレットペーパーは基本的に便器に流せない(配管が詰まる原因になるため)。使用後は個室内のゴミ箱に捨てる。モールやホテルなど一部施設では流せる場合もあるが、そういう施設はむしろ珍しく、「流してください」という注意書きが個室内に貼られているのが目印。注意書きがなければゴミ箱へ",
     ],
     note:"特別に覚えることは少ないので、「郷に入っては郷に従え」くらいの感覚で大丈夫です。" },
-  { title:"チップの習慣", ready:true,
+  { title:"チップの習慣", category:"習慣・マナー", sub:"義務ではないが、マッサージなど渡すのが一般的な場面もある", ready:true,
     lead:"タイに元々チップの制度はありませんでしたが、観光客の増加とともに一部の場面ではチップを渡すのが一般的なマナーになっています。義務ではないので身構えすぎなくて大丈夫です。",
     bullets:[
       "【レストラン】会計に「Service Charge(10%程度)」が別途加算されている場合は、それがチップ代わりなので追加は不要。加算されていない高級店・エアコン完備の店では、会計の5〜10%か端数のおつりを置いていくとスマート。屋台やフードコートでは不要",
@@ -2535,7 +2536,7 @@ const PROC_MANNER_EXTRA_ITEMS = [
       "【不要な場面】コンビニ・スーパー・市場・屋台などでは基本的にチップは不要",
     ],
     note:"迷ったら「サービス料が会計に含まれているかどうか」を確認するのが一番の目安です。おつりをそのまま渡す場面以外でチップを渡す時は、コインではなく紙幣で渡すのが一般的。金額が50バーツ程度でも、紙幣で渡す方が感謝の気持ちが伝わりやすいです。" },
-  { title:"緊急連絡先一覧", ready:true,
+  { title:"緊急連絡先一覧", category:"緊急時の備え", sub:"警察・救急車・大使館の番号をまとめて確認", ready:true,
     lead:"いざという時、番号だけサッと確認できるようにまとめました。",
     phoneRows:[
       { label:"警察", numbers:["191"] },
@@ -2660,8 +2661,11 @@ function renderChipRowsShared(rows, chipClass, isTel){
 }
 function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
   return items.map((it, i) => {
-    const imageHtml = it.image ? `<img class="proc-card-image" src="${it.image}" alt="${it.title}">` : '';
+    const imageHtml = it.image ? (it.imageLightbox
+      ? `<img class="proc-manner-img" src="${it.image}" alt="${it.title}" onclick="openMannerLightbox('${it.image}')">`
+      : `<img class="proc-card-image" src="${it.image}" alt="${it.title}">`) : '';
     const bulletsHtml = it.bullets ? `<ul class="proc-manner-bullets">${it.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
+    const paraHtml = it.paragraphs ? it.paragraphs.map(p => `<div class="proc-manner-para">${p}</div>`).join('') : '';
     const sectionsHtml = it.checklist ? `<div id="packingChecklistBody"></div>` : (it.sections ? it.sections.map(s => {
       const subnoteHtml = s.subnote ? `<div class="proc-sub-subnote">${s.subnote}</div>` : '';
       return `<div class="proc-sub-heading">${s.heading}</div>${subnoteHtml}
@@ -2678,8 +2682,10 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
     const categoryHtml = it.category ? `<div class="proc-card-category">${it.category}</div>` : '';
     const subHtml = it.sub ? `<div class="proc-sub">${it.sub}</div>` : '';
     const osBadgeHtml = it.os ? `<span class="proc-os-badge ${it.os}">${it.os === 'ios' ? 'iPhone専用' : 'Android専用'}</span>` : '';
-    const bodyInner = `${imageHtml}<div class="proc-manner-lead">${it.lead}</div>
+    const leadHtml = it.lead ? `<div class="proc-manner-lead">${it.lead}</div>` : '';
+    const bodyInner = `${imageHtml}${leadHtml}
         ${bulletsHtml}
+        ${paraHtml}
         ${sectionsHtml}
         ${linksLabelHtml}
         ${linksHtml}
@@ -2720,8 +2726,7 @@ function toggleAccordionItem(idPrefix, i){
 }
 function renderProcPrep(){
   const itemsHtml = buildAccordionItemsHtml(PROC_PREP_ITEMS, 'prep');
-  document.getElementById('procPrepList').innerHTML =
-    `<div class="proc-section-title" style="margin-top:0;padding-top:0;border-top:none;">パスポート・入国関連</div>${itemsHtml}`;
+  document.getElementById('procPrepList').innerHTML = itemsHtml;
   renderPackingChecklist();
 }
 function openProcPrep(){
@@ -2743,7 +2748,7 @@ function closeProcMoney(){
   document.getElementById('procMoneyScreen').classList.remove('show');
 }
 function renderProcPhone(){
-  const itemsHtml = buildAccordionItemsHtml(PROC_PHONE_ITEMS, 'phone', true);
+  const itemsHtml = buildAccordionItemsHtml(PROC_PHONE_ITEMS, 'phone', false);
   document.getElementById('procPhoneList').innerHTML = itemsHtml;
 }
 function openProcPhone(){
@@ -2764,51 +2769,36 @@ function openProcApps(){
 function closeProcApps(){
   document.getElementById('procAppsScreen').classList.remove('show');
 }
-const PROC_MANNER_INTRO = "旅行中に気をつけたいNG行動など。タイ旅行で特に覚えておきたいマナーや注意事項をまとめました。";
 const PROC_MANNER_TOPICS = [
-  { img:"images/manners/manner_head_feet.jpg", emoji:"🦶", title:"頭と足に注意",
+  { image:"images/manners/manner_head_feet.jpg", imageLightbox:true, title:"頭と足に注意", category:"体の部位に関するマナー",
+    sub:"頭は大切な場所、足は低いものとされる文化",
     lead:"タイでは頭は大切な場所、足は低いものと考えられています。",
     bullets:["人の頭を気軽に触らない", "足で人や物を指さない", "足の裏を人や仏像に向けない", "足で物を動かさない"] },
-  { img:"images/manners/manner_temple.jpg", emoji:"🛕", title:"寺院や仏像では敬意を",
+  { image:"images/manners/manner_temple.jpg", imageLightbox:true, title:"寺院や仏像では敬意を", category:"宗教施設でのマナー",
+    sub:"服装・写真撮影・声の大きさに注意",
     lead:"寺院は観光地であると同時に、大切な信仰の場です。",
     bullets:["露出の多い服装は避ける", "仏像によじ登ったり、不敬なポーズで写真を撮らない", "大声で騒がない", "靴を脱ぐ場所では周囲に合わせる", "お坊さんに必要以上に近づいたり触れたりしない"] },
-  { img:"images/manners/manner_royal.jpg", emoji:"👑", title:"王室や紙幣を軽く扱わない",
+  { image:"images/manners/manner_royal.jpg", imageLightbox:true, title:"王室や紙幣を軽く扱わない", category:"王室に関するマナー",
+    sub:"王室への敬意はタイで特に大切なマナー",
     lead:"タイでは王室への敬意がとても大切にされています。",
     bullets:["王室を侮辱したり、冗談のネタにしない", "王室に関する軽率なSNS投稿をしない", "国王の肖像がある紙幣を足で踏まない・粗末に扱わない"] },
-  { img:"images/manners/manner_food.jpg", emoji:"😌🙏🍽️", title:"トラブル・ワイ・食事のマナー",
-    lead:"",
-    bullets:[],
+  { image:"images/manners/manner_food.jpg", imageLightbox:true, title:"トラブル・ワイ・食事のマナー", category:"挨拶・食事のマナー",
+    sub:"怒らない・ワイは無理しない・食事はスプーン&フォーク",
     paragraphs:[
       "【トラブルでも怒鳴らない】言葉が通じないなど、旅行中にトラブルが起きても大声で怒鳴るのは逆効果です。できるだけ落ち着いて話しましょう。日本ではないということを常に念頭に置き冷静に行動しましょう。",
       "【ワイは無理にしなくてもOK】タイの挨拶「ワイ」は、旅行者が全員にする必要はありません。相手からワイをされたら、笑顔で返すくらいで十分です。",
       "【食事はスプーンとフォークがメイン】一般的なタイ料理は、スプーンとフォークで食べる事が多いです。フォークで料理をスプーンに乗せて食べます。麺類では箸をつかいますが、麺を直接啜らずにレンゲにのせて口に運ぶスタイルで食べる方が多いです。麺をズルズル啜ったりスープを音を立てて飲むのはマナー的にNGです。",
     ] },
-];
-const PROC_MANNER_OUTRO_TITLE = "迷ったら現地の方に合わせよう";
-const PROC_MANNER_OUTRO = [
-  "細かいマナーをすべて覚える必要はありません。日本と同様に電車では静かに・混雑時はリュックを前にする・飲食禁止、これらはタイも同じです。また、優先席もありますし年配の方や妊婦さんや体の不自由な方へ席を譲るのは日本と同様ですが、タイの場合さらにお坊さんや子どもにも進んで席を譲るマナーがあります。日本の新幹線のように指定席などのある鉄道では飲食できたりするので、分からない時は事前に確認しましょう。",
-  "国・人・宗教・王室への敬意を忘れず、迷ったときは周りの現地の方の行動に合わせる。日本の普通のマナーに加えこれだけ覚えておけば、タイ旅行ではあまり心配することはありません。",
+  { image:"images/manners/manner_outro.jpg", imageLightbox:true, title:"迷ったら現地の方に合わせよう", category:"まとめ",
+    sub:"細かいマナーを全部覚える必要はありません",
+    paragraphs:[
+      "細かいマナーをすべて覚える必要はありません。日本と同様に電車では静かに・混雑時はリュックを前にする・飲食禁止、これらはタイも同じです。また、優先席もありますし年配の方や妊婦さんや体の不自由な方へ席を譲るのは日本と同様ですが、タイの場合さらにお坊さんや子どもにも進んで席を譲るマナーがあります。日本の新幹線のように指定席などのある鉄道では飲食できたりするので、分からない時は事前に確認しましょう。",
+      "国・人・宗教・王室への敬意を忘れず、迷ったときは周りの現地の方の行動に合わせる。日本の普通のマナーに加えこれだけ覚えておけば、タイ旅行ではあまり心配することはありません。",
+    ] },
 ];
 function renderProcManner(){
-  const topicsHtml = PROC_MANNER_TOPICS.map(t => {
-    const leadHtml = t.lead ? `<div class="proc-manner-lead">${t.lead}</div>` : '';
-    const bulletsHtml = t.bullets && t.bullets.length ? `<ul class="proc-manner-bullets">${t.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
-    const paraHtml = t.paragraphs ? t.paragraphs.map(p => `<div class="proc-manner-para">${p}</div>`).join('') : '';
-    return `<div class="proc-manner-topic">
-      <img class="proc-manner-img" src="${t.img}" alt="${t.title}" onclick="openMannerLightbox('${t.img}')">
-      <div class="proc-manner-topic-title">${t.emoji} ${t.title}</div>
-      ${leadHtml}
-      ${bulletsHtml}
-      ${paraHtml}
-    </div>`;
-  }).join('');
-  const outroHtml = PROC_MANNER_OUTRO.map(p => `<div class="proc-manner-outro">${p}</div>`).join('');
-  document.getElementById('procMannerList').innerHTML =
-    `<div class="proc-manner-intro">${PROC_MANNER_INTRO}</div>
-     ${topicsHtml}
-     <div class="proc-manner-outro-title">${PROC_MANNER_OUTRO_TITLE}</div>
-     <img class="proc-manner-img" src="images/manners/manner_outro.jpg" alt="${PROC_MANNER_OUTRO_TITLE}" onclick="openMannerLightbox('images/manners/manner_outro.jpg')">
-     ${outroHtml}`;
+  const itemsHtml = buildAccordionItemsHtml(PROC_MANNER_TOPICS, 'manner', false);
+  document.getElementById('procMannerList').innerHTML = itemsHtml;
 }
 function openProcManner(){
   renderProcManner();
@@ -2829,17 +2819,17 @@ function closeProcSafety(){
   document.getElementById('procSafetyScreen').classList.remove('show');
 }
 const PROC_FOOD_PAIRING_ITEMS = [
-  { title:"🍺 ドリアン × アルコール", ready:true, image:"images/food-pairing/durian_alcohol.jpg",
+  { title:"ドリアン × アルコール", category:"食べ合わせの注意", sub:"体調不良や脱水につながる可能性がある有名な組み合わせ", ready:true, image:"images/food-pairing/durian_alcohol.jpg",
     lead:"タイでは有名な組み合わせです。ドリアンを食べた後に、ビールやウイスキーなどのお酒を大量に飲むのは避けましょう。体調不良や脱水につながる可能性があります。",
     bullets:[
       "タイでは、ドリアンとアルコールの組み合わせについて、保健当局などからも注意喚起されています。特に大量の飲酒との組み合わせは避けることがすすめられています。",
       "また、ドリアン×コーラについても、タイでは「危険な組み合わせ」として紹介されることがあります。医学的に「少量でも危険」「必ず中毒になる」と確立されているわけではありませんが、糖分やカロリーの多いドリアンと甘い清涼飲料を大量に組み合わせることはおすすめできません。",
     ],
     note:"👉 ドリアンを食べる日は、アルコールやコーラなどの甘い飲み物を大量に一緒に摂るのは避けましょう。" },
-  { title:"🍺 アルコール × エナジードリンク", ready:true, image:"images/food-pairing/alcohol_energy.jpg",
+  { title:"アルコール × エナジードリンク", category:"飲み合わせの注意", sub:"眠気を感じにくくなり、飲み過ぎにつながりやすい", ready:true, image:"images/food-pairing/alcohol_energy.jpg",
     lead:"タイではエナジードリンクを飲む機会も多いですが、お酒と一緒に飲むのはおすすめできません。カフェインによって眠気などを感じにくくなり、結果的にお酒を飲み過ぎてしまう可能性があります。",
     note:"👉 お酒とエナジードリンクの組み合わせは避けましょう。" },
-  { title:"💊 薬 × アルコール", ready:true, image:"images/food-pairing/medicine_alcohol.jpg",
+  { title:"薬 × アルコール", category:"飲み合わせの注意", sub:"一部の成分はアルコールで眠気などが強くなることがある", ready:true, image:"images/food-pairing/medicine_alcohol.jpg",
     lead:"旅行中に薬を服用する場合は、お酒との併用に注意しましょう。特に、以下の成分はアルコールによって眠気などが強くなる可能性があります。",
     bullets:[
       "セチリジン(Cetirizine)",
@@ -2848,18 +2838,18 @@ const PROC_FOOD_PAIRING_ITEMS = [
       "デキストロメトルファン(Dextromethorphan)",
     ],
     note:"👉 薬を服用している場合は、飲酒を控えるか、薬剤師に確認しましょう。" },
-  { title:"🍊 グレープフルーツ × 一部の薬", ready:true, image:"images/food-pairing/grapefruit_medicine.jpg",
+  { title:"グレープフルーツ × 一部の薬", category:"飲み合わせの注意", sub:"薬の作用に影響することがあるので服用中は要注意", ready:true, image:"images/food-pairing/grapefruit_medicine.jpg",
     lead:"グレープフルーツやグレープフルーツジュースは、一部の薬の作用に影響することがあります。特に、薬を継続して服用している人は注意が必要です。",
     note:"👉 薬を服用している場合は、グレープフルーツジュースとの併用について薬剤師に確認しましょう。" },
-  { title:"🦐 生・半生の魚介類の食中毒リスク", ready:true, image:"images/food-pairing/raw_seafood.jpg",
+  { title:"生・半生の魚介類の食中毒リスク", category:"衛生面の注意", sub:"お酒を飲めば防げるというのは誤解", ready:true, image:"images/food-pairing/raw_seafood.jpg",
     lead:"タイでは生牡蠣、半生の魚介類などを食べる機会があります。「お酒を一緒に飲めば食中毒を防げる」という考えは誤解で、アルコールで食中毒の原因となる細菌やウイルスを確実に防ぐことはできません。",
     note:"👉 生・半生の魚介類は、十分に加熱されたものを選ぶ方が安心です。" },
-  { title:"🌶️ 激辛料理 × 大量のアルコール", ready:true, image:"images/food-pairing/spicy_alcohol.jpg",
+  { title:"激辛料理 × 大量のアルコール", category:"食べ合わせの注意", sub:"胃腸への負担や脱水につながることがある", ready:true, image:"images/food-pairing/spicy_alcohol.jpg",
     lead:"タイ料理に慣れていない人は、激辛料理と大量のアルコールを組み合わせると、胃腸への負担や脱水につながることがあります。特に暑い時期は、水分不足にも注意しましょう。",
     note:"👉 辛さは無理せず、水分もしっかり取りましょう。" },
 ];
 function renderProcFoodPairing(){
-  const itemsHtml = buildAccordionItemsHtml(PROC_FOOD_PAIRING_ITEMS, 'foodpairing', true);
+  const itemsHtml = buildAccordionItemsHtml(PROC_FOOD_PAIRING_ITEMS, 'foodpairing', false);
   document.getElementById('procFoodPairingList').innerHTML = itemsHtml;
 }
 function openProcFoodPairing(){

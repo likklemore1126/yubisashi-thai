@@ -65,7 +65,7 @@
   header{
     background:var(--ink);
     color:var(--paper);
-    padding:calc(16px + env(safe-area-inset-top)) 20px 16px;
+    padding:calc(14px + env(safe-area-inset-top)) 20px 12px;
     position:relative;
     overflow:hidden;
   }
@@ -88,7 +88,7 @@
     gap:8px;
   }
   .wordmark span.th{ color:var(--marigold); font-size:26px; }
-  .tagline{ font-size:12.5px; opacity:0.75; margin-top:6px; letter-spacing:0.5px; }
+  .tagline{ font-size:12.5px; opacity:0.75; margin-top:4px; letter-spacing:0.5px; }
   .header-tools{ display:flex; align-items:center; gap:14px; margin-top:10px; flex-wrap:wrap; }
   .rate-status{
     font-size:15px; color:var(--marigold); font-weight:700;
@@ -115,9 +115,9 @@
   }
   @keyframes boot-spin{ to{ transform:rotate(360deg); } }
 
-  .gender-toggle{ position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
+  .gender-toggle{ position:absolute; top:calc(18px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
   .gender-toggle-single{
-    position:absolute; top:calc(20px + env(safe-area-inset-top)); right:16px; z-index:2;
+    position:absolute; top:calc(18px + env(safe-area-inset-top)); right:16px; z-index:2;
     background:var(--marigold); color:var(--ink); border:none; border-radius:999px;
     padding:7px 12px; font-size:12px; font-weight:700; font-family:'Noto Sans JP', sans-serif;
     display:flex; align-items:center; gap:5px; cursor:pointer;
@@ -140,7 +140,10 @@
   .body-actions-row{ display:flex; gap:8px; padding:0 18px; margin:8px 0; }
   .body-actions-row .header-action-btn{
     background:#fff; border:1.5px solid var(--line); color:var(--ink);
+    padding:6px 4px 5px; gap:1px;
   }
+  .body-actions-row .header-action-emoji{ height:26px; }
+  .body-actions-row .header-action-emoji img{ width:26px; height:26px; }
   .body-actions-row .header-action-btn.accent{ border-color:var(--marigold); background:#fff8ec; }
   .body-actions-row .header-action-caption{ opacity:0.55; color:var(--ink); }
 
@@ -168,7 +171,7 @@
     cursor:pointer; flex:0 0 auto; align-items:center; justify-content:center;
   }
   .search-clear.show{ display:flex; }
-  .search-hint{ font-size:11px; color:#8B8272; margin:6px 4px 0; }
+  .search-hint{ font-size:11px; color:#8B8272; margin:6px 4px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .search-suggestions{ margin:8px 0 0; }
   .suggestion-item{
     background:#fff; border:1.5px solid var(--line); border-radius:12px;
@@ -959,7 +962,7 @@
       <span id="genderToggleIconWrap"><span class="icon-slot" data-icon="female" data-size="16"></span></span>
       <span id="genderToggleLabel">女性語尾</span> <span class="swap-icon">⇄</span>
     </button>
-    <div class="wordmark">指さしタイ<span class="th"> na</span></div>
+    <div class="wordmark">指さしタイ</div>
     <div class="tagline">見せるだけで、伝わる。</div>
   </header>
 
@@ -988,7 +991,7 @@
       <input id="searchInput" type="text" placeholder="行き先をペーストして検索(例: วัดพระแก้ว)">
       <button type="button" class="search-clear" id="searchClearBtn" onclick="clearSearch()">✕</button>
     </div>
-    <div class="search-hint">お試し: 「アユタヤ」「チェンマイ」「わっとあるん」「あんぱわー」などと入力してみてください</div>
+    <div class="search-hint">「アユタヤ」「わっとあるん」なども検索できます</div>
     <div class="search-suggestions" id="searchSuggestions"></div>
   </div>
 
@@ -1010,7 +1013,7 @@
     <div class="dest-tour-block" id="destTourBlock" style="display:none;"></div>
   </div>
 
-  <div class="section-label"><span class="bar"></span>近くの◯◯を伝える</div>
+  <div class="section-label"><span class="bar"></span>近くの〇〇はどこにありますか？</div>
   <div class="chip-row" id="nearbyRow"></div>
 
   <div class="section-label"><span class="bar"></span>シチュエーションから探す</div>

@@ -2089,7 +2089,7 @@ function renderProcList(){
   document.getElementById('procList').innerHTML = PROC_CATEGORIES.map((p) => {
     if(p.ready){
       return `<div class="proc-row" onclick="${p.onOpen}">
-        <div class="proc-icon">${iconSvg(p.icon, 22)}</div>
+        <div class="proc-icon">${iconSvg(p.icon, 28)}</div>
         <div class="proc-text">
           <div class="proc-title">${p.title}</div>
           <div class="proc-sub">${p.sub}</div>
@@ -2098,7 +2098,7 @@ function renderProcList(){
       </div>`;
     }
     return `<div class="proc-row disabled">
-      <div class="proc-icon">${iconSvg(p.icon, 22)}</div>
+      <div class="proc-icon">${iconSvg(p.icon, 28)}</div>
       <div class="proc-text">
         <div class="proc-title">${p.title}</div>
         <div class="proc-sub">${p.sub}</div>

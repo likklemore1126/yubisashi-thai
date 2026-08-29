@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-08-29b';
+const SW_VERSION = '2026-08-29c';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -153,6 +153,10 @@ const PRECACHE_URLS = [
   './images/icons/klook.png',
   './images/icons/getyourguide.png',
   './images/icons/12go.png',
+  './images/icons/appicon.png',
+  './images/icons/booking.png',
+  './images/icons/caution.png',
+  './images/icons/foodwarn.png',
   './images/manners/manner_head_feet.jpg',
   './images/manners/manner_temple.jpg',
   './images/manners/manner_royal.jpg',

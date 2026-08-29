@@ -338,6 +338,11 @@
   }
   .proc-os-badge.ios{ background:var(--teal); }
   .proc-os-badge.android{ background:var(--marigold-deep); }
+  .proc-pr-badge{
+    display:inline-block; font-size:9.5px; font-weight:700; color:#9A9284;
+    border:1px solid #D8CFBC; border-radius:20px; padding:1px 8px; vertical-align:middle;
+    white-space:nowrap; flex:0 0 auto; letter-spacing:0.5px;
+  }
   .proc-badge{
     font-size:10px; font-weight:700; color:#fff; background:#B5AA92;
     border-radius:20px; padding:2px 8px; flex:0 0 auto;
@@ -2115,23 +2120,23 @@ function closeProcedures(){
   document.getElementById('proceduresScreen').classList.remove('show');
 }
 const PROC_BOOKING_ITEMS = [
-  { title:"Agoda", category:"ホテル予約サイト", sub:"タイのホテル・宿を検索・予約(PR)", ready:true,
+  { title:"Agoda", pr:true, category:"ホテル予約サイト", sub:"タイのホテル・宿を検索・予約", ready:true,
     bullets:["世界最大級の掲載軒数、口コミ・写真が豊富", "現地飛び込みより安いことが多い", "無料キャンセル可のプランも多数"],
     linksLabel:"🔗 予約サイトを見る",
     links:[{ label:"Agodaで見る", url:"https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&hl=ja-jp&city=9395" }] },
-  { title:"Trip.com", category:"航空券・ホテル予約サイト", sub:"航空券・ホテル・レンタカーをまとめて予約(PR)", ready:true,
+  { title:"Trip.com", pr:true, category:"航空券・ホテル予約サイト", sub:"航空券・ホテル・レンタカーをまとめて予約", ready:true,
     bullets:["航空券・ホテルを一括比較できる", "タイ国内の鉄道チケットも購入可能", "日本語サポートあり"],
     linksLabel:"🔗 予約サイトを見る",
     links:[{ label:"Trip.comで見る", url:"https://www.trip.com/t/JXt874hg1W2" }] },
-  { title:"Klook", category:"現地ツアー・eSIM予約サイト", sub:"eSIM・現地ツアー・アクティビティなどを予約(PR)", ready:true,
+  { title:"Klook", pr:true, category:"現地ツアー・eSIM予約サイト", sub:"eSIM・現地ツアー・アクティビティなどを予約", ready:true,
     bullets:["eSIMがそのまま購入できる", "現地ツアー・体験の品揃えが豊富", "QRコードでそのまま入場できるものが多い"],
     linksLabel:"🔗 予約サイトを見る",
     links:[{ label:"Klookで見る", url:"https://affiliate.klook.com/sl/jcd4JYZ" }] },
-  { title:"GetYourGuide", category:"現地ツアー予約サイト", sub:"現地ツアー・体験チケットの予約(PR)", ready:true,
+  { title:"GetYourGuide", pr:true, category:"現地ツアー予約サイト", sub:"現地ツアー・体験チケットの予約", ready:true,
     bullets:["現地ツアー・アクティビティ・体験系に強い", "前日キャンセル無料のプランが多い", "レビュー件数が多く比較しやすい"],
     linksLabel:"🔗 予約サイトを見る",
     links:[{ label:"GetYourGuideで見る", url:"https://gyg.me/APNmkbci" }] },
-  { title:"12GO", category:"交通機関予約サイト", sub:"タイ国内のバス・電車・フェリーを予約(PR)", ready:true,
+  { title:"12GO", pr:true, category:"交通機関予約サイト", sub:"タイ国内のバス・電車・フェリーを予約", ready:true,
     bullets:["タイ国内のバス・電車・フェリーをまとめて検索", "出発時刻・座席タイプを比較して予約", "eチケットをそのままスマホで提示できる"],
     linksLabel:"🔗 予約サイトを見る",
     links:[{ label:"12GOで見る", url:"https://12go.asia/?z=16726565" }] },
@@ -2390,7 +2395,7 @@ const PROC_MONEY_ITEMS = [
     ] },
 ];
 const PROC_PREP_ITEMS = [
-  { title:"持ち物チェックリスト", sub:"タップでチェックできる持ち物リスト", ready:true, checklist:true,
+  { title:"持ち物チェックリスト", category:"持ち物の準備", sub:"タップでチェックできる持ち物リスト", ready:true, checklist:true,
     lead:"タイ旅行に日本から持っていくと便利なものをまとめました。タップでチェック、✕で自分に不要な項目を消せます。",
     bullets:[
       "日本との時差は-2時間(日本が正午なら、タイは午前10時)",
@@ -2398,7 +2403,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"⚠️ 電子タバコ・加熱式タバコおよび関連付属品は、タイへの持ち込みが禁止されています。詳しくは「入国時の持ち込み制限」の項目もご確認ください。",
     source:{ label:"タイ観光案内サイト(タイ国政府観光庁公式)", url:"https://www.thailandtravel.or.jp/" } },
-  { title:"パスポート・ビザ", sub:"観光目的ならビザ免除。制度変更中なので要確認", ready:true,
+  { title:"パスポート・ビザ", category:"入国条件", sub:"観光目的ならビザ免除。制度変更中なので要確認", ready:true,
     lead:"日本国籍者は観光目的なら「ビザ免除」で入国できますが、制度が変更中のため要注意です。",
     bullets:[
       "パスポート残存有効期間は6か月以上を推奨(念のため)",
@@ -2409,7 +2414,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"制度変更の途中なので、出発直前に最新情報を必ず確認してください。",
     source:{ label:"外務省 海外安全ホームページ(タイ 安全対策基礎データ)", url:"https://www.anzen.mofa.go.jp/info/pcsafetymeasure_007.html" } },
-  { title:"TDACなど入国手続き", sub:"オンライン入国カードの登録が必須", ready:true,
+  { title:"TDACなど入国手続き", category:"入国手続き", sub:"オンライン入国カードの登録が必須", ready:true,
     lead:"2025年5月からタイ入国には「TDAC(タイ・デジタル入国カード)」のオンライン提出が必須になりました(紙のTM6は廃止)。",
     bullets:[
       "登録は到着予定日の3日前(72時間前)から可能、登録は無料",
@@ -2420,7 +2425,7 @@ const PROC_PREP_ITEMS = [
     ],
     links:[{ label:"TDAC公式サイトで登録", url:"https://tdac.immigration.go.th/" }],
     note:"⚠️ TDACは必ず上の公式サイトからのみ登録してください。自動化ゲートの運用開始時期や対象条件は変更される可能性があるため、渡航直前に最新情報を確認してください。" },
-  { title:"入国時の持ち込み制限", sub:"電子タバコは全面禁止など、税関ルールに注意", ready:true,
+  { title:"入国時の持ち込み制限", category:"税関ルール", sub:"電子タバコは全面禁止など、税関ルールに注意", ready:true,
     lead:"知らずに法律違反にならないよう、持ち込み品の制限も確認しておきましょう。",
     bullets:[
       "⚠️ 電子タバコ(加熱式タバコ・IQOS等を含む)は持ち込み・所持・使用すべて全面禁止。摘発されると最大50万バーツの罰金や機器の没収、拘留の対象になることも",
@@ -2429,7 +2434,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"電子タバコの取り締まりは特に強化されています。IQOSなどの加熱式タバコも対象になるので要注意です。",
     source:{ label:"タイ国政府観光庁 公式サイト", url:"https://www.thailandtravel.or.jp/about/basic/" } },
-  { title:"在タイ日本国大使館(バンコク管轄)", sub:"パスポート紛失などトラブル時の連絡先", ready:true,
+  { title:"在タイ日本国大使館(バンコク管轄)", category:"緊急連絡先", sub:"パスポート紛失などトラブル時の連絡先", ready:true,
     lead:"パスポート紛失やトラブルなど、いざという時のために連絡先を控えておきましょう。",
     bullets:[
       "住所: 177 Witthayu Road, Lumphini, Pathum Wan, Bangkok 10330(ウィタユ通り、ルンピニー警察署とMRTルンピニー駅のほぼ中間)",
@@ -2450,7 +2455,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"一般照会は窓口受付時間内にお願いします。",
     source:{ label:"在タイ日本国大使館 公式サイト", url:"https://www.th.emb-japan.go.jp/itpr_ja/embassy_embassy.html" } },
-  { title:"在チェンマイ日本国総領事館(北部管轄)", sub:"タイ北部9県はこちらが管轄", ready:true,
+  { title:"在チェンマイ日本国総領事館(北部管轄)", category:"緊急連絡先", sub:"タイ北部9県はこちらが管轄", ready:true,
     lead:"チェンマイ・チェンライなどタイ北部9県は、バンコクの大使館ではなくこちらの総領事館の管轄です。",
     bullets:[
       "住所: Airport Business Park, 90 Mahidol Rd., T.Haiya, A.Muang, Chiang Mai 50100",
@@ -2472,7 +2477,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"代表番号は自動音声応答です。日本語(1)→査証(1)/旅券・証明(2)/その他(3)の順で選ぶと繋がりやすくなります。観光警察は053-212-146〜8のどの番号でもOKです。",
     source:{ label:"在チェンマイ日本国総領事館 公式サイト", url:"https://www.chiangmai.th.emb-japan.go.jp/itpr_ja/annai_top.html" } },
-  { title:"たびレジ(海外旅行登録)", sub:"緊急時の安否確認・安全情報配信に登録", ready:true,
+  { title:"たびレジ(海外旅行登録)", category:"安全情報の登録", sub:"緊急時の安否確認・安全情報配信に登録", ready:true,
     lead:"外務省が無料で提供する、3か月未満の短期渡航者向けの安全情報配信・登録サービスです。出発前に登録しておくのがおすすめです。",
     bullets:[
       "現地で大規模な事件・災害・感染症などが発生した時、外務省・在外公館から緊急一斉通報メールが届く",
@@ -2483,7 +2488,7 @@ const PROC_PREP_ITEMS = [
     ],
     note:"タイは地震や政情不安などのニュースも時々あるので、短期旅行でも登録しておくと安心です。",
     links:[{ label:"たびレジで登録", url:"https://www.ezairyu.mofa.go.jp/" }] },
-  { title:"Visit Japan Web(日本帰国時に便利)", sub:"日本帰国時の入国審査・税関申告をウェブで完結", ready:true,
+  { title:"Visit Japan Web(日本帰国時に便利)", category:"帰国時の手続き", sub:"日本帰国時の入国審査・税関申告をウェブで完結", ready:true,
     lead:"タイからの入国とは逆に、日本へ「帰国」する時の入国審査・税関申告をウェブで済ませられる、日本政府のサービスです。",
     bullets:[
       "海外から日本に帰国する日本人も利用できる(外国人の入国者専用ではない)",
@@ -2682,6 +2687,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
     const categoryHtml = it.category ? `<div class="proc-card-category">${it.category}</div>` : '';
     const subHtml = it.sub ? `<div class="proc-sub">${it.sub}</div>` : '';
     const osBadgeHtml = it.os ? `<span class="proc-os-badge ${it.os}">${it.os === 'ios' ? 'iPhone専用' : 'Android専用'}</span>` : '';
+    const prBadgeHtml = it.pr ? `<span class="proc-pr-badge">PR</span>` : '';
     const leadHtml = it.lead ? `<div class="proc-manner-lead">${it.lead}</div>` : '';
     const bodyInner = `${imageHtml}${leadHtml}
         ${bulletsHtml}
@@ -2697,7 +2703,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
         ${sourceHtml}`;
     if(alwaysOpen){
       return `<div class="proc-card-alt" style="border-color:var(--line); margin-bottom:12px;">
-        <div class="proc-card-alt-head" style="color:var(--teal-deep);">${it.title}${osBadgeHtml}</div>
+        <div class="proc-card-alt-head" style="color:var(--teal-deep);">${it.title}${osBadgeHtml}${prBadgeHtml}</div>
         ${categoryHtml}
         ${subHtml}
         ${bodyInner}
@@ -2706,7 +2712,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
     return `<div class="proc-card-alt proc-collapsible" style="border-color:var(--line); margin-bottom:12px;">
       <div class="proc-collapsible-head" onclick="toggleAccordionItem('${idPrefix}', ${i})">
         <div style="flex:1; min-width:0;">
-          <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}${osBadgeHtml}</div>
+          <div class="proc-card-alt-head" style="color:var(--teal-deep); margin-bottom:0;">${it.title}${osBadgeHtml}${prBadgeHtml}</div>
           ${categoryHtml}
           ${subHtml}
         </div>

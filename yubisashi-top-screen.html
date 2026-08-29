@@ -123,6 +123,10 @@
     display:flex; align-items:center; gap:5px; cursor:pointer;
   }
   .gender-toggle-single .swap-icon{ font-size:12px; opacity:0.6; }
+  .header-version{
+    position:absolute; top:calc(50px + env(safe-area-inset-top)); right:16px; z-index:2;
+    font-size:9.5px; color:rgba(255,255,255,0.4); text-align:right; white-space:nowrap;
+  }
   .header-action-btn{
     flex:1; position:relative; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.28);
     border-radius:14px; padding:8px 4px 7px; display:flex; flex-direction:column; align-items:center; gap:3px;
@@ -962,6 +966,7 @@
       <span id="genderToggleIconWrap"><span class="icon-slot" data-icon="female" data-size="16"></span></span>
       <span id="genderToggleLabel">女性語尾</span> <span class="swap-icon">⇄</span>
     </button>
+    <div id="appVersionDisplay" class="header-version">バージョン確認中…</div>
     <div class="wordmark">指さしタイ</div>
     <div class="tagline">見せるだけで、伝わる。</div>
   </header>
@@ -1155,7 +1160,6 @@
       <button class="composer-close" onclick="closeProcedures()">✕</button>
     </div>
     <div class="proc-list" id="procList"></div>
-    <div style="text-align:center; font-size:11px; color:#B5AA92; margin-top:16px;" id="appVersionDisplay">バージョン確認中…</div>
   </div>
 
   <div class="composer-screen" id="procBookingScreen" style="z-index:10;">
@@ -4903,7 +4907,7 @@ async function updateVersionDisplay(){
     const key = keys.find(k => k.startsWith('yubisashi-thai-'));
     if(key){
       const v = key.replace('yubisashi-thai-', '');
-      el.textContent = '現在のバージョン: ' + v;
+      el.textContent = 'v' + v;
     } else {
       el.textContent = '';
     }

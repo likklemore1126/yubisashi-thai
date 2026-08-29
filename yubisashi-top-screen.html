@@ -1177,7 +1177,7 @@
   <div class="composer-screen" id="procSafetyScreen" style="z-index:10;">
     <div class="composer-header">
       <button class="composer-back" onclick="closeProcSafety()">‹</button>
-      <div class="ctitle">知っておきたい注意点</div>
+      <div class="ctitle">日本とは違う気を付けたいタイ事情</div>
       <button class="composer-close" onclick="closeProcSafety()">✕</button>
     </div>
     <div class="proc-booking-list" id="procSafetyList"></div>
@@ -1186,7 +1186,7 @@
   <div class="composer-screen" id="procFoodPairingScreen" style="z-index:10;">
     <div class="composer-header">
       <button class="composer-back" onclick="closeProcFoodPairing()">‹</button>
-      <div class="ctitle">気をつけたい食べ合わせ・飲み合わせ</div>
+      <div class="ctitle">食べ合わせ・飲み合わせで注意したいこと</div>
       <button class="composer-close" onclick="closeProcFoodPairing()">✕</button>
     </div>
     <div class="proc-booking-list" id="procFoodPairingList"></div>
@@ -2074,8 +2074,8 @@ const PROC_CATEGORIES = [
   { icon:"compass", title:"タイ旅行で便利なアプリ", sub:"Grab・バンコクメトロ・ViaBus・ツーリストポリス", ready:true, onOpen:"openProcApps()" },
   { icon:"hotel", title:"ホテル・航空券・現地ツアー<br>・鉄道・バスを予約する", sub:"Klook・GetYourGuide・Agoda・Trip.com・12GO", ready:true, onOpen:"openProcBooking()" },
   { icon:"hand", title:"タイのマナー・習慣", sub:"知らずにやりがちなNG行動", ready:true, onOpen:"openProcManner()" },
-  { icon:"cross", title:"知っておきたい注意点", sub:"お酒の販売規制・詐欺・水/トイレ事情", ready:true, onOpen:"openProcSafety()" },
-  { icon:"cross", title:"気をつけたい食べ合わせ・飲み合わせ", sub:"ドリアン×お酒・薬×お酒・グレープフルーツなど", ready:true, onOpen:"openProcFoodPairing()" },
+  { icon:"cross", title:"日本とは違う気を付けたいタイ事情", sub:"お酒の販売規制・詐欺・水/トイレ事情", ready:true, onOpen:"openProcSafety()" },
+  { icon:"cross", title:"食べ合わせ・飲み合わせで注意したいこと", sub:"ドリアン×お酒・薬×お酒・グレープフルーツなど", ready:true, onOpen:"openProcFoodPairing()" },
 ];
 function renderProcList(){
   document.getElementById('procList').innerHTML = PROC_CATEGORIES.map((p) => {

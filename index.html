@@ -125,6 +125,7 @@
   }
   .gender-toggle-single .swap-icon{ font-size:12px; opacity:0.6; }
   .header-version{
+    position:absolute; right:16px; top:calc(52px + env(safe-area-inset-top)); z-index:2;
     font-size:9.5px; color:rgba(255,255,255,0.4); white-space:nowrap;
   }
   .header-action-btn{
@@ -4634,14 +4635,17 @@ function updateGenderToggleSingle(){
   positionHeaderVersion();
 }
 function positionHeaderVersion(){
-  const btn = document.getElementById('genderToggleSingle');
-  const tagline = document.querySelector('.tagline');
-  const el = document.getElementById('appVersionDisplay');
-  if(!btn || !tagline || !el) return;
-  el.style.position = 'absolute';
-  el.style.top = tagline.offsetTop + 'px';
-  el.style.left = (btn.offsetLeft + btn.offsetWidth / 2) + 'px';
-  el.style.transform = 'translateX(-50%)';
+  try{
+    const btn = document.getElementById('genderToggleSingle');
+    const tagline = document.querySelector('.tagline');
+    const el = document.getElementById('appVersionDisplay');
+    if(!btn || !tagline || !el) return;
+    el.style.position = 'absolute';
+    el.style.top = tagline.offsetTop + 'px';
+    el.style.right = 'auto';
+    el.style.left = (btn.offsetLeft + btn.offsetWidth / 2) + 'px';
+    el.style.transform = 'translateX(-50%)';
+  }catch(e){}
 }
 function toggleGenderSingle(){
   setGender(genderState.value === 'male' ? 'female' : 'male');
@@ -4930,6 +4934,7 @@ async function updateVersionDisplay(){
 }
 updateVersionDisplay();
 positionHeaderVersion();
+requestAnimationFrame(positionHeaderVersion);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('controllerchange', updateVersionDisplay);
 }

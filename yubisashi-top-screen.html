@@ -739,6 +739,11 @@
     color:#fff; font-size:20px; font-weight:700; cursor:pointer;
   }
   .ticket-stepper span{ font-family:'Kanit', sans-serif; font-weight:700; font-size:18px; color:#fff; min-width:48px; text-align:center; }
+  .airline-input-row{ margin-top:14px; display:flex; justify-content:center; }
+  .airline-input-row input{
+    width:100%; max-width:280px; padding:10px 14px; border-radius:10px; border:none;
+    background:rgba(255,255,255,0.92); color:var(--ink); font-size:15px; text-align:center;
+  }
   .landscape-display{
     display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
     flex-direction:column; align-items:center; justify-content:center; text-align:center;
@@ -1814,65 +1819,128 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ"]
 ];
 
 const transportItems = [
-  {mode:'bus', base:"รถบัสออกกี่โมง", type:'q', jp:"何時発のバスがありますか？", timeAnswer:true},
+  {mode:'bus', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'bus', base:"รถบัสคันนี้ไป {DEST} ไหม", type:'q', jp:"このバスは{DEST}へ行きますか？", destInsert:true},
   {mode:'bus', base:"จะไป {DEST} ต้องลงป้ายนี้ใช่ไหม", type:'q', jp:"{DEST}に行くにはこのバス停で降りればいいですか？", destInsert:true},
-  {mode:'train', base:"ขอเป็นตู้แอร์", type:'s', jp:"エアコン付きの車両が希望です"},
-  {mode:'train', base:"รถไฟออกกี่โมง", type:'q', jp:"何時に出発しますか？", timeAnswer:true},
+  {mode:'bus', base:"รถบัสออกกี่โมง", type:'q', jp:"何時発のバスがありますか？", timeAnswer:true},
+  {mode:'bus', base:"ที่ขึ้นรถบัสอยู่ที่ไหน", type:'q', jp:"バス乗り場はどこですか？"},
+  {mode:'bus', base:"สถานีขนส่งอยู่ที่ไหน", type:'q', jp:"バスターミナルはどこですか？"},
+  {mode:'bus', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'bus', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'bus', base:"รถบัสคันนี้ไปถึงปลายทางโดยตรงไหม", type:'q', jp:"このバスは最終目的地まで直行しますか？"},
+  {mode:'bus', base:"ระหว่างทางต้องเปลี่ยนรถไหม", type:'q', jp:"途中で乗り換えはありますか？"},
+  {mode:'bus', base:"ต้องเปลี่ยนรถที่ไหน", type:'q', jp:"乗り換えはどこですか？"},
+  {mode:'bus', base:"ตั๋วใบนี้ไปถึงปลายทางได้เลยไหม", type:'q', jp:"このチケットで最終目的地まで行くことができますか？"},
+  {mode:'bus', base:"ตอนเปลี่ยนรถต้องซื้อตั๋วใหม่ไหม", type:'q', jp:"乗り換え時にチケットを再度購入する必要がありますか？"},
+  {mode:'densha', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'densha', base:"รถไฟขบวนนี้ไป {DEST} ไหม", type:'q', jp:"この電車は{DEST}へ行きますか？", destInsert:true},
+  {mode:'densha', base:"ซื้อตั๋วได้ที่ไหน", type:'q', jp:"乗車券はどこで買えますか？"},
+  {mode:'densha', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'densha', base:"รถไฟขบวนนี้ไปถึงปลายทางโดยตรงไหม", type:'q', jp:"この電車は最終目的地まで直行しますか？"},
+  {mode:'densha', base:"ตั๋วใบนี้ไปถึงปลายทางได้เลยไหม", type:'q', jp:"このチケットで最終目的地まで行くことができますか？"},
+  {mode:'densha', base:"ระหว่างทางต้องเปลี่ยนรถไหม", type:'q', jp:"途中で乗り換えはありますか？"},
+  {mode:'densha', base:"ต้องเปลี่ยนรถที่ไหน", type:'q', jp:"乗り換えはどこですか？"},
+  {mode:'densha', base:"ตอนเปลี่ยนรถต้องซื้อตั๋วใหม่ไหม", type:'q', jp:"乗り換え時にチケットを再度購入する必要がありますか？"},
+  {mode:'tetsudo', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'tetsudo', base:"ซื้อตั๋วได้ที่ไหน", type:'q', jp:"乗車券はどこで買えますか？"},
+  {mode:'tetsudo', base:"ต้องไปช่องไหน", type:'q', jp:"どの窓口に行けばいいですか？"},
+  {mode:'tetsudo', base:"รถไฟออกกี่โมง", type:'q', jp:"何時に出発しますか？", timeAnswer:true},
+  {mode:'tetsudo', base:"ขอเป็นตู้แอร์", type:'s', jp:"エアコン付きの車両が希望です"},
+  {mode:'tetsudo', base:"ขอตู้พัดลม", type:'s', jp:"扇風機付きの車両が希望です"},
+  {mode:'tetsudo', base:"ขอตู้ที่ราคาถูกที่สุด", type:'s', jp:"一番料金が安い車両が希望です"},
+  {mode:'tetsudo', base:"ขอห้องส่วนตัว", type:'s', jp:"個室の車両が希望です"},
+  {mode:'tetsudo', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'tetsudo', base:"รถไฟขบวนนี้ไปถึงปลายทางโดยตรงไหม", type:'q', jp:"この電車は最終目的地まで直行しますか？"},
+  {mode:'tetsudo', base:"ระหว่างทางต้องเปลี่ยนรถไหม", type:'q', jp:"途中で乗り換えはありますか？"},
+  {mode:'tetsudo', base:"ต้องเปลี่ยนรถที่ไหน", type:'q', jp:"乗り換えはどこですか？"},
+  {mode:'tetsudo', base:"ตั๋วใบนี้ไปถึงปลายทางได้เลยไหม", type:'q', jp:"このチケットで最終目的地まで行くことができますか？"},
+  {mode:'tetsudo', base:"ตอนเปลี่ยนรถต้องซื้อตั๋วใหม่ไหม", type:'q', jp:"乗り換え時にチケットを再度購入する必要がありますか？"},
+  {mode:'taxi', base:"อยากไป {DEST} ไปได้ไหม", type:'q', jp:"{DEST}まで行きたいのですが可能ですか？", destInsert:true},
+  {mode:'taxi', base:"จอดตรงนี้", type:'s', jp:"ここで停めてください"},
   {mode:'taxi', base:"ช่วยกดมิเตอร์ด้วย", type:'s', jp:"メーターを使ってください"},
   {mode:'taxi', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
-  {mode:'taxi', base:"จอดตรงนี้", type:'s', jp:"ここで停めてください"},
-  {mode:'taxi', base:"จะรีบกลับมา รอตรงนี้แป๊บนึงได้ไหม", type:'q', jp:"直ぐに戻るのでここで少し待ってもらえますか？"},
   {mode:'taxi', base:"เปิดแอร์หน่อยได้ไหม", type:'q', jp:"エアコンをつけてもらえますか？"},
-  {mode:'taxi', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
-  {mode:'taxi', base:"รู้สึกไม่ค่อยสบาย ขับช้าลงหน่อยได้ไหม", type:'q', jp:"体調があまり良くないのでもう少しゆっくり走ってくれますか？"},
-  {mode:'other', base:"มีที่จอดรถไหม", type:'q', jp:"駐車場はありますか？"},
-  {mode:'other', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
   {mode:'taxi', base:"รู้สึกไม่ค่อยสบาย ลดแอร์ลงหน่อยได้ไหม", type:'q', jp:"体調があまり良くないのでエアコンを弱くしてもらえますか？"},
-  {mode:'taxi', base:"ขอชาร์จโทรศัพท์ได้ไหม", type:'q', jp:"携帯の充電をさせてもらう事はできますか？"},
+  {mode:'taxi', base:"รู้สึกไม่ค่อยสบาย ขับช้าลงหน่อยได้ไหม", type:'q', jp:"体調があまり良くないのでもう少しゆっくり走ってくれますか？"},
   {mode:'taxi', base:"ขอเอากระเป๋าใส่ท้ายรถได้ไหม", type:'q', jp:"トランクに荷物を載せてもいいですか？"},
-  {mode:'train', base:"ขอตู้พัดลม", type:'s', jp:"扇風機付きの車両が希望です"},
-  {mode:'train', base:"ขอตู้ที่ราคาถูกที่สุด", type:'s', jp:"一番料金が安い車両が希望です"},
-  {mode:'train', base:"ขอห้องส่วนตัว", type:'s', jp:"個室の車両が希望です"},
-  {mode:'other', base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
-  {mode:'other', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
-  {mode:'taxi', base:"อยากไป {DEST} ไปได้ไหม", type:'q', jp:"{DEST}まで行きたいのですが可能ですか？", destInsert:true},
-  {mode:'other', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+  {mode:'taxi', base:"ขอชาร์จโทรศัพท์ได้ไหม", type:'q', jp:"携帯の充電をさせてもらう事はできますか？"},
   {mode:'taxi', base:"ที่ขึ้นแท็กซี่อยู่ที่ไหน", type:'q', jp:"タクシー乗り場はどこですか？"},
-  {mode:'bus', base:"ที่ขึ้นรถบัสอยู่ที่ไหน", type:'q', jp:"バス乗り場はどこですか？"},
-  {mode:'train', base:"ซื้อตั๋วได้ที่ไหน", type:'q', jp:"乗車券はどこで買えますか？"},
-  {mode:'bus', base:"สถานีขนส่งอยู่ที่ไหน", type:'q', jp:"バスターミナルはどこですか？"},
-  {mode:'bus', base:"ที่ขึ้นรถตู้อยู่ที่ไหน", type:'q', jp:"ロットゥー乗り場はどこですか？"},
-  {mode:'bus', base:"คันนี้ไปถึงที่หมายได้ไหม", type:'q', jp:"これに乗れば目的地まで行けますか？"},
-  {mode:'train', base:"ขอตั๋วไปสถานีนี้", type:'s', jp:"この駅までの乗車券をください"},
-  {mode:'train', base:"ต้องไปช่องไหน", type:'q', jp:"どの窓口に行けばいいですか？"},
-  {mode:'taxi', base:"เปลี่ยนจุดหมายได้ไหม", type:'q', jp:"行き先を変更することは可能ですか？"},
-  {mode:'taxi', base:"ขากลับจะใช้อีก รอได้ไหม", type:'q', jp:"帰りも利用したいので待っていてもらえますか？"},
-  {mode:'other', base:"มีแบงก์พันใบเดียว มีเงินทอนไหม", type:'q', jp:"1000バーツ札しか持ってないのですがおつりはありますか？"},
-  {mode:'taxi', base:"แวะร้านสะดวกซื้อระหว่างทางได้ไหม", type:'q', jp:"途中でコンビニに寄ってもらえますか？"},
-  {mode:'other', base:"อยากเช่ารถยนต์", type:'s', jp:"車を借りたいです"},
-  {mode:'other', base:"อยากเช่ามอเตอร์ไซค์", type:'s', jp:"バイクを借りたいです"},
-  {mode:'train', base:"รถไฟขบวนนี้ไป {DEST} ไหม", type:'q', jp:"この電車は{DEST}へ行きますか？", destInsert:true},
-  {mode:'bus', base:"รถบัสคันนี้ไป {DEST} ไหม", type:'q', jp:"このバスは{DEST}へ行きますか？", destInsert:true},
-  {mode:'other', base:"ท่าเรือเฟอร์รี่อยู่ที่ไหน", type:'q', jp:"フェリー乗り場はどこですか？"},
-  {mode:'other', base:"ท่าเรือสปีดโบ๊ทอยู่ที่ไหน", type:'q', jp:"スピードボート乗り場はどこですか？"},
-  {mode:'other', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
-  {mode:'other', base:"ท่าเรืออยู่ที่ไหน", type:'q', jp:"船の乗り場はどこですか？"},
-  {mode:'bus', base:"ที่ขึ้นสองแถวอยู่ที่ไหน", type:'q', jp:"ソンテウ乗り場はどこですか？"},
   {mode:'taxi', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'taxi', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'taxi', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง สามารถใช้บริการไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
+  {mode:'taxi', base:"ขอไลน์ไว้หน่อยได้ไหม เผื่อตอนกลับจะได้ติดต่อให้มารับ", type:'q', jp:"あとで帰る時に迎えに来てもらえるように、LINEを教えてもらえますか？"},
+  {mode:'taxi', base:"มีแบงก์พันใบเดียว มีเงินทอนไหม", type:'q', jp:"1000バーツ札しか持ってないのですがおつりはありますか？"},
+  {mode:'taxi', base:"แวะร้านสะดวกซื้อระหว่างทางได้ไหม", type:'q', jp:"途中でコンビニに寄ってもらえますか？"},
+  {mode:'taxi', base:"เปลี่ยนจุดหมายได้ไหม", type:'q', jp:"行き先を変更することは可能ですか？"},
+  {mode:'taxi', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'taxi', base:"ขอแวะเข้าห้องน้ำหน่อยได้ไหม", type:'q', jp:"ちょっとトイレに寄ってもらえますか？"},
+  {mode:'taxi', base:"จะรีบกลับมา รอตรงนี้แป๊บนึงได้ไหม", type:'q', jp:"直ぐに戻るのでここで少し待ってもらえますか？"},
+  {mode:'taxi', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'tuktuk', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'tuktuk', base:"ลดหน่อยได้ไหม", type:'q', jp:"少し安くしてもらえますか？"},
   {mode:'tuktuk', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'tuktuk', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'tuktuk', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง สามารถใช้บริการไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
+  {mode:'tuktuk', base:"ขอไลน์ไว้หน่อยได้ไหม เผื่อตอนกลับจะได้ติดต่อให้มารับ", type:'q', jp:"あとで帰る時に迎えに来てもらえるように、LINEを教えてもらえますか？"},
+  {mode:'tuktuk', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'tuktuk', base:"มีแบงก์พันใบเดียว มีเงินทอนไหม", type:'q', jp:"1000バーツ札しか持ってないのですがおつりはありますか？"},
+  {mode:'tuktuk', base:"ขอแวะเข้าห้องน้ำหน่อยได้ไหม", type:'q', jp:"ちょっとトイレに寄ってもらえますか？"},
+  {mode:'tuktuk', base:"จะรีบกลับมา รอตรงนี้แป๊บนึงได้ไหม", type:'q', jp:"直ぐに戻るのでここで少し待ってもらえますか？"},
+  {mode:'tuktuk', base:"พวกเรามี {N} คน นั่งคันเดียวได้ไหม", type:'q', jp:"{N}人ですが、1台に乗れますか？", peopleInput:true},
   {mode:'songthaew', base:"สองแถวคันนี้ไป {DEST} ไหม", type:'q', jp:"このソンテウは{DEST}へ行きますか？", destInsert:true},
+  {mode:'songthaew', base:"ผมอยากไป {DEST} ต้องขึ้นสองแถวคันไหน", type:'q', jp:"{DEST}へ行きたいのですが、どのソンテウに乗ればいいですか？", destInsert:true},
+  {mode:'songthaew', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'songthaew', base:"อยากนั่งสองแถว ต้องขึ้นยังไง", type:'q', jp:"ソンテウに乗りたいのですが、どうやって乗りますか？"},
+  {mode:'songthaew', base:"ที่ขึ้นสองแถวอยู่ที่ไหน", type:'q', jp:"ソンテウ乗り場はどこですか？"},
+  {mode:'songthaew', base:"ผมอยากลงแถวนี้ ต้องทำยังไง", type:'q', jp:"この辺で降りたいのですが、どうすればいいですか？"},
+  {mode:'songthaew', base:"ต้องกดปุ่มไหนถึงจะจอด", type:'q', jp:"どのボタンを押せば止まりますか？"},
   {mode:'songthaew', base:"เหมาคันได้ไหม {H} ชั่วโมง", type:'q', jp:"{H}時間チャーターは可能ですか？", hourInput:true},
   {mode:'songthaew', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
   {mode:'songthaew', base:"ไป-กลับราคาเท่าไหร่", type:'q', jp:"往復でいくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'songthaew', base:"จะอยู่ที่นี่ประมาณ {H} ชั่วโมง สามารถใช้บริการไป-กลับได้ไหม", type:'q', jp:"現地では{H}時間滞在予定ですが往復の利用可能ですか？", hourInput:true},
+  {mode:'songthaew', base:"ขอไลน์ไว้หน่อยได้ไหม เผื่อตอนกลับจะได้ติดต่อให้มารับ", type:'q', jp:"あとで帰る時に迎えに来てもらえるように、LINEを教えてもらえますか？"},
+  {mode:'songthaew', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'rotu', base:"คันนี้ไป {DEST} ไหม", type:'q', jp:"このロットゥーは{DEST}へ行きますか？", destInsert:true},
+  {mode:'rotu', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'rotu', base:"ที่ขึ้นรถตู้อยู่ที่ไหน", type:'q', jp:"ロットゥー乗り場はどこですか？"},
+  {mode:'rotu', base:"รถไฟออกกี่โมง", type:'q', jp:"何時に出発しますか？", timeAnswer:true},
+  {mode:'rotu', base:"ก่อนรถออก ขอไปเข้าห้องน้ำก่อนได้ไหม", type:'q', jp:"出発するまでにトイレに行ってきてもいいですか？"},
+  {mode:'rotu', base:"ก่อนรถออก ขอไปซื้อน้ำก่อนได้ไหม", type:'q', jp:"出発するまでに飲み物を買ってきてもいいですか？"},
+  {mode:'rotu', base:"กี่คนครบออก", type:'q', jp:"何人集まったら出発しますか？", numberAnswer:{unit:'คน', position:'suffix', jpy:false, unitJp:'人'}},
+  {mode:'rotu', base:"เต็มแล้วออกเลยไหม", type:'q', jp:"満席になったらすぐ出発しますか？"},
+  {mode:'rotu', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'plane', base:"เคาน์เตอร์เช็คอินสายการบิน {AIRLINE} อยู่ที่ไหน", type:'q', jp:"{AIRLINE}のチェックインカウンターはどこですか？", airlineInput:true},
+  {mode:'plane', base:"อยากโหลดกระเป๋าใบนี้", type:'s', jp:"この荷物を預けたいです"},
+  {mode:'plane', base:"กระเป๋าโหลดใต้เครื่องน้ำหนักได้กี่กิโล", type:'q', jp:"預け荷物の重量制限は何キロですか？"},
+  {mode:'plane', base:"ประตูขึ้นเครื่องอยู่ที่ไหน", type:'q', jp:"搭乗ゲートはどこですか？"},
+  {mode:'plane', base:"เริ่มขึ้นเครื่องกี่โมง", type:'q', jp:"搭乗開始時間は何時ですか？", timeAnswer:true},
+  {mode:'plane', base:"เที่ยวบินนี้ดีเลย์ไหม", type:'q', jp:"このフライトは遅延していますか？"},
+  {mode:'plane', base:"ขอที่นั่งริมหน้าต่าง", type:'s', jp:"窓側の座席が希望です"},
+  {mode:'plane', base:"ขอที่นั่งริมทางเดิน", type:'s', jp:"通路側の座席が希望です"},
+  {mode:'plane', base:"ขอที่นั่งใกล้ห้องน้ำ", type:'s', jp:"トイレ近くの座席が希望です"},
+  {mode:'plane', base:"เที่ยวบินระหว่างประเทศอยู่ที่ไหน", type:'q', jp:"国際線はどこですか？"},
+  {mode:'plane', base:"เที่ยวบินภายในประเทศอยู่ที่ไหน", type:'q', jp:"国内線はどこですか？"},
+  {mode:'plane', base:"เลานจ์ของสายการบิน {AIRLINE} อยู่ที่ไหน", type:'q', jp:"{AIRLINE}のラウンジはどこですか？", airlineInput:true},
+  {mode:'plane', base:"เลานจ์ที่ใช้ Priority Pass ได้อยู่ที่ไหน", type:'q', jp:"プライオリティパスの使えるラウンジの場所はどこですか？"},
+  {mode:'plane', base:"ห้องสูบบุหรี่อยู่ที่ไหน", type:'q', jp:"喫煙所はどこですか？"},
+  {mode:'ferry', base:"เรือลำนี้ไป {DEST} ไหม", type:'q', jp:"この船は{DEST}へ行きますか？", destInsert:true},
+  {mode:'ferry', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'ferry', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+  {mode:'ferry', base:"ท่าเรือเฟอร์รี่อยู่ที่ไหน", type:'q', jp:"フェリー乗り場はどこですか？"},
+  {mode:'ferry', base:"ท่าเรือสปีดโบ๊ทอยู่ที่ไหน", type:'q', jp:"スピードボート乗り場はどこですか？"},
+  {mode:'ferry', base:"ท่าเรืออยู่ที่ไหน", type:'q', jp:"船の乗り場はどこですか？"},
+  {mode:'ferry', base:"ซื้อตั๋วได้ที่ไหน", type:'q', jp:"乗車券はどこで買えますか？"},
+  {mode:'ferry', base:"เรือลำต่อไปกี่โมง", type:'q', jp:"次の船は何時ですか？", timeAnswer:true},
+  {mode:'ferry', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
+  {mode:'ferry', base:"มีเสื้อชูชีพไหม", type:'q', jp:"救命胴衣はありますか？"},
+  {mode:'other', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+  {mode:'other', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+  {mode:'other', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+  {mode:'other', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+  {mode:'other', base:"อยากเช่ารถยนต์ {D} วัน", type:'s', jp:"車を{D}日間借りたいです", dayInput:true},
+  {mode:'other', base:"อยากเช่ามอเตอร์ไซค์ {D} วัน", type:'s', jp:"バイクを{D}日間借りたいです", dayInput:true},
 ];
-const modeMeta = { bus:{icon:'bus', label:'バス'}, train:{icon:'train', label:'電車'}, taxi:{icon:'taxi', label:'タクシー'}, tuktuk:{icon:'tuktuk', label:'トゥクトゥク'}, songthaew:{icon:'songthaew', label:'ソンテウ'}, other:{icon:'pin', label:'その他'} };
+const modeMeta = { bus:{icon:'bus', label:'バス'}, densha:{icon:'train', label:'電車'}, tetsudo:{icon:'ticket', label:'鉄道'}, taxi:{icon:'taxi', label:'タクシー'}, tuktuk:{icon:'tuktuk', label:'トゥクトゥク'}, songthaew:{icon:'songthaew', label:'ソンテウ'}, rotu:{icon:'bus', label:'ロットゥー'}, plane:{icon:'suitcase', label:'飛行機'}, ferry:{icon:'pin', label:'船'}, other:{icon:'pin', label:'その他'} };
 function metaIconHtml(meta){
   return ICON_DATA[meta.icon] ? iconSvg(meta.icon, 24) : meta.icon;
 }
@@ -2040,6 +2108,9 @@ let openState = null;
 let ticketSelected = false;
 let ticketCount = 1;
 let hourCount = 2;
+let peopleCount = 2;
+let dayCount = 1;
+let airlineText = '';
 let transportTab = 'bus';
 
 // ---------- お気に入り(並び替え作文) ----------
@@ -3997,7 +4068,7 @@ function renderComposerList(){
   let html = '';
   if(openState && openState.type === 'transport'){
     html += `<div class="transport-tabs">`;
-    ['bus','train','taxi','tuktuk','songthaew','other'].forEach(mode => {
+    ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','other'].forEach(mode => {
       const meta = modeMeta[mode];
       const active = transportTab === mode ? 'active' : '';
       html += `<button class="transport-tab ${active}" onclick="switchTransportTab('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
@@ -4016,17 +4087,17 @@ function renderComposerList(){
       .map((item, idx) => ({item, idx}))
       .filter(x => x.item.mode === transportTab)
       .filter(x => {
-        if(x.item.destInsert && x.item.mode === 'train'){
+        if(x.item.destInsert && x.item.mode === 'densha'){
           return !!(currentDestination && currentDestination.station);
         }
         return true;
       })
       .sort((a, b) => {
-        const pa = (a.item.destInsert || a.item.hourInput) ? 0 : 1;
-        const pb = (b.item.destInsert || b.item.hourInput) ? 0 : 1;
+        const pa = (a.item.destInsert || a.item.hourInput || a.item.peopleInput || a.item.dayInput || a.item.airlineInput) ? 0 : 1;
+        const pb = (b.item.destInsert || b.item.hourInput || b.item.peopleInput || b.item.dayInput || b.item.airlineInput) ? 0 : 1;
         return pa - pb;
       });
-    if(transportTab === 'train') html += ticketRowHtml();
+    if(transportTab === 'densha') html += ticketRowHtml();
     modeIndices.forEach(({item, idx}) => {
       const sel = (!ticketSelected && selectedFollowUp === idx) ? 'selected' : '';
       const isSelectedNow = !ticketSelected && selectedFollowUp === idx;
@@ -4037,6 +4108,22 @@ function renderComposerList(){
         th = th.replace('{H}', hourCount);
         jp = jp.replace('{H}', hourCount);
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に時間を変更できます</span>`;
+      }
+      if(item.peopleInput){
+        th = th.replace('{N}', peopleCount);
+        jp = jp.replace('{N}', peopleCount);
+        if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に人数を変更できます</span>`;
+      }
+      if(item.dayInput){
+        th = th.replace('{D}', dayCount);
+        jp = jp.replace('{D}', dayCount);
+        if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に日数を変更できます</span>`;
+      }
+      if(item.airlineInput){
+        const name = airlineText.trim() || '○○';
+        th = th.replace('{AIRLINE}', name);
+        jp = jp.replace('{AIRLINE}', name);
+        if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に航空会社名を入力できます</span>`;
       }
       if(item.destInsert){
         const {th: destTh, jp: destJp} = destInsertNames(item.mode);
@@ -4073,9 +4160,21 @@ function changeHourCount(delta){
   hourCount = Math.max(1, Math.min(24, hourCount + delta));
   renderComposerFixed();
 }
+function changePeopleCount(delta){
+  peopleCount = Math.max(1, Math.min(20, peopleCount + delta));
+  renderComposerFixed();
+}
+function changeDayCount(delta){
+  dayCount = Math.max(1, Math.min(30, dayCount + delta));
+  renderComposerFixed();
+}
+function setAirlineText(v){
+  airlineText = v;
+  renderComposerFixed();
+}
 function destInsertNames(mode){
   if(!currentDestination) return {th:'ที่นี่', jp:'ここ'};
-  if((mode === 'train' || mode === 'bus') && currentDestination.station){
+  if((mode === 'densha' || mode === 'bus') && currentDestination.station){
     return {th: currentDestination.station.th, jp: currentDestination.station.jp};
   }
   return {th: currentDestination.th, jp: currentDestination.jp};
@@ -4091,6 +4190,15 @@ function toggleFollowUp(idx){
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].hourInput){
     hourCount = 2;
+  }
+  if(selectedFollowUp !== null && transportItems[selectedFollowUp].peopleInput){
+    peopleCount = 2;
+  }
+  if(selectedFollowUp !== null && transportItems[selectedFollowUp].dayInput){
+    dayCount = 1;
+  }
+  if(selectedFollowUp !== null && transportItems[selectedFollowUp].airlineInput){
+    airlineText = '';
   }
   renderComposerFixed();
   renderComposerList();
@@ -4240,6 +4348,19 @@ function showFollowUpFullscreen(){
     followTh = followTh.replace('{H}', hourCount);
     followJp = followJp.replace('{H}', hourCount);
   }
+  if(follow.peopleInput){
+    followTh = followTh.replace('{N}', peopleCount);
+    followJp = followJp.replace('{N}', peopleCount);
+  }
+  if(follow.dayInput){
+    followTh = followTh.replace('{D}', dayCount);
+    followJp = followJp.replace('{D}', dayCount);
+  }
+  if(follow.airlineInput){
+    const name = airlineText.trim() || '○○';
+    followTh = followTh.replace('{AIRLINE}', name);
+    followJp = followJp.replace('{AIRLINE}', name);
+  }
   if(follow.destInsert){
     const {th: destTh, jp: destJp} = destInsertNames(follow.mode);
     followTh = followTh.replace('{DEST}', destTh);
@@ -4282,6 +4403,32 @@ function renderSelectedPhraseBlock(){
       <button onclick="changeHourCount(1)">＋</button>
     </div>`;
   }
+  if(follow.peopleInput){
+    followTh = followTh.replace('{N}', peopleCount);
+    followJp = followJp.replace('{N}', peopleCount);
+    stepperHtml = `<div class="ticket-stepper">
+      <button onclick="changePeopleCount(-1)">−</button>
+      <span>${peopleCount}人</span>
+      <button onclick="changePeopleCount(1)">＋</button>
+    </div>`;
+  }
+  if(follow.dayInput){
+    followTh = followTh.replace('{D}', dayCount);
+    followJp = followJp.replace('{D}', dayCount);
+    stepperHtml = `<div class="ticket-stepper">
+      <button onclick="changeDayCount(-1)">−</button>
+      <span>${dayCount}日間</span>
+      <button onclick="changeDayCount(1)">＋</button>
+    </div>`;
+  }
+  if(follow.airlineInput){
+    const name = airlineText.trim() || '○○';
+    followTh = followTh.replace('{AIRLINE}', name);
+    followJp = followJp.replace('{AIRLINE}', name);
+    stepperHtml = `<div class="airline-input-row">
+      <input type="text" id="airlineTextInput" placeholder="例: JAL、タイ国際航空" value="${airlineText.replace(/"/g, '&quot;')}" oninput="updateAirlineText(this.value)">
+    </div>`;
+  }
   if(follow.destInsert){
     const {th: destTh, jp: destJp} = destInsertNames(follow.mode);
     followTh = followTh.replace('{DEST}', destTh);
@@ -4290,12 +4437,29 @@ function renderSelectedPhraseBlock(){
   setLastPhrase(followTh, followJp);
   return `<div class="selected-phrase">
     <div class="sp-header"><button class="sp-clear-btn" onclick="clearSelectedPhrase()">✕ 選択を解除</button></div>
-    <div class="sp-th">${followTh}</div>
-    <div class="sp-jp">${followJp}</div>
+    <div class="sp-th" id="spTh">${followTh}</div>
+    <div class="sp-jp" id="spJp">${followJp}</div>
     ${stepperHtml}
     <button class="fullscreen-btn" onclick="showFollowUpFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}${favStarHtml(followTh, followJp)}
   </div>`;
 }
+function updateAirlineText(v){
+  airlineText = v;
+  if(selectedFollowUp === null) return;
+  const follow = transportItems[selectedFollowUp];
+  if(!follow.airlineInput) return;
+  let followTh = fullTh(follow.base, follow.type);
+  let followJp = follow.jp;
+  const name = airlineText.trim() || '○○';
+  followTh = followTh.replace('{AIRLINE}', name);
+  followJp = followJp.replace('{AIRLINE}', name);
+  setLastPhrase(followTh, followJp);
+  const thEl = document.getElementById('spTh');
+  const jpEl = document.getElementById('spJp');
+  if(thEl) thEl.textContent = followTh;
+  if(jpEl) jpEl.textContent = followJp;
+}
+
 
 function nbTriggerHtml(config){
   if(!config) return '';

@@ -4143,6 +4143,10 @@ function renderComposerList(){
     });
   }
   document.getElementById('composerList').innerHTML = html;
+  if(openState && openState.type === 'transport'){
+    const activeTabEl = document.querySelector('.transport-tab.active');
+    if(activeTabEl) activeTabEl.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
 }
 function toggleTicket(){
   ticketSelected = !ticketSelected;

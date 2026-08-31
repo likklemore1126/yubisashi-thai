@@ -3899,6 +3899,14 @@ window.addEventListener('resize', checkOrientationDisplay);
         wrap.style.opacity = '1';
       }
     }, {passive:true});
+    wrap.addEventListener('touchcancel', function(){
+      touchStartX = null; touchStartY = null; dragging = false; dragDX = 0;
+      wrap.style.transition = 'none';
+      wrap.style.transform = '';
+      wrap.style.opacity = '';
+      void wrap.offsetHeight;
+      requestAnimationFrame(() => { wrap.style.transition = ''; });
+    }, {passive:true});
   }
 })();
 
@@ -3967,6 +3975,16 @@ function attachSwipeToClose(screenId, closeFn, shouldActivate){
       }, 190);
     }
   }, {passive:true});
+  el.addEventListener('touchcancel', function(){
+    // iOSの端スワイプ「戻る」ジェスチャー等でタッチが強制的に中断された場合、
+    // touchendが発火せず途中経過のインラインstyleが残ってしまうため、即座に全リセットする。
+    startX = null; dragging = false; dx = 0;
+    el.style.transition = 'none';
+    el.style.transform = '';
+    el.style.opacity = '';
+    void el.offsetHeight;
+    requestAnimationFrame(() => { el.style.transition = ''; });
+  }, {passive:true});
 }
 attachSwipeToClose('composerScreen', closeComposer);
 attachSwipeToClose('calcScreen', closeCalc);
@@ -3983,6 +4001,20 @@ attachSwipeToClose('procPhoneScreen', closeProcPhone);
 attachSwipeToClose('procAppsScreen', closeProcApps);
 // 料理/スイーツ/ドリンクの一覧画面: 詳細画面を見ていない時だけ有効(詳細画面は専用スワイプが別途処理)
 attachSwipeToClose('dishScreen', closeDishScreen, () => dishSelectedIdx === null);
+
+// 保険: アプリがバックグラウンドに回るなど、スワイプ操作が中断されるケースを想定し、
+// show状態でないのに transform 等が残ってしまった composer-screen を一括で正常化する。
+function resetStuckSwipeStyles(){
+  document.querySelectorAll('.composer-screen').forEach(el => {
+    if(!el.classList.contains('show') && el.getAttribute('style') && el.style.transform !== ''){
+      el.style.transition = 'none';
+      el.style.transform = '';
+      el.style.opacity = '';
+    }
+  });
+}
+document.addEventListener('visibilitychange', () => { if(document.hidden) resetStuckSwipeStyles(); });
+window.addEventListener('pageshow', resetStuckSwipeStyles);
 
 let thbToJpyRate = null;
 

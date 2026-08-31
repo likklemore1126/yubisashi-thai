@@ -897,10 +897,11 @@
   }
   .rate-modal-close{ width:100%; background:transparent; color:#8B8272; border:none; padding:8px; font-size:12.5px; cursor:pointer; }
 
+  .transport-tabs-fixed{ flex:0 0 auto; }
   .mode-group-label{ font-size:11px; font-weight:700; color:#8B8272; letter-spacing:1px; margin:14px 2px 6px; }
   .transport-tabs{
-    display:flex; gap:6px; margin:0 2px 14px; position:sticky; top:0; background:var(--paper);
-    padding-top:6px; padding-bottom:8px; z-index:1; overflow-x:auto; scrollbar-width:none;
+    display:flex; gap:6px; margin:0 2px 0; background:var(--paper);
+    padding:6px 18px 10px; overflow-x:auto; scrollbar-width:none;
   }
   .transport-tabs::-webkit-scrollbar{ display:none; }
   .dest-access-note{
@@ -1047,6 +1048,7 @@
       <button class="composer-close" onclick="closeComposer()">✕</button>
     </div>
     <div class="composer-fixed" id="composerFixed"></div>
+    <div class="transport-tabs-fixed" id="transportTabsFixed"></div>
     <div class="composer-list" id="composerList"></div>
   </div>
 
@@ -4102,14 +4104,15 @@ function switchTransportTab(mode){
 }
 function renderComposerList(){
   let html = '';
+  let tabsHtml = '';
   if(openState && openState.type === 'transport'){
-    html += `<div class="transport-tabs">`;
+    tabsHtml += `<div class="transport-tabs">`;
     ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','other'].forEach(mode => {
       const meta = modeMeta[mode];
       const active = transportTab === mode ? 'active' : '';
-      html += `<button class="transport-tab ${active}" onclick="switchTransportTab('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
+      tabsHtml += `<button class="transport-tab ${active}" onclick="switchTransportTab('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
     });
-    html += `</div>`;
+    tabsHtml += `</div>`;
     if(currentDestination && currentDestination.access){
       html += `<div class="dest-access-note"><div class="dest-access-row">${iconSvg('pin', 14)} 行き方参考: ${currentDestination.access}</div>${transportBlockHtml(currentDestination)}</div>`;
     } else if(currentDestination && currentDestination.station){
@@ -4174,6 +4177,7 @@ function renderComposerList(){
       </div>`;
     });
   }
+  document.getElementById('transportTabsFixed').innerHTML = tabsHtml;
   document.getElementById('composerList').innerHTML = html;
   if(openState && openState.type === 'transport' && document.getElementById('composerScreen').classList.contains('show')){
     const activeTabEl = document.querySelector('.transport-tab.active');
@@ -4264,6 +4268,7 @@ function openCategoryComposer(i){
   selectedCategoryIdx = null;
   const s = situations[i];
   document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg(s.icon, 22)}</span>${s.title}`;
+  document.getElementById('transportTabsFixed').innerHTML = '';
   renderCategoryFixed();
   renderCategoryList();
   document.getElementById('composerScreen').classList.add('show');

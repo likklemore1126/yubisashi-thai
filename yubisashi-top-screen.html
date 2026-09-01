@@ -933,8 +933,8 @@
     border-radius:5px; padding:1px 5px;
   }
   .transport-tab{
-    flex:0 0 auto; min-width:74px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:1px;
-    background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:6px 8px 5px;
+    flex:0 0 auto; min-width:82px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:0px;
+    background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:4px 6px 4px;
     font-family:'Noto Sans JP', sans-serif; font-size:12px; font-weight:600; color:#8B8272; cursor:pointer; white-space:nowrap;
   }
   .transport-tab.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
@@ -1953,7 +1953,7 @@ const transportItems = [
 ];
 const modeMeta = { bus:{icon:'bus2', label:'バス'}, densha:{icon:'train2', label:'電車'}, tetsudo:{icon:'tetsudo', label:'鉄道'}, taxi:{icon:'taxi2', label:'タクシー'}, tuktuk:{icon:'tuktuk2', label:'トゥクトゥク'}, songthaew:{icon:'songthaew2', label:'ソンテウ'}, rotu:{icon:'rotu', label:'ロットゥー'}, plane:{icon:'plane', label:'飛行機'}, ferry:{icon:'ferry', label:'船'}, other:{icon:'pin', label:'その他'} };
 function metaIconHtml(meta){
-  return ICON_DATA[meta.icon] ? iconSvg(meta.icon, 38) : meta.icon;
+  return ICON_DATA[meta.icon] ? iconSvg(meta.icon, 48) : meta.icon;
 }
 
 const travelModes = [

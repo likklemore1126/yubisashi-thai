@@ -205,13 +205,10 @@
     padding:12px 14px; font-family:'Kanit', sans-serif; font-size:19px; font-weight:600;
   }
   .dest-phrase-jp{ font-size:11px; color:rgba(255,255,255,0.75); margin-top:5px; padding:0 2px; }
-  .dest-modes{ display:flex; gap:8px; margin-top:12px; overflow-x:auto; scrollbar-width:none; }
+  .dest-modes{ display:flex; gap:6px; margin-top:12px; overflow-x:auto; scrollbar-width:none; }
   .dest-modes::-webkit-scrollbar{ display:none; }
-  .mode-btn{
-    flex:0 0 auto; min-width:74px; background:var(--paper); color:var(--teal-deep); border:none;
-    border-radius:10px; padding:9px 10px; font-family:'Noto Sans JP', sans-serif;
-    font-weight:600; font-size:12.5px; cursor:pointer; white-space:nowrap;
-  }
+  .dest-modes .transport-tab{ min-width:60px; padding:5px 4px 4px; font-size:10.5px; }
+  .dest-modes .transport-tab .icon-img{ width:26px; height:26px; }
 
   .fav-entry{
     display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid var(--marigold);
@@ -768,7 +765,7 @@
     padding:24px calc(24px + env(safe-area-inset-right)) 24px calc(24px + env(safe-area-inset-left));
   }
   .landscape-display.show{ display:flex; }
-  .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; }
+  .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; white-space:normal; word-break:normal; overflow-wrap:normal; }
   .landscape-th::before{
     content:""; display:inline-block; width:1em; height:0.72em; margin-right:0.18em; vertical-align:0.05em;
     background-image:url('https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f1f9-1f1ed.png');
@@ -1031,14 +1028,7 @@
     <div class="dest-phrase" id="destPhrase"></div>
     <div class="dest-phrase-jp" id="destPhraseJp"></div>
     <button class="fullscreen-btn" onclick="showDestinationFullscreen()" style="margin-top:10px;"><span class="icon-slot" data-icon="search" data-size="17"></span> 相手に見せる</button>
-    <div class="dest-modes">
-      <button class="mode-btn" onclick="openModeList('bus')"><span class="icon-slot" data-icon="bus" data-size="24"></span> バス</button>
-      <button class="mode-btn" onclick="openModeList('train')"><span class="icon-slot" data-icon="train" data-size="24"></span> 電車</button>
-      <button class="mode-btn" onclick="openModeList('taxi')"><span class="icon-slot" data-icon="taxi" data-size="24"></span> タクシー</button>
-      <button class="mode-btn" onclick="openModeList('tuktuk')"><span class="icon-slot" data-icon="tuktuk" data-size="24"></span> トゥクトゥク</button>
-      <button class="mode-btn" onclick="openModeList('songthaew')"><span class="icon-slot" data-icon="songthaew" data-size="24"></span> ソンテウ</button>
-      <button class="mode-btn" onclick="openModeList('other')"><span class="icon-slot" data-icon="pin" data-size="24"></span> その他</button>
-    </div>
+    <div class="dest-modes" id="destModes"></div>
     <div class="dest-access-note" id="destAccessNote" style="display:none;"></div>
     <div class="dest-tour-block" id="destTourBlock" style="display:none;"></div>
   </div>
@@ -1969,6 +1959,7 @@ const transportItems = [
   {mode:'other', base:"อยากเช่ามอเตอร์ไซค์ {D} วัน", type:'s', jp:"バイクを{D}日間借りたいです", dayInput:true},
 ];
 const modeMeta = { bus:{icon:'bus2', label:'バス'}, densha:{icon:'train2', label:'電車'}, tetsudo:{icon:'tetsudo', label:'鉄道'}, taxi:{icon:'taxi2', label:'タクシー'}, tuktuk:{icon:'tuktuk2', label:'トゥクトゥク'}, songthaew:{icon:'songthaew2', label:'ソンテウ'}, rotu:{icon:'rotu', label:'ロットゥー'}, plane:{icon:'plane', label:'飛行機'}, ferry:{icon:'ferry', label:'船'}, other:{icon:'pin', label:'その他'} };
+const TRANSPORT_MODE_ORDER = ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','other'];
 function metaIconHtml(meta){
   return ICON_DATA[meta.icon] ? iconSvg(meta.icon, 48) : meta.icon;
 }
@@ -2128,6 +2119,7 @@ const situations = [
 // 他の初期化処理(お気に入り読み込み・ホテル情報等)より先に描画してしまう
 renderNearby();
 renderSituations();
+renderDestModes();
 
 let currentDestination = null;
 let selectedFollowUp = null;
@@ -3877,6 +3869,11 @@ function fitLandscapeText(){
   const padB = parseFloat(cs.paddingBottom) || 0;
   const maxWidth = (container.clientWidth - padL - padR) * 0.95;
   const maxHeight = (container.clientHeight - padT - padB) * 0.85;
+  // maxWidthを明示的に指定することで複数行に折り返させる。
+  // word-break:normal(CSS側)と組み合わせることで、単語の途中では改行されず、
+  // スペースの無い長い連続文字列(タイ語に多い)がmaxWidthを超える場合のみ、
+  // 下のループでフォントサイズを縮小して対応する。
+  el.style.maxWidth = maxWidth + 'px';
   let fontSize = 220;
   el.style.fontSize = fontSize + 'px';
   while(fontSize > 24 && (el.scrollWidth > maxWidth || el.scrollHeight > maxHeight)){
@@ -4165,23 +4162,31 @@ function ticketRowHtml(){
 }
 function switchTransportTab(mode){
   transportTab = mode;
-  document.querySelectorAll('.transport-tab').forEach(btn => {
+  document.querySelectorAll('#transportTabsFixed .transport-tab').forEach(btn => {
     const isActive = btn.dataset.mode === mode;
     btn.classList.toggle('active', isActive);
   });
-  const activeTabEl = document.querySelector('.transport-tab.active');
+  const activeTabEl = document.querySelector('#transportTabsFixed .transport-tab.active');
   if(activeTabEl) activeTabEl.scrollIntoView({behavior:'auto', inline:'center', block:'nearest'});
   renderComposerList();
 }
 function renderTransportTabs(){
   let tabsHtml = `<div class="transport-tabs">`;
-  ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','other'].forEach(mode => {
+  TRANSPORT_MODE_ORDER.forEach(mode => {
     const meta = modeMeta[mode];
     const active = transportTab === mode ? 'active' : '';
     tabsHtml += `<button class="transport-tab ${active}" data-mode="${mode}" onclick="switchTransportTab('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
   });
   tabsHtml += `</div>`;
   document.getElementById('transportTabsFixed').innerHTML = tabsHtml;
+}
+function renderDestModes(){
+  const el = document.getElementById('destModes');
+  if(!el) return;
+  el.innerHTML = TRANSPORT_MODE_ORDER.map(mode => {
+    const meta = modeMeta[mode];
+    return `<button class="transport-tab" data-mode="${mode}" onclick="openModeList('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
+  }).join('');
 }
 function renderComposerList(){
   let html = '';

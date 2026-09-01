@@ -2120,7 +2120,7 @@ let openState = null;
 let ticketSelected = false;
 let ticketCount = 1;
 let hourCount = 2;
-let peopleCount = 2;
+let peopleCount = 4;
 let dayCount = 1;
 let airlineSelectedIdx = -1;
 const AIRLINE_OPTIONS = [
@@ -4283,7 +4283,7 @@ function toggleFollowUp(idx){
     hourCount = 2;
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].peopleInput){
-    peopleCount = 2;
+    peopleCount = 4;
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].dayInput){
     dayCount = 1;

@@ -1276,6 +1276,11 @@ setTimeout(() => {
 const ICON_DATA = {
   tuktuk: "images/icons/tuktuk.png",
   songthaew: "images/icons/songthaew.png",
+  bus2: "images/icons/bus2.png",
+  train2: "images/icons/train2.png",
+  taxi2: "images/icons/taxi2.png",
+  tuktuk2: "images/icons/tuktuk2.png",
+  songthaew2: "images/icons/songthaew2.png",
   atm: "images/icons/atm.png",
   bag: "images/icons/bag.png",
   bowl: "images/icons/bowl.png",
@@ -1946,7 +1951,7 @@ const transportItems = [
   {mode:'other', base:"อยากเช่ารถยนต์ {D} วัน", type:'s', jp:"車を{D}日間借りたいです", dayInput:true},
   {mode:'other', base:"อยากเช่ามอเตอร์ไซค์ {D} วัน", type:'s', jp:"バイクを{D}日間借りたいです", dayInput:true},
 ];
-const modeMeta = { bus:{icon:'bus', label:'バス'}, densha:{icon:'train', label:'電車'}, tetsudo:{icon:'tetsudo', label:'鉄道'}, taxi:{icon:'taxi', label:'タクシー'}, tuktuk:{icon:'tuktuk', label:'トゥクトゥク'}, songthaew:{icon:'songthaew', label:'ソンテウ'}, rotu:{icon:'rotu', label:'ロットゥー'}, plane:{icon:'plane', label:'飛行機'}, ferry:{icon:'ferry', label:'船'}, other:{icon:'pin', label:'その他'} };
+const modeMeta = { bus:{icon:'bus2', label:'バス'}, densha:{icon:'train2', label:'電車'}, tetsudo:{icon:'tetsudo', label:'鉄道'}, taxi:{icon:'taxi2', label:'タクシー'}, tuktuk:{icon:'tuktuk2', label:'トゥクトゥク'}, songthaew:{icon:'songthaew2', label:'ソンテウ'}, rotu:{icon:'rotu', label:'ロットゥー'}, plane:{icon:'plane', label:'飛行機'}, ferry:{icon:'ferry', label:'船'}, other:{icon:'pin', label:'その他'} };
 function metaIconHtml(meta){
   return ICON_DATA[meta.icon] ? iconSvg(meta.icon, 24) : meta.icon;
 }

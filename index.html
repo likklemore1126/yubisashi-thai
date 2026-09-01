@@ -4161,11 +4161,12 @@ function renderComposerFixed(){
   document.getElementById('composerFixed').innerHTML = renderDestinationAnchor() + renderSelectedPhraseBlock();
 }
 function ticketRowHtml(){
-  if(!currentDestination || !currentDestination.station) return '';
+  const st = getEffectiveStation(currentDestination);
+  if(!st) return '';
   const sel = ticketSelected ? 'selected' : '';
   return `<div class="follow-item ${sel}" onclick="toggleTicket()">
-    <div class="fi-th">${iconSvg('ticket', 24)} ขอตั๋วไป${currentDestination.station.th}</div>
-    <div class="fi-jp">${currentDestination.station.jp}までの乗車券をお願いします</div>
+    <div class="fi-th">🎫 ขอตั๋วไป${st.th}</div>
+    <div class="fi-jp">${st.jp}までの乗車券をお願いします</div>
   </div>`;
 }
 function switchTransportTab(mode){
@@ -4213,7 +4214,7 @@ function renderComposerList(){
       .filter(x => x.item.mode === transportTab)
       .filter(x => {
         if(x.item.destInsert && x.item.mode === 'densha'){
-          return !!(currentDestination && currentDestination.station);
+          return !!getEffectiveStation(currentDestination);
         }
         return true;
       })
@@ -4293,10 +4294,26 @@ function changeDayCount(delta){
   dayCount = Math.max(1, Math.min(30, dayCount + delta));
   renderComposerFixed();
 }
+// 目的地自体が「〇〇駅」の場合、station(近くの駅情報)を別途持たないデータ構造のため、
+// 乗車券フレーズ等が正しく出るよう、目的地名の末尾が「駅」であれば目的地自身を駅とみなす。
+// (例外: 「ワン・バンコク(ルンピニー駅近くの...)」のように、末尾の括弧内だけに「駅」が
+//  含まれる場合は駅そのものではないので対象外にする)
+function isStationDestination(dest){
+  if(!dest || !dest.jp) return false;
+  const core = dest.jp.replace(/\([^()]*\)\s*$/, '').trim();
+  return core.endsWith('駅');
+}
+function getEffectiveStation(dest){
+  if(!dest) return null;
+  if(dest.station) return dest.station;
+  if(isStationDestination(dest)) return {th: dest.th, jp: dest.jp, access: dest.access || '駅直結'};
+  return null;
+}
 function destInsertNames(mode){
   if(!currentDestination) return {th:'ที่นี่', jp:'ここ'};
-  if((mode === 'densha' || mode === 'bus') && currentDestination.station){
-    return {th: currentDestination.station.th, jp: currentDestination.station.jp};
+  const st = getEffectiveStation(currentDestination);
+  if((mode === 'densha' || mode === 'bus') && st){
+    return {th: st.th, jp: st.jp};
   }
   return {th: currentDestination.th, jp: currentDestination.jp};
 }
@@ -4455,8 +4472,8 @@ function clearSelectedPhrase(){
   renderComposerList();
 }
 function showTicketFullscreen(){
-  if(!(currentDestination && currentDestination.station)) return;
-  const st = currentDestination.station;
+  const st = getEffectiveStation(currentDestination);
+  if(!st) return;
   const th = `ขอตั๋วไป${st.th} ${ticketCount} ใบ${particle('s')}`;
   const jp = `${st.jp}までの乗車券を${ticketCount}枚お願いします`;
   setLastPhrase(th, jp);
@@ -4493,8 +4510,9 @@ function showFollowUpFullscreen(){
   showFullscreenNow();
 }
 function renderSelectedPhraseBlock(){
-  if(ticketSelected && currentDestination && currentDestination.station){
-    const st = currentDestination.station;
+  const ticketStation = getEffectiveStation(currentDestination);
+  if(ticketSelected && ticketStation){
+    const st = ticketStation;
     const th = `ขอตั๋วไป${st.th} ${ticketCount} ใบ${particle('s')}`;
     const jp = `${st.jp}までの乗車券を${ticketCount}枚お願いします`;
     setLastPhrase(th, jp);

@@ -1932,7 +1932,7 @@ const transportItems = [
   {mode:'plane', base:"ขอที่นั่งใกล้ห้องน้ำ", type:'s', jp:"トイレ近くの座席が希望です"},
   {mode:'plane', base:"เที่ยวบินระหว่างประเทศอยู่ที่ไหน", type:'q', jp:"国際線はどこですか？"},
   {mode:'plane', base:"เที่ยวบินภายในประเทศอยู่ที่ไหน", type:'q', jp:"国内線はどこですか？"},
-  {mode:'plane', base:"เลานจ์ของสายการบิน {AIRLINE} อยู่ที่ไหน", type:'q', jp:"{AIRLINE}のラウンジはどこですか？", airlineInput:true},
+  {mode:'plane', base:"เลานจ์ของสายการบิน {AIRLINE} อยู่ที่ไหน", type:'q', jp:"{AIRLINE}のラウンジはどこですか？", airlineInput:true, loungeAirline:true},
   {mode:'plane', base:"เลานจ์ที่ใช้ Priority Pass ได้อยู่ที่ไหน", type:'q', jp:"プライオリティパスの使えるラウンジの場所はどこですか？"},
   {mode:'plane', base:"ห้องสูบบุหรี่อยู่ที่ไหน", type:'q', jp:"喫煙所はどこですか？"},
   {mode:'ferry', base:"เรือลำนี้ไป {DEST} ไหม", type:'q', jp:"この船は{DEST}へ行きますか？", destInsert:true},
@@ -2143,8 +2143,24 @@ const AIRLINE_OPTIONS = [
   {th:'AirAsia', jp:'エアアジア'},
   {th:'Scoot', jp:'スクート'},
 ];
-function getAirlineNames(){
-  if(airlineSelectedIdx >= 0 && AIRLINE_OPTIONS[airlineSelectedIdx]) return AIRLINE_OPTIONS[airlineSelectedIdx];
+// スワンナプーム/ドンムアン空港に自社直営ラウンジを持つ航空会社のみ(2026年時点で確認できたもの)
+const LOUNGE_AIRLINE_OPTIONS = [
+  {th:'การบินไทย', jp:'タイ国際航空'},
+  {th:'บางกอกแอร์เวย์ส', jp:'バンコクエアウェイズ'},
+  {th:'นกแอร์', jp:'ノックエア'},
+  {th:'JAL', jp:'JAL(日本航空)'},
+  {th:'Cathay Pacific', jp:'キャセイパシフィック航空'},
+  {th:'EVA Air', jp:'エバー航空'},
+  {th:'Singapore Airlines', jp:'シンガポール航空'},
+  {th:'Qatar Airways', jp:'カタール航空'},
+];
+function currentAirlineOptions(item){
+  return (item && item.loungeAirline) ? LOUNGE_AIRLINE_OPTIONS : AIRLINE_OPTIONS;
+}
+function getAirlineNames(item, isSelectedNow){
+  if(!isSelectedNow) return {th:'○○', jp:'○○'};
+  const options = currentAirlineOptions(item);
+  if(airlineSelectedIdx >= 0 && options[airlineSelectedIdx]) return options[airlineSelectedIdx];
   return {th:'○○', jp:'○○'};
 }
 let transportTab = 'bus';
@@ -4199,7 +4215,7 @@ function renderComposerList(){
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に日数を変更できます</span>`;
       }
       if(item.airlineInput){
-        const {th: airlineTh, jp: airlineJp} = getAirlineNames();
+        const {th: airlineTh, jp: airlineJp} = getAirlineNames(item, isSelectedNow);
         th = th.replace('{AIRLINE}', airlineTh);
         jp = jp.replace('{AIRLINE}', airlineJp);
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に航空会社を選べます</span>`;
@@ -4433,7 +4449,7 @@ function showFollowUpFullscreen(){
     followJp = followJp.replace('{D}', dayCount);
   }
   if(follow.airlineInput){
-    const {th: airlineTh, jp: airlineJp} = getAirlineNames();
+    const {th: airlineTh, jp: airlineJp} = getAirlineNames(follow, true);
     followTh = followTh.replace('{AIRLINE}', airlineTh);
     followJp = followJp.replace('{AIRLINE}', airlineJp);
   }
@@ -4498,10 +4514,10 @@ function renderSelectedPhraseBlock(){
     </div>`;
   }
   if(follow.airlineInput){
-    const {th: airlineTh, jp: airlineJp} = getAirlineNames();
+    const {th: airlineTh, jp: airlineJp} = getAirlineNames(follow, true);
     followTh = followTh.replace('{AIRLINE}', airlineTh);
     followJp = followJp.replace('{AIRLINE}', airlineJp);
-    const optionsHtml = AIRLINE_OPTIONS.map((a, i) => `<option value="${i}" ${airlineSelectedIdx===i?'selected':''}>${a.jp}</option>`).join('');
+    const optionsHtml = currentAirlineOptions(follow).map((a, i) => `<option value="${i}" ${airlineSelectedIdx===i?'selected':''}>${a.jp}</option>`).join('');
     stepperHtml = `<div class="airline-input-row">
       <select id="airlineSelectInput" onchange="updateAirlineSelect(this.value)">
         <option value="-1" ${airlineSelectedIdx===-1?'selected':''}>航空会社を選択してください</option>

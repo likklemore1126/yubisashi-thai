@@ -740,9 +740,10 @@
   }
   .ticket-stepper span{ font-family:'Kanit', sans-serif; font-weight:700; font-size:18px; color:#fff; min-width:48px; text-align:center; }
   .airline-input-row{ margin-top:14px; display:flex; justify-content:center; }
-  .airline-input-row input{
+  .airline-input-row select{
     width:100%; max-width:280px; padding:10px 14px; border-radius:10px; border:none;
     background:rgba(255,255,255,0.92); color:var(--ink); font-size:15px; text-align:center;
+    -webkit-appearance:none; appearance:none;
   }
   .landscape-display{
     display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
@@ -2121,7 +2122,31 @@ let ticketCount = 1;
 let hourCount = 2;
 let peopleCount = 2;
 let dayCount = 1;
-let airlineText = '';
+let airlineSelectedIdx = -1;
+const AIRLINE_OPTIONS = [
+  {th:'การบินไทย', jp:'タイ国際航空'},
+  {th:'ไทยแอร์เอเชีย', jp:'タイ・エアアジア'},
+  {th:'นกแอร์', jp:'ノックエア'},
+  {th:'บางกอกแอร์เวย์ส', jp:'バンコクエアウェイズ'},
+  {th:'ไทยไลอ้อนแอร์', jp:'タイ・ライオンエア'},
+  {th:'ไทยเวียตเจ็ท', jp:'タイ・ベトジェット'},
+  {th:'JAL', jp:'JAL(日本航空)'},
+  {th:'ANA', jp:'ANA(全日空)'},
+  {th:'Peach', jp:'ピーチ・アビエーション'},
+  {th:'Jetstar', jp:'ジェットスター'},
+  {th:'Singapore Airlines', jp:'シンガポール航空'},
+  {th:'Cathay Pacific', jp:'キャセイパシフィック航空'},
+  {th:'EVA Air', jp:'エバー航空'},
+  {th:'Korean Air', jp:'大韓航空'},
+  {th:'Emirates', jp:'エミレーツ航空'},
+  {th:'Qatar Airways', jp:'カタール航空'},
+  {th:'AirAsia', jp:'エアアジア'},
+  {th:'Scoot', jp:'スクート'},
+];
+function getAirlineNames(){
+  if(airlineSelectedIdx >= 0 && AIRLINE_OPTIONS[airlineSelectedIdx]) return AIRLINE_OPTIONS[airlineSelectedIdx];
+  return {th:'○○', jp:'○○'};
+}
 let transportTab = 'bus';
 
 // ---------- お気に入り(並び替え作文) ----------
@@ -4174,10 +4199,10 @@ function renderComposerList(){
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に日数を変更できます</span>`;
       }
       if(item.airlineInput){
-        const name = airlineText.trim() || '○○';
-        th = th.replace('{AIRLINE}', name);
-        jp = jp.replace('{AIRLINE}', name);
-        if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に航空会社名を入力できます</span>`;
+        const {th: airlineTh, jp: airlineJp} = getAirlineNames();
+        th = th.replace('{AIRLINE}', airlineTh);
+        jp = jp.replace('{AIRLINE}', airlineJp);
+        if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に航空会社を選べます</span>`;
       }
       if(item.destInsert){
         const {th: destTh, jp: destJp} = destInsertNames(item.mode);
@@ -4222,10 +4247,6 @@ function changeDayCount(delta){
   dayCount = Math.max(1, Math.min(30, dayCount + delta));
   renderComposerFixed();
 }
-function setAirlineText(v){
-  airlineText = v;
-  renderComposerFixed();
-}
 function destInsertNames(mode){
   if(!currentDestination) return {th:'ที่นี่', jp:'ここ'};
   if((mode === 'densha' || mode === 'bus') && currentDestination.station){
@@ -4252,7 +4273,7 @@ function toggleFollowUp(idx){
     dayCount = 1;
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].airlineInput){
-    airlineText = '';
+    airlineSelectedIdx = -1;
   }
   renderComposerFixed();
   renderComposerList();
@@ -4412,9 +4433,9 @@ function showFollowUpFullscreen(){
     followJp = followJp.replace('{D}', dayCount);
   }
   if(follow.airlineInput){
-    const name = airlineText.trim() || '○○';
-    followTh = followTh.replace('{AIRLINE}', name);
-    followJp = followJp.replace('{AIRLINE}', name);
+    const {th: airlineTh, jp: airlineJp} = getAirlineNames();
+    followTh = followTh.replace('{AIRLINE}', airlineTh);
+    followJp = followJp.replace('{AIRLINE}', airlineJp);
   }
   if(follow.destInsert){
     const {th: destTh, jp: destJp} = destInsertNames(follow.mode);
@@ -4477,11 +4498,15 @@ function renderSelectedPhraseBlock(){
     </div>`;
   }
   if(follow.airlineInput){
-    const name = airlineText.trim() || '○○';
-    followTh = followTh.replace('{AIRLINE}', name);
-    followJp = followJp.replace('{AIRLINE}', name);
+    const {th: airlineTh, jp: airlineJp} = getAirlineNames();
+    followTh = followTh.replace('{AIRLINE}', airlineTh);
+    followJp = followJp.replace('{AIRLINE}', airlineJp);
+    const optionsHtml = AIRLINE_OPTIONS.map((a, i) => `<option value="${i}" ${airlineSelectedIdx===i?'selected':''}>${a.jp}</option>`).join('');
     stepperHtml = `<div class="airline-input-row">
-      <input type="text" id="airlineTextInput" placeholder="例: JAL、タイ国際航空" value="${airlineText.replace(/"/g, '&quot;')}" oninput="updateAirlineText(this.value)">
+      <select id="airlineSelectInput" onchange="updateAirlineSelect(this.value)">
+        <option value="-1" ${airlineSelectedIdx===-1?'selected':''}>航空会社を選択してください</option>
+        ${optionsHtml}
+      </select>
     </div>`;
   }
   if(follow.destInsert){
@@ -4498,21 +4523,9 @@ function renderSelectedPhraseBlock(){
     <button class="fullscreen-btn" onclick="showFollowUpFullscreen();">${iconSvg('search', 16)} 相手に見せる</button>${nbTriggerHtml(follow.numberAnswer)}${timeTriggerHtml(follow.timeAnswer)}${favStarHtml(followTh, followJp)}
   </div>`;
 }
-function updateAirlineText(v){
-  airlineText = v;
-  if(selectedFollowUp === null) return;
-  const follow = transportItems[selectedFollowUp];
-  if(!follow.airlineInput) return;
-  let followTh = fullTh(follow.base, follow.type);
-  let followJp = follow.jp;
-  const name = airlineText.trim() || '○○';
-  followTh = followTh.replace('{AIRLINE}', name);
-  followJp = followJp.replace('{AIRLINE}', name);
-  setLastPhrase(followTh, followJp);
-  const thEl = document.getElementById('spTh');
-  const jpEl = document.getElementById('spJp');
-  if(thEl) thEl.textContent = followTh;
-  if(jpEl) jpEl.textContent = followJp;
+function updateAirlineSelect(v){
+  airlineSelectedIdx = parseInt(v, 10);
+  renderComposerFixed();
 }
 
 

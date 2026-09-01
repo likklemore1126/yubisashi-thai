@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-09-01p';
+const SW_VERSION = '2026-09-01q';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [

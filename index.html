@@ -739,12 +739,28 @@
     color:#fff; font-size:20px; font-weight:700; cursor:pointer;
   }
   .ticket-stepper span{ font-family:'Kanit', sans-serif; font-weight:700; font-size:18px; color:#fff; min-width:48px; text-align:center; }
-  .airline-input-row{ margin-top:14px; display:flex; justify-content:center; }
-  .airline-input-row select{
+  .airline-input-row{ margin-top:14px; display:flex; justify-content:center; position:relative; }
+  .airline-select-btn{
     width:100%; max-width:280px; padding:10px 14px; border-radius:10px; border:none;
     background:rgba(255,255,255,0.92); color:var(--ink); font-size:15px; text-align:center;
-    -webkit-appearance:none; appearance:none;
+    font-family:'Noto Sans JP', sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
   }
+  .airline-select-btn .chevron{ font-size:11px; opacity:0.6; transition:transform 0.15s ease; }
+  .airline-select-btn.open .chevron{ transform:rotate(180deg); }
+  .airline-select-panel{
+    position:absolute; left:50%; top:calc(100% + 6px); transform:translateX(-50%);
+    width:100%; max-width:280px; max-height:252px; overflow-y:auto;
+    background:#fff; border-radius:10px; box-shadow:0 10px 26px rgba(23,36,42,0.3);
+    z-index:30; display:none;
+  }
+  .airline-select-panel.show{ display:block; }
+  .airline-select-option{
+    padding:11px 14px; text-align:center; font-size:15px; color:var(--ink); cursor:pointer;
+    font-family:'Noto Sans JP', sans-serif; border-bottom:1px solid var(--line);
+  }
+  .airline-select-option:last-child{ border-bottom:none; }
+  .airline-select-option:active{ background:var(--sand); }
+  .airline-select-option.selected{ background:var(--marigold); font-weight:700; color:#5c4415; }
   .landscape-display{
     display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
     flex-direction:column; align-items:center; justify-content:center; text-align:center;
@@ -2123,6 +2139,7 @@ let hourCount = 2;
 let peopleCount = 4;
 let dayCount = 1;
 let airlineSelectedIdx = -1;
+let airlineDropdownOpen = false;
 const AIRLINE_OPTIONS = [
   {th:'การบินไทย', jp:'タイ国際航空'},
   {th:'ไทยแอร์เอเชีย', jp:'タイ・エアアジア'},
@@ -4291,6 +4308,7 @@ function toggleFollowUp(idx){
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].airlineInput){
     airlineSelectedIdx = -1;
   }
+  airlineDropdownOpen = false;
   renderComposerFixed();
   renderComposerList();
 }
@@ -4517,12 +4535,14 @@ function renderSelectedPhraseBlock(){
     const {th: airlineTh, jp: airlineJp} = getAirlineNames(follow, true);
     followTh = followTh.replace('{AIRLINE}', airlineTh);
     followJp = followJp.replace('{AIRLINE}', airlineJp);
-    const optionsHtml = currentAirlineOptions(follow).map((a, i) => `<option value="${i}" ${airlineSelectedIdx===i?'selected':''}>${a.jp}</option>`).join('');
+    const optionsList = currentAirlineOptions(follow);
+    const optionsHtml = optionsList.map((a, i) =>
+      `<div class="airline-select-option ${airlineSelectedIdx===i?'selected':''}" onclick="event.stopPropagation(); selectAirlineOption(${i});">${a.jp}</div>`
+    ).join('');
+    const btnLabel = (airlineSelectedIdx >= 0 && optionsList[airlineSelectedIdx]) ? optionsList[airlineSelectedIdx].jp : '航空会社を選択してください';
     stepperHtml = `<div class="airline-input-row">
-      <select id="airlineSelectInput" onchange="updateAirlineSelect(this.value)">
-        <option value="-1" ${airlineSelectedIdx===-1?'selected':''}>航空会社を選択してください</option>
-        ${optionsHtml}
-      </select>
+      <button type="button" class="airline-select-btn ${airlineDropdownOpen ? 'open' : ''}" onclick="event.stopPropagation(); toggleAirlineDropdown();">${btnLabel}<span class="chevron">▾</span></button>
+      <div class="airline-select-panel ${airlineDropdownOpen ? 'show' : ''}">${optionsHtml}</div>
     </div>`;
   }
   if(follow.destInsert){
@@ -4543,6 +4563,21 @@ function updateAirlineSelect(v){
   airlineSelectedIdx = parseInt(v, 10);
   renderComposerFixed();
 }
+function toggleAirlineDropdown(){
+  airlineDropdownOpen = !airlineDropdownOpen;
+  renderComposerFixed();
+}
+function selectAirlineOption(i){
+  airlineSelectedIdx = i;
+  airlineDropdownOpen = false;
+  renderComposerFixed();
+}
+document.addEventListener('click', (e) => {
+  if(!airlineDropdownOpen) return;
+  if(e.target.closest('.airline-select-btn, .airline-select-panel')) return;
+  airlineDropdownOpen = false;
+  renderComposerFixed();
+});
 
 
 function nbTriggerHtml(config){

@@ -4075,6 +4075,7 @@ function openModeList(mode){
   transportTab = mode;
   document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg('taxi', 22)}</span>移動する`;
   renderComposerFixed();
+  renderTransportTabs();
   renderComposerList();
   document.getElementById('composerScreen').classList.add('show');
 }
@@ -4084,6 +4085,7 @@ function openTransportComposer(){
   transportTab = 'bus';
   document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg('taxi', 22)}</span>移動する`;
   renderComposerFixed();
+  renderTransportTabs();
   renderComposerList();
   document.getElementById('composerScreen').classList.add('show');
 }
@@ -4105,19 +4107,27 @@ function ticketRowHtml(){
 }
 function switchTransportTab(mode){
   transportTab = mode;
+  document.querySelectorAll('.transport-tab').forEach(btn => {
+    const isActive = btn.dataset.mode === mode;
+    btn.classList.toggle('active', isActive);
+  });
+  const activeTabEl = document.querySelector('.transport-tab.active');
+  if(activeTabEl) activeTabEl.scrollIntoView({behavior:'auto', inline:'center', block:'nearest'});
   renderComposerList();
+}
+function renderTransportTabs(){
+  let tabsHtml = `<div class="transport-tabs">`;
+  ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','other'].forEach(mode => {
+    const meta = modeMeta[mode];
+    const active = transportTab === mode ? 'active' : '';
+    tabsHtml += `<button class="transport-tab ${active}" data-mode="${mode}" onclick="switchTransportTab('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
+  });
+  tabsHtml += `</div>`;
+  document.getElementById('transportTabsFixed').innerHTML = tabsHtml;
 }
 function renderComposerList(){
   let html = '';
-  let tabsHtml = '';
   if(openState && openState.type === 'transport'){
-    tabsHtml += `<div class="transport-tabs">`;
-    ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','other'].forEach(mode => {
-      const meta = modeMeta[mode];
-      const active = transportTab === mode ? 'active' : '';
-      tabsHtml += `<button class="transport-tab ${active}" onclick="switchTransportTab('${mode}')">${metaIconHtml(meta)}<span>${meta.label}</span></button>`;
-    });
-    tabsHtml += `</div>`;
     if(currentDestination && currentDestination.access){
       html += `<div class="dest-access-note"><div class="dest-access-row">${iconSvg('pin', 14)} 行き方参考: ${currentDestination.access}</div>${transportBlockHtml(currentDestination)}</div>`;
     } else if(currentDestination && currentDestination.station){
@@ -4182,12 +4192,7 @@ function renderComposerList(){
       </div>`;
     });
   }
-  document.getElementById('transportTabsFixed').innerHTML = tabsHtml;
   document.getElementById('composerList').innerHTML = html;
-  if(openState && openState.type === 'transport' && document.getElementById('composerScreen').classList.contains('show')){
-    const activeTabEl = document.querySelector('.transport-tab.active');
-    if(activeTabEl) activeTabEl.scrollIntoView({behavior:'auto', inline:'center', block:'nearest'});
-  }
 }
 function toggleTicket(){
   ticketSelected = !ticketSelected;

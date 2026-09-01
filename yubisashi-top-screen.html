@@ -3875,19 +3875,32 @@ function fitLandscapeText(){
   const padR = parseFloat(cs.paddingRight) || 0;
   const padT = parseFloat(cs.paddingTop) || 0;
   const padB = parseFloat(cs.paddingBottom) || 0;
-  const maxWidth = (container.clientWidth - padL - padR) * 0.95;
+  const fullMaxWidth = (container.clientWidth - padL - padR) * 0.95;
   const maxHeight = (container.clientHeight - padT - padB) * 0.85;
-  // maxWidthを明示的に指定することで複数行に折り返させる。
+  // 横向き画面は「幅は広いが高さが少ない」形状のため、無理に1行へ収めようとすると
+  // 横の余白が余ったまま、高さの制約だけで文字が小さく決まってしまう。
+  // そこで折り返し幅を複数パターン試し、結果的に一番文字が大きくなる
+  // パターン(=画面の余白を無駄にしないパターン)を採用する。
   // word-break:normal(CSS側)と組み合わせることで、単語の途中では改行されず、
-  // スペースの無い長い連続文字列(タイ語に多い)がmaxWidthを超える場合のみ、
+  // スペースの無い長い連続文字列(タイ語に多い)がその折り返し幅を超える場合のみ、
   // 下のループでフォントサイズを縮小して対応する。
-  el.style.maxWidth = maxWidth + 'px';
-  let fontSize = 220;
-  el.style.fontSize = fontSize + 'px';
-  while(fontSize > 24 && (el.scrollWidth > maxWidth || el.scrollHeight > maxHeight)){
-    fontSize -= 6;
+  const widthFractions = [1, 0.8, 0.65, 0.5, 0.38, 0.28];
+  let best = null;
+  widthFractions.forEach(frac => {
+    const w = fullMaxWidth * frac;
+    let fontSize = 220;
+    el.style.maxWidth = w + 'px';
     el.style.fontSize = fontSize + 'px';
-  }
+    while(fontSize > 24 && (el.scrollWidth > w || el.scrollHeight > maxHeight)){
+      fontSize -= 6;
+      el.style.fontSize = fontSize + 'px';
+    }
+    if(!best || fontSize > best.fontSize){
+      best = {fontSize, width: w};
+    }
+  });
+  el.style.maxWidth = best.width + 'px';
+  el.style.fontSize = best.fontSize + 'px';
 }
 function showFullscreenNow(){
   if(!lastShownPhrase) return;

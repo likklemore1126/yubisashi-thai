@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>指さしタイ ― 見せるだけで、伝わる。タイ旅行の会話帳アプリ</title>
+<meta name="description" content="タイ語が話せなくても大丈夫。スマホの画面を見せるだけで伝わる、旅行者専用のタイ語会話帳アプリ「指さしタイ」。買い切り2,000円、旅行中はオフラインでも使えます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17242A;
+    --paper:#FBF7EF;
+    --sand:#F1E9D8;
+    --marigold:#E8A33D;
+    --marigold-deep:#C9812A;
+    --teal:#0F6B62;
+    --teal-deep:#0A4C46;
+    --pink:#E23F73;
+    --line:#E4DAC4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    font-family:'Noto Sans JP', sans-serif;
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit;}
+  .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
+  section{padding:88px 0;}
+  @media (max-width:600px){ section{padding:64px 0;} }
+
+  h1,h2,h3{font-weight:800; line-height:1.4; letter-spacing:0.01em;}
+  .th{font-family:'Kanit', sans-serif; font-weight:700;}
+
+  /* ---------- ヘッダー ---------- */
+  header{
+    position:sticky; top:0; z-index:40;
+    background:rgba(251,247,239,0.92); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    max-width:720px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ font-family:'Kanit', sans-serif; font-weight:700; font-size:19px; display:flex; align-items:baseline; gap:6px; }
+  .brand span{ color:var(--marigold-deep); }
+  .header-cta{
+    background:var(--ink); color:var(--paper); text-decoration:none;
+    padding:9px 18px; border-radius:999px; font-size:13.5px; font-weight:700;
+    white-space:nowrap;
+  }
+
+  /* ---------- ヒーロー ---------- */
+  .hero{ padding:56px 0 72px; }
+  .hero-eyebrow{ font-size:13.5px; color:var(--teal-deep); font-weight:700; margin-bottom:14px; }
+  .hero h1{ font-size:34px; margin-bottom:18px; }
+  .hero h1 .accent{ color:var(--marigold-deep); }
+  .hero-lead{ font-size:16px; color:#4a4237; max-width:46ch; margin-bottom:32px; }
+
+  /* 実機の「相手に見せる」拡大表示を再現したモックアップ */
+  .phone-mock{
+    background:var(--ink); border-radius:20px; padding:34px 26px 30px;
+    color:#fff; position:relative; overflow:hidden;
+    box-shadow:0 30px 60px -24px rgba(23,36,42,0.5);
+    max-width:420px;
+  }
+  .phone-mock::before{
+    content:"タップで閉じる ✕"; position:absolute; top:14px; right:18px;
+    font-size:10.5px; color:rgba(255,255,255,0.4);
+  }
+  .phone-mock-flag{ font-size:22px; margin-bottom:14px; }
+  .phone-mock-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:30px; line-height:1.3; }
+  .phone-mock-jp{ font-size:13px; color:rgba(255,255,255,0.62); margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.14); }
+
+  .hero-price-row{ display:flex; align-items:center; gap:16px; margin-top:34px; flex-wrap:wrap; }
+  .price-tag{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; }
+  .price-tag small{ font-family:'Noto Sans JP', sans-serif; font-size:13px; font-weight:600; color:#6b6355; margin-left:6px; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--marigold); color:var(--ink); text-decoration:none;
+    padding:15px 26px; border-radius:12px; font-weight:700; font-size:15.5px;
+    border:none; cursor:pointer;
+  }
+  .btn.disabled{ background:var(--sand); color:#9a9284; border:1.5px dashed var(--line); cursor:default; }
+  .hero-note{ font-size:12.5px; color:#8B8272; margin-top:10px; }
+
+  /* ---------- 課題提起 ---------- */
+  .problem{ background:var(--ink); color:var(--paper); }
+  .problem h2{ color:#fff; font-size:24px; max-width:22ch; margin-bottom:26px; }
+  .problem-list{ list-style:none; display:flex; flex-direction:column; gap:18px; }
+  .problem-list li{ display:flex; gap:14px; align-items:flex-start; font-size:15px; color:rgba(255,255,255,0.78); }
+  .problem-list li::before{ content:"・"; color:var(--marigold); font-weight:700; flex:0 0 auto; }
+  .problem-answer{ margin-top:36px; padding-top:32px; border-top:1px solid rgba(255,255,255,0.16); font-size:16px; }
+  .problem-answer strong{ color:var(--marigold); font-weight:700; }
+
+  /* ---------- 使い方3ステップ ---------- */
+  .steps h2{ font-size:24px; margin-bottom:8px; }
+  .section-lead{ font-size:14.5px; color:#6b6355; margin-bottom:44px; }
+  .step{ display:flex; gap:26px; padding:32px 0; border-top:1px solid var(--line); flex-wrap:wrap; align-items:center; }
+  .step:last-child{ border-bottom:1px solid var(--line); }
+  .step-text{ display:flex; gap:22px; flex:1 1 260px; }
+  .step-num{ font-family:'Kanit', sans-serif; font-weight:700; font-size:15px; color:var(--marigold-deep); flex:0 0 32px; }
+  .step-body h3{ font-size:17px; margin-bottom:6px; }
+  .step-body p{ font-size:14.5px; color:#6b6355; max-width:48ch; }
+
+  /* 3ステップのモックアップ(現時点では実機スクリーンショットではなく再現イメージ) */
+  .step-mock{
+    flex:0 0 220px; background:#fff; border-radius:14px; padding:14px;
+    border:1px solid var(--line); box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
+  }
+  .step-mock.dark{ background:var(--ink); border-color:var(--ink); }
+  .mock-searchbar{
+    background:var(--sand); border:1.5px solid var(--line); border-radius:8px;
+    padding:8px 10px; font-size:12px; color:#6b6355; margin-bottom:10px;
+  }
+  .mock-destcard{ background:var(--teal); color:#fff; border-radius:10px; padding:12px; }
+  .mock-destcard-th{ font-size:18px; }
+  .mock-destcard-jp{ font-size:10.5px; opacity:0.8; margin-top:4px; }
+  .mock-phrase-item{
+    background:var(--sand); border:1.5px solid var(--line); border-radius:9px;
+    padding:9px 11px; margin-bottom:8px;
+  }
+  .mock-phrase-item:last-child{ margin-bottom:0; }
+  .mock-phrase-item.selected{ background:var(--marigold); border-color:var(--marigold-deep); }
+  .mock-phrase-th{ font-size:13px; }
+  .mock-phrase-jp{ font-size:10px; color:#6b6355; margin-top:2px; }
+  .mock-phrase-item.selected .mock-phrase-jp{ color:#5c4415; }
+  .mock-flag{ font-size:15px; margin-bottom:8px; }
+  .mock-big-th{ color:#fff; font-size:17px; line-height:1.35; }
+  .mock-big-jp{ color:rgba(255,255,255,0.6); font-size:10px; margin-top:8px; }
+
+  /* ---------- 機能一覧 ---------- */
+  .features{ background:var(--sand); }
+  .features h2{ font-size:24px; margin-bottom:44px; }
+  .feature-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  @media (max-width:560px){ .feature-grid{ grid-template-columns:1fr; } }
+  .feature-cell{ background:var(--paper); padding:22px 22px 26px; }
+  .feature-visual{
+    margin-bottom:16px; border-radius:10px; overflow:hidden;
+    background:var(--sand); border:1px solid var(--line); padding:10px;
+    min-height:64px; display:flex; flex-direction:column; justify-content:center; gap:6px;
+  }
+  .mini-search{ background:#fff; border:1.5px solid var(--line); border-radius:7px; padding:6px 9px; font-size:11px; color:#6b6355; }
+  .mini-result{ background:var(--teal); color:#fff; border-radius:7px; padding:7px 9px; font-size:12px; }
+  .mini-result span{ display:block; font-size:10px; opacity:0.8; margin-top:2px; }
+  .mini-tabrow{ flex-direction:row; gap:6px; background:transparent; border:none; padding:0; }
+  .mini-tab{
+    flex:1; background:#fff; border:1.5px solid var(--line); border-radius:8px;
+    height:38px; display:flex; align-items:center; justify-content:center; font-size:15px;
+  }
+  .mini-tab.active{ background:var(--teal); border-color:var(--teal); }
+  .mini-booklink{
+    background:#fff; border:1.5px solid var(--marigold); border-radius:8px;
+    padding:9px 10px; font-size:11.5px; color:var(--ink); display:flex; align-items:center; justify-content:space-between; gap:6px;
+  }
+  .mini-booklink span{ font-size:10.5px; color:var(--marigold-deep); font-weight:700; white-space:nowrap; }
+  .mini-dishrow{ flex-direction:row; gap:6px; background:transparent; border:none; padding:0; }
+  .mini-dish{
+    flex:1; aspect-ratio:1; background:#fff; border:1.5px solid var(--line); border-radius:8px;
+    display:flex; align-items:center; justify-content:center; font-size:19px;
+  }
+  .mini-med{ background:#fff; border:1.5px solid var(--line); border-radius:8px; padding:9px 10px; font-size:11.5px; }
+  .mini-med span{ display:block; font-size:13px; font-weight:700; color:var(--teal-deep); margin-top:3px; }
+  .mini-calc{ flex-direction:row; align-items:center; justify-content:center; gap:8px; background:var(--ink); border:none; }
+  .mini-calc-th{ font-family:'Kanit', sans-serif; font-weight:700; color:#fff; font-size:14px; }
+  .mini-calc-eq{ color:var(--marigold); font-size:12px; }
+  .mini-calc-jp{ color:rgba(255,255,255,0.7); font-size:12px; }
+  .mini-offline{ flex-direction:row; align-items:center; justify-content:center; gap:8px; font-size:12.5px; color:#6b6355; font-weight:600; }
+  .feature-cell h3{ font-size:15.5px; margin-bottom:8px; }
+  .feature-cell p{ font-size:13.5px; color:#6b6355; }
+
+  /* ---------- 買い切りの理由 ---------- */
+  .why h2{ font-size:24px; margin-bottom:20px; }
+  .why p{ font-size:15px; color:#4a4237; max-width:52ch; margin-bottom:16px; }
+  .why-compare{ display:flex; gap:16px; margin-top:32px; flex-wrap:wrap; }
+  .why-card{ flex:1 1 240px; border:1.5px solid var(--line); border-radius:14px; padding:22px; }
+  .why-card.highlight{ border-color:var(--marigold); background:#fff8ec; }
+  .why-card-label{ font-size:12px; font-weight:700; color:#8B8272; margin-bottom:8px; }
+  .why-card.highlight .why-card-label{ color:var(--marigold-deep); }
+  .why-card-title{ font-family:'Kanit', sans-serif; font-weight:700; font-size:20px; margin-bottom:10px; }
+  .why-card p{ font-size:13.5px; color:#6b6355; margin:0; }
+
+  /* ---------- 開発者紹介 ---------- */
+  .author{ background:var(--teal); color:#fff; }
+  .author h2{ color:#fff; font-size:22px; margin-bottom:18px; }
+  .author p{ font-size:14.5px; color:rgba(255,255,255,0.82); max-width:50ch; margin-bottom:12px; }
+  .author-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+  .author-badge{ background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28); border-radius:999px; padding:8px 15px; font-size:12.5px; font-weight:600; }
+
+  /* ---------- 価格 ---------- */
+  .pricing{ text-align:center; }
+  .pricing h2{ font-size:24px; margin-bottom:10px; }
+  .pricing .section-lead{ margin-bottom:40px; }
+  .price-card{
+    border:1.5px solid var(--line); border-radius:20px; padding:40px 32px;
+    max-width:400px; margin:0 auto; background:#fff;
+  }
+  .price-card-name{ font-size:14px; font-weight:700; color:var(--teal-deep); margin-bottom:14px; }
+  .price-card-amount{ font-family:'Kanit', sans-serif; font-weight:700; font-size:48px; }
+  .price-card-amount small{ font-family:'Noto Sans JP', sans-serif; font-size:15px; font-weight:600; }
+  .price-card-sub{ font-size:12.5px; color:#8B8272; margin:8px 0 26px; }
+  .price-card-features{ list-style:none; text-align:left; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
+  .price-card-features li{ font-size:13.5px; color:#4a4237; padding-left:22px; position:relative; }
+  .price-card-features li::before{ content:"✓"; position:absolute; left:0; color:var(--teal); font-weight:700; }
+  .price-card .btn{ width:100%; justify-content:center; }
+
+  /* ---------- FAQ ---------- */
+  .faq h2{ font-size:24px; margin-bottom:36px; }
+  .faq-item{ padding:22px 0; border-top:1px solid var(--line); }
+  .faq-item:last-child{ border-bottom:1px solid var(--line); }
+  .faq-q{ font-size:15px; font-weight:700; margin-bottom:8px; }
+  .faq-a{ font-size:14px; color:#6b6355; }
+
+  /* ---------- 最終CTA ---------- */
+  .final-cta{ text-align:center; background:var(--ink); color:#fff; }
+  .final-cta h2{ color:#fff; font-size:26px; margin-bottom:14px; }
+  .final-cta p{ color:rgba(255,255,255,0.7); font-size:14.5px; margin-bottom:32px; }
+
+  footer{ padding:40px 0 48px; font-size:12px; color:#8B8272; border-top:1px solid var(--line); }
+  .footer-brand{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .footer-brand img{ height:30px; width:auto; }
+  .footer-brand-text{ font-size:12.5px; color:#8B8272; }
+  .footer-links{ display:flex; gap:18px; flex-wrap:wrap; margin-top:10px; }
+  .footer-links a{ text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">指さしタイ</div>
+    <a class="header-cta" href="#price">価格を見る</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap" style="display:flex; flex-wrap:wrap; gap:48px; align-items:center;">
+    <div style="flex:1 1 300px;">
+      <div class="hero-eyebrow">タイ旅行者専用・会話帳アプリ</div>
+      <h1>タイ語が話せなくても、<br><span class="accent">見せるだけで、伝わる。</span></h1>
+      <p class="hero-lead">行き先も、注文も、値段交渉も、体調不良のときも。スマホの画面を見せるだけで、現地の人に伝わるフレーズが出てきます。買い切り2,000円、インストールしたその日から使えます。</p>
+      <div class="hero-price-row">
+        <a class="btn disabled" href="#price">近日公開・購入はこちら</a>
+      </div>
+      <div class="hero-note">App Store・Google Playを経由しない、ブラウザから直接使えるアプリです(PWA)</div>
+    </div>
+    <div style="flex:1 1 280px; display:flex; justify-content:center;">
+      <div class="phone-mock">
+        <div class="phone-mock-flag">🇹🇭</div>
+        <div class="phone-mock-th">ไม่ใส่ผักชีนะครับ</div>
+        <div class="phone-mock-jp">🇯🇵 パクチーを入れないでください</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap">
+    <h2>タイ旅行、こんな瞬間に困ったことはありませんか？</h2>
+    <ul class="problem-list">
+      <li>タクシーの運転手に行き先を伝えたのに、違う場所に着いてしまった</li>
+      <li>屋台で注文したら、頼んでいないパクチーがたっぷり乗っていた</li>
+      <li>体調を崩したのに、症状をどう伝えればいいか分からなかった</li>
+      <li>翻訳アプリを開いたら、Wi-Fiが無くて動かなかった</li>
+    </ul>
+    <div class="problem-answer">指さしタイは、こうした場面のために作られた<strong>「見せるだけで伝わる」</strong>アプリです。話す必要も、通信環境も要りません。</div>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="wrap">
+    <h2>使い方は3ステップ</h2>
+    <p class="section-lead">タイ語の入力も、文法の心配も必要ありません。</p>
+    <div class="step">
+      <div class="step-text">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>行き先やシーンを選ぶ</h3>
+          <p>地名を検索するか、「移動する」「レストランで注文する」「助けを求める」など、今いるシチュエーションをタップします。</p>
+        </div>
+      </div>
+      <div class="step-mock">
+        <div class="mock-searchbar">🔍 อยุธยา</div>
+        <div class="mock-destcard">
+          <div class="mock-destcard-th th">อยุธยา</div>
+          <div class="mock-destcard-jp">アユタヤ　【アユタヤ県】</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-text">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>伝えたいフレーズをタップ</h3>
+          <p>一覧から伝えたい一言を選ぶだけで、自然なタイ語の文章が組み上がります。人数や時間、金額なども画面上で調整できます。</p>
+        </div>
+      </div>
+      <div class="step-mock">
+        <div class="mock-phrase-item">
+          <div class="mock-phrase-th th">ไป อยุธยา เท่าไหร่ครับ</div>
+          <div class="mock-phrase-jp">アユタヤまでいくらですか？</div>
+        </div>
+        <div class="mock-phrase-item selected">
+          <div class="mock-phrase-th th">รถไฟไปอยุธยาไหมครับ</div>
+          <div class="mock-phrase-jp">この電車はアユタヤへ行きますか？</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-text">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>画面いっぱいに表示して見せる</h3>
+          <p>「相手に見せる」をタップすると、タイ語が画面いっぱいの大きな文字で表示されます。あとはスマホを相手に見せるだけです。</p>
+        </div>
+      </div>
+      <div class="step-mock dark">
+        <div class="mock-flag">🇹🇭</div>
+        <div class="mock-big-th th">รถไฟไปอยุธยาไหมครับ</div>
+        <div class="mock-big-jp">🇯🇵 この電車はアユタヤへ行きますか？</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap">
+    <h2>旅のあらゆる場面をカバー</h2>
+    <div class="feature-grid">
+      <div class="feature-cell">
+        <div class="feature-visual">
+          <div class="mini-search">🔍 วัดพระแก้ว</div>
+          <div class="mini-result">วัดพระแก้ว<span>ワット・プラケオ</span></div>
+        </div>
+        <h3>400件以上の目的地検索</h3>
+        <p>観光地・駅・空港・バスターミナルなど。日本語はもちろん、Googleマップからコピーしたタイ語表記をそのまま貼り付けても見つかります。</p>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-visual mini-tabrow">
+          <span class="mini-tab active">🚌</span>
+          <span class="mini-tab">🚆</span>
+          <span class="mini-tab">🚕</span>
+          <span class="mini-tab">✈️</span>
+          <span class="mini-tab">⛴️</span>
+        </div>
+        <h3>10種類の移動手段に対応</h3>
+        <p>バス・電車・鉄道・タクシー・トゥクトゥク・ソンテウ・ロットゥー・飛行機・船まで、乗車券の買い方や料金交渉まで。</p>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-visual">
+          <div class="mini-booklink">🎫 バンコク → アユタヤ<span>予約する ›</span></div>
+        </div>
+        <h3>電波があれば予約もスムーズ</h3>
+        <p>バス・鉄道・現地ツアーは、そのまま予約ページに進めるリンク付き。分かりにくいチケット購入も迷いません。</p>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-visual mini-dishrow">
+          <span class="mini-dish">🍜</span>
+          <span class="mini-dish">🍛</span>
+          <span class="mini-dish">🍢</span>
+        </div>
+        <h3>屋台・レストラン注文</h3>
+        <p>定番タイ料理を写真付きで選び、辛さ・パクチー抜きなどの追加指示もその場で組み立てられます。</p>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-visual">
+          <div class="mini-med">💊 頭痛・発熱に<span>パナドーン</span></div>
+        </div>
+        <h3>薬局・体調不良にも対応</h3>
+        <p>症状別に市販薬を写真付きで探せて、そのまま画面を見せて購入できます。</p>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-visual mini-calc">
+          <span class="mini-calc-th th">150 บาท</span>
+          <span class="mini-calc-eq">≈</span>
+          <span class="mini-calc-jp">645円</span>
+        </div>
+        <h3>バーツ計算機を内蔵</h3>
+        <p>為替レートを設定しておけば、現地価格を円換算しながら確認・交渉できます。</p>
+      </div>
+      <div class="feature-cell">
+        <div class="feature-visual mini-offline">🧳 電波の無い場所でも問題なく動作</div>
+        <h3>オフラインで動作</h3>
+        <p>一度読み込めば、電波の無い場所でも問題なく使えるPWAです。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="wrap">
+    <h2>なぜ「買い切り」なのか</h2>
+    <p>指さしタイは、旅行のあいだだけ使う道具です。帰国後も払い続けるサブスクリプションは、この用途に合いません。一度購入すれば、その後の追加料金は一切かかりません。</p>
+    <div class="why-compare">
+      <div class="why-card highlight">
+        <div class="why-card-label">指さしタイ</div>
+        <div class="why-card-title">買い切り 2,000円</div>
+        <p>一度の購入で、何度でも・何回の旅行でも使えます。旅費として計上しやすい、分かりやすい価格です。</p>
+      </div>
+      <div class="why-card">
+        <div class="why-card-label">一般的な翻訳アプリ・サブスク</div>
+        <div class="why-card-title">継続課金</div>
+        <p>旅行が終わっても課金が続く、あるいは通信環境が無いと機能しないケースがあります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="author">
+  <div class="wrap">
+    <h2>タイが好きすぎて、移住しました</h2>
+    <p>東南アジアのひとり旅が好きで、何度も旅をするうちにタイにハマり、大好きが高じてバンコクへ移住。今もバンコクに暮らしています。タイ国政府観光庁公認のThailand Specialist資格を取得し、これまでにタイ全土1都76県のうち29県を旅してきました。旅行ブログも運営しながら、旅先で撮った写真をInstagramにも投稿しています。</p>
+    <p>旅好きだからこそ気づくこと、現地で実際に体験したからこそ分かることを詰め込みました。既存のアプリをいくつ使い回しても届かない、痒いところに手が届くように、実際の旅行シーンを一つひとつ想定して作り込んでいます。これから訪れる方にも、大好きなタイを心ゆくまで楽しんで、好きになってもらいたい。そんな思いでこのアプリを形にしました。</p>
+    <div class="author-badges">
+      <div class="author-badge">タイ政府観光庁認定 Thailand Specialist</div>
+      <div class="author-badge">バンコク在住</div>
+      <div class="author-badge">タイ全土29/76県を旅済み</div>
+      <div class="author-badge">旅行ブログ運営中</div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="price">
+  <div class="wrap">
+    <h2>価格</h2>
+    <p class="section-lead">シンプルな一つのプランだけです。</p>
+    <div class="price-card">
+      <div class="price-card-name">指さしタイ ― 買い切り版</div>
+      <div class="price-card-amount">¥2,000<small> (税込)</small></div>
+      <div class="price-card-sub">一度購入すれば、追加料金なしで使い続けられます</div>
+      <ul class="price-card-features">
+        <li>すべてのシチュエーション・フレーズが使える</li>
+        <li>400件以上の目的地データを全て利用可能</li>
+        <li>オフライン対応・機種変更時も購入情報を復元可能</li>
+        <li>今後のアップデートも追加費用なし</li>
+      </ul>
+      <a class="btn disabled" href="#">近日公開・準備中です</a>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <h2>よくある質問</h2>
+    <div class="faq-item">
+      <div class="faq-q">インターネット環境が無くても使えますか?</div>
+      <div class="faq-a">一度アプリを開いて読み込みが完了すれば、その後は電波が無い状態でも使えます。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">App StoreやGoogle Playからダウンロードするのですか?</div>
+      <div class="faq-a">いいえ。ブラウザからページを開き、ホーム画面に追加するだけでアプリのように使えます(ストアの審査を経ないPWAという方式です)。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">機種変更した場合、購入し直しになりますか?</div>
+      <div class="faq-a">購入時に発行されるコードを新しい端末でも入力することで、再購入せずに引き続きお使いいただけます。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">タイ語が話せなくても、読めなくても大丈夫ですか?</div>
+      <div class="faq-a">はい、大丈夫です。タイ語の入力も音読も一切不要です。画面に表示されたタイ語を、そのまま相手に見せるだけで伝わります。</div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="wrap">
+    <h2>次のタイ旅行に、指さしタイを。</h2>
+    <p>買い切り2,000円。旅の準備リストに加えておくと安心です。</p>
+    <a class="btn disabled" href="#price">近日公開・購入はこちら</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="https://takatobi.jp/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+        <img src="images/takatobi-logo.png" alt="TakaTobi">
+        <div class="footer-brand-text">指さしタイ ／ 運営: TakaTobi</div>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="#">特定商取引法に基づく表記</a>
+      <a href="#">プライバシーポリシー</a>
+      <a href="https://kankoutaishi.hatenablog.com/">運営者ブログ「勝手に観光大使w」</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

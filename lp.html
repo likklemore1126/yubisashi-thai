@@ -194,6 +194,7 @@
   .vs-steps{ list-style:none; display:flex; flex-direction:column; gap:6px; }
   .vs-steps li{ font-size:13px; color:#4a4237; padding:9px 11px; background:#fff; border-radius:8px; border:1px solid var(--line); }
   .vs-steps li.arrow{ text-align:center; background:none; border:none; padding:0; color:#C7BEA9; font-size:12px; }
+  .vs-steps li.warn{ background:#fdecea; border-color:#e3b4a8; color:#a34a2f; font-size:11.5px; line-height:1.6; }
   .vs-points{ list-style:none; display:flex; flex-direction:column; gap:10px; }
   .vs-points li{ font-size:14.5px; color:#4a4237; padding-left:22px; position:relative; }
   .vs-points li::before{ content:"✓"; position:absolute; left:0; color:var(--teal); font-weight:700; }
@@ -432,7 +433,7 @@
 <section class="vs">
   <div class="wrap">
     <h2>翻訳アプリではなく、指さしタイを使う理由</h2>
-    <p class="section-lead">タイ語を「翻訳する」のではなく、すでに用意された自然な一言を「選んで見せる」だけです。</p>
+    <p class="section-lead">タイ語に「翻訳する」のではなく、すでに用意された自然な一言を「選んで見せる」だけです。</p>
     <div class="vs-quote">「1回の翻訳では伝わらず、言い回しを変えて何度も翻訳し直して、やっと伝わった」<br>——そんな経験はありませんか？</div>
     <div class="vs-compare">
       <div class="vs-col bad">
@@ -441,6 +442,10 @@
           <li>「〇〇へ行きたい」と入力する</li>
           <li class="arrow">↓</li>
           <li>翻訳する</li>
+          <li class="arrow">↓</li>
+          <li class="warn">施設名・地名は誤訳されがち…<br>入力し直す・タイ語名を探す</li>
+          <li class="arrow">↓</li>
+          <li>もう一度翻訳する</li>
           <li class="arrow">↓</li>
           <li>相手に見せる</li>
         </ul>

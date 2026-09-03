@@ -174,9 +174,26 @@
   .feature-cell h3{ font-size:15.5px; margin-bottom:8px; }
   .feature-cell p{ font-size:13.5px; color:#6b6355; }
 
+  /* ---------- Google翻訳との違い ---------- */
+  .vs h2{ font-size:24px; margin-bottom:8px; }
+  .vs-compare{ display:flex; gap:18px; flex-wrap:wrap; margin:32px 0 28px; }
+  .vs-col{ flex:1 1 220px; border-radius:14px; padding:20px; }
+  .vs-col.bad{ background:var(--sand); border:1.5px solid var(--line); }
+  .vs-col.good{ background:#fff8ec; border:1.5px solid var(--marigold); }
+  .vs-col-label{ font-size:12px; font-weight:700; margin-bottom:14px; }
+  .vs-col.bad .vs-col-label{ color:#8B8272; }
+  .vs-col.good .vs-col-label{ color:var(--marigold-deep); }
+  .vs-steps{ list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .vs-steps li{ font-size:13px; color:#4a4237; padding:9px 11px; background:#fff; border-radius:8px; border:1px solid var(--line); }
+  .vs-steps li.arrow{ text-align:center; background:none; border:none; padding:0; color:#C7BEA9; font-size:12px; }
+  .vs-points{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .vs-points li{ font-size:14.5px; color:#4a4237; padding-left:22px; position:relative; }
+  .vs-points li::before{ content:"✓"; position:absolute; left:0; color:var(--teal); font-weight:700; }
+
   /* ---------- 買い切りの理由 ---------- */
   .why h2{ font-size:24px; margin-bottom:20px; }
   .why p{ font-size:15px; color:#4a4237; max-width:52ch; margin-bottom:16px; }
+  .why p strong{ color:var(--marigold-deep); }
   .why-compare{ display:flex; gap:16px; margin-top:32px; flex-wrap:wrap; }
   .why-card{ flex:1 1 240px; border:1.5px solid var(--line); border-radius:14px; padding:22px; }
   .why-card.highlight{ border-color:var(--marigold); background:#fff8ec; }
@@ -184,6 +201,18 @@
   .why-card.highlight .why-card-label{ color:var(--marigold-deep); }
   .why-card-title{ font-family:'Kanit', sans-serif; font-weight:700; font-size:20px; margin-bottom:10px; }
   .why-card p{ font-size:13.5px; color:#6b6355; margin:0; }
+
+  /* ---------- 購入後の流れ ---------- */
+  .flow h2{ font-size:24px; margin-bottom:36px; }
+  .flow-list{ list-style:none; counter-reset:flow; display:flex; flex-direction:column; }
+  .flow-list li{ counter-increment:flow; display:flex; align-items:center; gap:16px; padding:14px 0; }
+  .flow-list li::before{
+    content:counter(flow); flex:0 0 30px; width:30px; height:30px; border-radius:50%;
+    background:var(--teal); color:#fff; font-family:'Kanit', sans-serif; font-weight:700; font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .flow-list li span{ font-size:14.5px; color:var(--ink); font-weight:600; }
+  .flow-arrow{ text-align:center; color:#C7BEA9; font-size:13px; padding-left:15px; }
 
   /* ---------- 開発者紹介 ---------- */
   .author{ background:var(--teal); color:#fff; }
@@ -247,7 +276,7 @@
       <div class="hero-price-row">
         <a class="btn disabled" href="#price">近日公開・購入はこちら</a>
       </div>
-      <div class="hero-note">App Store・Google Playを経由しない、ブラウザから直接使えるアプリです(PWA)</div>
+      <div class="hero-note">アプリのインストールは不要。ブラウザから開いて、ホーム画面に追加するだけです。<span style="opacity:0.7;">※PWAという仕組みのWebアプリです</span></div>
     </div>
     <div style="flex:1 1 280px; display:flex; justify-content:center;">
       <div class="phone-mock">
@@ -356,7 +385,7 @@
           <div class="mini-booklink">🎫 バンコク → アユタヤ<span>予約する ›</span></div>
         </div>
         <h3>電波があれば予約もスムーズ</h3>
-        <p>バス・鉄道・現地ツアーは、そのまま予約ページに進めるリンク付き。分かりにくいチケット購入も迷いません。</p>
+        <p>「伝える」だけでなく「予約する」までサポート。バス・鉄道・現地ツアーは、そのまま予約ページに進めるリンク付きです。</p>
       </div>
       <div class="feature-cell">
         <div class="feature-visual mini-dishrow">
@@ -372,7 +401,7 @@
           <div class="mini-med">💊 頭痛・発熱に<span>パナドーン</span></div>
         </div>
         <h3>薬局・体調不良にも対応</h3>
-        <p>症状別に市販薬を写真付きで探せて、そのまま画面を見せて購入できます。</p>
+        <p>「頭が痛い」「熱がある」など、症状や欲しいものを画面で伝えられます。市販薬を写真付きで探すこともできます。</p>
       </div>
       <div class="feature-cell">
         <div class="feature-visual mini-calc">
@@ -386,21 +415,55 @@
       <div class="feature-cell">
         <div class="feature-visual mini-offline">🧳 電波の無い場所でも問題なく動作</div>
         <h3>オフラインで動作</h3>
-        <p>一度読み込めば、電波の無い場所でも問題なく使えるPWAです。</p>
+        <p>一度読み込んでおけば、空港・地下・郊外など通信環境が不安定な場所でも問題なく使えます。</p>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="vs">
+  <div class="wrap">
+    <h2>Google翻訳ではなく、指さしタイを使う理由</h2>
+    <p class="section-lead">タイ語を「翻訳する」のではなく、すでに用意された自然な一言を「選んで見せる」だけです。</p>
+    <div class="vs-compare">
+      <div class="vs-col bad">
+        <div class="vs-col-label">Google翻訳などの場合</div>
+        <ul class="vs-steps">
+          <li>「〇〇へ行きたい」と入力する</li>
+          <li class="arrow">↓</li>
+          <li>翻訳する</li>
+          <li class="arrow">↓</li>
+          <li>相手に見せる</li>
+        </ul>
+      </div>
+      <div class="vs-col good">
+        <div class="vs-col-label">指さしタイの場合</div>
+        <ul class="vs-steps">
+          <li>場面を選ぶ</li>
+          <li class="arrow">↓</li>
+          <li>フレーズを選ぶ</li>
+          <li class="arrow">↓</li>
+          <li>見せる</li>
+        </ul>
+      </div>
+    </div>
+    <ul class="vs-points">
+      <li>タイ語が読めなくても使える</li>
+      <li>文章を自分で作らなくていい</li>
+      <li>オフラインでも使える</li>
+    </ul>
   </div>
 </section>
 
 <section class="why">
   <div class="wrap">
     <h2>なぜ「買い切り」なのか</h2>
-    <p>指さしタイは、旅行のあいだだけ使う道具です。帰国後も払い続けるサブスクリプションは、この用途に合いません。一度購入すれば、その後の追加料金は一切かかりません。</p>
+    <p><strong>タイ旅行1回の安心料として、2,000円。</strong>指さしタイは、旅行のあいだだけ使う道具です。帰国後も払い続けるサブスクリプションは、この用途に合いません。一度購入すれば、その後の追加料金は一切かかりません。</p>
     <div class="why-compare">
       <div class="why-card highlight">
         <div class="why-card-label">指さしタイ</div>
         <div class="why-card-title">買い切り 2,000円</div>
-        <p>一度の購入で、何度でも・何回の旅行でも使えます。旅費として計上しやすい、分かりやすい価格です。</p>
+        <p>一度の購入で、何度でも・何回の旅行でも使えます。</p>
       </div>
       <div class="why-card">
         <div class="why-card-label">一般的な翻訳アプリ・サブスク</div>
@@ -437,10 +500,24 @@
         <li>すべてのシチュエーション・フレーズが使える</li>
         <li>400件以上の目的地データを全て利用可能</li>
         <li>オフライン対応・機種変更時も購入情報を復元可能</li>
-        <li>今後のアップデートも追加費用なし</li>
+        <li>新しい観光地・フレーズ・旅行シーンが追加されても、追加費用なし</li>
       </ul>
-      <a class="btn disabled" href="#">近日公開・準備中です</a>
+      <a class="btn disabled" href="#">近日公開・買い切り¥2,000(税込)</a>
     </div>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="wrap">
+    <h2>購入後の流れ</h2>
+    <ul class="flow-list">
+      <li><span>購入する</span></li>
+      <li><span>利用コードを受け取る</span></li>
+      <li><span>指さしタイを開く</span></li>
+      <li><span>コードを入力する</span></li>
+      <li><span>ホーム画面に追加する</span></li>
+      <li><span>タイ旅行へ</span></li>
+    </ul>
   </div>
 </section>
 
@@ -462,6 +539,10 @@
     <div class="faq-item">
       <div class="faq-q">タイ語が話せなくても、読めなくても大丈夫ですか?</div>
       <div class="faq-a">はい、大丈夫です。タイ語の入力も音読も一切不要です。画面に表示されたタイ語を、そのまま相手に見せるだけで伝わります。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">対応している端末やブラウザはありますか?</div>
+      <div class="faq-a">iPhone・Androidどちらの端末にも対応しています。ブラウザはSafari・Chromeでのご利用を推奨しています。</div>
     </div>
   </div>
 </section>

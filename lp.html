@@ -174,8 +174,15 @@
   .feature-cell h3{ font-size:15.5px; margin-bottom:8px; }
   .feature-cell p{ font-size:13.5px; color:#6b6355; }
 
-  /* ---------- Google翻訳との違い ---------- */
+  /* ---------- 翻訳アプリとの違い ---------- */
   .vs h2{ font-size:24px; margin-bottom:8px; }
+  .vs-quote{
+    background:var(--sand); border-left:4px solid var(--marigold); border-radius:0 10px 10px 0;
+    padding:16px 18px; margin:26px 0 30px; font-size:14.5px; color:#5c4415; line-height:1.8;
+  }
+  .vs-note{ margin-top:32px; padding-top:28px; border-top:1px solid var(--line); }
+  .vs-note p{ font-size:14.5px; color:#4a4237; line-height:1.85; margin-bottom:14px; }
+  .vs-note p.conclusion{ font-weight:700; color:var(--teal-deep); font-size:15px; }
   .vs-compare{ display:flex; gap:18px; flex-wrap:wrap; margin:32px 0 28px; }
   .vs-col{ flex:1 1 220px; border-radius:14px; padding:20px; }
   .vs-col.bad{ background:var(--sand); border:1.5px solid var(--line); }
@@ -270,7 +277,7 @@
 <section class="hero">
   <div class="wrap" style="display:flex; flex-wrap:wrap; gap:48px; align-items:center;">
     <div style="flex:1 1 300px;">
-      <div class="hero-eyebrow">タイ旅行者専用・会話帳アプリ</div>
+      <div class="hero-eyebrow">持ち歩ける、旅のパートナー</div>
       <h1>タイ語が話せなくても、<br><span class="accent">見せるだけで、伝わる。</span></h1>
       <p class="hero-lead">行き先も、注文も、値段交渉も、体調不良のときも。スマホの画面を見せるだけで、現地の人に伝わるフレーズが出てきます。買い切り2,000円、インストールしたその日から使えます。</p>
       <div class="hero-price-row">
@@ -423,11 +430,12 @@
 
 <section class="vs">
   <div class="wrap">
-    <h2>Google翻訳ではなく、指さしタイを使う理由</h2>
+    <h2>翻訳アプリではなく、指さしタイを使う理由</h2>
     <p class="section-lead">タイ語を「翻訳する」のではなく、すでに用意された自然な一言を「選んで見せる」だけです。</p>
+    <div class="vs-quote">「1回の翻訳では伝わらず、言い回しを変えて何度も翻訳し直して、やっと伝わった」<br>——そんな経験はありませんか？</div>
     <div class="vs-compare">
       <div class="vs-col bad">
-        <div class="vs-col-label">Google翻訳などの場合</div>
+        <div class="vs-col-label">翻訳アプリの場合</div>
         <ul class="vs-steps">
           <li>「〇〇へ行きたい」と入力する</li>
           <li class="arrow">↓</li>
@@ -452,6 +460,11 @@
       <li>文章を自分で作らなくていい</li>
       <li>オフラインでも使える</li>
     </ul>
+    <div class="vs-note">
+      <p>実は、翻訳アプリの精度だけが原因ではありません。日本語とタイ語は、そもそも翻訳との相性があまり良くない言語同士だと言われています。伝わる文章に仕上げるには、実は経験とコツが必要なのが実情です。</p>
+      <p>さらに厄介なのは、翻訳アプリを普段使い慣れていない人ほど、「本当にこの訳で伝わっているのか」を確かめるすべがなく、訳された文章をただ信じるしかないという点です。</p>
+      <p class="conclusion">指さしタイは、その「伝わるかどうか分からない不安」自体をなくすために作りました。翻訳アプリの代わりではなく、旅の心強いパートナーとして。</p>
+    </div>
   </div>
 </section>
 
@@ -478,11 +491,12 @@
   <div class="wrap">
     <h2>タイが好きすぎて、移住しました</h2>
     <p>東南アジアのひとり旅が好きで、何度も旅をするうちにタイにハマり、大好きが高じてバンコクへ移住。今もバンコクに暮らしています。タイ国政府観光庁公認のThailand Specialist資格を取得し、これまでにタイ全土1都76県のうち29県を旅してきました。旅行ブログも運営しながら、旅先で撮った写真をInstagramにも投稿しています。</p>
-    <p>旅好きだからこそ気づくこと、現地で実際に体験したからこそ分かることを詰め込みました。既存のアプリをいくつ使い回しても届かない、痒いところに手が届くように、実際の旅行シーンを一つひとつ想定して作り込んでいます。これから訪れる方にも、大好きなタイを心ゆくまで楽しんで、好きになってもらいたい。そんな思いでこのアプリを形にしました。</p>
+    <p>海外生活は約8年、東南アジアへの渡航はこれまでに30回以上。散々翻訳アプリを使い倒しながら旅をしてきました(今でも日常的に使っています)。だからこそ、翻訳アプリで伝わる文章の作り方や訳の精度の善し悪しが分かるようになった一方で、普段あまり使わない人にとっては、訳された文章が正しく伝わっているとただ信じるしかないのが現状だとも気づきました。どんな文章をよく使うのか、どんな場面で伝わらず困るのか、どんな質問をしたくなるのか——自分自身の経験をもとに、翻訳アプリだけでは埋まらなかった部分をカバーする、タイ旅行のためのツールを作りました。これから訪れる方にも、大好きなタイを心ゆくまで楽しんで、好きになってもらいたい。そんな思いを込めています。</p>
     <div class="author-badges">
       <div class="author-badge">タイ政府観光庁認定 Thailand Specialist</div>
       <div class="author-badge">バンコク在住</div>
       <div class="author-badge">タイ全土29/76県を旅済み</div>
+      <div class="author-badge">海外生活8年・渡航30回以上</div>
       <div class="author-badge">旅行ブログ運営中</div>
     </div>
   </div>

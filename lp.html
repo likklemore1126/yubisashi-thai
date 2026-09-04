@@ -82,10 +82,10 @@
   .menu-panel{
     position:fixed; top:0; right:0; height:100%; width:78%; max-width:320px;
     background:var(--paper); z-index:50; box-shadow:-8px 0 24px rgba(0,0,0,0.15);
-    transform:translateX(100%); transition:transform 0.25s ease; padding:22px 22px 32px;
-    overflow-y:auto;
+    transform:translateX(100%); transition:transform 0.25s ease, visibility 0.25s; padding:22px 22px 32px;
+    overflow-y:auto; visibility:hidden;
   }
-  .menu-panel.open{ transform:translateX(0); }
+  .menu-panel.open{ transform:translateX(0); visibility:visible; }
   .menu-panel-title{ font-size:13px; font-weight:700; color:#8B8272; margin-bottom:16px; }
   .menu-close{
     position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:8px;
@@ -655,5 +655,17 @@
   </div>
 </footer>
 
+<script>
+  function closeMenu(){
+    var panel = document.getElementById('menuPanel');
+    var overlay = document.getElementById('menuOverlay');
+    if(panel) panel.classList.remove('open');
+    if(overlay) overlay.classList.remove('open');
+  }
+  // ページ表示時(通常読み込み・戻る/進む・bfcacheからの復元含む)は必ずメニューを閉じた状態にする
+  window.addEventListener('pageshow', closeMenu);
+  document.addEventListener('DOMContentLoaded', closeMenu);
+  closeMenu();
+</script>
 </body>
 </html>

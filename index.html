@@ -787,6 +787,9 @@
     background-image:url('https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f1f9-1f1ed.png');
     background-size:contain; background-repeat:no-repeat; background-position:center;
   }
+  @media (orientation: portrait){
+    .landscape-th::before{ display:block; width:1.6em; height:1.15em; margin-right:0; margin-bottom:0.2em; }
+  }
   .landscape-jp{ font-size:min(4vw, 22px); opacity:0.65; margin-top:18px; }
   .landscape-jp::before{
     content:""; display:inline-block; width:1em; height:0.72em; margin-right:0.18em; vertical-align:0.02em;

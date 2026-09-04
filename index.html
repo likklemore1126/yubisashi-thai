@@ -2301,7 +2301,12 @@ function isFavorite(th){
 function toggleFavorite(th, jp){
   const i = favorites.findIndex(f => f.th === th);
   if(i >= 0){ favorites.splice(i, 1); }
-  else{ favorites.push({th, jp}); }
+  else{
+    favorites.push({th, jp});
+    if(typeof gtag === 'function'){
+      gtag('event', 'favorite_add', { phrase_th: th, phrase_jp: jp });
+    }
+  }
   saveFavorites();
   document.querySelectorAll(`.fav-star[data-th="${CSS.escape(th)}"]`).forEach(btn => {
     const active = isFavorite(th);
@@ -4457,6 +4462,9 @@ let selectedCategoryIdx = null;
 
 function openSituation(i){
   const s = situations[i];
+  if(typeof gtag === 'function'){
+    gtag('event', 'category_view', { category_name: s.title });
+  }
   if(s.title === "移動する"){
     openTransportComposer();
   } else {
@@ -5039,6 +5047,9 @@ function setGender(g){
   updateGenderToggleSingle();
   try{ localStorage.setItem('yubisashi_gender', g); }catch(e){}
   refreshVisible();
+  if(typeof gtag === 'function'){
+    gtag('event', 'gender_switch', { gender: g });
+  }
 }
 function updateGenderToggleSingle(){
   const iconWrap = document.getElementById('genderToggleIconWrap');
@@ -5234,6 +5245,13 @@ function applyDestination(found){
     tourEl.innerHTML = '';
   }
   setLastPhrase(destPhraseTh, found.jp + "へ行くつもりです");
+  if(typeof gtag === 'function'){
+    gtag('event', 'destination_view', {
+      destination_name: found.jp,
+      destination_pref: found.pref || '',
+      is_registered: !found.note
+    });
+  }
 }
 function selectSuggestion(i){
   const found = currentMatches[i];
@@ -5261,6 +5279,7 @@ function clearSearch(){
   currentMatches = [];
   updateClearBtnVisibility();
 }
+let searchGtagTimer = null;
 document.getElementById('searchInput').addEventListener('input', (e) => {
   const q = e.target.value.trim();
   const result = document.getElementById('destResult');
@@ -5270,6 +5289,7 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     result.classList.remove('show');
     document.getElementById('searchSuggestions').innerHTML = '';
     currentMatches = [];
+    clearTimeout(searchGtagTimer);
     return;
   }
   currentMatches = findMatches(q);
@@ -5278,6 +5298,16 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     currentDestination = null;
     result.classList.remove('show');
   }
+  clearTimeout(searchGtagTimer);
+  searchGtagTimer = setTimeout(() => {
+    if(typeof gtag === 'function'){
+      gtag('event', 'search', {
+        search_term: q,
+        result_count: currentMatches.length,
+        is_miss: currentMatches.length === 0
+      });
+    }
+  }, 800);
 });
 document.getElementById('searchInput').addEventListener('focus', (e) => {
   const q = e.target.value.trim();
@@ -5285,6 +5315,23 @@ document.getElementById('searchInput').addEventListener('focus', (e) => {
     currentMatches = findMatches(q);
     renderSuggestions(currentMatches, q);
   }
+});
+
+// 外部リンク(アフィリエイト・予約・参考サイトなど)のクリックをまとめて計測
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="http"]');
+  if(!link) return;
+  try{
+    const url = new URL(link.href);
+    if(url.hostname === window.location.hostname) return;
+    if(typeof gtag === 'function'){
+      gtag('event', 'external_click', {
+        link_domain: url.hostname,
+        link_url: link.href,
+        link_text: (link.textContent || '').trim().slice(0, 100)
+      });
+    }
+  }catch(err){}
 });
 
 try{

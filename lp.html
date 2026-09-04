@@ -57,18 +57,42 @@
   }
 
   /* ---------- ヒーロー ---------- */
-  /* ---------- 目次ナビ ---------- */
-  .toc{ position:sticky; top:68px; z-index:30; background:var(--paper); border-bottom:1px solid var(--line); }
-  .toc-scroll{
-    max-width:680px; margin:0 auto; padding:10px 24px; display:flex; gap:8px;
-    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  /* ---------- 目次メニュー(ハンバーガー) ---------- */
+  .menu-btn{
+    flex:0 0 auto; width:40px; height:40px; border-radius:10px; border:1px solid var(--line);
+    background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    padding:0;
   }
-  .toc-scroll::-webkit-scrollbar{ display:none; }
-  .toc-chip{
-    flex:0 0 auto; background:#fff; border:1px solid var(--line); border-radius:999px;
-    padding:7px 14px; font-size:13px; font-weight:600; color:#4a4237; white-space:nowrap; text-decoration:none;
+  .menu-btn span{ display:block; width:18px; height:2px; background:var(--ink); position:relative; }
+  .menu-btn span::before, .menu-btn span::after{
+    content:""; position:absolute; left:0; width:18px; height:2px; background:var(--ink);
   }
-  section[id]{ scroll-margin-top:118px; }
+  .menu-btn span::before{ top:-6px; }
+  .menu-btn span::after{ top:6px; }
+  .menu-overlay{
+    position:fixed; inset:0; background:rgba(23,36,42,0.45); z-index:49;
+    opacity:0; pointer-events:none; transition:opacity 0.2s;
+  }
+  .menu-overlay.open{ opacity:1; pointer-events:auto; }
+  .menu-panel{
+    position:fixed; top:0; right:0; height:100%; width:78%; max-width:320px;
+    background:var(--paper); z-index:50; box-shadow:-8px 0 24px rgba(0,0,0,0.15);
+    transform:translateX(100%); transition:transform 0.25s ease; padding:22px 22px 32px;
+    overflow-y:auto;
+  }
+  .menu-panel.open{ transform:translateX(0); }
+  .menu-panel-title{ font-size:13px; font-weight:700; color:#8B8272; margin-bottom:16px; }
+  .menu-close{
+    position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:8px;
+    border:1px solid var(--line); background:#fff; font-size:18px; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .menu-list{ list-style:none; margin-top:44px; display:flex; flex-direction:column; }
+  .menu-list a{
+    display:block; padding:14px 4px; border-bottom:1px solid var(--line);
+    font-size:16px; font-weight:600; color:var(--ink); text-decoration:none;
+  }
+  section[id]{ scroll-margin-top:76px; }
 
   .hero{ padding:56px 0 72px; }
   .hero-eyebrow{ font-size:13.5px; color:var(--teal-deep); font-weight:700; margin-bottom:14px; }
@@ -285,22 +309,28 @@
 <header>
   <div class="header-inner">
     <div class="brand"><img src="images/app-icon.png" alt="指さしタイ">指さしタイ</div>
-    <a class="header-cta" href="#price">価格を見る</a>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <a class="header-cta" href="#price">価格を見る</a>
+      <button class="menu-btn" onclick="document.getElementById('menuPanel').classList.add('open');document.getElementById('menuOverlay').classList.add('open');" aria-label="メニューを開く"><span></span></button>
+    </div>
   </div>
 </header>
 
-<nav class="toc">
-  <div class="toc-scroll">
-    <a class="toc-chip" href="#problem">困った瞬間</a>
-    <a class="toc-chip" href="#steps">使い方</a>
-    <a class="toc-chip" href="#features">機能</a>
-    <a class="toc-chip" href="#vs">翻訳アプリとの違い</a>
-    <a class="toc-chip" href="#why">買い切りの理由</a>
-    <a class="toc-chip" href="#author">運営者</a>
-    <a class="toc-chip" href="#price">価格</a>
-    <a class="toc-chip" href="#flow">購入後の流れ</a>
-    <a class="toc-chip" href="#faq">FAQ</a>
-  </div>
+<div class="menu-overlay" id="menuOverlay" onclick="document.getElementById('menuPanel').classList.remove('open');this.classList.remove('open');"></div>
+<nav class="menu-panel" id="menuPanel">
+  <button class="menu-close" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');" aria-label="メニューを閉じる">×</button>
+  <div class="menu-panel-title">目次</div>
+  <ul class="menu-list">
+    <li><a href="#problem" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">困った瞬間</a></li>
+    <li><a href="#steps" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">使い方</a></li>
+    <li><a href="#features" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">機能</a></li>
+    <li><a href="#vs" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">翻訳アプリとの違い</a></li>
+    <li><a href="#why" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">買い切りの理由</a></li>
+    <li><a href="#author" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">運営者</a></li>
+    <li><a href="#price" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">価格</a></li>
+    <li><a href="#flow" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">購入後の流れ</a></li>
+    <li><a href="#faq" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">FAQ</a></li>
+  </ul>
 </nav>
 
 <section class="hero">

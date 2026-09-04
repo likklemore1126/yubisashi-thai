@@ -321,6 +321,7 @@
   <button class="menu-close" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');" aria-label="メニューを閉じる">×</button>
   <div class="menu-panel-title">目次</div>
   <ul class="menu-list">
+    <li><a href="#" onclick="window.scrollTo({top:0, behavior:'smooth'});document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');return false;">トップ</a></li>
     <li><a href="#problem" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">困った瞬間</a></li>
     <li><a href="#steps" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">使い方</a></li>
     <li><a href="#features" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">機能</a></li>

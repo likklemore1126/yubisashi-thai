@@ -57,6 +57,19 @@
   }
 
   /* ---------- ヒーロー ---------- */
+  /* ---------- 目次ナビ ---------- */
+  .toc{ position:sticky; top:68px; z-index:30; background:var(--paper); border-bottom:1px solid var(--line); }
+  .toc-scroll{
+    max-width:680px; margin:0 auto; padding:10px 24px; display:flex; gap:8px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  .toc-scroll::-webkit-scrollbar{ display:none; }
+  .toc-chip{
+    flex:0 0 auto; background:#fff; border:1px solid var(--line); border-radius:999px;
+    padding:7px 14px; font-size:13px; font-weight:600; color:#4a4237; white-space:nowrap; text-decoration:none;
+  }
+  section[id]{ scroll-margin-top:118px; }
+
   .hero{ padding:56px 0 72px; }
   .hero-eyebrow{ font-size:13.5px; color:var(--teal-deep); font-weight:700; margin-bottom:14px; }
   .hero h1{ font-size:34px; margin-bottom:18px; }
@@ -276,6 +289,20 @@
   </div>
 </header>
 
+<nav class="toc">
+  <div class="toc-scroll">
+    <a class="toc-chip" href="#problem">困った瞬間</a>
+    <a class="toc-chip" href="#steps">使い方</a>
+    <a class="toc-chip" href="#features">機能</a>
+    <a class="toc-chip" href="#vs">翻訳アプリとの違い</a>
+    <a class="toc-chip" href="#why">買い切りの理由</a>
+    <a class="toc-chip" href="#author">運営者</a>
+    <a class="toc-chip" href="#price">価格</a>
+    <a class="toc-chip" href="#flow">購入後の流れ</a>
+    <a class="toc-chip" href="#faq">FAQ</a>
+  </div>
+</nav>
+
 <section class="hero">
   <div class="wrap" style="display:flex; flex-wrap:wrap; gap:48px; align-items:center;">
     <div style="flex:1 1 300px;">
@@ -297,7 +324,7 @@
   </div>
 </section>
 
-<section class="problem">
+<section class="problem" id="problem">
   <div class="wrap">
     <h2>タイ旅行、こんな瞬間に困ったことはありませんか？</h2>
     <ul class="problem-list">
@@ -310,7 +337,7 @@
   </div>
 </section>
 
-<section class="steps">
+<section class="steps" id="steps">
   <div class="wrap">
     <h2>使い方は3ステップ</h2>
     <p class="section-lead">タイ語の入力も、文法の心配も必要ありません。</p>
@@ -366,7 +393,7 @@
   </div>
 </section>
 
-<section class="features">
+<section class="features" id="features">
   <div class="wrap">
     <h2>旅のあらゆる場面をカバー</h2>
     <div class="feature-grid">
@@ -430,7 +457,7 @@
   </div>
 </section>
 
-<section class="vs">
+<section class="vs" id="vs">
   <div class="wrap">
     <h2>翻訳アプリではなく、指さしタイを使う理由</h2>
     <p class="section-lead">タイ語に「翻訳する」のではなく、すでに用意された自然な一言を「選んで見せる」だけです。</p>
@@ -474,7 +501,7 @@
   </div>
 </section>
 
-<section class="why">
+<section class="why" id="why">
   <div class="wrap">
     <h2>なぜ「買い切り」なのか</h2>
     <p><strong>タイ旅行1回の安心料として、2,000円。</strong>指さしタイは、旅行のあいだだけ使う道具です。帰国後も払い続けるサブスクリプションは、この用途に合いません。一度購入すれば、その後の追加料金は一切かかりません。</p>
@@ -493,7 +520,7 @@
   </div>
 </section>
 
-<section class="author">
+<section class="author" id="author">
   <div class="wrap">
     <h2>タイが好きすぎて、移住しました</h2>
     <p>東南アジアのひとり旅が好きで、何度も旅をするうちにタイにハマり、大好きが高じてバンコクへ移住。今もバンコクに暮らしています。タイ国政府観光庁公認のThailand Specialist資格を取得し、これまでにタイ全土1都76県のうち29県を旅してきました。旅行ブログも運営しながら、旅先で撮った写真をInstagramにも投稿しています。</p>
@@ -528,7 +555,7 @@
   </div>
 </section>
 
-<section class="flow">
+<section class="flow" id="flow">
   <div class="wrap">
     <h2>購入後の流れ</h2>
     <ul class="flow-list">
@@ -542,7 +569,7 @@
   </div>
 </section>
 
-<section class="faq">
+<section class="faq" id="faq">
   <div class="wrap">
     <h2>よくある質問</h2>
     <div class="faq-item">

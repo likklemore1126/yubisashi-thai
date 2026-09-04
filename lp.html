@@ -21,7 +21,7 @@
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
-  html{ overflow-x:hidden; }
+  html{ overflow-x:hidden; overscroll-behavior-x:none; width:100%; }
   body{
     background:var(--paper);
     font-family:'Noto Sans JP', sans-serif;
@@ -29,6 +29,9 @@
     line-height:1.75;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+    overscroll-behavior-x:none;
+    width:100%;
+    position:relative;
   }
   img{max-width:100%; display:block;}
   a{color:inherit;}

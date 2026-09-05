@@ -183,6 +183,23 @@
   .mock-big-jp{ color:rgba(255,255,255,0.6); font-size:15px; margin-top:8px; }
 
   /* ---------- 機能一覧 ---------- */
+  /* ---------- 最寄り駅名の自動表示 ---------- */
+  .station-feature{ background:var(--teal); color:#fff; }
+  .station-feature h2{ color:#fff; font-size:24px; margin-bottom:10px; }
+  .station-feature .section-lead{ color:rgba(255,255,255,0.78); margin-bottom:36px; }
+  .station-gallery{ display:flex; flex-direction:column; gap:16px; }
+  .station-shot-card{
+    background:#fff; border-radius:14px; overflow:hidden;
+    box-shadow:0 10px 24px -14px rgba(0,0,0,0.4);
+  }
+  .station-shot-card img{ width:100%; display:block; }
+  .station-shot-caption{ padding:12px 14px; font-size:14px; color:#4a4237; line-height:1.7; }
+  .station-shot-num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px; border-radius:50%; background:var(--marigold);
+    color:var(--ink); font-size:11px; font-weight:700; margin-right:6px; flex:0 0 auto;
+  }
+
   .features{ background:var(--sand); }
   .features h2{ font-size:24px; margin-bottom:44px; }
   .feature-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
@@ -389,16 +406,12 @@
       </div>
       <div class="step-mock-full">
         <div class="step-shot-card">
-          <img src="images/screenshot-search.jpeg" alt="目的地を検索する実画面">
-          <div class="step-shot-caption">① 行き先を検索窓に入力し、リストから選ぶ</div>
+          <img src="images/screenshot-top-search.jpeg" alt="行き先を検索する実画面">
+          <div class="step-shot-caption">行き先を検索窓に入力し、リストから選ぶ</div>
         </div>
         <div class="step-shot-card">
-          <img src="images/screenshot-transport-select.jpeg" alt="行き先と交通手段を選ぶ実画面">
-          <div class="step-shot-caption">② 「バス」「電車」など交通手段のタブをタップ。最寄り駅がある場合は駅名入りのフレーズが自動で出ます</div>
-        </div>
-        <div class="step-shot-card">
-          <img src="images/screenshot-ticket-qty.jpeg" alt="乗車券の枚数を調整する実画面">
-          <div class="step-shot-caption">③ 乗車券が必要なら枚数も調整。「相手に見せる」で窓口にそのまま見せられます</div>
+          <img src="images/screenshot-top-situations.jpeg" alt="シチュエーションから探す実画面">
+          <div class="step-shot-caption">行き先が決まっていなくても、「移動する」「レストランで注文する」などシチュエーションから探せる</div>
         </div>
       </div>
     </div>
@@ -411,7 +424,7 @@
         </div>
       </div>
       <div class="step-mock" style="padding:0; overflow:hidden;">
-        <img src="images/screenshot-order.jpeg" alt="レストラン・屋台で注文するフレーズ一覧の実画面" style="width:100%; display:block;">
+        <img src="images/screenshot-hotel-order.jpeg" alt="ホテルにチェックインするフレーズ一覧の実画面" style="width:100%; display:block;">
       </div>
     </div>
     <div class="step">
@@ -423,7 +436,32 @@
         </div>
       </div>
       <div class="step-mock dark" style="padding:0; overflow:hidden;">
-        <img src="images/screenshot-portrait.jpeg" alt="画面いっぱいに表示した実画面(縦向き)" style="width:100%; display:block;">
+        <img src="images/screenshot-hotel-fullscreen.jpeg" alt="画面いっぱいに表示した実画面(縦向き・ホテルパターン)" style="width:100%; display:block;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="station-feature">
+  <div class="wrap">
+    <h2>電車なら、最寄り駅名も自動で入る</h2>
+    <p class="section-lead">目的地に最寄り駅がある場合、駅名まで含めたフレーズがそのまま出てくるので、自分で調べて入力する必要がありません。</p>
+    <div class="station-gallery">
+      <div class="station-shot-card">
+        <img src="images/screenshot-search.jpeg" alt="目的地を検索する実画面">
+        <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索窓に入力してリストから選ぶ</div>
+      </div>
+      <div class="station-shot-card">
+        <img src="images/screenshot-transport-select.jpeg" alt="行き先と交通手段を選ぶ実画面">
+        <div class="station-shot-caption"><span class="station-shot-num">2</span>「電車」のタブを選ぶと、最寄り駅名を含めたフレーズが自動で出てくる</div>
+      </div>
+      <div class="station-shot-card">
+        <img src="images/screenshot-ticket-qty.jpeg" alt="乗車券の枚数を調整する実画面">
+        <div class="station-shot-caption"><span class="station-shot-num">3</span>乗車券が必要なら、枚数もその場で調整できる</div>
+      </div>
+      <div class="station-shot-card">
+        <img src="images/screenshot-portrait.jpeg" alt="乗車券を見せる実画面(縦向き)">
+        <div class="station-shot-caption"><span class="station-shot-num">4</span>あとは「相手に見せる」で、窓口にそのまま見せるだけ</div>
       </div>
     </div>
   </div>

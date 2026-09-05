@@ -3264,6 +3264,7 @@ function fitFavChainText(el){
   const padL = parseFloat(cs.paddingLeft) || 0;
   const padR = parseFloat(cs.paddingRight) || 0;
   const fullMaxWidth = (container.clientWidth - padL - padR) * 0.95;
+  const maxHeight = window.innerHeight * 0.65; // 1画面に収まる目安(日本語訳の行や余白ぶんを残す)
   const widthFractions = [1, 0.8, 0.65, 0.5, 0.38, 0.28];
   let best = null;
   widthFractions.forEach(frac => {
@@ -3271,7 +3272,7 @@ function fitFavChainText(el){
     let fontSize = 200;
     el.style.maxWidth = w + 'px';
     el.style.fontSize = fontSize + 'px';
-    while(fontSize > 20 && el.scrollWidth > w){
+    while(fontSize > 20 && (el.scrollWidth > w || el.scrollHeight > maxHeight)){
       fontSize -= 6;
       el.style.fontSize = fontSize + 'px';
     }

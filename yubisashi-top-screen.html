@@ -2089,8 +2089,8 @@ const nearby = [
 ];
 
 const situations = [
-  { icon:"taxi", title:"移動する", color:"var(--teal)", count:"44", phrases:[] },
-  { icon:"hotel", title:"ホテルにチェックインする", color:"var(--marigold)", count:"33", phrases:[
+  { icon:"taxi", title:"移動する", color:"var(--teal)", count:"44", sample:"バス・タクシー・電車など", phrases:[] },
+  { icon:"hotel", title:"ホテルにチェックインする", color:"var(--marigold)", count:"33", sample:"チェックイン・部屋の不具合など", phrases:[
     {base:"ต้องการเช็คอิน", type:'s', jp:"チェックインをお願いします"},
     {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか？", timeAnswer:true},
     {base:"เช็คอินกี่โมง", type:'q', jp:"チェックインは何時ですか？", timeAnswer:true},
@@ -2125,7 +2125,7 @@ const situations = [
     {base:"มีแมลงหรือจิ้งจก", type:'s', jp:"虫やトカゲがいます"},
     {base:"ได้พักอย่างสบายมาก ขอบคุณมากค่ะ", type:'s', jp:"とても快適に過ごすことができ大変お世話になりました"},
   ]},
-  { icon:"bowl", title:"レストラン・屋台で注文する", color:"var(--pink)", count:"25", phrases:[
+  { icon:"bowl", title:"レストラン・屋台で注文する", color:"var(--pink)", count:"25", sample:"注文・辛さ調整・会計など", phrases:[
     {base:"ขอเมนูหน่อย", type:'s', jp:"メニューをください"},
     {base:"อันนี้เผ็ดไหม", type:'q', jp:"これは辛いですか？"},
     {base:"เก็บเงินด้วย", type:'s', jp:"お会計お願いします"},
@@ -2152,7 +2152,7 @@ const situations = [
     {base:"วันไหนหยุด", type:'q', jp:"何曜日が店休日ですか？"},
     {base:"เมนูนี้เรียกว่าอะไร", type:'q', jp:"これは何という料理ですか？"},
   ]},
-  { icon:"bag", title:"市場で買い物する", color:"var(--teal-deep)", count:"17", phrases:[
+  { icon:"bag", title:"市場で買い物する", color:"var(--teal-deep)", count:"17", sample:"値段交渉・サイズ・会計など", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
     {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true, modes:priceModes}},
     {base:"ลดได้ไหม", type:'q', jp:"安くなりますか？"},
@@ -2171,7 +2171,7 @@ const situations = [
     {base:"มีไซส์อื่นไหม", type:'q', jp:"他のサイズはありますか？"},
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
   ]},
-  { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"11", phrases:[
+  { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"11", sample:"症状の伝え方・薬の相談など", phrases:[
     {base:"ปวดหัว", type:'s', jp:"頭が痛いです"},
     {base:"เป็นไข้", type:'s', jp:"熱があります"},
     {base:"น้ำมูกไหล", type:'s', jp:"鼻水が出ます"},
@@ -2185,13 +2185,13 @@ const situations = [
     {base:"มีแผ่นแปะแก้ปวดกล้ามเนื้อไหม", type:'q', jp:"筋肉痛用の張り薬(湿布)はありますか？"},
     {base:"มียานอนหลับไหม", type:'q', jp:"睡眠導入剤はありますか？"},
   ]},
-  { icon:"compass", title:"道をたずねる", color:"var(--teal)", count:"4", phrases:[
+  { icon:"compass", title:"道をたずねる", color:"var(--teal)", count:"4", sample:"場所・行き方をたずねる", phrases:[
     {base:"ตรงนี้คือที่ไหน", type:'q', jp:"ここはどこですか？"},
     {base:"เดินไปทางไหน", type:'q', jp:"どちらの方向に歩けばいいですか？"},
     {base:"ควรทำอย่างไรดี", type:'q', jp:"どうしたらいいですか？"},
     {base:"หลงทาง", type:'s', jp:"道に迷いました"},
   ]},
-  { icon:"hand", title:"助けを求める", color:"var(--pink-deep)", count:"24", phrases:[
+  { icon:"hand", title:"助けを求める", color:"var(--pink-deep)", count:"24", sample:"急病・けが・トラブル時の一言", phrases:[
     {base:"ช่วยด้วย", type:'s', jp:"助けてください"},
     {base:"โทรเรียกตำรวจได้ไหม", type:'q', jp:"警察を呼んでもらえますか？"},
     {base:"บาดเจ็บ", type:'s', jp:"怪我をしました"},
@@ -4213,7 +4213,7 @@ function renderSituations(){
        <div class="sit-icon" style="--accent:${s.color}">${iconSvg(s.icon, 40)}</div>
        <div class="sit-text">
          <div class="sit-title">${s.title}</div>
-         <div class="sit-sub">${s.count}フレーズ</div>
+         <div class="sit-sub">${s.sample || (s.count+'フレーズ')}</div>
        </div>
        <div class="sit-arrow">›</div>
      </div>`

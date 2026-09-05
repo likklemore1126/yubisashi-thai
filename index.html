@@ -3258,13 +3258,14 @@ function openFavoritesChain(){
   });
 }
 function fitFavChainText(el){
+  const item = el.closest('.fav-chain-item');
   const container = document.getElementById('favChainList');
-  if(!el || !container) return;
+  if(!el || !item || !container) return;
   const cs = getComputedStyle(container);
   const padL = parseFloat(cs.paddingLeft) || 0;
   const padR = parseFloat(cs.paddingRight) || 0;
   const fullMaxWidth = (container.clientWidth - padL - padR) * 0.95;
-  const maxHeight = window.innerHeight * 0.65; // 1画面に収まる目安(日本語訳の行や余白ぶんを残す)
+  const maxHeight = window.innerHeight * 0.55; // タイ語+日本語訳+余白を含めて1画面に収める
   const widthFractions = [1, 0.8, 0.65, 0.5, 0.38, 0.28];
   let best = null;
   widthFractions.forEach(frac => {
@@ -3272,8 +3273,8 @@ function fitFavChainText(el){
     let fontSize = 200;
     el.style.maxWidth = w + 'px';
     el.style.fontSize = fontSize + 'px';
-    while(fontSize > 20 && (el.scrollWidth > w || el.scrollHeight > maxHeight)){
-      fontSize -= 6;
+    while(fontSize > 16 && (el.scrollWidth > w || item.scrollHeight > maxHeight)){
+      fontSize -= 4;
       el.style.fontSize = fontSize + 'px';
     }
     if(!best || fontSize > best.fontSize){

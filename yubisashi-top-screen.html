@@ -822,7 +822,15 @@
   }
   .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:0 8px; }
   .fav-chain-item{ margin-bottom:26px; text-align:center; }
-  .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; }
+  .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; white-space:normal; word-break:normal; overflow-wrap:normal; }
+  .fav-chain-th::before{
+    content:""; display:inline-block; width:1em; height:0.72em; margin-right:0.18em; vertical-align:0.05em;
+    background-image:url('https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f1f9-1f1ed.png');
+    background-size:contain; background-repeat:no-repeat; background-position:center;
+  }
+  @media (orientation: portrait){
+    .fav-chain-th::before{ display:block; width:1.6em; height:1.15em; margin-right:0; margin-bottom:0.2em; }
+  }
   .fav-chain-jp{ font-size:13px; opacity:0.6; margin-top:6px; }
   .landscape-close{
     position:absolute; top:calc(16px + env(safe-area-inset-top)); right:calc(20px + env(safe-area-inset-right)); font-size:13px; opacity:0.55;
@@ -3245,10 +3253,50 @@ function openFavoritesChain(){
     </div>
   `).join('');
   document.getElementById('favChainDisplay').classList.add('show');
+  requestAnimationFrame(() => {
+    document.querySelectorAll('#favChainList .fav-chain-th').forEach(fitFavChainText);
+  });
+}
+function fitFavChainText(el){
+  const container = document.getElementById('favChainList');
+  if(!el || !container) return;
+  const cs = getComputedStyle(container);
+  const padL = parseFloat(cs.paddingLeft) || 0;
+  const padR = parseFloat(cs.paddingRight) || 0;
+  const fullMaxWidth = (container.clientWidth - padL - padR) * 0.95;
+  const widthFractions = [1, 0.8, 0.65, 0.5, 0.38, 0.28];
+  let best = null;
+  widthFractions.forEach(frac => {
+    const w = fullMaxWidth * frac;
+    let fontSize = 200;
+    el.style.maxWidth = w + 'px';
+    el.style.fontSize = fontSize + 'px';
+    while(fontSize > 20 && el.scrollWidth > w){
+      fontSize -= 6;
+      el.style.fontSize = fontSize + 'px';
+    }
+    if(!best || fontSize > best.fontSize){
+      best = {fontSize, width: w};
+    }
+  });
+  el.style.maxWidth = best.width + 'px';
+  el.style.fontSize = best.fontSize + 'px';
 }
 function closeFavChain(){
   document.getElementById('favChainDisplay').classList.remove('show');
 }
+window.addEventListener('resize', () => {
+  if(document.getElementById('favChainDisplay').classList.contains('show')){
+    document.querySelectorAll('#favChainList .fav-chain-th').forEach(fitFavChainText);
+  }
+});
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    if(document.getElementById('favChainDisplay').classList.contains('show')){
+      document.querySelectorAll('#favChainList .fav-chain-th').forEach(fitFavChainText);
+    }
+  }, 150);
+});
 
 // ---------- ホテル情報の保存欄 ----------
 let hotelInfo = {name:'', floor:'', room:'', checkin:'', checkout:''};

@@ -832,6 +832,11 @@
     .fav-chain-th::before{ display:block; width:1.6em; height:1.15em; margin-right:0; margin-bottom:0.2em; }
   }
   .fav-chain-jp{ font-size:13px; opacity:0.6; margin-top:6px; }
+  .fav-chain-jp::before{
+    content:""; display:inline-block; width:1em; height:0.72em; margin-right:0.18em; vertical-align:0.02em;
+    background-image:url('https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f1ef-1f1f5.png');
+    background-size:contain; background-repeat:no-repeat; background-position:center;
+  }
   .landscape-close{
     position:absolute; top:calc(16px + env(safe-area-inset-top)); right:calc(20px + env(safe-area-inset-right)); font-size:13px; opacity:0.55;
     font-family:'Noto Sans JP', sans-serif;
@@ -3265,7 +3270,8 @@ function fitFavChainText(el){
   const padL = parseFloat(cs.paddingLeft) || 0;
   const padR = parseFloat(cs.paddingRight) || 0;
   const fullMaxWidth = (container.clientWidth - padL - padR) * 0.95;
-  const maxHeight = window.innerHeight * 0.55; // タイ語+日本語訳+余白を含めて1画面に収める
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const maxHeight = window.innerHeight * (isLandscape ? 0.8 : 0.55); // タイ語+日本語訳+余白を含めて1画面に収める(横画面は高さに余裕が無いぶん比率を緩める)
   const widthFractions = [1, 0.8, 0.65, 0.5, 0.38, 0.28];
   let best = null;
   widthFractions.forEach(frac => {

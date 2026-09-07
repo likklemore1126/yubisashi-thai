@@ -534,31 +534,108 @@
   <div class="wrap">
     <h2>旅のあらゆる場面をカバー</h2>
     <div class="feature-grid">
-      <div class="feature-cell">
-        <div class="feature-visual">
-          <div class="mini-search">🔍 วัดพระแก้ว</div>
-          <div class="mini-result">วัดพระแก้ว<span>ワット・プラケオ</span></div>
+      <div class="feature-cell feature-cell--accordion" id="feature-search">
+        <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-search">
+          <div class="feature-toggle-head">
+            <div class="feature-toggle-titles">
+              <div class="feature-visual">
+                <div class="mini-search">🔍 วัดพระแก้ว</div>
+                <div class="mini-result">วัดพระแก้ว<span>ワット・プラケオ</span></div>
+              </div>
+              <h3>500件以上の目的地を検索</h3>
+              <p>観光地・駅・空港・バスターミナルなど、タイ旅行で使う場所を幅広く収録。日本語はもちろん、Googleマップからコピーしたタイ語表記をそのまま貼り付けても見つかります。</p>
+              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
+            </div>
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </button>
+        <div class="feature-panel" id="feature-panel-search">
+          <div class="feature-gallery">
+            <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+            <div class="feature-gallery-scroll">
+              <img src="images/mockup-search-01.jpg" alt="①検索窓に入力する画面" loading="lazy">
+              <img src="images/mockup-search-02.jpg" alt="②候補が一覧表示される画面" loading="lazy">
+              <img src="images/mockup-search-03.jpg" alt="③目的地の詳細画面" loading="lazy">
+            </div>
+            <div class="feature-gallery-fade" aria-hidden="true"></div>
+            <div class="feature-gallery-dots" aria-hidden="true">
+              <span class="active"></span><span></span><span></span>
+            </div>
+          </div>
         </div>
-        <h3>500件以上の目的地を検索</h3>
-        <p>観光地・駅・空港・バスターミナルなど、タイ旅行で使う場所を幅広く収録。日本語はもちろん、Googleマップからコピーしたタイ語表記をそのまま貼り付けても見つかります。</p>
       </div>
-      <div class="feature-cell">
-        <div class="feature-visual mini-tabrow">
-          <span class="mini-tab active">🚌</span>
-          <span class="mini-tab">🚆</span>
-          <span class="mini-tab">🚕</span>
-          <span class="mini-tab">✈️</span>
-          <span class="mini-tab">⛴️</span>
+      <div class="feature-cell feature-cell--accordion" id="feature-transport">
+        <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-transport">
+          <div class="feature-toggle-head">
+            <div class="feature-toggle-titles">
+              <div class="feature-visual mini-tabrow">
+                <span class="mini-tab active">🚌</span>
+                <span class="mini-tab">🚆</span>
+                <span class="mini-tab">🚕</span>
+                <span class="mini-tab">✈️</span>
+                <span class="mini-tab">⛴️</span>
+              </div>
+              <h3>10種類の移動手段に対応</h3>
+              <p>バス・電車・鉄道・タクシー・トゥクトゥク・ソンテウ・ロットゥー・飛行機・船まで、乗車券の買い方や料金交渉まで。</p>
+              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
+            </div>
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </button>
+        <div class="feature-panel" id="feature-panel-transport">
+          <div class="feature-gallery">
+            <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+            <div class="feature-gallery-scroll">
+              <img src="images/mockup-transport-01.jpg" alt="①移動手段タブを選ぶ画面" loading="lazy">
+              <img src="images/mockup-transport-02.jpg" alt="②選んだ手段のフレーズ画面" loading="lazy">
+              <img src="images/mockup-transport-03.jpg" alt="③料金交渉フレーズの画面" loading="lazy">
+            </div>
+            <div class="feature-gallery-fade" aria-hidden="true"></div>
+            <div class="feature-gallery-dots" aria-hidden="true">
+              <span class="active"></span><span></span><span></span>
+            </div>
+          </div>
         </div>
-        <h3>10種類の移動手段に対応</h3>
-        <p>バス・電車・鉄道・タクシー・トゥクトゥク・ソンテウ・ロットゥー・飛行機・船まで、乗車券の買い方や料金交渉まで。</p>
       </div>
-      <div class="feature-cell">
-        <div class="feature-visual">
-          <div class="mini-booklink">🎫 バンコク → アユタヤ<span>予約する ›</span></div>
+      <div class="feature-cell feature-cell--accordion" id="feature-booking">
+        <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-booking">
+          <div class="feature-toggle-head">
+            <div class="feature-toggle-titles">
+              <div class="feature-visual">
+                <div class="mini-booklink">🎫 バンコク → アユタヤ<span>予約する ›</span></div>
+              </div>
+              <h3>電波があれば予約もスムーズ</h3>
+              <p>「伝える」だけでなく「予約する」までサポート。バス・鉄道・現地ツアーは、そのまま予約ページに進めるリンク付きです。</p>
+              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
+            </div>
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </button>
+        <div class="feature-panel" id="feature-panel-booking">
+          <div class="feature-gallery">
+            <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+            <div class="feature-gallery-scroll">
+              <img src="images/mockup-booking-01.jpg" alt="①目的地詳細の予約リンク画面" loading="lazy">
+              <img src="images/mockup-booking-02.jpg" alt="②予約ページに遷移した画面" loading="lazy">
+            </div>
+            <div class="feature-gallery-fade" aria-hidden="true"></div>
+            <div class="feature-gallery-dots" aria-hidden="true">
+              <span class="active"></span><span></span>
+            </div>
+          </div>
         </div>
-        <h3>電波があれば予約もスムーズ</h3>
-        <p>「伝える」だけでなく「予約する」までサポート。バス・鉄道・現地ツアーは、そのまま予約ページに進めるリンク付きです。</p>
       </div>
       <div class="feature-cell feature-cell--accordion" id="feature-order">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-order">
@@ -598,26 +675,96 @@
           </div>
         </div>
       </div>
-      <div class="feature-cell">
-        <div class="feature-visual">
-          <div class="mini-med">💊 頭痛・発熱に<span>パナドーン</span></div>
+      <div class="feature-cell feature-cell--accordion" id="feature-medicine">
+        <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-medicine">
+          <div class="feature-toggle-head">
+            <div class="feature-toggle-titles">
+              <div class="feature-visual">
+                <div class="mini-med">💊 頭痛・発熱に<span>パナドーン</span></div>
+              </div>
+              <h3>薬局・体調不良にも対応</h3>
+              <p>「頭が痛い」「熱がある」など、症状や欲しいものを画面で伝えられます。市販薬を写真付きで探すこともできます。</p>
+              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
+            </div>
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </button>
+        <div class="feature-panel" id="feature-panel-medicine">
+          <div class="feature-gallery">
+            <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+            <div class="feature-gallery-scroll">
+              <img src="images/mockup-medicine-01.jpg" alt="①症状を選ぶ画面" loading="lazy">
+              <img src="images/mockup-medicine-02.jpg" alt="②市販薬を写真付きで探す画面" loading="lazy">
+              <img src="images/mockup-medicine-03.jpg" alt="③できたフレーズを見せる画面" loading="lazy">
+            </div>
+            <div class="feature-gallery-fade" aria-hidden="true"></div>
+            <div class="feature-gallery-dots" aria-hidden="true">
+              <span class="active"></span><span></span><span></span>
+            </div>
+          </div>
         </div>
-        <h3>薬局・体調不良にも対応</h3>
-        <p>「頭が痛い」「熱がある」など、症状や欲しいものを画面で伝えられます。市販薬を写真付きで探すこともできます。</p>
       </div>
-      <div class="feature-cell">
-        <div class="feature-visual mini-calc">
-          <span class="mini-calc-th th">150 บาท</span>
-          <span class="mini-calc-eq">≈</span>
-          <span class="mini-calc-jp">645円</span>
+      <div class="feature-cell feature-cell--accordion" id="feature-calc">
+        <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-calc">
+          <div class="feature-toggle-head">
+            <div class="feature-toggle-titles">
+              <div class="feature-visual mini-calc">
+                <span class="mini-calc-th th">150 บาท</span>
+                <span class="mini-calc-eq">≈</span>
+                <span class="mini-calc-jp">645円</span>
+              </div>
+              <h3>バーツ計算機を内蔵</h3>
+              <p>為替レートを設定しておけば、現地価格を円換算しながら確認・交渉できます。</p>
+              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
+            </div>
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </button>
+        <div class="feature-panel" id="feature-panel-calc">
+          <div class="feature-gallery">
+            <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+            <div class="feature-gallery-scroll">
+              <img src="images/mockup-calc-01.jpg" alt="①為替レートを設定する画面" loading="lazy">
+              <img src="images/mockup-calc-02.jpg" alt="②現地価格→円換算の画面" loading="lazy">
+            </div>
+            <div class="feature-gallery-fade" aria-hidden="true"></div>
+            <div class="feature-gallery-dots" aria-hidden="true">
+              <span class="active"></span><span></span>
+            </div>
+          </div>
         </div>
-        <h3>バーツ計算機を内蔵</h3>
-        <p>為替レートを設定しておけば、現地価格を円換算しながら確認・交渉できます。</p>
       </div>
-      <div class="feature-cell">
-        <div class="feature-visual mini-offline">🧳 電波の無い場所でも問題なく動作</div>
-        <h3>オフラインで動作</h3>
-        <p>一度読み込んでおけば、空港・地下・郊外など通信環境が不安定な場所でも問題なく使えます。</p>
+      <div class="feature-cell feature-cell--accordion" id="feature-offline">
+        <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-offline">
+          <div class="feature-toggle-head">
+            <div class="feature-toggle-titles">
+              <div class="feature-visual mini-offline">🧳 電波の無い場所でも問題なく動作</div>
+              <h3>オフラインで動作</h3>
+              <p>一度読み込んでおけば、空港・地下・郊外など通信環境が不安定な場所でも問題なく使えます。</p>
+              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
+            </div>
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </button>
+        <div class="feature-panel" id="feature-panel-offline">
+          <div class="feature-gallery">
+            <div class="feature-gallery-scroll">
+              <img src="images/mockup-offline-01.jpg" alt="オフラインでも使える画面" loading="lazy">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

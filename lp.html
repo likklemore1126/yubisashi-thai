@@ -239,6 +239,62 @@
   .feature-cell h3{ font-size:15.5px; margin-bottom:8px; }
   .feature-cell p{ font-size:16px; color:#6b6355; }
 
+  /* ---------- 機能カード:折りたたみ+横スクロールギャラリー(試作) ---------- */
+  .feature-cell--accordion{ padding:0; }
+  .feature-toggle{
+    display:block; width:100%; background:none; border:none; margin:0;
+    font-family:inherit; color:inherit; text-align:left; cursor:pointer;
+    padding:22px 22px 26px;
+  }
+  .feature-toggle-head{ display:flex; align-items:flex-start; gap:10px; }
+  .feature-toggle-titles{ flex:1 1 auto; min-width:0; }
+  .feature-toggle-cta{
+    margin-top:10px; display:inline-flex; align-items:center; gap:4px;
+    font-size:13px; font-weight:700; color:var(--marigold-deep);
+  }
+  .feature-chevron{
+    flex:0 0 auto; width:26px; height:26px; border-radius:50%;
+    border:1.5px solid var(--line); background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; color:#6b6355; margin-top:2px;
+    transition:transform 0.25s ease;
+  }
+  .feature-cell--accordion.open .feature-chevron{ transform:rotate(180deg); }
+  .feature-cell--accordion.open .feature-toggle-cta{ display:none; }
+  .feature-panel{ max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+  .feature-cell--accordion.open .feature-panel{ max-height:640px; }
+  .feature-gallery{ position:relative; padding:0 22px 24px; }
+  .feature-gallery-hint{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--ink); color:#fff; font-size:12px; font-weight:700;
+    padding:6px 12px; border-radius:999px; margin-bottom:12px;
+    opacity:1; transition:opacity 0.3s ease;
+  }
+  .feature-gallery-hint.is-hidden{ opacity:0; }
+  .feature-gallery-scroll{
+    display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory;
+    padding-bottom:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  .feature-gallery-scroll::-webkit-scrollbar{ display:none; }
+  .feature-gallery-scroll img{
+    flex:0 0 auto; width:78%; min-width:0; scroll-snap-align:start;
+    border-radius:14px; border:1px solid var(--line);
+    box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
+  }
+  @media (min-width:560px){ .feature-gallery-scroll img{ width:58%; } }
+  .feature-gallery-fade{
+    position:absolute; top:0; right:22px; bottom:30px; width:40px;
+    pointer-events:none; opacity:1; transition:opacity 0.3s ease;
+    background:linear-gradient(to right, rgba(251,247,239,0), var(--paper) 82%);
+  }
+  .feature-gallery-fade.is-hidden{ opacity:0; }
+  .feature-gallery-dots{ display:flex; gap:6px; justify-content:center; margin-top:12px; }
+  .feature-gallery-dots span{
+    width:6px; height:6px; border-radius:3px; background:var(--line);
+    transition:background 0.2s ease, width 0.2s ease;
+  }
+  .feature-gallery-dots span.active{ background:var(--marigold-deep); width:16px; }
+
   /* ---------- 翻訳アプリとの違い ---------- */
   .vs h2{ font-size:24px; margin-bottom:8px; }
   .vs-quote{
@@ -499,14 +555,39 @@
         <h3>電波があれば予約もスムーズ</h3>
         <p>「伝える」だけでなく「予約する」までサポート。バス・鉄道・現地ツアーは、そのまま予約ページに進めるリンク付きです。</p>
       </div>
-      <div class="feature-cell">
-        <div class="feature-visual mini-dishrow">
-          <span class="mini-dish">🍜</span>
-          <span class="mini-dish">🍛</span>
-          <span class="mini-dish">🍢</span>
+      <div class="feature-cell feature-cell--accordion" id="feature-order">
+        <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-order">
+          <div class="feature-toggle-head">
+            <div class="feature-toggle-titles">
+              <div class="feature-visual mini-dishrow">
+                <span class="mini-dish">🍜</span>
+                <span class="mini-dish">🍛</span>
+                <span class="mini-dish">🍢</span>
+              </div>
+              <h3>屋台・レストラン注文</h3>
+              <p>定番タイ料理を写真付きで選び、辛さ・パクチー抜きなどの追加指示もその場で組み立てられます。</p>
+              <span class="feature-toggle-cta">実際の画面で見る ›</span>
+            </div>
+            <span class="feature-chevron" aria-hidden="true">⌄</span>
+          </div>
+        </button>
+        <div class="feature-panel" id="feature-panel-order">
+          <div class="feature-gallery">
+            <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+            <div class="feature-gallery-scroll">
+              <img src="images/screenshot-order-01.jpg" alt="①シチュエーションを選ぶ" loading="lazy">
+              <img src="images/screenshot-order-02.jpg" alt="②料理・スイーツ・ドリンクから選ぶ" loading="lazy">
+              <img src="images/screenshot-order-03.jpg" alt="③料理を選ぶ" loading="lazy">
+              <img src="images/screenshot-order-04.jpg" alt="④料理+追加指示を選ぶ" loading="lazy">
+              <img src="images/screenshot-order-05.jpg" alt="⑤できたフレーズを相手に見せる" loading="lazy">
+              <img src="images/screenshot-order-06.jpg" alt="⑥お気に入りに追加する" loading="lazy">
+            </div>
+            <div class="feature-gallery-fade" aria-hidden="true"></div>
+            <div class="feature-gallery-dots" aria-hidden="true">
+              <span class="active"></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
         </div>
-        <h3>屋台・レストラン注文</h3>
-        <p>定番タイ料理を写真付きで選び、辛さ・パクチー抜きなどの追加指示もその場で組み立てられます。</p>
       </div>
       <div class="feature-cell">
         <div class="feature-visual">
@@ -706,6 +787,35 @@
   window.addEventListener('pageshow', closeMenu);
   document.addEventListener('DOMContentLoaded', closeMenu);
   closeMenu();
+
+  // ---------- 機能カード:折りたたみ+横スクロールギャラリー(試作) ----------
+  document.querySelectorAll('.feature-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var cell = btn.closest('.feature-cell--accordion');
+      var isOpen = cell.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+
+  document.querySelectorAll('.feature-gallery-scroll').forEach(function(scroller){
+    var gallery = scroller.closest('.feature-gallery');
+    var hint = gallery.querySelector('.feature-gallery-hint');
+    var fade = gallery.querySelector('.feature-gallery-fade');
+    var dots = gallery.querySelectorAll('.feature-gallery-dots span');
+
+    scroller.addEventListener('scroll', function(){
+      if(hint) hint.classList.add('is-hidden');
+
+      var maxScroll = scroller.scrollWidth - scroller.clientWidth;
+      if(fade){
+        fade.classList.toggle('is-hidden', maxScroll <= 0 || scroller.scrollLeft >= maxScroll - 8);
+      }
+      if(dots.length && maxScroll > 0){
+        var idx = Math.round((scroller.scrollLeft / maxScroll) * (dots.length - 1));
+        dots.forEach(function(d, i){ d.classList.toggle('active', i === idx); });
+      }
+    }, { passive:true });
+  });
 </script>
 </body>
 </html>

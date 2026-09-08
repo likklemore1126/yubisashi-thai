@@ -142,26 +142,20 @@
   /* ---------- 使い方3ステップ ---------- */
   .steps h2{ font-size:24px; margin-bottom:8px; }
   .section-lead{ font-size:16px; color:#6b6355; margin-bottom:44px; }
-  .step{ display:flex; gap:26px; padding:32px 0; border-top:1px solid var(--line); flex-wrap:wrap; align-items:center; }
-  .step:last-child{ border-bottom:1px solid var(--line); }
-  .step-text{ display:flex; gap:22px; flex:1 1 260px; }
-  .step-num{ font-family:'Kanit', sans-serif; font-weight:700; font-size:15px; color:var(--marigold-deep); flex:0 0 32px; }
-  .step-body h3{ font-size:17px; margin-bottom:6px; }
-  .step-body p{ font-size:16px; color:#6b6355; max-width:48ch; }
-
-  /* 3ステップのモックアップ(現時点では実機スクリーンショットではなく再現イメージ) */
-  .step-mock{
-    flex:0 0 220px; background:#fff; border-radius:14px; padding:14px;
-    border:1px solid var(--line); box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
+  .steps-gallery{ position:relative; }
+  .steps .feature-gallery{ padding:0 0 24px; }
+  .feature-gallery-scroll .steps-shot-card{
+    flex:0 0 auto; width:78%; min-width:0; scroll-snap-align:start;
   }
-  .step-mock.dark{ background:var(--ink); border-color:var(--ink); }
-  .step-mock-full{ flex:1 1 280px; width:100%; display:flex; flex-direction:column; gap:16px; }
-  .step-shot-card{
+  @media (min-width:560px){ .feature-gallery-scroll .steps-shot-card{ width:58%; } }
+  .steps-shot-card{
     background:#fff; border-radius:14px; border:1px solid var(--line);
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); overflow:hidden;
   }
-  .step-shot-card img{ width:100%; display:block; }
-  .step-shot-caption{ padding:12px 14px; font-size:14px; color:#6b6355; line-height:1.7; }
+  .feature-gallery-scroll .steps-shot-card img{ width:100%; display:block; aspect-ratio:1206/2436; object-fit:cover; object-position:bottom; }
+  .steps-shot-caption{ padding:16px 16px 12px; min-height:276px; box-sizing:border-box; }
+  .steps-shot-title{ display:flex; align-items:center; gap:8px; font-size:17px; font-weight:700; color:var(--ink); margin-bottom:8px; }
+  .steps-shot-desc{ font-size:15px; color:#6b6355; line-height:1.7; }
   .mock-searchbar{
     background:var(--sand); border:1.5px solid var(--line); border-radius:8px;
     padding:10px 12px; font-size:16px; color:#6b6355; margin-bottom:10px;
@@ -198,7 +192,7 @@
     box-shadow:0 10px 24px -14px rgba(0,0,0,0.4);
   }
   .feature-gallery-scroll .station-shot-card img{ width:100%; display:block; }
-  .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; }
+  .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:96px; box-sizing:border-box; }
   .station-shot-num{
     display:inline-flex; align-items:center; justify-content:center;
     width:20px; height:20px; border-radius:50%; background:var(--marigold);
@@ -462,49 +456,34 @@
   <div class="wrap">
     <h2>使い方は3ステップ</h2>
     <p class="section-lead">タイ語の入力も、文法の心配も必要ありません。</p>
-    <div class="step">
-      <div class="step-text">
-        <div class="step-num">01</div>
-        <div class="step-body">
-          <h3>行き先やシーンを選ぶ</h3>
-          <p>地名を検索するか、「移動する」「レストランで注文する」など、今のシチュエーションをタップします。</p>
-        </div>
-      </div>
-      <div class="step-mock-full">
-        <div class="step-shot-card">
+    <div class="steps-gallery feature-gallery">
+      <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+      <div class="feature-gallery-scroll">
+        <div class="steps-shot-card">
+          <div class="steps-shot-caption">
+            <div class="steps-shot-title"><span class="station-shot-num">1</span>行き先やシーンを選ぶ</div>
+            <p class="steps-shot-desc">地名を検索するか、「移動する」「レストランで注文する」など、今のシチュエーションをタップします。</p>
+          </div>
           <img src="images/screenshot-top-situations.jpeg" alt="シチュエーションから探す実画面">
-          <div class="step-shot-caption">「移動する」「レストランで注文する」など、今のシチュエーションをタップ</div>
         </div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-text">
-        <div class="step-num">02</div>
-        <div class="step-body">
-          <h3>伝えたいフレーズをタップ</h3>
-          <p>一覧から伝えたい一言を選ぶだけで、自然なタイ語の文章が組み上がります。人数や時間、金額なども画面上で調整できます。</p>
-        </div>
-      </div>
-      <div class="step-mock-full">
-        <div class="step-shot-card">
+        <div class="steps-shot-card">
+          <div class="steps-shot-caption">
+            <div class="steps-shot-title"><span class="station-shot-num">2</span>伝えたいフレーズをタップ</div>
+            <p class="steps-shot-desc">一覧から伝えたい一言を選ぶだけで、自然なタイ語の文章が組み上がります。人数や時間、金額なども画面上で調整できます。</p>
+          </div>
           <img src="images/screenshot-hotel-order.jpeg" alt="ホテルにチェックインするフレーズ一覧の実画面">
-          <div class="step-shot-caption">一覧から伝えたい一言をタップするだけ</div>
         </div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-text">
-        <div class="step-num">03</div>
-        <div class="step-body">
-          <h3>画面いっぱいに表示して見せる</h3>
-          <p>「相手に見せる」をタップすると、タイ語が画面いっぱいの大きな文字で表示されます。スマホを横向きにすれば、さらに大きな文字で表示することもできます。あとはスマホを相手に見せるだけです。</p>
-        </div>
-      </div>
-      <div class="step-mock-full">
-        <div class="step-shot-card">
+        <div class="steps-shot-card">
+          <div class="steps-shot-caption">
+            <div class="steps-shot-title"><span class="station-shot-num">3</span>画面いっぱいに表示して見せる</div>
+            <p class="steps-shot-desc">「相手に見せる」をタップすると、タイ語が画面いっぱいの大きな文字で表示されます。スマホを横向きにすれば、さらに大きな文字で表示することもできます。あとはスマホを相手に見せるだけです。</p>
+          </div>
           <img src="images/screenshot-hotel-fullscreen.jpeg" alt="画面いっぱいに表示した実画面(縦向き・ホテルパターン)">
-          <div class="step-shot-caption">画面いっぱいの大きな文字で、そのまま相手に見せる</div>
         </div>
+      </div>
+      <div class="feature-gallery-fade" aria-hidden="true"></div>
+      <div class="feature-gallery-dots" aria-hidden="true">
+        <span class="active"></span><span></span><span></span>
       </div>
     </div>
   </div>

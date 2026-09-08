@@ -34,7 +34,7 @@
   img{max-width:100%; display:block;}
   a{color:inherit;}
   .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
-  section{padding:88px 0;}
+  section{padding:60px 0;}
   @media (max-width:600px){ section{padding:64px 0;} }
 
   h1,h2,h3{font-weight:800; line-height:1.4; letter-spacing:0.01em;}
@@ -191,7 +191,7 @@
     box-shadow:0 10px 24px -14px rgba(0,0,0,0.4);
   }
   .feature-gallery-scroll .station-shot-card img{ width:100%; display:block; }
-  .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:96px; box-sizing:border-box; }
+  .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
   .station-shot-num{
     display:inline-flex; align-items:center; justify-content:center;
     width:20px; height:20px; border-radius:50%; background:var(--marigold);
@@ -307,20 +307,7 @@
   .vs-note{ margin-top:32px; padding-top:28px; border-top:1px solid var(--line); }
   .vs-note p{ font-size:16px; color:#4a4237; line-height:1.85; margin-bottom:14px; }
   .vs-note p.conclusion{ font-weight:700; color:var(--teal-deep); font-size:17px; }
-  .vs-compare{ display:flex; gap:18px; flex-wrap:wrap; margin:32px 0 28px; }
-  .vs-col{ flex:1 1 220px; border-radius:14px; padding:20px; }
-  .vs-col.bad{ background:var(--sand); border:1.5px solid var(--line); }
-  .vs-col.good{ background:#fff8ec; border:1.5px solid var(--marigold); }
-  .vs-col-label{ font-size:12px; font-weight:700; margin-bottom:14px; }
-  .vs-col.bad .vs-col-label{ color:#8B8272; }
-  .vs-col.good .vs-col-label{ color:var(--marigold-deep); }
-  .vs-steps{ list-style:none; display:flex; flex-direction:column; gap:6px; }
-  .vs-steps li{ font-size:16px; color:#4a4237; padding:9px 11px; background:#fff; border-radius:8px; border:1px solid var(--line); }
-  .vs-steps li.arrow{ text-align:center; background:none; border:none; padding:0; color:#C7BEA9; font-size:12px; }
-  .vs-steps li.warn{ background:#fdecea; border-color:#e3b4a8; color:#a34a2f; font-size:15px; line-height:1.6; }
-  .vs-points{ list-style:none; display:flex; flex-direction:column; gap:10px; }
-  .vs-points li{ font-size:16px; color:#4a4237; padding-left:22px; position:relative; }
-  .vs-points li::before{ content:"✓"; position:absolute; left:0; color:var(--teal); font-weight:700; }
+  .vs-compare-img{ width:100%; border-radius:16px; margin:24px 0 20px; display:block; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); }
 
   /* ---------- 買い切りの理由 ---------- */
   .why h2{ font-size:24px; margin-bottom:20px; }
@@ -348,10 +335,17 @@
 
   /* ---------- 開発者紹介 ---------- */
   .author{ background:var(--teal); color:#fff; }
-  .author h2{ color:#fff; font-size:22px; margin-bottom:18px; }
+  .author h2{ color:#fff; font-size:22px; margin-bottom:0; }
+  .author h3{ color:#fff; font-size:18px; margin-bottom:12px; }
   .author p{ font-size:16px; color:rgba(255,255,255,0.82); max-width:50ch; margin-bottom:12px; }
   .author-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
   .author-badge{ background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28); border-radius:999px; padding:8px 15px; font-size:12.5px; font-weight:600; }
+  .author-toggle-btn{ padding:26px 0; }
+  .author-toggle-btn .feature-toggle-cta{ color:#fff; opacity:0.85; }
+  .author-chevron{ background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.3); color:#fff; }
+  #author-accordion.open .author-chevron{ background:var(--marigold); border-color:var(--marigold-deep); color:var(--ink); }
+  #author-accordion .author-panel{ max-height:0; }
+  #author-accordion.open .author-panel{ max-height:864px; padding-bottom:8px; }
 
   /* ---------- 価格 ---------- */
   .pricing{ text-align:center; }
@@ -758,37 +752,7 @@
     <h2>翻訳アプリではなく、指さしタイを使う理由</h2>
     <p class="section-lead">タイ語に「翻訳する」のではなく、すでに用意された自然な一言を「選んで見せる」だけです。</p>
     <div class="vs-quote">「1回の翻訳では伝わらず、言い回しを変えて何度も翻訳し直して、やっと伝わった」<br>——そんな経験はありませんか？</div>
-    <div class="vs-compare">
-      <div class="vs-col bad">
-        <div class="vs-col-label">翻訳アプリの場合</div>
-        <ul class="vs-steps">
-          <li>「〇〇へ行きたい」と入力する</li>
-          <li class="arrow">↓</li>
-          <li>翻訳する</li>
-          <li class="arrow">↓</li>
-          <li class="warn">施設名・地名は誤訳されがち…<br>入力し直す・タイ語名を探す</li>
-          <li class="arrow">↓</li>
-          <li>もう一度翻訳する</li>
-          <li class="arrow">↓</li>
-          <li>相手に見せる</li>
-        </ul>
-      </div>
-      <div class="vs-col good">
-        <div class="vs-col-label">指さしタイの場合</div>
-        <ul class="vs-steps">
-          <li>場面を選ぶ</li>
-          <li class="arrow">↓</li>
-          <li>フレーズを選ぶ</li>
-          <li class="arrow">↓</li>
-          <li>見せる</li>
-        </ul>
-      </div>
-    </div>
-    <ul class="vs-points">
-      <li>タイ語が読めなくても使える</li>
-      <li>文章を自分で作らなくていい</li>
-      <li>オフラインでも使える</li>
-    </ul>
+    <img class="vs-compare-img" src="images/why-use-comparison.jpg" alt="翻訳アプリの場合と指さしタイの場合の比較、およびタイ語が読めなくても使える・文章を自分で作らなくていい・オフラインでも使えるの3つの特長">
     <div class="vs-note">
       <p>実は、翻訳アプリの精度だけが原因ではありません。日本語とタイ語は、そもそも翻訳との相性があまり良くない言語同士だと言われています。伝わる文章に仕上げるには、実は経験とコツが必要なのが実情です。</p>
       <p>さらに厄介なのは、翻訳アプリを普段使い慣れていない人ほど、「本当にこの訳で伝わっているのか」を確かめるすべがなく、訳された文章をただ信じるしかないという点です。</p>
@@ -817,17 +781,32 @@
 </section>
 
 <section class="author" id="author">
-  <div class="wrap">
-    <h2>タイが好きすぎて、移住しました</h2>
-    <p>東南アジアのひとり旅が好きで、何度も旅をするうちにタイにハマり、大好きが高じてバンコクへ移住。今もバンコクに暮らしています。タイ国政府観光庁公認のタイランド・スペシャリスト資格を取得し、これまでにタイ全土1都76県のうち29県を旅してきました。旅行ブログも運営しながら、旅先で撮った写真をInstagramにも投稿しています。</p>
-    <p>海外生活は約8年、東南アジアへの渡航はこれまでに30回以上。散々翻訳アプリを使い倒しながら旅をしてきました(今でも日常的に使っています)。だからこそ、翻訳アプリで伝わる文章の作り方や訳の精度の善し悪しが分かるようになった一方で、普段あまり使わない人にとっては、訳された文章が正しく伝わっているとただ信じるしかないのが現状だとも気づきました。どんな文章をよく使うのか、どんな場面で伝わらず困るのか、どんな質問をしたくなるのか——自分自身の経験をもとに、翻訳アプリだけでは埋まらなかった部分をカバーする、タイ旅行のためのツールを作りました。これから訪れる方にも、大好きなタイを心ゆくまで楽しんで、好きになってもらいたい。そんな思いを込めています。</p>
-    <div class="author-badges">
-      <div class="author-badge">タイ国政府観光庁認定 タイランド・スペシャリスト</div>
-      <div class="author-badge">バンコク在住</div>
-      <div class="author-badge">タイ全土29/77都県を旅済み</div>
-      <div class="author-badge">海外生活8年</div>
-      <div class="author-badge">東南アジア渡航30回以上</div>
-      <div class="author-badge">旅行ブログ運営中</div>
+  <div class="wrap feature-cell--accordion" id="author-accordion">
+    <button class="feature-toggle author-toggle-btn" type="button" aria-expanded="false" aria-controls="author-panel">
+      <div class="feature-toggle-head">
+        <div class="feature-toggle-titles">
+          <h2>運営者について</h2>
+          <span class="feature-toggle-cta" data-label-closed="詳しく見る ›" data-label-open="閉じる ‹">詳しく見る ›</span>
+        </div>
+        <span class="feature-chevron author-chevron" aria-hidden="true">
+          <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+    </button>
+    <div class="feature-panel author-panel" id="author-panel">
+      <h3>タイが好きすぎて、移住しました</h3>
+      <p>東南アジアのひとり旅が好きで、何度も旅をするうちにタイにハマり、大好きが高じてバンコクへ移住。今もバンコクに暮らしています。タイ国政府観光庁公認のタイランド・スペシャリスト資格を取得し、これまでにタイ全土1都76県のうち29県を旅してきました。旅行ブログも運営しながら、旅先で撮った写真をInstagramにも投稿しています。</p>
+      <p>海外生活は約8年、東南アジアへの渡航はこれまでに30回以上。散々翻訳アプリを使い倒しながら旅をしてきました(今でも日常的に使っています)。だからこそ、翻訳アプリで伝わる文章の作り方や訳の精度の善し悪しが分かるようになった一方で、普段あまり使わない人にとっては、訳された文章が正しく伝わっているとただ信じるしかないのが現状だとも気づきました。どんな文章をよく使うのか、どんな場面で伝わらず困るのか、どんな質問をしたくなるのか——自分自身の経験をもとに、翻訳アプリだけでは埋まらなかった部分をカバーする、タイ旅行のためのツールを作りました。これから訪れる方にも、大好きなタイを心ゆくまで楽しんで、好きになってもらいたい。そんな思いを込めています。</p>
+      <div class="author-badges">
+        <div class="author-badge">タイ国政府観光庁認定 タイランド・スペシャリスト</div>
+        <div class="author-badge">バンコク在住</div>
+        <div class="author-badge">タイ全土29/77都県を旅済み</div>
+        <div class="author-badge">海外生活8年</div>
+        <div class="author-badge">東南アジア渡航30回以上</div>
+        <div class="author-badge">旅行ブログ運営中</div>
+      </div>
     </div>
   </div>
 </section>

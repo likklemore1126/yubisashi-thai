@@ -5148,7 +5148,7 @@ function refreshVisible(){
 }
 
 function normalizeSearch(str){
-  return str.toLowerCase().replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)).replace(/\s+/g, '');
+  return str.toLowerCase().replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)).replace(/\s+/g, '').replace(/ー/g, '');
 }
 function isSubsequence(query, target){
   let qi = 0;

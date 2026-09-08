@@ -187,7 +187,15 @@
   .station-feature{ background:var(--teal); color:#fff; }
   .station-feature h2{ color:#fff; font-size:24px; margin-bottom:10px; }
   .station-feature .section-lead{ color:rgba(255,255,255,0.78); margin-bottom:36px; }
-  .station-gallery{ display:flex; flex-direction:column; gap:16px; }
+  .station-gallery{ position:relative; }
+  .station-feature .feature-gallery{ padding:0 0 24px; }
+  .feature-gallery-scroll .station-shot-card{
+    flex:0 0 auto; width:78%; min-width:0; scroll-snap-align:start;
+  }
+  @media (min-width:560px){ .feature-gallery-scroll .station-shot-card{ width:58%; } }
+  .station-feature .feature-gallery-fade{
+    background:linear-gradient(to right, rgba(15,107,98,0), var(--teal) 82%);
+  }
   .station-shot-card{
     background:#fff; border-radius:14px; overflow:hidden;
     box-shadow:0 10px 24px -14px rgba(0,0,0,0.4);
@@ -509,22 +517,29 @@
   <div class="wrap">
     <h2>電車なら、最寄り駅名も自動で入る</h2>
     <p class="section-lead">目的地に最寄り駅がある場合、駅名まで含めたフレーズがそのまま出てくるので、自分で調べて入力する必要がありません。</p>
-    <div class="station-gallery">
-      <div class="station-shot-card">
-        <img src="images/screenshot-search.jpeg" alt="目的地を検索する実画面">
-        <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索窓に入力してリストから選ぶ</div>
+    <div class="station-gallery feature-gallery">
+      <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+      <div class="feature-gallery-scroll">
+        <div class="station-shot-card">
+          <img src="images/screenshot-search.jpeg" alt="目的地を検索する実画面">
+          <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索窓に入力してリストから選ぶ</div>
+        </div>
+        <div class="station-shot-card">
+          <img src="images/screenshot-transport-select.jpeg" alt="行き先と交通手段を選ぶ実画面">
+          <div class="station-shot-caption"><span class="station-shot-num">2</span>「電車」のタブを選ぶと、最寄り駅名を含めたフレーズが自動で出てくる</div>
+        </div>
+        <div class="station-shot-card">
+          <img src="images/screenshot-ticket-qty.jpeg" alt="乗車券の枚数を調整する実画面">
+          <div class="station-shot-caption"><span class="station-shot-num">3</span>乗車券が必要なら、枚数もその場で調整できる</div>
+        </div>
+        <div class="station-shot-card">
+          <img src="images/screenshot-portrait.jpeg" alt="乗車券を見せる実画面(縦向き)">
+          <div class="station-shot-caption"><span class="station-shot-num">4</span>あとは「相手に見せる」で、窓口にそのまま見せるだけ</div>
+        </div>
       </div>
-      <div class="station-shot-card">
-        <img src="images/screenshot-transport-select.jpeg" alt="行き先と交通手段を選ぶ実画面">
-        <div class="station-shot-caption"><span class="station-shot-num">2</span>「電車」のタブを選ぶと、最寄り駅名を含めたフレーズが自動で出てくる</div>
-      </div>
-      <div class="station-shot-card">
-        <img src="images/screenshot-ticket-qty.jpeg" alt="乗車券の枚数を調整する実画面">
-        <div class="station-shot-caption"><span class="station-shot-num">3</span>乗車券が必要なら、枚数もその場で調整できる</div>
-      </div>
-      <div class="station-shot-card">
-        <img src="images/screenshot-portrait.jpeg" alt="乗車券を見せる実画面(縦向き)">
-        <div class="station-shot-caption"><span class="station-shot-num">4</span>あとは「相手に見せる」で、窓口にそのまま見せるだけ</div>
+      <div class="feature-gallery-fade" aria-hidden="true"></div>
+      <div class="feature-gallery-dots" aria-hidden="true">
+        <span class="active"></span><span></span><span></span><span></span>
       </div>
     </div>
   </div>

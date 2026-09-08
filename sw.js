@@ -1,4 +1,4 @@
-const SW_VERSION = '2026-09-05h';
+const SW_VERSION = '2026-09-08a';
 const CACHE_NAME = `yubisashi-thai-${SW_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -214,9 +214,6 @@ const PRECACHE_URLS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) =>
-      // cache.addAll()は内部でfetch()を使うため、ブラウザのHTTPキャッシュが
-      // 古いレスポンスを返すと、SWのキャッシュにも古い中身がそのまま入ってしまう。
-      // {cache:'reload'}でHTTPキャッシュを無視し、必ずサーバーへ取りに行かせる。
       Promise.all(
         PRECACHE_URLS.map((url) =>
           fetch(url, { cache: 'reload' }).then((response) => {
@@ -244,8 +241,6 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Stale-while-revalidate: 即座にキャッシュを返して高速表示しつつ、
-// 裏側でネットワークから最新版を取得してキャッシュを更新する(次回起動時に反映)。
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 

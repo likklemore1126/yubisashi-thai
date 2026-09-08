@@ -142,8 +142,9 @@
   /* ---------- 使い方3ステップ ---------- */
   .steps h2{ font-size:24px; margin-bottom:8px; }
   .section-lead{ font-size:16px; color:#6b6355; margin-bottom:44px; }
+  #steps .section-lead{ margin-bottom:20px; }
   .steps-gallery{ position:relative; }
-  .steps .feature-gallery{ padding:0 0 24px; }
+  .steps .feature-gallery{ padding:0 0 20px; }
   .feature-gallery-scroll .steps-shot-card{
     flex:0 0 auto; width:78%; min-width:0; scroll-snap-align:start;
   }
@@ -153,9 +154,6 @@
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); overflow:hidden;
   }
   .feature-gallery-scroll .steps-shot-card img{ width:100%; display:block; aspect-ratio:1206/2436; object-fit:cover; object-position:bottom; }
-  .steps-shot-caption{ padding:16px 16px 12px; min-height:276px; box-sizing:border-box; }
-  .steps-shot-title{ display:flex; align-items:center; gap:8px; font-size:17px; font-weight:700; color:var(--ink); margin-bottom:8px; }
-  .steps-shot-desc{ font-size:15px; color:#6b6355; line-height:1.7; }
   .mock-searchbar{
     background:var(--sand); border:1.5px solid var(--line); border-radius:8px;
     padding:10px 12px; font-size:16px; color:#6b6355; margin-bottom:10px;
@@ -460,28 +458,18 @@
       <div class="feature-gallery-hint">👉 横にスワイプできます</div>
       <div class="feature-gallery-scroll">
         <div class="steps-shot-card">
-          <div class="steps-shot-caption">
-            <div class="steps-shot-title"><span class="station-shot-num">1</span>行き先やシーンを選ぶ</div>
-            <p class="steps-shot-desc">地名を検索するか、「移動する」「レストランで注文する」など、今のシチュエーションをタップします。</p>
-          </div>
+          <div class="station-shot-caption"><span class="station-shot-num">1</span>地名を検索するか、シチュエーションをタップして選ぶ</div>
           <img src="images/screenshot-top-situations.jpeg" alt="シチュエーションから探す実画面">
         </div>
         <div class="steps-shot-card">
-          <div class="steps-shot-caption">
-            <div class="steps-shot-title"><span class="station-shot-num">2</span>伝えたいフレーズをタップ</div>
-            <p class="steps-shot-desc">一覧から伝えたい一言を選ぶだけで、自然なタイ語の文章が組み上がります。人数や時間、金額なども画面上で調整できます。</p>
-          </div>
+          <div class="station-shot-caption"><span class="station-shot-num">2</span>伝えたい一言をタップするだけで文章が完成</div>
           <img src="images/screenshot-hotel-order.jpeg" alt="ホテルにチェックインするフレーズ一覧の実画面">
         </div>
         <div class="steps-shot-card">
-          <div class="steps-shot-caption">
-            <div class="steps-shot-title"><span class="station-shot-num">3</span>画面いっぱいに表示して見せる</div>
-            <p class="steps-shot-desc">「相手に見せる」をタップすると、タイ語が画面いっぱいの大きな文字で表示されます。スマホを横向きにすれば、さらに大きな文字で表示することもできます。あとはスマホを相手に見せるだけです。</p>
-          </div>
+          <div class="station-shot-caption"><span class="station-shot-num">3</span>画面いっぱいの大きな文字で、そのまま相手に見せる</div>
           <img src="images/screenshot-hotel-fullscreen.jpeg" alt="画面いっぱいに表示した実画面(縦向き・ホテルパターン)">
         </div>
       </div>
-      <div class="feature-gallery-fade" aria-hidden="true"></div>
       <div class="feature-gallery-dots" aria-hidden="true">
         <span class="active"></span><span></span><span></span>
       </div>

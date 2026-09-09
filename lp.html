@@ -321,7 +321,7 @@
     border-radius:16px; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
   }
   @media (min-width:560px){ .vs-gallery .feature-gallery-scroll img{ width:64%; } }
-  .vs-gallery .feature-gallery-scroll img{ cursor:zoom-in; }
+  .feature-gallery-scroll img{ cursor:zoom-in; }
 
   .lightbox{
     position:fixed; inset:0; background:rgba(10,14,16,0.97); z-index:9999;
@@ -994,16 +994,9 @@
   </div>
 </footer>
 
-<div class="lightbox" id="vsLightbox">
+<div class="lightbox" id="imgLightbox">
   <button class="lightbox-close" type="button" aria-label="閉じる">✕</button>
-  <div class="lightbox-scroll" id="vsLightboxScroll">
-    <div class="lightbox-slide"><img src="images/vs-01.jpg" alt="①1回の翻訳では伝わらず、言い回しを変えて何度も翻訳し直して、やっと伝わった"></div>
-    <div class="lightbox-slide"><img src="images/vs-02.jpg" alt="②翻訳アプリの場合の流れ"></div>
-    <div class="lightbox-slide"><img src="images/vs-03.jpg" alt="③指さしタイの場合の流れ"></div>
-    <div class="lightbox-slide"><img src="images/vs-04.jpg" alt="④タイ語が読めなくても使える"></div>
-    <div class="lightbox-slide"><img src="images/vs-05.jpg" alt="⑤文章を自分で作らなくていい"></div>
-    <div class="lightbox-slide"><img src="images/vs-06.jpg" alt="⑥オフラインでも使える"></div>
-  </div>
+  <div class="lightbox-scroll" id="imgLightboxScroll"></div>
 </div>
 <script>
   function closeMenu(){
@@ -1039,25 +1032,40 @@
   });
 
   (function(){
-    var lightbox = document.getElementById('vsLightbox');
-    var scroller = document.getElementById('vsLightboxScroll');
+    var lightbox = document.getElementById('imgLightbox');
+    var scroller = document.getElementById('imgLightboxScroll');
     if(!lightbox || !scroller) return;
     var closeBtn = lightbox.querySelector('.lightbox-close');
-    var galleryImgs = document.querySelectorAll('.vs-gallery .feature-gallery-scroll img');
-    var slides = lightbox.querySelectorAll('.lightbox-slide');
 
-    function openLightbox(index){
+    function openLightbox(imgs, startIndex){
+      scroller.innerHTML = '';
+      imgs.forEach(function(img){
+        var slide = document.createElement('div');
+        slide.className = 'lightbox-slide';
+        var im = document.createElement('img');
+        im.src = img.currentSrc || img.src;
+        im.alt = img.alt || '';
+        slide.appendChild(im);
+        scroller.appendChild(slide);
+      });
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
-      scroller.scrollLeft = index * scroller.clientWidth;
+      requestAnimationFrame(function(){
+        scroller.scrollLeft = startIndex * scroller.clientWidth;
+      });
     }
     function closeLightbox(){
       lightbox.classList.remove('open');
       document.body.style.overflow = '';
     }
-    galleryImgs.forEach(function(img, i){
-      img.addEventListener('click', function(){ openLightbox(i); });
+
+    document.querySelectorAll('.feature-gallery-scroll').forEach(function(galleryScroller){
+      var imgs = Array.prototype.slice.call(galleryScroller.querySelectorAll('img'));
+      imgs.forEach(function(img, i){
+        img.addEventListener('click', function(){ openLightbox(imgs, i); });
+      });
     });
+
     closeBtn.addEventListener('click', closeLightbox);
     lightbox.addEventListener('click', function(e){
       if(e.target === lightbox){ closeLightbox(); }

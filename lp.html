@@ -341,11 +341,18 @@
   .lightbox-scroll::-webkit-scrollbar{ display:none; }
   .lightbox-slide{
     flex:0 0 100%; scroll-snap-align:center;
-    display:flex; align-items:center; justify-content:center; padding:26px 20px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:64px 20px 26px; gap:14px;
   }
+  .lightbox-caption{
+    color:#fff; font-size:15px; font-weight:700; text-align:center; line-height:1.6;
+    max-width:480px; flex:0 0 auto;
+    display:flex; align-items:center; gap:8px; justify-content:center;
+  }
+  .lightbox-caption .station-shot-num{ flex:0 0 auto; }
   .lightbox-slide img{
     max-width:100%; max-height:100%; width:auto; height:auto;
-    border-radius:12px; object-fit:contain;
+    border-radius:12px; object-fit:contain; flex:1 1 auto; min-height:0;
   }
 
   /* ---------- 買い切りの理由 ---------- */
@@ -1042,6 +1049,13 @@
       imgs.forEach(function(img){
         var slide = document.createElement('div');
         slide.className = 'lightbox-slide';
+        var captionEl = img.parentElement.querySelector('.station-shot-caption');
+        if(captionEl){
+          var cap = document.createElement('div');
+          cap.className = 'lightbox-caption';
+          cap.innerHTML = captionEl.innerHTML;
+          slide.appendChild(cap);
+        }
         var im = document.createElement('img');
         im.src = img.currentSrc || img.src;
         im.alt = img.alt || '';

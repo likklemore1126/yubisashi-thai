@@ -98,10 +98,14 @@
   section[id]{ scroll-margin-top:76px; }
 
   .hero{ padding:56px 0 72px; }
+  @media (max-width:600px){ .hero{ padding:32px 0 28px; } }
+  .hero-flex{ display:flex; flex-wrap:wrap; gap:48px; align-items:center; }
+  @media (max-width:600px){ .hero-flex{ gap:20px; } }
+  .hero-shot-col{ flex:1 1 280px; display:flex; flex-direction:column; align-items:center; gap:10px; }
   .hero-eyebrow{ font-size:13.5px; color:var(--teal-deep); font-weight:700; margin-bottom:14px; }
   .hero h1{ font-size:34px; margin-bottom:18px; }
   .hero h1 .accent{ color:var(--marigold-deep); }
-  .hero-lead{ font-size:16px; color:#4a4237; max-width:46ch; margin-bottom:32px; }
+  .hero-lead{ font-size:16px; color:#4a4237; max-width:46ch; margin-bottom:22px; }
 
   /* 実機の「相手に見せる」拡大表示を再現したモックアップ */
   .phone-mock{
@@ -118,7 +122,7 @@
   .phone-mock-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:30px; line-height:1.3; }
   .phone-mock-jp{ font-size:16px; color:rgba(255,255,255,0.62); margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.14); }
 
-  .hero-price-row{ display:flex; align-items:center; gap:16px; margin-top:34px; flex-wrap:wrap; }
+  .hero-price-row{ display:flex; align-items:center; gap:16px; margin-top:20px; flex-wrap:wrap; }
   .price-tag{ font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; }
   .price-tag small{ font-family:'Noto Sans JP', sans-serif; font-size:13px; font-weight:600; color:#6b6355; margin-left:6px; }
   .btn{
@@ -136,12 +140,12 @@
   .problem-list{ list-style:none; display:flex; flex-direction:column; gap:18px; }
   .problem-list li{ display:flex; gap:14px; align-items:flex-start; font-size:16px; color:rgba(255,255,255,0.78); }
   .problem-list li::before{ content:"・"; color:var(--marigold); font-weight:700; flex:0 0 auto; }
-  .problem-answer{ margin-top:36px; padding-top:32px; border-top:1px solid rgba(255,255,255,0.16); font-size:16px; }
+  .problem-answer{ margin-top:22px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.16); font-size:16px; }
   .problem-answer strong{ color:var(--marigold); font-weight:700; }
 
   /* ---------- 使い方3ステップ ---------- */
   .steps h2{ font-size:24px; margin-bottom:8px; }
-  .section-lead{ font-size:16px; color:#6b6355; margin-bottom:44px; }
+  .section-lead{ font-size:16px; color:#6b6355; margin-bottom:22px; }
   #steps .section-lead{ margin-bottom:20px; }
   .steps-gallery{ position:relative; }
   .steps .feature-gallery{ padding:0 0 20px; }
@@ -199,7 +203,7 @@
   }
 
   .features{ background:var(--sand); }
-  .features h2{ font-size:24px; margin-bottom:44px; }
+  .features h2{ font-size:24px; margin-bottom:22px; }
   .feature-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
   @media (max-width:560px){ .feature-grid{ grid-template-columns:1fr; } }
   .feature-cell{ background:var(--paper); padding:22px 22px 26px; }
@@ -300,7 +304,7 @@
 
   /* ---------- 翻訳アプリとの違い ---------- */
   .vs h2{ font-size:24px; margin-bottom:8px; }
-  .vs-note{ margin-top:32px; padding-top:28px; border-top:1px solid var(--line); }
+  .vs-note{ margin-top:20px; padding-top:20px; border-top:1px solid var(--line); }
   .vs-note p{ font-size:16px; color:#4a4237; line-height:1.85; margin-bottom:14px; }
   .vs-note p.conclusion{ font-weight:700; color:var(--teal-deep); font-size:17px; }
   .vs-compare-img{ width:100%; border-radius:16px; margin:24px 0 20px; display:block; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); }
@@ -309,7 +313,7 @@
   .why h2{ font-size:24px; margin-bottom:20px; }
   .why p{ font-size:16px; color:#4a4237; max-width:52ch; margin-bottom:16px; }
   .why p strong{ color:var(--marigold-deep); }
-  .why-compare{ display:flex; gap:16px; margin-top:32px; flex-wrap:wrap; }
+  .why-compare{ display:flex; gap:16px; margin-top:20px; flex-wrap:wrap; }
   .why-card{ flex:1 1 240px; border:1.5px solid var(--line); border-radius:14px; padding:22px; }
   .why-card.highlight{ border-color:var(--marigold); background:#fff8ec; }
   .why-card-label{ font-size:12px; font-weight:700; color:#8B8272; margin-bottom:8px; }
@@ -318,7 +322,7 @@
   .why-card p{ font-size:16px; color:#6b6355; margin:0; }
 
   /* ---------- 購入後の流れ ---------- */
-  .flow h2{ font-size:24px; margin-bottom:36px; }
+  .flow h2{ font-size:24px; margin-bottom:20px; }
   .flow-list{ list-style:none; counter-reset:flow; display:flex; flex-direction:column; }
   .flow-list li{ counter-increment:flow; display:flex; align-items:center; gap:16px; padding:14px 0; }
   .flow-list li::before{
@@ -346,7 +350,7 @@
   /* ---------- 価格 ---------- */
   .pricing{ text-align:center; }
   .pricing h2{ font-size:24px; margin-bottom:10px; }
-  .pricing .section-lead{ margin-bottom:40px; }
+  .pricing .section-lead{ margin-bottom:22px; }
   .price-card{
     border:1.5px solid var(--line); border-radius:20px; padding:40px 32px;
     max-width:400px; margin:0 auto; background:#fff;
@@ -383,9 +387,9 @@
   /* ---------- 最終CTA ---------- */
   .final-cta{ text-align:center; background:var(--ink); color:#fff; }
   .final-cta h2{ color:#fff; font-size:26px; margin-bottom:14px; }
-  .final-cta p{ color:rgba(255,255,255,0.7); font-size:16px; margin-bottom:32px; }
+  .final-cta p{ color:rgba(255,255,255,0.7); font-size:16px; margin-bottom:20px; }
 
-  footer{ padding:40px 0 48px; font-size:12px; color:#8B8272; border-top:1px solid var(--line); }
+  footer{ padding:28px 0 32px; font-size:12px; color:#8B8272; border-top:1px solid var(--line); }
   .footer-brand{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
   .footer-brand img{ height:30px; width:auto; }
   .footer-brand-text{ font-size:12.5px; color:#8B8272; }
@@ -424,7 +428,7 @@
 </nav>
 
 <section class="hero">
-  <div class="wrap" style="display:flex; flex-wrap:wrap; gap:48px; align-items:center;">
+  <div class="wrap hero-flex">
     <div style="flex:1 1 300px;">
       <div class="hero-eyebrow">持ち歩ける、旅のパートナー</div>
       <h1>タイ語が<br>話せなくても<br><span class="accent">見せるだけで<br>伝わる。</span></h1>
@@ -434,7 +438,7 @@
       </div>
       <div class="hero-note">※1 アプリのインストールは不要。<br>ブラウザから開いて、ホーム画面に追加するだけです。<br>PWAという仕組みのWebアプリです。</div>
     </div>
-    <div style="flex:1 1 280px; display:flex; flex-direction:column; align-items:center; gap:12px;">
+    <div class="hero-shot-col">
       <img src="images/screenshot-landscape.png" alt="指さしタイ 画面いっぱいに表示した例(横向き)" style="width:100%; max-width:440px; border-radius:16px; box-shadow:0 30px 60px -24px rgba(23,36,42,0.5);">
       <div style="font-size:13px; color:#8B8272; text-align:center;">↑ 実際の「相手に見せる」画面。横向きにすると、さらに大きな文字で表示されます</div>
     </div>

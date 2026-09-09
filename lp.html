@@ -382,17 +382,23 @@
   /* ---------- 開発者紹介 ---------- */
   .author{ background:var(--teal); color:#fff; padding:20px 0; }
   .author h2{ color:#fff; font-size:22px; margin-bottom:0; }
-  .author h3{ color:#fff; font-size:18px; margin-bottom:12px; }
-  .author p{ font-size:16px; color:rgba(255,255,255,0.82); max-width:50ch; margin-bottom:12px; }
-  .author-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
-  .author-badge{ background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28); border-radius:999px; padding:8px 15px; font-size:12.5px; font-weight:600; }
+  .author h3{ color:#fff; font-size:16px; margin-bottom:10px; }
+  .author p{ font-size:15px; color:rgba(255,255,255,0.82); line-height:1.8; margin-bottom:12px; }
+  .author-section{ margin-bottom:26px; }
+  .author-section:last-child{ margin-bottom:0; }
+  .author-list{ list-style:none; padding:0; }
+  .author-list li{
+    font-size:15px; color:rgba(255,255,255,0.82); line-height:1.7;
+    padding-left:16px; position:relative; margin-bottom:6px;
+  }
+  .author-list li::before{ content:"・"; position:absolute; left:0; }
   .author-toggle-btn{ padding:18px 0; }
   #author-accordion{ padding:0 24px; }
   .author-toggle-btn .feature-toggle-cta{ color:#fff; opacity:0.85; }
   .author-chevron{ background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.3); color:#fff; }
   #author-accordion.open .author-chevron{ background:var(--marigold); border-color:var(--marigold-deep); color:var(--ink); }
   #author-accordion .author-panel{ max-height:0; }
-  #author-accordion.open .author-panel{ max-height:960px; padding-bottom:8px; }
+  #author-accordion.open .author-panel{ max-height:1220px; padding-bottom:8px; }
 
   /* ---------- 価格 ---------- */
   .pricing{ text-align:center; }
@@ -857,7 +863,7 @@
     <button class="feature-toggle author-toggle-btn" type="button" aria-expanded="false" aria-controls="author-panel">
       <div class="feature-toggle-head">
         <div class="feature-toggle-titles">
-          <h2>運営者について</h2>
+          <h2>タイが好きすぎて、移住しました</h2>
           <span class="feature-toggle-cta" data-label-closed="詳しく見る ›" data-label-open="閉じる ‹">詳しく見る ›</span>
         </div>
         <span class="feature-chevron author-chevron" aria-hidden="true">
@@ -868,16 +874,32 @@
       </div>
     </button>
     <div class="feature-panel author-panel" id="author-panel">
-      <h3>タイが好きすぎて、移住しました</h3>
-      <p>東南アジアのひとり旅が好きで、何度も旅をするうちにタイにハマり、大好きが高じてバンコクへ移住。今もバンコクに暮らしています。タイ国政府観光庁公認のタイランド・スペシャリスト資格を取得し、これまでにタイ全土1都76県のうち29県を旅してきました。旅行ブログも運営しながら、旅先で撮った写真をInstagramにも投稿しています。</p>
-      <p>海外生活は約8年、東南アジアへの渡航はこれまでに30回以上。散々翻訳アプリを使い倒しながら旅をしてきました(今でも日常的に使っています)。だからこそ、翻訳アプリで伝わる文章の作り方や訳の精度の善し悪しが分かるようになった一方で、普段あまり使わない人にとっては、訳された文章が正しく伝わっているとただ信じるしかないのが現状だとも気づきました。どんな文章をよく使うのか、どんな場面で伝わらず困るのか、どんな質問をしたくなるのか——自分自身の経験をもとに、翻訳アプリだけでは埋まらなかった部分をカバーする、タイ旅行のためのツールを作りました。これから訪れる方にも、大好きなタイを心ゆくまで楽しんで、好きになってもらいたい。そんな思いを込めています。</p>
-      <div class="author-badges">
-        <div class="author-badge">タイ国政府観光庁認定 タイランド・スペシャリスト</div>
-        <div class="author-badge">バンコク在住</div>
-        <div class="author-badge">タイ全土29/77都県を旅済み</div>
-        <div class="author-badge">海外生活8年</div>
-        <div class="author-badge">東南アジア渡航30回以上</div>
-        <div class="author-badge">旅行ブログ運営中</div>
+      <div class="author-section">
+        <h3>■タイが好きすぎて、移住しました</h3>
+        <p>東南アジアのひとり旅が好きで何度も旅をするうちにタイにハマり「好きすぎてとうとうタイへ移住しました」。今もタイで暮らしています。</p>
+      </div>
+      <div class="author-section">
+        <h3>■タイを知る・旅する</h3>
+        <ul class="author-list">
+          <li>タイ国政府観光庁公認「タイランド・スペシャリスト」資格</li>
+          <li>タイ全土1都76県のうち29県を訪問</li>
+          <li>東南アジアへの渡航30回以上</li>
+          <li>海外生活約8年</li>
+          <li>旅行ブログを運営</li>
+          <li>旅先で撮った写真をInstagramでも発信</li>
+        </ul>
+      </div>
+      <div class="author-section">
+        <h3>■翻訳アプリを使い倒してきました</h3>
+        <p>タイ旅行だけでなく海外で今まで何度も翻訳アプリを使ってきました。今でもタイでの日常的に使っていますが、長いこと使っていると「この訳なら伝わる」「この文章だと、ちょっと伝わりにくい」ということが、少しずつ分かるようになりました。でも同時に、こんなことにも気づきました。翻訳アプリを普段あまり使わない人にとっては翻訳された文章が本当に正しく伝わっているのか確かめるのが難しいということ。</p>
+      </div>
+      <div class="author-section">
+        <h3>■だから「指さしタイ」を作りました</h3>
+        <p>旅行中に本当に使うのは必ずしも「日本語をタイ語に翻訳した文章」だけではありません。<br>どんな言葉を使えばいいのか。<br>どんな聞き方をすればいいのか。<br>どう伝えれば相手に分かってもらえるのか。<br>自分自身がタイを旅してきた経験やタイでの日常生活から「翻訳アプリだけでは埋まらなかった部分」をカバーするために作ったのがこの「指さしタイ」です。</p>
+      </div>
+      <div class="author-section">
+        <h3>■僕の大好きなタイをもっとたくさんの方に楽しんでほしい。</h3>
+        <p>これからタイを訪れる方にも、言葉の不安に悩まされることなくタイを思いっきり楽しんで、そしてタイをもっと好きになってもらいたい。そんな思いを込めて、指さしタイを作っています。</p>
       </div>
     </div>
   </div>

@@ -35,7 +35,7 @@
   a{color:inherit;}
   .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
   section{padding:60px 0;}
-  @media (max-width:600px){ section{padding:64px 0;} }
+  @media (max-width:600px){ section{padding:40px 0;} }
 
   h1,h2,h3{font-weight:800; line-height:1.4; letter-spacing:0.01em;}
   .th{font-family:'Kanit', sans-serif; font-weight:700;}
@@ -330,7 +330,7 @@
   .flow-arrow{ text-align:center; color:#C7BEA9; font-size:13px; padding-left:15px; }
 
   /* ---------- 開発者紹介 ---------- */
-  .author{ background:var(--teal); color:#fff; }
+  .author{ background:var(--teal); color:#fff; padding:28px 0; }
   .author h2{ color:#fff; font-size:22px; margin-bottom:0; }
   .author h3{ color:#fff; font-size:18px; margin-bottom:12px; }
   .author p{ font-size:16px; color:rgba(255,255,255,0.82); max-width:50ch; margin-bottom:12px; }
@@ -361,11 +361,24 @@
   .price-card .btn{ width:100%; justify-content:center; }
 
   /* ---------- FAQ ---------- */
-  .faq h2{ font-size:24px; margin-bottom:36px; }
-  .faq-item{ padding:22px 0; border-top:1px solid var(--line); }
+  .faq h2{ font-size:24px; margin-bottom:12px; }
+  .faq-item{ border-top:1px solid var(--line); }
   .faq-item:last-child{ border-bottom:1px solid var(--line); }
-  .faq-q{ font-size:15px; font-weight:700; margin-bottom:8px; }
-  .faq-a{ font-size:16px; color:#6b6355; }
+  .faq-toggle{
+    width:100%; background:none; border:none; text-align:left; cursor:pointer;
+    padding:18px 0; display:flex; align-items:center; justify-content:space-between; gap:14px;
+  }
+  .faq-q{ font-size:15px; font-weight:700; color:var(--ink); }
+  .faq-chevron{
+    flex:0 0 auto; width:26px; height:26px; border-radius:50%;
+    border:1.5px solid var(--line); background:var(--sand);
+    display:flex; align-items:center; justify-content:center;
+    color:#6b6355; transition:transform 0.25s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .faq-item.open .faq-chevron{ transform:rotate(180deg); background:var(--marigold); border-color:var(--marigold-deep); color:var(--ink); }
+  .faq-panel{ max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+  .faq-item.open .faq-panel{ max-height:200px; }
+  .faq-a{ font-size:16px; color:#6b6355; padding-bottom:18px; }
 
   /* ---------- 最終CTA ---------- */
   .final-cta{ text-align:center; background:var(--ink); color:#fff; }
@@ -843,24 +856,59 @@
   <div class="wrap">
     <h2>よくある質問</h2>
     <div class="faq-item">
-      <div class="faq-q">インターネット環境が無くても使えますか?</div>
-      <div class="faq-a">一度アプリを開いて読み込みが完了すれば、その後は電波が無い状態でも使えます。</div>
+      <button class="faq-toggle" type="button" aria-expanded="false">
+        <span class="faq-q">インターネット環境が無くても使えますか?</span>
+        <span class="faq-chevron" aria-hidden="true">
+          <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <div class="faq-panel"><div class="faq-a">一度アプリを開いて読み込みが完了すれば、その後は電波が無い状態でも使えます。</div></div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">App StoreやGoogle Playからダウンロードするのですか?</div>
-      <div class="faq-a">いいえ。ブラウザからページを開き、ホーム画面に追加するだけでアプリのように使えます(ストアの審査を経ないPWAという方式です)。</div>
+      <button class="faq-toggle" type="button" aria-expanded="false">
+        <span class="faq-q">App StoreやGoogle Playからダウンロードするのですか?</span>
+        <span class="faq-chevron" aria-hidden="true">
+          <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <div class="faq-panel"><div class="faq-a">いいえ。ブラウザからページを開き、ホーム画面に追加するだけでアプリのように使えます(ストアの審査を経ないPWAという方式です)。</div></div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">機種変更した場合、購入し直しになりますか?</div>
-      <div class="faq-a">購入時に発行されるコードを新しい端末でも入力することで、再購入せずに引き続きお使いいただけます。</div>
+      <button class="faq-toggle" type="button" aria-expanded="false">
+        <span class="faq-q">機種変更した場合、購入し直しになりますか?</span>
+        <span class="faq-chevron" aria-hidden="true">
+          <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <div class="faq-panel"><div class="faq-a">購入時に発行されるコードを新しい端末でも入力することで、再購入せずに引き続きお使いいただけます。</div></div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">タイ語が話せなくても、読めなくても大丈夫ですか?</div>
-      <div class="faq-a">はい、大丈夫です。タイ語の入力も音読も一切不要です。画面に表示されたタイ語を、そのまま相手に見せるだけで伝わります。</div>
+      <button class="faq-toggle" type="button" aria-expanded="false">
+        <span class="faq-q">タイ語が話せなくても、読めなくても大丈夫ですか?</span>
+        <span class="faq-chevron" aria-hidden="true">
+          <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <div class="faq-panel"><div class="faq-a">はい、大丈夫です。タイ語の入力も音読も一切不要です。画面に表示されたタイ語を、そのまま相手に見せるだけで伝わります。</div></div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">対応している端末やブラウザはありますか?</div>
-      <div class="faq-a">iPhone・Androidどちらの端末にも対応しています。ブラウザはSafari・Chromeでのご利用を推奨しています。</div>
+      <button class="faq-toggle" type="button" aria-expanded="false">
+        <span class="faq-q">対応している端末やブラウザはありますか?</span>
+        <span class="faq-chevron" aria-hidden="true">
+          <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <div class="faq-panel"><div class="faq-a">iPhone・Androidどちらの端末にも対応しています。ブラウザはSafari・Chromeでのご利用を推奨しています。</div></div>
     </div>
   </div>
 </section>
@@ -911,6 +959,14 @@
       if(cta){
         cta.textContent = isOpen ? cta.dataset.labelOpen : cta.dataset.labelClosed;
       }
+    });
+  });
+
+  document.querySelectorAll('.faq-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item');
+      var isOpen = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
   });
 

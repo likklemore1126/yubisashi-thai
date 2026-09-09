@@ -164,7 +164,7 @@
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); overflow:hidden;
   }
   .feature-gallery-scroll .steps-shot-card img{ width:100%; display:block; aspect-ratio:1206/2436; object-fit:cover; object-position:bottom; }
-  #steps .station-shot-caption{ min-height:96px; }
+  #steps .station-shot-caption{ min-height:72px; }
   .mock-searchbar{
     background:var(--sand); border:1.5px solid var(--line); border-radius:8px;
     padding:10px 12px; font-size:16px; color:#6b6355; margin-bottom:10px;
@@ -202,7 +202,7 @@
   }
   .feature-gallery-scroll .station-shot-card img{ width:100%; display:block; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
-  .station-feature .station-shot-caption{ min-height:120px; }
+  .station-feature .station-shot-caption{ min-height:72px; }
   .station-shot-num{
     display:inline-flex; align-items:center; justify-content:center;
     width:20px; height:20px; border-radius:50%; background:var(--marigold);
@@ -316,15 +316,12 @@
   .vs-note p.conclusion{ font-weight:700; color:var(--teal-deep); font-size:17px; }
   .vs-compare-img{ width:100%; border-radius:16px; margin:24px 0 20px; display:block; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); }
   .vs-gallery{ position:relative; margin:8px 0 20px; }
-  .vs-gallery .feature-gallery-scroll .vs-shot-card{
+  .vs-gallery .feature-gallery-scroll img{
     flex:0 0 auto; width:92%; min-width:0; scroll-snap-align:start;
+    aspect-ratio:1024/1536; object-fit:cover;
+    border-radius:16px; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
   }
-  @media (min-width:560px){ .vs-gallery .feature-gallery-scroll .vs-shot-card{ width:64%; } }
-  .vs-shot-card .station-shot-caption{ min-height:58px; padding:0 4px 10px; }
-  .vs-gallery .feature-gallery-scroll .vs-shot-card img{
-    width:100%; aspect-ratio:1024/1536; object-fit:cover;
-    border-radius:16px; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); display:block;
-  }
+  @media (min-width:560px){ .vs-gallery .feature-gallery-scroll img{ width:64%; } }
   .feature-gallery-scroll img{ cursor:zoom-in; }
 
   .lightbox{
@@ -516,15 +513,15 @@
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
         <div class="steps-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">1</span>地名を検索するか、シチュエーションをタップして選ぶ</div>
+          <div class="station-shot-caption"><span class="station-shot-num">1</span>地名や場面を<br>タップして選ぶ</div>
           <img src="images/screenshot-top-situations.jpeg" alt="シチュエーションから探す実画面">
         </div>
         <div class="steps-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">2</span>伝えたい一言をタップするだけで文章が完成</div>
+          <div class="station-shot-caption"><span class="station-shot-num">2</span>伝えたい一言を<br>タップするだけ</div>
           <img src="images/screenshot-hotel-order.jpeg" alt="ホテルにチェックインするフレーズ一覧の実画面">
         </div>
         <div class="steps-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">3</span>画面いっぱいの大きな文字で、そのまま相手に見せる</div>
+          <div class="station-shot-caption"><span class="station-shot-num">3</span>大きな文字で<br>そのまま見せる</div>
           <img src="images/screenshot-hotel-fullscreen.jpeg" alt="画面いっぱいに表示した実画面(縦向き・ホテルパターン)">
         </div>
       </div>
@@ -543,23 +540,23 @@
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
         <div class="station-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索窓に入力してリストから選ぶ</div>
+          <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索<br>リストから選ぶ</div>
           <img src="images/screenshot-transport-search.jpeg" alt="目的地を検索する実画面">
         </div>
         <div class="station-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">2</span>目的地が決まると、基本のフレーズと移動手段タブが表示される</div>
+          <div class="station-shot-caption"><span class="station-shot-num">2</span>目的地が決まる<br>移動手段を選べる</div>
           <img src="images/screenshot-transport-confirmed.jpeg" alt="目的地が確定し移動手段タブが表示される実画面">
         </div>
         <div class="station-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">3</span>「電車」のタブを選ぶと、最寄り駅名を含むフレーズが自動で出る</div>
+          <div class="station-shot-caption"><span class="station-shot-num">3</span>「電車」を選ぶ<br>駅名も自動表示</div>
           <img src="images/screenshot-transport-train.jpeg" alt="電車タブを選んだ実画面">
         </div>
         <div class="station-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">4</span>乗車券が必要なら、枚数もその場で調整できる</div>
+          <div class="station-shot-caption"><span class="station-shot-num">4</span>乗車券が必要<br>枚数も調整できる</div>
           <img src="images/screenshot-transport-qty.jpeg" alt="乗車券の枚数を調整する実画面">
         </div>
         <div class="station-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">5</span>あとは「相手に見せる」で、窓口にそのまま見せるだけ</div>
+          <div class="station-shot-caption"><span class="station-shot-num">5</span>あとは画面を<br>見せるだけでOK</div>
           <img src="images/screenshot-transport-show.jpeg" alt="フレーズを相手に見せる実画面">
         </div>
       </div>
@@ -817,30 +814,12 @@
     <div class="vs-gallery feature-gallery">
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
-        <div class="vs-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">1</span>1回の翻訳では伝わらず、何度も訳し直した経験はありませんか</div>
-          <img src="images/vs-01.jpg" alt="①1回の翻訳では伝わらず、言い回しを変えて何度も翻訳し直して、やっと伝わった">
-        </div>
-        <div class="vs-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">2</span>翻訳アプリの場合の流れ</div>
-          <img src="images/vs-02.jpg" alt="②翻訳アプリの場合の流れ">
-        </div>
-        <div class="vs-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">3</span>指さしタイの場合の流れ</div>
-          <img src="images/vs-03.jpg" alt="③指さしタイの場合の流れ">
-        </div>
-        <div class="vs-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">4</span>タイ語が読めなくても使える</div>
-          <img src="images/vs-04.jpg" alt="④タイ語が読めなくても使える">
-        </div>
-        <div class="vs-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">5</span>文章を自分で作らなくていい</div>
-          <img src="images/vs-05.jpg" alt="⑤文章を自分で作らなくていい">
-        </div>
-        <div class="vs-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">6</span>オフラインでも使える</div>
-          <img src="images/vs-06.jpg" alt="⑥オフラインでも使える">
-        </div>
+        <img src="images/vs-01.jpg" alt="①1回の翻訳では伝わらず、言い回しを変えて何度も翻訳し直して、やっと伝わった">
+        <img src="images/vs-02.jpg" alt="②翻訳アプリの場合の流れ">
+        <img src="images/vs-03.jpg" alt="③指さしタイの場合の流れ">
+        <img src="images/vs-04.jpg" alt="④タイ語が読めなくても使える">
+        <img src="images/vs-05.jpg" alt="⑤文章を自分で作らなくていい">
+        <img src="images/vs-06.jpg" alt="⑥オフラインでも使える">
       </div>
       <div class="feature-gallery-dots" aria-hidden="true">
         <span class="active"></span><span></span><span></span><span></span><span></span><span></span>

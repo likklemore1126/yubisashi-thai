@@ -164,7 +164,7 @@
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); overflow:hidden;
   }
   .feature-gallery-scroll .steps-shot-card img{ width:100%; display:block; aspect-ratio:1206/2436; object-fit:cover; object-position:bottom; }
-  #steps .station-shot-caption{ min-height:72px; }
+  #steps .station-shot-caption{ min-height:96px; }
   .mock-searchbar{
     background:var(--sand); border:1.5px solid var(--line); border-radius:8px;
     padding:10px 12px; font-size:16px; color:#6b6355; margin-bottom:10px;
@@ -202,6 +202,7 @@
   }
   .feature-gallery-scroll .station-shot-card img{ width:100%; display:block; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
+  .station-feature .station-shot-caption{ min-height:120px; }
   .station-shot-num{
     display:inline-flex; align-items:center; justify-content:center;
     width:20px; height:20px; border-radius:50%; background:var(--marigold);
@@ -346,10 +347,9 @@
   }
   .lightbox-caption{
     color:#fff; font-size:15px; font-weight:700; text-align:center; line-height:1.6;
-    max-width:480px; flex:0 0 auto;
-    display:flex; align-items:center; gap:8px; justify-content:center;
+    max-width:480px; width:100%; flex:0 0 auto; min-height:48px;
   }
-  .lightbox-caption .station-shot-num{ flex:0 0 auto; }
+  .lightbox-caption .station-shot-num{ margin-right:4px; vertical-align:-1px; }
   .lightbox-slide img{
     max-width:100%; max-height:100%; width:auto; height:auto;
     border-radius:12px; object-fit:contain; flex:1 1 auto; min-height:0;
@@ -1044,29 +1044,53 @@
     if(!lightbox || !scroller) return;
     var closeBtn = lightbox.querySelector('.lightbox-close');
 
+    function buildSlide(container, img){
+      var captionEl = img.parentElement.querySelector('.station-shot-caption');
+      if(captionEl){
+        var cap = document.createElement('div');
+        cap.className = 'lightbox-caption';
+        cap.innerHTML = captionEl.innerHTML;
+        container.appendChild(cap);
+      }
+      var im = document.createElement('img');
+      im.decoding = 'async';
+      im.src = img.currentSrc || img.src;
+      im.alt = img.alt || '';
+      container.appendChild(im);
+    }
+
     function openLightbox(imgs, startIndex){
       scroller.innerHTML = '';
-      imgs.forEach(function(img){
+      var slots = imgs.map(function(){
         var slide = document.createElement('div');
         slide.className = 'lightbox-slide';
-        var captionEl = img.parentElement.querySelector('.station-shot-caption');
-        if(captionEl){
-          var cap = document.createElement('div');
-          cap.className = 'lightbox-caption';
-          cap.innerHTML = captionEl.innerHTML;
-          slide.appendChild(cap);
-        }
-        var im = document.createElement('img');
-        im.src = img.currentSrc || img.src;
-        im.alt = img.alt || '';
-        slide.appendChild(im);
         scroller.appendChild(slide);
+        return slide;
       });
+
+      // 開く画像とその前後だけ先に読み込み、体感速度を優先する
+      [startIndex - 1, startIndex, startIndex + 1].forEach(function(i){
+        if(i >= 0 && i < imgs.length && !slots[i].dataset.built){
+          slots[i].dataset.built = '1';
+          buildSlide(slots[i], imgs[i]);
+        }
+      });
+
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
       requestAnimationFrame(function(){
         scroller.scrollLeft = startIndex * scroller.clientWidth;
       });
+
+      // 残りは少し遅れてバックグラウンドで読み込む
+      setTimeout(function(){
+        imgs.forEach(function(img, i){
+          if(!slots[i].dataset.built){
+            slots[i].dataset.built = '1';
+            buildSlide(slots[i], img);
+          }
+        });
+      }, 250);
     }
     function closeLightbox(){
       lightbox.classList.remove('open');

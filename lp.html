@@ -314,6 +314,13 @@
   .vs-note p{ font-size:16px; color:#4a4237; line-height:1.85; margin-bottom:14px; }
   .vs-note p.conclusion{ font-weight:700; color:var(--teal-deep); font-size:17px; }
   .vs-compare-img{ width:100%; border-radius:16px; margin:24px 0 20px; display:block; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); }
+  .vs-gallery{ position:relative; margin:20px 0; }
+  .vs-gallery .feature-gallery-scroll img{
+    flex:0 0 auto; width:72%; min-width:0; scroll-snap-align:start;
+    aspect-ratio:1024/1536; object-fit:cover;
+    border-radius:16px; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
+  }
+  @media (min-width:560px){ .vs-gallery .feature-gallery-scroll img{ width:50%; } }
 
   /* ---------- 買い切りの理由 ---------- */
   .why h2{ font-size:24px; margin-bottom:20px; }
@@ -771,7 +778,20 @@
   <div class="wrap">
     <h2>翻訳アプリではなく、指さしタイを使う理由</h2>
     <p class="section-lead">タイ語に「翻訳する」のではなく、すでに用意された自然な一言を「選んで見せる」だけです。</p>
-    <img class="vs-compare-img" src="images/why-use-comparison.jpg" alt="翻訳アプリの場合と指さしタイの場合の比較、およびタイ語が読めなくても使える・文章を自分で作らなくていい・オフラインでも使えるの3つの特長">
+    <div class="vs-gallery feature-gallery">
+      <div class="feature-gallery-hint">👉 横にスワイプできます</div>
+      <div class="feature-gallery-scroll">
+        <img src="images/vs-01.jpg" alt="①1回の翻訳では伝わらず、言い回しを変えて何度も翻訳し直して、やっと伝わった">
+        <img src="images/vs-02.jpg" alt="②翻訳アプリの場合の流れ">
+        <img src="images/vs-03.jpg" alt="③指さしタイの場合の流れ">
+        <img src="images/vs-04.jpg" alt="④タイ語が読めなくても使える">
+        <img src="images/vs-05.jpg" alt="⑤文章を自分で作らなくていい">
+        <img src="images/vs-06.jpg" alt="⑥オフラインでも使える">
+      </div>
+      <div class="feature-gallery-dots" aria-hidden="true">
+        <span class="active"></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
     <div class="vs-note">
       <p>実は、翻訳アプリの精度だけが原因ではありません。日本語とタイ語は、そもそも翻訳との相性があまり良くない言語同士だと言われています。伝わる文章に仕上げるには、実は経験とコツが必要なのが実情です。</p>
       <p>さらに厄介なのは、翻訳アプリを普段使い慣れていない人ほど、「本当にこの訳で伝わっているのか」を確かめるすべがなく、訳された文章をただ信じるしかないという点です。</p>

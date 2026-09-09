@@ -36,6 +36,12 @@
   .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
   section{padding:60px 0;}
   @media (max-width:600px){ section{padding:40px 0;} }
+  /* 背景色が同じセクション同士は区切りが無く繋がって見えるため、その境界だけ余白をさらに詰める */
+  #vs{ padding-bottom:20px; }
+  #why{ padding-top:20px; }
+  #price{ padding-bottom:20px; }
+  #flow{ padding-top:20px; padding-bottom:20px; }
+  #faq{ padding-top:20px; }
 
   h1,h2,h3{font-weight:800; line-height:1.4; letter-spacing:0.01em;}
   .th{font-family:'Kanit', sans-serif; font-weight:700;}
@@ -334,18 +340,19 @@
   .flow-arrow{ text-align:center; color:#C7BEA9; font-size:13px; padding-left:15px; }
 
   /* ---------- 開発者紹介 ---------- */
-  .author{ background:var(--teal); color:#fff; padding:28px 0; }
+  .author{ background:var(--teal); color:#fff; padding:20px 0; }
   .author h2{ color:#fff; font-size:22px; margin-bottom:0; }
   .author h3{ color:#fff; font-size:18px; margin-bottom:12px; }
   .author p{ font-size:16px; color:rgba(255,255,255,0.82); max-width:50ch; margin-bottom:12px; }
   .author-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
   .author-badge{ background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28); border-radius:999px; padding:8px 15px; font-size:12.5px; font-weight:600; }
-  .author-toggle-btn{ padding:26px 0; }
+  .author-toggle-btn{ padding:18px 0; }
+  #author-accordion{ padding:0 24px; }
   .author-toggle-btn .feature-toggle-cta{ color:#fff; opacity:0.85; }
   .author-chevron{ background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.3); color:#fff; }
   #author-accordion.open .author-chevron{ background:var(--marigold); border-color:var(--marigold-deep); color:var(--ink); }
   #author-accordion .author-panel{ max-height:0; }
-  #author-accordion.open .author-panel{ max-height:864px; padding-bottom:8px; }
+  #author-accordion.open .author-panel{ max-height:960px; padding-bottom:8px; }
 
   /* ---------- 価格 ---------- */
   .pricing{ text-align:center; }

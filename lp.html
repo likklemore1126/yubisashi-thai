@@ -290,6 +290,16 @@
     padding-bottom:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none;
   }
   .feature-gallery-scroll::-webkit-scrollbar{ display:none; }
+  .feature-gallery-scroll .feature-shot-card{
+    flex:0 0 auto; width:78%; min-width:0; scroll-snap-align:start;
+  }
+  @media (min-width:560px){ .feature-gallery-scroll .feature-shot-card{ width:58%; } }
+  .feature-shot-card .station-shot-caption{ color:#4a4237; }
+  .feature-gallery-scroll .feature-shot-card img{
+    width:100%; display:block;
+    border-radius:14px; border:1px solid var(--line);
+    box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
+  }
   .feature-gallery-scroll img{
     flex:0 0 auto; width:78%; min-width:0; scroll-snap-align:start;
     border-radius:14px; border:1px solid var(--line);
@@ -600,9 +610,18 @@
           <div class="feature-gallery">
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <img src="images/screenshot-search-01.jpg" alt="①検索窓に入力する画面" loading="lazy">
-              <img src="images/screenshot-search-02.jpg" alt="②候補が一覧表示される画面" loading="lazy">
-              <img src="images/screenshot-search-03.jpg" alt="③目的地の詳細画面" loading="lazy">
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">1</span>検索窓に入力</div>
+                <img src="images/screenshot-search-01.jpg" alt="①検索窓に入力する画面" loading="lazy">
+              </div>
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">2</span>候補が一覧表示</div>
+                <img src="images/screenshot-search-02.jpg" alt="②候補が一覧表示される画面" loading="lazy">
+              </div>
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">3</span>目的地の詳細画面</div>
+                <img src="images/screenshot-search-03.jpg" alt="③目的地の詳細画面" loading="lazy">
+              </div>
             </div>
             <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">
@@ -704,12 +723,30 @@
           <div class="feature-gallery">
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <img src="images/screenshot-order-01.jpg" alt="①シチュエーションを選ぶ" loading="lazy">
-              <img src="images/screenshot-order-02.jpg" alt="②料理・スイーツ・ドリンクから選ぶ" loading="lazy">
-              <img src="images/screenshot-order-03.jpg" alt="③料理を選ぶ" loading="lazy">
-              <img src="images/screenshot-order-04.jpg" alt="④料理+追加指示を選ぶ" loading="lazy">
-              <img src="images/screenshot-order-05.jpg" alt="⑤できたフレーズを相手に見せる" loading="lazy">
-              <img src="images/screenshot-order-06.jpg" alt="⑥お気に入りに追加する" loading="lazy">
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">1</span>シチュエーションを選ぶ</div>
+                <img src="images/screenshot-order-01.jpg" alt="①シチュエーションを選ぶ" loading="lazy">
+              </div>
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">2</span>料理・スイーツ・<br>ドリンクから選ぶ</div>
+                <img src="images/screenshot-order-02.jpg" alt="②料理・スイーツ・ドリンクから選ぶ" loading="lazy">
+              </div>
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">3</span>料理を選ぶ</div>
+                <img src="images/screenshot-order-03.jpg" alt="③料理を選ぶ" loading="lazy">
+              </div>
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">4</span>追加の指示を選ぶ</div>
+                <img src="images/screenshot-order-04.jpg" alt="④料理+追加指示を選ぶ" loading="lazy">
+              </div>
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">5</span>フレーズを見せる</div>
+                <img src="images/screenshot-order-05.jpg" alt="⑤できたフレーズを相手に見せる" loading="lazy">
+              </div>
+              <div class="feature-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">6</span>お気に入りに追加</div>
+                <img src="images/screenshot-order-06.jpg" alt="⑥お気に入りに追加する" loading="lazy">
+              </div>
             </div>
             <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">

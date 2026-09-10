@@ -275,7 +275,8 @@
   }
   .feature-panel{ max-height:0; overflow:hidden; transition:max-height 0.35s ease; min-width:0; }
   .feature-cell--accordion.open .feature-panel{ max-height:640px; }
-  .feature-gallery{ position:relative; padding:0 22px 24px; min-width:0; }
+  .feature-gallery{ position:relative; padding:0 0 24px; min-width:0; }
+  .feature-cell .feature-gallery-hint{ margin-left:22px; }
   .feature-gallery-hint{
     display:inline-flex; align-items:center; gap:6px;
     background:var(--ink); color:#fff; font-size:12px; font-weight:700;
@@ -318,7 +319,7 @@
   .vs-note p{ font-size:16px; color:#4a4237; line-height:1.85; margin-bottom:14px; }
   .vs-note p.conclusion{ font-weight:700; color:var(--teal-deep); font-size:17px; }
   .vs-compare-img{ width:100%; border-radius:16px; margin:24px 0 20px; display:block; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); }
-  .vs-gallery{ position:relative; margin:8px 0 20px; }
+  .vs-gallery{ position:relative; margin:8px 0 20px; padding:0; }
   .vs-gallery .feature-gallery-scroll img{
     flex:0 0 auto; width:var(--gallery-card-w); min-width:0; scroll-snap-align:start;
     aspect-ratio:1024/1536; object-fit:cover;

@@ -274,7 +274,7 @@
     border-color:var(--marigold-deep); color:var(--ink);
   }
   .feature-panel{ max-height:0; overflow:hidden; transition:max-height 0.35s ease; min-width:0; }
-  .feature-cell--accordion.open .feature-panel{ max-height:640px; }
+  .feature-cell--accordion.open .feature-panel{ max-height:720px; }
   .feature-gallery{ position:relative; padding:0 0 24px; min-width:0; }
   .feature-cell .feature-gallery-hint{ margin-left:22px; }
   .feature-gallery-hint{
@@ -300,12 +300,6 @@
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
   }
   @media (min-width:560px){ .feature-gallery-scroll img{ width:var(--gallery-card-w-desktop); } }
-  .feature-gallery-fade{
-    position:absolute; top:0; right:22px; bottom:30px; width:40px;
-    pointer-events:none; opacity:1; transition:opacity 0.3s ease;
-    background:linear-gradient(to right, rgba(251,247,239,0), var(--paper) 82%);
-  }
-  .feature-gallery-fade.is-hidden{ opacity:0; }
   .feature-gallery-dots{ display:flex; gap:6px; justify-content:center; margin-top:12px; }
   .feature-gallery-dots span{
     width:6px; height:6px; border-radius:3px; background:var(--line);
@@ -617,7 +611,6 @@
                 <img src="images/screenshot-search-03.jpg" alt="③目的地の詳細画面" loading="lazy">
               </div>
             </div>
-            <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">
               <span class="active"></span><span></span><span></span>
             </div>
@@ -654,7 +647,6 @@
               <img src="images/mockup-transport-02.jpg" alt="②選んだ手段のフレーズ画面" loading="lazy">
               <img src="images/mockup-transport-03.jpg" alt="③料金交渉フレーズの画面" loading="lazy">
             </div>
-            <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">
               <span class="active"></span><span></span><span></span>
             </div>
@@ -686,7 +678,6 @@
               <img src="images/mockup-booking-01.jpg" alt="①目的地詳細の予約リンク画面" loading="lazy">
               <img src="images/mockup-booking-02.jpg" alt="②予約ページに遷移した画面" loading="lazy">
             </div>
-            <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">
               <span class="active"></span><span></span>
             </div>
@@ -742,7 +733,6 @@
                 <img src="images/screenshot-order-06.jpg" alt="⑥お気に入りに追加する" loading="lazy">
               </div>
             </div>
-            <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">
               <span class="active"></span><span></span><span></span><span></span><span></span><span></span>
             </div>
@@ -775,7 +765,6 @@
               <img src="images/mockup-medicine-02.jpg" alt="②市販薬を写真付きで探す画面" loading="lazy">
               <img src="images/mockup-medicine-03.jpg" alt="③できたフレーズを見せる画面" loading="lazy">
             </div>
-            <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">
               <span class="active"></span><span></span><span></span>
             </div>
@@ -809,7 +798,6 @@
               <img src="images/mockup-calc-01.jpg" alt="①為替レートを設定する画面" loading="lazy">
               <img src="images/mockup-calc-02.jpg" alt="②現地価格→円換算の画面" loading="lazy">
             </div>
-            <div class="feature-gallery-fade" aria-hidden="true"></div>
             <div class="feature-gallery-dots" aria-hidden="true">
               <span class="active"></span><span></span>
             </div>

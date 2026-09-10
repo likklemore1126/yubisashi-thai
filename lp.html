@@ -153,6 +153,14 @@
 
   /* ---------- 使い方3ステップ ---------- */
   .steps h2{ font-size:24px; margin-bottom:8px; }
+  .steps-overview{
+    list-style:none; padding:0; margin:16px 0 20px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .steps-overview li{
+    display:flex; align-items:center; gap:8px;
+    font-size:15px; color:#4a4237; line-height:1.5;
+  }
   .section-lead{ font-size:16px; color:#6b6355; margin-bottom:22px; }
   #steps .section-lead{ margin-bottom:20px; }
   .steps-gallery{ position:relative; }
@@ -513,15 +521,20 @@
   <div class="wrap">
     <h2>使い方は3ステップ</h2>
     <p class="section-lead">タイ語の入力も、文法の心配も必要ありません。</p>
+    <ol class="steps-overview">
+      <li><span class="station-shot-num">1</span>シチュエーションを選ぶ ･目的地を検索</li>
+      <li><span class="station-shot-num">2</span>フレーズを選ぶ→相手に見せるをタップ</li>
+      <li><span class="station-shot-num">3</span>拡大表示された画面を相手に見せるだけ</li>
+    </ol>
     <div class="steps-gallery feature-gallery">
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
         <div class="gallery-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">1</span>シチュエーションを選ぶ or 目的地を検索</div>
+          <div class="station-shot-caption"><span class="station-shot-num">1</span>シチュエーションを選ぶ ･目的地を検索</div>
           <img src="images/screenshot-top-situations.jpeg" alt="シチュエーションから探す実画面">
         </div>
         <div class="gallery-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">2</span>フレーズを選んでタップ<br>and 相手に見せるをタップ</div>
+          <div class="station-shot-caption"><span class="station-shot-num">2</span>フレーズを選ぶ→相手に見せるをタップ</div>
           <img src="images/screenshot-hotel-order.jpeg" alt="ホテルにチェックインするフレーズ一覧の実画面">
         </div>
         <div class="gallery-shot-card">

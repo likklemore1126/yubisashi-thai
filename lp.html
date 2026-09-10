@@ -14,6 +14,8 @@
     --sand:#F1E9D8;
     --marigold:#E8A33D;
     --marigold-deep:#C9812A;
+    --gallery-card-w:92%;
+    --gallery-card-w-desktop:64%;
     --teal:#0F6B62;
     --teal-deep:#0A4C46;
     --pink:#E23F73;
@@ -155,15 +157,15 @@
   #steps .section-lead{ margin-bottom:20px; }
   .steps-gallery{ position:relative; }
   .steps .feature-gallery{ padding:0 0 20px; }
-  .feature-gallery-scroll .steps-shot-card{
-    flex:0 0 auto; width:92%; min-width:0; scroll-snap-align:start;
+  .feature-gallery-scroll .gallery-shot-card{
+    flex:0 0 auto; width:var(--gallery-card-w); min-width:0; scroll-snap-align:start;
   }
-  @media (min-width:560px){ .feature-gallery-scroll .steps-shot-card{ width:64%; } }
-  .steps-shot-card{
+  @media (min-width:560px){ .feature-gallery-scroll .gallery-shot-card{ width:var(--gallery-card-w-desktop); } }
+  #steps .gallery-shot-card{
     background:#fff; border-radius:14px; border:1px solid var(--line);
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); overflow:hidden;
   }
-  .feature-gallery-scroll .steps-shot-card img{ width:100%; display:block; aspect-ratio:1206/2436; object-fit:cover; object-position:bottom; }
+  #steps .feature-gallery-scroll .gallery-shot-card img{ width:100%; display:block; aspect-ratio:1206/2436; object-fit:cover; object-position:bottom; }
   #steps .station-shot-caption{ min-height:72px; }
   .mock-searchbar{
     background:var(--sand); border:1.5px solid var(--line); border-radius:8px;
@@ -192,15 +194,11 @@
   .station-feature .section-lead{ color:rgba(255,255,255,0.78); margin-bottom:20px; }
   .station-gallery{ position:relative; }
   .station-feature .feature-gallery{ padding:0 0 24px; }
-  .feature-gallery-scroll .station-shot-card{
-    flex:0 0 auto; width:92%; min-width:0; scroll-snap-align:start;
-  }
-  @media (min-width:560px){ .feature-gallery-scroll .station-shot-card{ width:64%; } }
-  .station-shot-card{
+  .station-feature .gallery-shot-card{
     background:#fff; border-radius:14px; overflow:hidden;
     box-shadow:0 10px 24px -14px rgba(0,0,0,0.4);
   }
-  .feature-gallery-scroll .station-shot-card img{ width:100%; display:block; }
+  .station-feature .feature-gallery-scroll .gallery-shot-card img{ width:100%; display:block; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
   .station-feature .station-shot-caption{ min-height:72px; }
   .station-shot-num{
@@ -290,22 +288,17 @@
     padding-bottom:6px; padding-right:64px; -webkit-overflow-scrolling:touch; scrollbar-width:none;
   }
   .feature-gallery-scroll::-webkit-scrollbar{ display:none; }
-  .feature-gallery-scroll .feature-shot-card{
-    flex:0 0 auto; width:92%; min-width:0; scroll-snap-align:start;
-  }
-  @media (min-width:560px){ .feature-gallery-scroll .feature-shot-card{ width:64%; } }
-  .feature-shot-card .station-shot-caption{ color:#4a4237; }
-  .feature-gallery-scroll .feature-shot-card img{
+  .feature-gallery-scroll .gallery-shot-card img{
     width:100%; display:block;
     border-radius:14px; border:1px solid var(--line);
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
   }
   .feature-gallery-scroll img{
-    flex:0 0 auto; width:92%; min-width:0; scroll-snap-align:start;
+    flex:0 0 auto; width:var(--gallery-card-w); min-width:0; scroll-snap-align:start;
     border-radius:14px; border:1px solid var(--line);
     box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
   }
-  @media (min-width:560px){ .feature-gallery-scroll img{ width:64%; } }
+  @media (min-width:560px){ .feature-gallery-scroll img{ width:var(--gallery-card-w-desktop); } }
   .feature-gallery-fade{
     position:absolute; top:0; right:22px; bottom:30px; width:40px;
     pointer-events:none; opacity:1; transition:opacity 0.3s ease;
@@ -327,11 +320,11 @@
   .vs-compare-img{ width:100%; border-radius:16px; margin:24px 0 20px; display:block; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3); }
   .vs-gallery{ position:relative; margin:8px 0 20px; }
   .vs-gallery .feature-gallery-scroll img{
-    flex:0 0 auto; width:92%; min-width:0; scroll-snap-align:start;
+    flex:0 0 auto; width:var(--gallery-card-w); min-width:0; scroll-snap-align:start;
     aspect-ratio:1024/1536; object-fit:cover;
     border-radius:16px; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
   }
-  @media (min-width:560px){ .vs-gallery .feature-gallery-scroll img{ width:64%; } }
+  @media (min-width:560px){ .vs-gallery .feature-gallery-scroll img{ width:var(--gallery-card-w-desktop); } }
   .feature-gallery-scroll img{ cursor:zoom-in; }
 
   .lightbox{
@@ -528,15 +521,15 @@
     <div class="steps-gallery feature-gallery">
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
-        <div class="steps-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">1</span>地名や場面を<br>タップして選ぶ</div>
           <img src="images/screenshot-top-situations.jpeg" alt="シチュエーションから探す実画面">
         </div>
-        <div class="steps-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">2</span>伝えたい一言を<br>タップするだけ</div>
           <img src="images/screenshot-hotel-order.jpeg" alt="ホテルにチェックインするフレーズ一覧の実画面">
         </div>
-        <div class="steps-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">3</span>大きな文字で<br>そのまま見せる</div>
           <img src="images/screenshot-hotel-fullscreen.jpeg" alt="画面いっぱいに表示した実画面(縦向き・ホテルパターン)">
         </div>
@@ -555,23 +548,23 @@
     <div class="station-gallery feature-gallery">
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
-        <div class="station-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索<br>リストから選ぶ</div>
           <img src="images/screenshot-transport-search.jpeg" alt="目的地を検索する実画面">
         </div>
-        <div class="station-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">2</span>目的地が決まる<br>移動手段を選べる</div>
           <img src="images/screenshot-transport-confirmed.jpeg" alt="目的地が確定し移動手段タブが表示される実画面">
         </div>
-        <div class="station-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">3</span>「電車」を選ぶ<br>駅名も自動表示</div>
           <img src="images/screenshot-transport-train.jpeg" alt="電車タブを選んだ実画面">
         </div>
-        <div class="station-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">4</span>必要な枚数も<br>その場で調整</div>
           <img src="images/screenshot-transport-qty.jpeg" alt="乗車券の枚数を調整する実画面">
         </div>
-        <div class="station-shot-card">
+        <div class="gallery-shot-card">
           <div class="station-shot-caption"><span class="station-shot-num">5</span>あとは画面を<br>見せるだけでOK</div>
           <img src="images/screenshot-transport-show.jpeg" alt="フレーズを相手に見せる実画面">
         </div>
@@ -610,15 +603,15 @@
           <div class="feature-gallery">
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">1</span>検索窓に入力</div>
                 <img src="images/screenshot-search-01.jpg" alt="①検索窓に入力する画面" loading="lazy">
               </div>
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">2</span>候補が一覧表示</div>
                 <img src="images/screenshot-search-02.jpg" alt="②候補が一覧表示される画面" loading="lazy">
               </div>
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">3</span>目的地の詳細画面</div>
                 <img src="images/screenshot-search-03.jpg" alt="③目的地の詳細画面" loading="lazy">
               </div>
@@ -723,27 +716,27 @@
           <div class="feature-gallery">
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">1</span>シチュエーションを選ぶ</div>
                 <img src="images/screenshot-order-01.jpg" alt="①シチュエーションを選ぶ" loading="lazy">
               </div>
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">2</span>写真を見て選ぶ</div>
                 <img src="images/screenshot-order-02.jpg" alt="②料理・スイーツ・ドリンクから選ぶ" loading="lazy">
               </div>
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">3</span>料理を選ぶ</div>
                 <img src="images/screenshot-order-03.jpg" alt="③料理を選ぶ" loading="lazy">
               </div>
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">4</span>追加の指示を選ぶ</div>
                 <img src="images/screenshot-order-04.jpg" alt="④料理+追加指示を選ぶ" loading="lazy">
               </div>
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">5</span>フレーズを見せる</div>
                 <img src="images/screenshot-order-05.jpg" alt="⑤できたフレーズを相手に見せる" loading="lazy">
               </div>
-              <div class="feature-shot-card">
+              <div class="gallery-shot-card">
                 <div class="station-shot-caption"><span class="station-shot-num">6</span>お気に入りに追加</div>
                 <img src="images/screenshot-order-06.jpg" alt="⑥お気に入りに追加する" loading="lazy">
               </div>

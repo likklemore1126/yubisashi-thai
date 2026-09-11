@@ -200,13 +200,15 @@
   .station-feature{ background:var(--teal); color:#fff; }
   .station-feature h2{ color:#fff; font-size:24px; margin-bottom:10px; }
   .station-feature .section-lead{ color:rgba(255,255,255,0.78); margin-bottom:20px; }
+  .station-feature .steps-overview li{ color:rgba(255,255,255,0.92); }
   .station-gallery{ position:relative; }
   .station-feature .feature-gallery{ padding:0 0 24px; }
   .station-feature .gallery-shot-card{
     background:#fff; border-radius:14px; overflow:hidden;
     box-shadow:0 10px 24px -14px rgba(0,0,0,0.4);
   }
-  .station-feature .feature-gallery-scroll .gallery-shot-card img{ width:100%; display:block; }
+  .station-feature .feature-gallery-scroll .gallery-shot-card img{ width:100%; display:block; aspect-ratio:1024/1536; object-fit:cover; }
+  .station-feature .station-shot-caption{ display:none; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
   .station-feature .station-shot-caption{ min-height:72px; }
   .station-shot-num{
@@ -553,28 +555,35 @@
 <section class="station-feature">
   <div class="wrap">
     <h2>最寄り駅名も自動で表示</h2>
-    <p class="section-lead">リスト表示された目的地に最寄り駅がある場合、駅名まで含めたフレーズがそのまま出てくるので、最寄り駅を自分で調べて入力する必要がありません。</p>
+    <ol class="steps-overview">
+      <li><span class="station-shot-num">1</span>行き先を検索しリストから選ぶ</li>
+      <li><span class="station-shot-num">2</span>交通手段の電車を選ぶ</li>
+      <li><span class="station-shot-num">3</span>最寄り駅名入りのフレーズが表示</li>
+      <li><span class="station-shot-num">4</span>乗車券の枚数変更もできる</li>
+      <li><span class="station-shot-num">5</span>相手に見せるで拡大表示</li>
+    </ol>
+    <p class="section-lead">リストから選んだ目的地に最寄り駅がある場合駅名の入ったフレーズも出てくるのでわざわざ最寄り駅を調べて入力する必要もなく簡単。</p>
     <div class="station-gallery feature-gallery">
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
         <div class="gallery-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索<br>リストから選ぶ</div>
+          <div class="station-shot-caption"><span class="station-shot-num">1</span>行き先を検索しリストから選ぶ</div>
           <img src="images/screenshot-transport-search.jpeg" alt="目的地を検索する実画面">
         </div>
         <div class="gallery-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">2</span>目的地が決まる<br>移動手段を選べる</div>
+          <div class="station-shot-caption"><span class="station-shot-num">2</span>交通手段の電車を選ぶ</div>
           <img src="images/screenshot-transport-confirmed.jpeg" alt="目的地が確定し移動手段タブが表示される実画面">
         </div>
         <div class="gallery-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">3</span>「電車」を選ぶ<br>駅名も自動表示</div>
+          <div class="station-shot-caption"><span class="station-shot-num">3</span>最寄り駅名入りのフレーズが表示</div>
           <img src="images/screenshot-transport-train.jpeg" alt="電車タブを選んだ実画面">
         </div>
         <div class="gallery-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">4</span>必要な枚数も<br>その場で調整</div>
+          <div class="station-shot-caption"><span class="station-shot-num">4</span>乗車券の枚数変更もできる</div>
           <img src="images/screenshot-transport-qty.jpeg" alt="乗車券の枚数を調整する実画面">
         </div>
         <div class="gallery-shot-card">
-          <div class="station-shot-caption"><span class="station-shot-num">5</span>あとは画面を<br>見せるだけでOK</div>
+          <div class="station-shot-caption"><span class="station-shot-num">5</span>相手に見せるで拡大表示</div>
           <img src="images/screenshot-transport-show.jpeg" alt="フレーズを相手に見せる実画面">
         </div>
       </div>

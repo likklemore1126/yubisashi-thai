@@ -351,6 +351,13 @@
     max-width:480px; width:100%; flex:0 0 auto; min-height:48px;
   }
   .lightbox-caption .station-shot-num{ margin-right:4px; vertical-align:-1px; }
+  .lightbox-caption:has(br){
+    display:flex; align-items:flex-start; justify-content:center;
+    width:auto; max-width:none; gap:2px; text-align:center; min-height:0;
+  }
+  .lightbox-caption:has(br) .station-shot-num{
+    margin-right:0; margin-top:3px; flex:0 0 auto;
+  }
   .lightbox-slide img{
     max-width:100%; max-height:100%; width:auto; height:auto;
     border-radius:12px; object-fit:contain; flex:1 1 auto; min-height:0;
@@ -695,7 +702,7 @@
               <h3>予約サイトにもすぐアクセス</h3>
               <p>バス・鉄道・現地ツアーなどの予約サイトへのリンクも収録。気になったらそのまま予約サイトの関連ページに進めます。</p>
               <ol class="steps-overview">
-                <li><span class="station-shot-num">1</span>目的地に関連した移動手段・ホテル・現地ツアーのリンク</li>
+                <li><span class="station-shot-num">1</span>目的地に関連した移動手段<br>ホテル・現地ツアーのリンク</li>
                 <li><span class="station-shot-num">2</span>目的地への移動手段の予約サイト</li>
                 <li><span class="station-shot-num">3</span>目的地に関連した現地ツアー予約サイト</li>
               </ol>
@@ -707,7 +714,7 @@
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
               <div class="gallery-shot-card">
-                <div class="station-shot-caption"><span class="station-shot-num">1</span>目的地に関連した移動手段・ホテル・現地ツアーのリンク</div>
+                <div class="station-shot-caption"><span class="station-shot-num">1</span>目的地に関連した移動手段<br>ホテル・現地ツアーのリンク</div>
                 <img src="images/mockup-booking-01.jpg" alt="①目的地に関連した移動手段・ホテル・現地ツアーのリンク画面" loading="lazy">
               </div>
               <div class="gallery-shot-card">

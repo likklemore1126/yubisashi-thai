@@ -210,6 +210,7 @@
   .station-feature .feature-gallery-scroll .gallery-shot-card img{ width:100%; display:block; aspect-ratio:1024/1536; object-fit:cover; }
   .station-feature .station-shot-caption{ display:none; }
   #feature-panel-search .station-shot-caption{ display:none; }
+  #feature-panel-transport .station-shot-caption{ display:none; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
   .station-feature .station-shot-caption{ min-height:72px; }
   .station-shot-num{
@@ -642,15 +643,17 @@
       <div class="feature-cell feature-cell--accordion" id="feature-transport">
         <div class="feature-toggle-head">
           <div class="feature-toggle-titles">
-              <div class="feature-visual mini-tabrow">
-                <span class="mini-tab active">🚌</span>
-                <span class="mini-tab">🚆</span>
-                <span class="mini-tab">🚕</span>
-                <span class="mini-tab">✈️</span>
-                <span class="mini-tab">⛴️</span>
+              <div class="feature-visual feature-visual--photo">
+                <img src="images/preview-transport.jpg" alt="10種類の移動手段アイコンのプレビュー" loading="lazy">
               </div>
               <h3>10種類の移動手段に対応</h3>
-              <p>バス・電車・鉄道・タクシー・トゥクトゥク・ソンテウ・ロットゥー・飛行機・船まで、乗車券の買い方や料金交渉まで。</p>
+              <p>バス・電車・鉄道・タクシー・トゥクトゥク・ソンテウ・ロットゥー・飛行機・船まで、乗車券の買い方やトゥクトゥクの往復利用交渉と誤解や勘違いがあると困る料金確認まで。</p>
+              <ol class="steps-overview">
+                <li><span class="station-shot-num">1</span>電車の行き先を確認したい時</li>
+                <li><span class="station-shot-num">2</span>タクシー利用時に意外と便利なフレーズ</li>
+                <li><span class="station-shot-num">3</span>トゥクトゥクを往復利用したい時</li>
+                <li><span class="station-shot-num">4</span>交渉した料金などを間違えない為にも</li>
+              </ol>
               <button class="feature-toggle-cta" type="button" aria-expanded="false" aria-controls="feature-panel-transport" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</button>
             </div>
         </div>
@@ -658,12 +661,25 @@
           <div class="feature-gallery">
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <img src="images/mockup-transport-01.jpg" alt="①移動手段タブを選ぶ画面" loading="lazy">
-              <img src="images/mockup-transport-02.jpg" alt="②選んだ手段のフレーズ画面" loading="lazy">
-              <img src="images/mockup-transport-03.jpg" alt="③料金交渉フレーズの画面" loading="lazy">
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">1</span>電車の行き先を確認したい時</div>
+                <img src="images/mockup-transport-01.jpg" alt="①電車の行き先を確認したい時の画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">2</span>タクシー利用時に意外と便利なフレーズ</div>
+                <img src="images/mockup-transport-02.jpg" alt="②タクシー利用時に意外と便利なフレーズの画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">3</span>トゥクトゥクを往復利用したい時</div>
+                <img src="images/mockup-transport-03.jpg" alt="③トゥクトゥクを往復利用したい時の画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">4</span>交渉した料金などを間違えない為にも</div>
+                <img src="images/mockup-transport-04.jpg" alt="④交渉した料金を計算機で確認する画面" loading="lazy">
+              </div>
             </div>
             <div class="feature-gallery-dots" aria-hidden="true">
-              <span class="active"></span><span></span><span></span>
+              <span class="active"></span><span></span><span></span><span></span>
             </div>
           </div>
         </div>

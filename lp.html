@@ -229,6 +229,8 @@
     background:var(--sand); border:1px solid var(--line); padding:10px;
     min-height:64px; display:flex; flex-direction:column; justify-content:center; gap:6px;
   }
+  .feature-visual--photo{ background:none; border:none; padding:0; min-height:0; }
+  .feature-visual--photo img{ width:100%; display:block; }
   .mini-search{ background:#fff; border:1.5px solid var(--line); border-radius:7px; padding:8px 10px; font-size:16px; color:#6b6355; }
   .mini-result{ background:var(--teal); color:#fff; border-radius:7px; padding:9px 11px; font-size:16px; }
   .mini-result span{ display:block; font-size:14px; opacity:0.8; margin-top:2px; }
@@ -620,9 +622,8 @@
               </svg>
             </span>
           <div class="feature-toggle-titles">
-              <div class="feature-visual">
-                <div class="mini-search">🔍 วัดพระแก้ว</div>
-                <div class="mini-result">วัดพระแก้ว<span>ワット・プラケオ</span></div>
+              <div class="feature-visual feature-visual--photo">
+                <img src="images/preview-search.jpg" alt="「วัดพระแก้ว」で検索した結果画面のプレビュー" loading="lazy">
               </div>
               <h3>500件以上の目的地を検索</h3>
               <p>観光地・駅・空港・バスターミナルなど、タイ旅行で使う場所を幅広く収録。日本語はもちろん、Googleマップからコピーしたタイ語表記をそのまま貼り付けても見つかります。</p>

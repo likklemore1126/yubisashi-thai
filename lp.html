@@ -264,17 +264,17 @@
     font-family:inherit; color:inherit; text-align:left; cursor:pointer;
     padding:22px 0 14px;
   }
-  .feature-toggle-head{ display:flex; align-items:flex-start; gap:6px; }
-  .feature-toggle-titles{ flex:1 1 auto; min-width:0; }
+  .feature-toggle-head{ overflow:hidden; }
+  .feature-toggle-titles{ }
   .feature-toggle-cta{
     margin-top:10px; display:inline-flex; align-items:center; gap:4px;
     font-size:13px; font-weight:700; color:var(--marigold-deep);
   }
   .feature-chevron{
-    flex:0 0 auto; width:26px; height:26px; border-radius:50%;
+    float:right; width:26px; height:26px; border-radius:50%;
     border:1.5px solid var(--line); background:var(--sand);
     display:flex; align-items:center; justify-content:center;
-    color:#6b6355; margin-top:2px;
+    color:#6b6355; margin:2px 0 8px 8px;
     box-shadow:0 2px 6px rgba(23,36,42,0.1);
     transition:transform 0.25s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
@@ -613,7 +613,12 @@
       <div class="feature-cell feature-cell--accordion" id="feature-search">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-search">
           <div class="feature-toggle-head">
-            <div class="feature-toggle-titles">
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          <div class="feature-toggle-titles">
               <div class="feature-visual">
                 <div class="mini-search">🔍 วัดพระแก้ว</div>
                 <div class="mini-result">วัดพระแก้ว<span>ワット・プラケオ</span></div>
@@ -622,12 +627,7 @@
               <p>観光地・駅・空港・バスターミナルなど、タイ旅行で使う場所を幅広く収録。日本語はもちろん、Googleマップからコピーしたタイ語表記をそのまま貼り付けても見つかります。</p>
               <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
             </div>
-            <span class="feature-chevron" aria-hidden="true">
-              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
+            </div>
         </button>
         <div class="feature-panel" id="feature-panel-search">
           <div class="feature-gallery">
@@ -655,7 +655,12 @@
       <div class="feature-cell feature-cell--accordion" id="feature-transport">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-transport">
           <div class="feature-toggle-head">
-            <div class="feature-toggle-titles">
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          <div class="feature-toggle-titles">
               <div class="feature-visual mini-tabrow">
                 <span class="mini-tab active">🚌</span>
                 <span class="mini-tab">🚆</span>
@@ -667,12 +672,7 @@
               <p>バス・電車・鉄道・タクシー・トゥクトゥク・ソンテウ・ロットゥー・飛行機・船まで、乗車券の買い方や料金交渉まで。</p>
               <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
             </div>
-            <span class="feature-chevron" aria-hidden="true">
-              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
+            </div>
         </button>
         <div class="feature-panel" id="feature-panel-transport">
           <div class="feature-gallery">
@@ -691,7 +691,12 @@
       <div class="feature-cell feature-cell--accordion" id="feature-booking">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-booking">
           <div class="feature-toggle-head">
-            <div class="feature-toggle-titles">
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          <div class="feature-toggle-titles">
               <div class="feature-visual">
                 <div class="mini-booklink">🎫 バンコク → アユタヤ<span>予約する ›</span></div>
               </div>
@@ -699,12 +704,7 @@
               <p>バス・鉄道・現地ツアーなどの予約サイトへのリンクも収録。気になったらそのままページに進めます。</p>
               <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
             </div>
-            <span class="feature-chevron" aria-hidden="true">
-              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
+            </div>
         </button>
         <div class="feature-panel" id="feature-panel-booking">
           <div class="feature-gallery">
@@ -722,7 +722,12 @@
       <div class="feature-cell feature-cell--accordion" id="feature-order">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-order">
           <div class="feature-toggle-head">
-            <div class="feature-toggle-titles">
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          <div class="feature-toggle-titles">
               <div class="feature-visual mini-dishrow">
                 <span class="mini-dish">🍜</span>
                 <span class="mini-dish">🍛</span>
@@ -732,12 +737,7 @@
               <p>定番タイ料理を写真付きで選び、辛さ・パクチー抜きなどの追加指示もその場で組み立てられます。</p>
               <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
             </div>
-            <span class="feature-chevron" aria-hidden="true">
-              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
+            </div>
         </button>
         <div class="feature-panel" id="feature-panel-order">
           <div class="feature-gallery">
@@ -777,7 +777,12 @@
       <div class="feature-cell feature-cell--accordion" id="feature-medicine">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-medicine">
           <div class="feature-toggle-head">
-            <div class="feature-toggle-titles">
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          <div class="feature-toggle-titles">
               <div class="feature-visual">
                 <div class="mini-med">💊 頭痛・発熱に<span>パナドーン</span></div>
               </div>
@@ -785,12 +790,7 @@
               <p>「頭が痛い」「熱がある」など、症状や欲しいものを画面で伝えられます。市販薬を写真付きで探すこともできます。</p>
               <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
             </div>
-            <span class="feature-chevron" aria-hidden="true">
-              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
+            </div>
         </button>
         <div class="feature-panel" id="feature-panel-medicine">
           <div class="feature-gallery">
@@ -809,7 +809,12 @@
       <div class="feature-cell feature-cell--accordion" id="feature-calc">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-calc">
           <div class="feature-toggle-head">
-            <div class="feature-toggle-titles">
+            <span class="feature-chevron" aria-hidden="true">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          <div class="feature-toggle-titles">
               <div class="feature-visual mini-calc">
                 <span class="mini-calc-th th">150 บาท</span>
                 <span class="mini-calc-eq">≈</span>
@@ -819,12 +824,7 @@
               <p>為替レートを設定しておけば、現地価格を円換算しながら確認・交渉できます。</p>
               <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
             </div>
-            <span class="feature-chevron" aria-hidden="true">
-              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
+            </div>
         </button>
         <div class="feature-panel" id="feature-panel-calc">
           <div class="feature-gallery">
@@ -842,18 +842,18 @@
       <div class="feature-cell feature-cell--accordion" id="feature-offline">
         <button class="feature-toggle" type="button" aria-expanded="false" aria-controls="feature-panel-offline">
           <div class="feature-toggle-head">
-            <div class="feature-toggle-titles">
-              <div class="feature-visual mini-offline">🧳 電波の無い場所でも問題なく動作</div>
-              <h3>オフラインで動作</h3>
-              <p>一度読み込んでおけば、空港・地下・郊外など通信環境が不安定な場所でも問題なく使えます。</p>
-              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
-            </div>
             <span class="feature-chevron" aria-hidden="true">
               <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
-          </div>
+          <div class="feature-toggle-titles">
+              <div class="feature-visual mini-offline">🧳 電波の無い場所でも問題なく動作</div>
+              <h3>オフラインで動作</h3>
+              <p>一度読み込んでおけば、空港・地下・郊外など通信環境が不安定な場所でも問題なく使えます。</p>
+              <span class="feature-toggle-cta" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</span>
+            </div>
+            </div>
         </button>
         <div class="feature-panel" id="feature-panel-offline">
           <div class="feature-gallery">
@@ -916,15 +916,15 @@
   <div class="wrap feature-cell--accordion" id="author-accordion">
     <button class="feature-toggle author-toggle-btn" type="button" aria-expanded="false" aria-controls="author-panel">
       <div class="feature-toggle-head">
-        <div class="feature-toggle-titles">
-          <h2>タイが好きすぎて<br>移住しました</h2>
-          <span class="feature-toggle-cta" data-label-closed="詳しく見る ›" data-label-open="閉じる ‹">詳しく見る ›</span>
-        </div>
         <span class="feature-chevron author-chevron" aria-hidden="true">
           <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1.2L6.5 7.2L12 1.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
+        <div class="feature-toggle-titles">
+          <h2>タイが好きすぎて<br>移住しました</h2>
+          <span class="feature-toggle-cta" data-label-closed="詳しく見る ›" data-label-open="閉じる ‹">詳しく見る ›</span>
+        </div>
       </div>
     </button>
     <div class="feature-panel author-panel" id="author-panel">

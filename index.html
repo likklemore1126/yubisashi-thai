@@ -3763,7 +3763,10 @@ function composeDishClauses(d, selectedMods){
 function dishComposedTh(){
   const d = dishes[dishSelectedIdx];
   let th = `ขอ${d.th}`;
-  composeDishClauses(d, dishSelectedMods).forEach(c => { th += ' ' + c.th; });
+  const thClauses = composeDishClauses(d, dishSelectedMods).map(c => c.th);
+  // 性質の異なる指示同士(抜き系→量→追加→持ち帰り、など)は「แล้วก็」で繋ぎ、
+  // 会話として自然な一続きの依頼に見せる(同じ種類の列挙内の「と」は joinListTh の「และ」が担当)
+  if(thClauses.length) th += ' ' + thClauses.join(' แล้วก็');
   return th + particle('s');
 }
 function dishComposedJp(){

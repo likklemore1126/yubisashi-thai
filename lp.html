@@ -213,6 +213,7 @@
   #feature-panel-transport .station-shot-caption{ display:none; }
   #feature-panel-booking .station-shot-caption{ display:none; }
   #feature-panel-order .station-shot-caption{ display:none; }
+  #feature-panel-medicine .station-shot-caption{ display:none; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
   .station-feature .station-shot-caption{ min-height:72px; }
   .station-shot-num{
@@ -790,11 +791,20 @@
       <div class="feature-cell feature-cell--accordion" id="feature-medicine">
         <div class="feature-toggle-head">
           <div class="feature-toggle-titles">
-              <div class="feature-visual">
-                <div class="mini-med">💊 頭痛・発熱に<span>パナドーン</span></div>
+              <div class="feature-visual feature-visual--photo">
+                <img src="images/preview-medicine.jpg" alt="薬を探す(12品)のプレビュー" loading="lazy">
               </div>
               <h3>薬局・体調不良にも対応</h3>
-              <p>「頭が痛い」「熱がある」など、症状や欲しいものを画面で伝えられます。市販薬を写真付きで探すこともできます。</p>
+              <p>「頭が痛い」「熱がある」など、症状を画面で伝えられます。コンビニや薬局で買える市販薬を、症状や商品画像から探すこともできます。</p>
+              <ol class="steps-overview">
+                <li><span class="station-shot-num">1</span>薬局・コンビニで薬を買うをタップ</li>
+                <li><span class="station-shot-num">2</span>写真や症状から薬を探す場合</li>
+                <li><span class="station-shot-num">3</span>症状にあった薬を選ぶ</li>
+                <li><span class="station-shot-num">4</span>買える場所や薬の詳細を確認</li>
+                <li><span class="station-shot-num">5</span>伝えたいフレーズを選んでタップ</li>
+                <li><span class="station-shot-num">6</span>相手に見せるで拡大表示</li>
+                <li><span class="station-shot-num">7</span>錠数や回数など数字入力にも対応</li>
+              </ol>
               <button class="feature-toggle-cta" type="button" aria-expanded="false" aria-controls="feature-panel-medicine" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</button>
             </div>
         </div>
@@ -802,12 +812,37 @@
           <div class="feature-gallery">
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <img src="images/mockup-medicine-01.jpg" alt="①症状を選ぶ画面" loading="lazy">
-              <img src="images/mockup-medicine-02.jpg" alt="②市販薬を写真付きで探す画面" loading="lazy">
-              <img src="images/mockup-medicine-03.jpg" alt="③できたフレーズを見せる画面" loading="lazy">
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">1</span>薬局・コンビニで薬を買うをタップ</div>
+                <img src="images/screenshot-medicine-01.jpg" alt="①薬局・コンビニで薬を買うをタップする画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">2</span>写真や症状から薬を探す場合</div>
+                <img src="images/screenshot-medicine-02.jpg" alt="②写真や症状から薬を探す画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">3</span>症状にあった薬を選ぶ</div>
+                <img src="images/screenshot-medicine-03.jpg" alt="③症状にあった薬を選ぶ画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">4</span>買える場所や薬の詳細を確認</div>
+                <img src="images/screenshot-medicine-04.jpg" alt="④買える場所や薬の詳細を確認する画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">5</span>伝えたいフレーズを選んでタップ</div>
+                <img src="images/screenshot-medicine-05.jpg" alt="⑤伝えたいフレーズを選んでタップする画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">6</span>相手に見せるで拡大表示</div>
+                <img src="images/screenshot-medicine-06.jpg" alt="⑥相手に見せるで拡大表示する画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">7</span>錠数や回数など数字入力にも対応</div>
+                <img src="images/screenshot-medicine-07.jpg" alt="⑦錠数や回数など数字入力する画面" loading="lazy">
+              </div>
             </div>
             <div class="feature-gallery-dots" aria-hidden="true">
-              <span class="active"></span><span></span><span></span>
+              <span class="active"></span><span></span><span></span><span></span><span></span><span></span><span></span>
             </div>
           </div>
         </div>

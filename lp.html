@@ -214,6 +214,7 @@
   #feature-panel-booking .station-shot-caption{ display:none; }
   #feature-panel-order .station-shot-caption{ display:none; }
   #feature-panel-medicine .station-shot-caption{ display:none; }
+  #feature-panel-calc .station-shot-caption{ display:none; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
   .station-feature .station-shot-caption{ min-height:72px; }
   .station-shot-num{
@@ -850,13 +851,17 @@
       <div class="feature-cell feature-cell--accordion" id="feature-calc">
         <div class="feature-toggle-head">
           <div class="feature-toggle-titles">
-              <div class="feature-visual mini-calc">
-                <span class="mini-calc-th th">150 บาท</span>
-                <span class="mini-calc-eq">≈</span>
-                <span class="mini-calc-jp">645円</span>
+              <div class="feature-visual feature-visual--photo">
+                <img src="images/preview-calc.jpg" alt="バーツ計算機アイコンのプレビュー" loading="lazy">
               </div>
               <h3>バーツ計算機を内蔵</h3>
-              <p>為替レートを設定しておけば、現地価格を円換算しながら確認・交渉できます。</p>
+              <p>事前に為替レートを設定しておけば、現地価格をその場で円換算。買い物やトゥクトゥクなどの料金交渉にも使えて、決定した金額はスクショで保存できるので、後からの確認にも便利です。</p>
+              <ol class="steps-overview">
+                <li><span class="station-shot-num">1</span>バーツ計算機も内蔵してます</li>
+                <li><span class="station-shot-num">2</span>事前にレートを設定しておくと便利</li>
+                <li><span class="station-shot-num">3</span>レート換算された日本円も表示</li>
+                <li><span class="station-shot-num">4</span>相手に見せるで拡大表示</li>
+              </ol>
               <button class="feature-toggle-cta" type="button" aria-expanded="false" aria-controls="feature-panel-calc" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</button>
             </div>
         </div>
@@ -864,11 +869,25 @@
           <div class="feature-gallery">
             <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <img src="images/mockup-calc-01.jpg" alt="①為替レートを設定する画面" loading="lazy">
-              <img src="images/mockup-calc-02.jpg" alt="②現地価格→円換算の画面" loading="lazy">
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">1</span>バーツ計算機も内蔵してます</div>
+                <img src="images/screenshot-calc-01.jpg" alt="①バーツ計算機の画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">2</span>事前にレートを設定しておくと便利</div>
+                <img src="images/screenshot-calc-02.jpg" alt="②事前にレートを設定する画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">3</span>レート換算された日本円も表示</div>
+                <img src="images/screenshot-calc-03.jpg" alt="③レート換算された日本円が表示される画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">4</span>相手に見せるで拡大表示</div>
+                <img src="images/screenshot-calc-04.jpg" alt="④相手に見せるで拡大表示する画面" loading="lazy">
+              </div>
             </div>
             <div class="feature-gallery-dots" aria-hidden="true">
-              <span class="active"></span><span></span>
+              <span class="active"></span><span></span><span></span><span></span>
             </div>
           </div>
         </div>

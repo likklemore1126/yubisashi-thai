@@ -4694,12 +4694,15 @@ function renderCategoryList(){
   let html = '';
   s.phrases.forEach((p, idx) => {
     const sel = selectedCategoryIdx === idx ? 'selected' : '';
-    const durVal = p.durationOptions ? ((selectedCategoryIdx === idx && categoryDurationVal !== null) ? categoryDurationVal : durationDefaultVal(p)) : null;
+    const isSelectedNow = selectedCategoryIdx === idx;
+    const durVal = p.durationOptions ? ((isSelectedNow && categoryDurationVal !== null) ? categoryDurationVal : durationDefaultVal(p)) : null;
     const th = applyDuration(fullTh(p.base, p.type), durVal);
     const jp = applyDuration(p.jp, durVal);
+    const durationBadge = (p.durationOptions && !isSelectedNow) ? `<span class="fi-editable-badge">✏️ タップ後に時間を変更できます</span>` : '';
     html += `<div class="follow-item ${sel}" onclick="selectCategoryPhrase(${idx})">
       <div class="fi-th">${th}</div>
       <div class="fi-jp">${jp}</div>
+      ${durationBadge}
       ${p.note ? `<div class="fi-note">${p.note}</div>` : ''}
       ${favStarHtml(th, jp)}
     </div>`;

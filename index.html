@@ -748,6 +748,12 @@
     color:#fff; font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; cursor:pointer;
   }
   .pharmacy-qa-chip.active{ background:var(--marigold); color:var(--ink); }
+  .duration-chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .duration-chip{
+    padding:9px 16px; border-radius:999px; border:none; background:rgba(255,255,255,0.18);
+    color:#fff; font-family:inherit; font-weight:700; font-size:14px; cursor:pointer;
+  }
+  .duration-chip.active{ background:var(--marigold); color:var(--ink); }
   .pharmacy-qa-result{
     margin-top:12px; background:rgba(255,255,255,0.12); border-radius:12px; padding:12px;
   }
@@ -2212,6 +2218,29 @@ const situations = [
     {base:"วันไหนหยุด", type:'q', jp:"何曜日が店休日ですか？"},
     {base:"มีไซส์อื่นไหม", type:'q', jp:"他のサイズはありますか？"},
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
+  ]},
+  { icon:"hand", title:"マッサージ", color:"var(--teal)", count:"21", sample:"タイ・フット・オイル、強さ調整、会計など", phrases:[
+    {base:"ขอนวดไทย {DURATION} นาที", type:'s', jp:"タイマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
+    {base:"ขอนวดเท้า {DURATION} นาที", type:'s', jp:"フットマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
+    {base:"ขอนวดน้ำมัน {DURATION} นาที", type:'s', jp:"オイルマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
+    {base:"มีอะไรแนะนำไหม", type:'q', jp:"おすすめはどれですか？"},
+    {base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+    {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+    {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+    {base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+    {base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+    {base:"เป็นรอยช้ำง่าย ขอเบาๆหน่อย", type:'s', jp:"痣ができやすいので弱めでお願いします"},
+    {base:"ตัวเมื่อยมาก ขอแรงๆหน่อย", type:'s', jp:"体が疲れてるので強めでお願いします"},
+    {base:"เจ็บ", type:'s', jp:"痛いです"},
+    {base:"จั๊กจี้", type:'s', jp:"くすぐったいです"},
+    {base:"ขอโทษนะ มีนัดต้องไป ขอจบตรงนี้ก่อนได้ไหม", type:'q', jp:"すみませんが予定があるのでもう終わりにしてください"},
+    {base:"ขอต่อเวลาอีก {DURATION} นาทีได้ไหม", type:'q', jp:"あと{DURATION}分延長できますか？", durationOptions:[30,60,90,120]},
+    {base:"ผ่อนคลายมาก", type:'s', jp:"リラックスできました"},
+    {base:"ขอบคุณมาก", type:'s', jp:"ありがとうございました"},
+    {base:"ขอทราบชื่อได้ไหม", type:'q', jp:"お名前を伺ってもよろしいでしょうか？"},
+    {base:"อยากมาอีก จองคิวได้ไหม", type:'q', jp:"またお願いしたいのですが予約は可能ですか？"},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？"},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？"},
   ]},
   { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"28", sample:"症状の伝え方・薬の相談など", phrases:[
     {base:"ปวดหัว", type:'s', jp:"頭が痛いです"},
@@ -4565,6 +4594,26 @@ function toggleAnchorExpand(){
 }
 
 let selectedCategoryIdx = null;
+let categoryDurationVal = null;
+function durationDefaultVal(p){
+  return (p.durationOptions && p.durationOptions.length) ? p.durationOptions[0] : null;
+}
+function applyDuration(text, val){
+  return (val === null || val === undefined) ? text : text.replace('{DURATION}', val);
+}
+function durationChipsHtml(options, current){
+  if(!options) return '';
+  const chips = options.map(v => {
+    const active = current === v ? 'active' : '';
+    return `<button class="duration-chip ${active}" onclick="event.stopPropagation(); selectCategoryDuration(${v});">${v}分</button>`;
+  }).join('');
+  return `<div class="duration-chip-row">${chips}</div>`;
+}
+function selectCategoryDuration(v){
+  categoryDurationVal = v;
+  renderCategoryFixed();
+  renderCategoryList();
+}
 
 function openSituation(i){
   const s = situations[i];
@@ -4622,15 +4671,17 @@ function renderCategoryFixed(){
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + pharmacyEntryHtml + `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   } else {
     const p = s.phrases[selectedCategoryIdx];
-    const th = fullTh(p.base, p.type);
+    const durVal = p.durationOptions ? (categoryDurationVal !== null ? categoryDurationVal : durationDefaultVal(p)) : null;
+    const th = applyDuration(fullTh(p.base, p.type), durVal);
+    const jp = applyDuration(p.jp, durVal);
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + pharmacyEntryHtml + `<div class="selected-phrase">
       <div class="sp-header"><button class="sp-clear-btn" onclick="clearCategoryPhrase()">✕ 選択を解除</button></div>
       <div class="sp-th">${th}</div>
-      <div class="sp-jp">${p.jp}</div>
+      <div class="sp-jp">${jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
-      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${favStarHtml(th, p.jp)}
+      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${durationChipsHtml(p.durationOptions, durVal)}${favStarHtml(th, jp)}
     </div>`;
-    setLastPhrase(th, p.jp);
+    setLastPhrase(th, jp);
   }
 }
 function clearCategoryPhrase(){
@@ -4643,18 +4694,21 @@ function renderCategoryList(){
   let html = '';
   s.phrases.forEach((p, idx) => {
     const sel = selectedCategoryIdx === idx ? 'selected' : '';
-    const th = fullTh(p.base, p.type);
+    const durVal = p.durationOptions ? ((selectedCategoryIdx === idx && categoryDurationVal !== null) ? categoryDurationVal : durationDefaultVal(p)) : null;
+    const th = applyDuration(fullTh(p.base, p.type), durVal);
+    const jp = applyDuration(p.jp, durVal);
     html += `<div class="follow-item ${sel}" onclick="selectCategoryPhrase(${idx})">
       <div class="fi-th">${th}</div>
-      <div class="fi-jp">${p.jp}</div>
+      <div class="fi-jp">${jp}</div>
       ${p.note ? `<div class="fi-note">${p.note}</div>` : ''}
-      ${favStarHtml(th, p.jp)}
+      ${favStarHtml(th, jp)}
     </div>`;
   });
   document.getElementById('composerList').innerHTML = html;
 }
 function selectCategoryPhrase(idx){
   selectedCategoryIdx = (selectedCategoryIdx === idx) ? null : idx;
+  categoryDurationVal = null;
   renderCategoryFixed();
   renderCategoryList();
 }

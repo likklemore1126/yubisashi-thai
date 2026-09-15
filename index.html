@@ -2152,7 +2152,7 @@ const situations = [
     {base:"มีแมลงหรือจิ้งจก", type:'s', jp:"虫やトカゲがいます"},
     {base:"ได้พักอย่างสบายมาก ขอบคุณมากค่ะ", type:'s', jp:"とても快適に過ごすことができ大変お世話になりました"},
   ]},
-  { icon:"bowl", title:"レストラン・屋台で注文する", color:"var(--pink)", count:"32", sample:"注文・辛さ調整・会計など", phrases:[
+  { icon:"bowl", title:"レストラン・屋台で注文する", color:"var(--pink)", count:"34", sample:"注文・辛さ調整・会計など", phrases:[
     {base:"ขอเมนูหน่อย", type:'s', jp:"メニューをください"},
     {base:"อันนี้เผ็ดไหม", type:'q', jp:"これは辛いですか？"},
     {base:"เก็บเงินด้วย", type:'s', jp:"お会計お願いします"},
@@ -2181,12 +2181,14 @@ const situations = [
     {base:"ขอหลอดหน่อย", type:'q', jp:"ストローをもらえますか？"},
     {base:"ขอน้ำแข็งด้วย", type:'s', jp:"氷をください(飲み物を注文する時)"},
     {base:"วันไหนหยุด", type:'q', jp:"何曜日が店休日ですか？"},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？"},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？"},
     {base:"เมนูนี้เรียกว่าอะไร", type:'q', jp:"これは何という料理ですか？"},
     {base:"อร่อยมาก ขอบคุณ", type:'s', jp:"美味しかったです、ありがとうございました"},
     {base:"อร่อยสุดๆเลย", type:'s', jp:"めちゃくちゃ美味しかったです"},
     {base:"จะกลับมาอีก", type:'s', jp:"また来ます"},
   ]},
-  { icon:"bag", title:"市場で買い物する", color:"var(--teal-deep)", count:"21", sample:"値段交渉・サイズ・会計など", phrases:[
+  { icon:"bag", title:"市場で買い物する", color:"var(--teal-deep)", count:"23", sample:"値段交渉・サイズ・会計など", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
     {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true, modes:priceModes}},
     {base:"ลดได้ไหม", type:'q', jp:"安くなりますか？"},
@@ -2205,11 +2207,13 @@ const situations = [
     {base:"อยากซื้อหลายชิ้น มีของเหลือกี่ชิ้น", type:'q', jp:"複数購入したいのですが在庫はいくつありますか？"},
     {base:"ขอถุงด้วย", type:'s', jp:"袋をください"},
     {base:"เปิดถึงกี่โมง", type:'q', jp:"何時まで営業していますか？", timeAnswer:true},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？"},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？"},
     {base:"วันไหนหยุด", type:'q', jp:"何曜日が店休日ですか？"},
     {base:"มีไซส์อื่นไหม", type:'q', jp:"他のサイズはありますか？"},
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
   ]},
-  { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"26", sample:"症状の伝え方・薬の相談など", phrases:[
+  { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"28", sample:"症状の伝え方・薬の相談など", phrases:[
     {base:"ปวดหัว", type:'s', jp:"頭が痛いです"},
     {base:"เป็นไข้", type:'s', jp:"熱があります"},
     {base:"น้ำมูกไหล", type:'s', jp:"鼻水が出ます"},
@@ -2236,6 +2240,8 @@ const situations = [
     {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
     {base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
     {base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？"},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？"},
   ]},
   { icon:"hand", title:"助けを求める", color:"var(--pink-deep)", count:"10", sample:"急病・けが・トラブル時の一言", phrases:[
     {base:"ช่วยด้วย", type:'s', jp:"助けてください"},

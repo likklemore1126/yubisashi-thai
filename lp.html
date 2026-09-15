@@ -215,6 +215,7 @@
   #feature-panel-order .station-shot-caption{ display:none; }
   #feature-panel-medicine .station-shot-caption{ display:none; }
   #feature-panel-calc .station-shot-caption{ display:none; }
+  #feature-panel-offline .station-shot-caption{ display:none; }
   .station-shot-caption{ padding:14px 14px 10px; font-size:14px; color:#4a4237; line-height:1.7; min-height:72px; box-sizing:border-box; }
   .station-feature .station-shot-caption{ min-height:72px; }
   .station-shot-num{
@@ -895,16 +896,33 @@
       <div class="feature-cell feature-cell--accordion" id="feature-offline">
         <div class="feature-toggle-head">
           <div class="feature-toggle-titles">
-              <div class="feature-visual mini-offline">🧳 電波の無い場所でも問題なく動作</div>
+              <div class="feature-visual feature-visual--photo">
+                <img src="images/preview-offline.jpg" alt="オフラインでも動作するイメージ" loading="lazy">
+              </div>
               <h3>オフラインで動作</h3>
-              <p>一度読み込んでおけば、空港・地下・郊外など通信環境が不安定な場所でも問題なく使えます。</p>
+              <p>一度読み込んでおけば、空港・地下・郊外など通信環境が不安定な場所でも問題なく使えます。外部のHPや予約サイト等へのリンクについてはWi-Fiなどの通信環境が必要となります。</p>
+              <ol class="steps-overview">
+                <li><span class="station-shot-num">1</span>オフラインでも使えます</li>
+                <li><span class="station-shot-num">2</span>もちろん検索もつかえます</li>
+              </ol>
               <button class="feature-toggle-cta" type="button" aria-expanded="false" aria-controls="feature-panel-offline" data-label-closed="実際の画面で見る ›" data-label-open="閉じる ‹">実際の画面で見る ›</button>
             </div>
         </div>
         <div class="feature-panel" id="feature-panel-offline">
           <div class="feature-gallery">
+            <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
             <div class="feature-gallery-scroll">
-              <img src="images/mockup-offline-01.jpg" alt="オフラインでも使える画面" loading="lazy">
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">1</span>オフラインでも使えます</div>
+                <img src="images/screenshot-offline-01.jpg" alt="①オフラインでも使える画面" loading="lazy">
+              </div>
+              <div class="gallery-shot-card">
+                <div class="station-shot-caption"><span class="station-shot-num">2</span>もちろん検索もつかえます</div>
+                <img src="images/screenshot-offline-02.jpg" alt="②オフラインでも検索が使える画面" loading="lazy">
+              </div>
+            </div>
+            <div class="feature-gallery-dots" aria-hidden="true">
+              <span class="active"></span><span></span>
             </div>
           </div>
         </div>

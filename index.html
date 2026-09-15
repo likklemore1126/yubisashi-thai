@@ -1167,7 +1167,7 @@
 
   <div class="composer-screen" id="timeBoardScreen" style="z-index:9;">
     <div class="composer-header">
-      <div class="ctitle"><span class="icon-slot" data-icon="clock" data-size="20"></span>時刻で答える</div>
+      <div class="ctitle" id="timeBoardTitle"><span class="icon-slot" data-icon="clock" data-size="20"></span>時刻で答える</div>
       <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()"><span class="icon-slot" data-icon="search" data-size="17"></span>相手に見せる</button>
       <button class="composer-close" onclick="closeTimeBoard()">✕</button>
     </div>
@@ -2142,8 +2142,8 @@ const situations = [
     {base:"ช่วยแนะนำร้านอาหารหน่อย", type:'s', jp:"おすすめのレストランを教えてください"},
     {base:"มีที่จอดรถไหม", type:'q', jp:"駐車場はありますか？"},
     {base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
-    {base:"สระว่ายน้ำเปิดกี่โมงถึงกี่โมง", type:'q', jp:"プールは何時から何時まで利用可能ですか？"},
-    {base:"ฟิตเนสเปิดกี่โมงถึงกี่โมง", type:'q', jp:"ジムは何時から何時まで利用可能ですか？"},
+    {base:"สระว่ายน้ำเปิดกี่โมงถึงกี่โมง", type:'q', jp:"プールは何時から何時まで利用可能ですか？", timeRangeAnswer:true},
+    {base:"ฟิตเนสเปิดกี่โมงถึงกี่โมง", type:'q', jp:"ジムは何時から何時まで利用可能ですか？", timeRangeAnswer:true},
     {base:"แถวนี้มีตลาดนัดกลางคืนไหม", type:'q', jp:"近くにナイトマーケットはありますか？"},
     {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
     {base:"จ่ายเงินตอนจองแล้ว", type:'s', jp:"予約時に支払い済みです"},
@@ -4679,7 +4679,7 @@ function renderCategoryFixed(){
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
-      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${durationChipsHtml(p.durationOptions, durVal)}${favStarHtml(th, jp)}
+      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${timeRangeTriggerHtml(p.timeRangeAnswer)}${durationChipsHtml(p.durationOptions, durVal)}${favStarHtml(th, jp)}
     </div>`;
     setLastPhrase(th, jp);
   }
@@ -4894,19 +4894,31 @@ function nbTriggerHtml(config){
 }
 function timeTriggerHtml(flag){
   if(!flag) return '';
-  return `<button class="nb-trigger" onclick="openTimeBoard()">${iconSvg('clock', 18)} 時刻で答えてもらう</button>`;
+  return `<button class="nb-trigger" onclick="openTimeBoard(false)">${iconSvg('clock', 18)} 時刻で答えてもらう</button>`;
+}
+function timeRangeTriggerHtml(flag){
+  if(!flag) return '';
+  return `<button class="nb-trigger" onclick="openTimeBoard(true)">${iconSvg('clock', 18)} 開始〜終了時刻で答えてもらう</button>`;
 }
 let timeHH = '';
 let timeMM = '';
 let timeField = 'hh';
 let timePeriod = null;
-function openTimeBoard(){
+let timeRangeMode = false;
+let timeRangeStage = 'from';
+let timeFromResult = null;
+function openTimeBoard(isRange){
   timeHH = '';
   timeMM = '';
   timeField = 'hh';
   timePeriod = null;
+  timeRangeMode = !!isRange;
+  timeRangeStage = 'from';
+  timeFromResult = null;
   document.getElementById('tpAm').classList.remove('selected');
   document.getElementById('tpPm').classList.remove('selected');
+  const titleEl = document.getElementById('timeBoardTitle');
+  titleEl.innerHTML = `${iconSvg('clock', 20)}${timeRangeMode ? '開始時刻を答える' : '時刻で答える'}`;
   renderTimeDisplay();
   document.getElementById('timeBoardScreen').classList.add('show');
 }
@@ -4976,6 +4988,21 @@ function renderTimeDisplay(){
   const ampmTag = timePeriod === 'am' ? 'AM' : (timePeriod === 'pm' ? 'PM' : '');
   const isComplete = timeHH !== '' && timeMM.length === 2 && timePeriod !== null;
 
+  // 範囲モード:開始時刻が完了したら、自動的に終了時刻の入力へ切り替える
+  if(isComplete && timeRangeMode && timeRangeStage === 'from'){
+    timeFromResult = `${ampmTag} ${hhDisp}:${mmDisp}`;
+    timeRangeStage = 'to';
+    timeHH = '';
+    timeMM = '';
+    timeField = 'hh';
+    timePeriod = null;
+    document.getElementById('tpAm').classList.remove('selected');
+    document.getElementById('tpPm').classList.remove('selected');
+    document.getElementById('timeBoardTitle').innerHTML = `${iconSvg('clock', 20)}終了時刻を答える`;
+    renderTimeDisplay();
+    return;
+  }
+
   // phase: 'period' (choosing AM/PM) -> 'digits' (typing hour/minute) -> 'done'
   const phase = timePeriod === null ? 'period' : (isComplete ? 'done' : 'digits');
   document.getElementById('tpAm').classList.toggle('phase-active', phase === 'period');
@@ -4984,8 +5011,14 @@ function renderTimeDisplay(){
 
   let timeLine;
   if(isComplete){
-    timeLine = `${ampmTag} ${hhDisp}:${mmDisp}`;
-    setLastPhrase(timeLine, '');
+    const nowResult = `${ampmTag} ${hhDisp}:${mmDisp}`;
+    if(timeRangeMode){
+      timeLine = `${timeFromResult} 〜 ${nowResult}`;
+      setLastPhrase(timeLine, '');
+    } else {
+      timeLine = nowResult;
+      setLastPhrase(timeLine, '');
+    }
   } else {
     const hhCls = (phase === 'digits' && timeField === 'hh') ? ' time-active' : '';
     const mmCls = (phase === 'digits' && timeField === 'mm') ? ' time-active' : '';
@@ -4993,7 +5026,8 @@ function renderTimeDisplay(){
     const ampmHtml = phase === 'period'
       ? `<span class="time-ampm-placeholder">AM<br>PM</span> `
       : (ampmTag ? `${ampmTag} ` : '');
-    timeLine = `${ampmHtml}<span class="${hhCls}">${hhDisp}</span><span class="${colonCls}">:</span><span class="${mmCls}">${mmDisp}</span>`;
+    const fromPrefix = (timeRangeMode && timeRangeStage === 'to') ? `<div class="calc-rate-hint confirmed">開始:${timeFromResult}</div>` : '';
+    timeLine = `${fromPrefix}${ampmHtml}<span class="${hhCls}">${hhDisp}</span><span class="${colonCls}">:</span><span class="${mmCls}">${mmDisp}</span>`;
   }
 
   let periodLabel;

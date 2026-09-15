@@ -406,6 +406,16 @@
   .proc-manner-bullets{ list-style:none; padding:0; margin:0; }
   .proc-manner-bullets li{ font-size:14.5px; line-height:2; padding-left:18px; position:relative; color:var(--ink); }
   .proc-manner-bullets li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); font-weight:700; }
+  .proc-manner-bullets li:has(> details.proc-inline-fold){ padding-left:0; }
+  .proc-manner-bullets li:has(> details.proc-inline-fold)::before{ display:none; }
+  .proc-inline-fold{ margin:8px 0 4px 18px; background:var(--sand); border:1px solid var(--line); border-radius:10px; padding:10px 13px; font-size:14px; line-height:1.85; color:var(--ink); }
+  .proc-inline-fold summary{ cursor:pointer; font-weight:700; color:var(--marigold-deep); list-style:none; }
+  .proc-inline-fold summary::-webkit-details-marker{ display:none; }
+  .proc-inline-fold summary::before{ content:"▸ "; }
+  .proc-inline-fold[open] summary::before{ content:"▾ "; }
+  .proc-inline-fold-body{ margin-top:8px; }
+  .proc-inline-fold ul{ margin:6px 0 8px; padding-left:18px; }
+  .proc-inline-fold li{ margin-bottom:3px; }
   .proc-manner-para{ font-size:14px; line-height:1.85; color:var(--ink); margin-bottom:10px; }
   .proc-manner-outro-title{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:16px; color:var(--teal-deep);
@@ -2605,6 +2615,7 @@ const PROC_MONEY_ITEMS = [
       "引き出し回数をまとめる(滞在中1〜2回にする)ことで、220バーツ×回数のロスを抑えられる",
       "⚠️タイのATMは日本と逆で、現金が先に出てカードは後から返却される仕様。現金だけ受け取ってカードを取り忘れる事例が多いので要注意",
       "カードを抜き取らずに一定時間放置すると、盗難防止のためカードがATM内に取り込まれてしまい、取り出すのに大きな手間と時間がかかる",
+      "<details class=\"proc-inline-fold\"><summary>カードが取り込まれてしまった時は</summary><div class=\"proc-inline-fold-body\">まずは慌てずに、以下の情報をメモや写真で記録しておきましょう。<ul><li>ATMを利用した時間</li><li>ATMの端末番号</li><li>取引金額</li></ul>その後、利用した銀行の支店に連絡し、規定の手続きに沿ってカード返却を申請する必要があります。空港では、ツーリストポリスが手続きを手伝ってくれたという情報もあります。</div></details>",
       "心配な場合は、銀行の支店窓口のすぐ横にあるATMを優先的に使うと安心。万一トラブルが起きても近くに銀行スタッフがいて、すぐに対応してもらいやすい",
     ],
     note:"目安: 短期・少額の旅行なら両替の手軽さで十分。1週間以上の滞在やまとまった金額が必要なら、レート面でATM引き出しが有利になりやすいです。",

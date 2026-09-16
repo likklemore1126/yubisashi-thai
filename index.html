@@ -2169,8 +2169,8 @@ const nearby = [
 ];
 
 const situations = [
-  { icon:"sit_transport", title:"移動する", color:"var(--marigold)", count:"136", sample:"バス・タクシー・電車など", phrases:[] },
-  { icon:"sit_hotel", title:"ホテルにチェックインする", color:"var(--pink)", count:"35", sample:"チェックイン・部屋の不具合など", phrases:[
+  { icon:"sit_transport", title:"移動する", color:"#9C6511", count:"136", sample:"バス・タクシー・電車など", phrases:[] },
+  { icon:"sit_hotel", title:"ホテルにチェックインする", color:"#CA2156", count:"35", sample:"チェックイン・部屋の不具合など", phrases:[
     {base:"ต้องการเช็คอิน", type:'s', jp:"チェックインをお願いします"},
     {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか？", timeAnswer:true},
     {base:"เช็คอินกี่โมง", type:'q', jp:"チェックインは何時ですか？", timeAnswer:true},
@@ -2207,7 +2207,7 @@ const situations = [
     {base:"มีแมลงหรือจิ้งจก", type:'s', jp:"虫やトカゲがいます"},
     {base:"ได้พักอย่างสบายมาก ขอบคุณมากค่ะ", type:'s', jp:"とても快適に過ごすことができ大変お世話になりました"},
   ]},
-  { icon:"sit_restaurant", title:"レストラン・屋台で注文する", color:"var(--marigold-deep)", count:"34", sample:"注文・辛さ調整・会計など", phrases:[
+  { icon:"sit_restaurant", title:"レストラン・屋台で注文する", color:"#B57526", count:"34", sample:"注文・辛さ調整・会計など", phrases:[
     {base:"ขอเมนูหน่อย", type:'s', jp:"メニューをください"},
     {base:"อันนี้เผ็ดไหม", type:'q', jp:"これは辛いですか？"},
     {base:"เก็บเงินด้วย", type:'s', jp:"お会計お願いします"},
@@ -2243,7 +2243,7 @@ const situations = [
     {base:"อร่อยสุดๆเลย", type:'s', jp:"めちゃくちゃ美味しかったです"},
     {base:"จะกลับมาอีก", type:'s', jp:"また来ます"},
   ]},
-  { icon:"sit_foodcourt", title:"フードコート", color:"var(--marigold)", count:"9", sample:"チャージ・注文・返却など", phrases:[
+  { icon:"sit_foodcourt", title:"フードコート", color:"#9C6511", count:"9", sample:"チャージ・注文・返却など", phrases:[
     {base:"เติมเงินให้หน่อย {NUM} บาท", type:'s', jp:"{NUM}バーツチャージしてください", numInput:{defaultVal:100, placeholder:"例:500"}},
     {base:"เอาอันนี้", type:'s', jp:"これください"},
     {base:"เอาอันนี้ {NUM} อัน", type:'s', jp:"これを{NUM}個ください", numInput:{defaultVal:1, placeholder:"例:3"}},
@@ -2254,7 +2254,7 @@ const situations = [
     {base:"นั่งตรงนี้ได้ไหม", type:'q', jp:"ここに座ってもいいですか？"},
     {base:"ขอเงินคืนด้วย", type:'s', jp:"払い戻しをお願いします"},
   ]},
-  { icon:"sit_market", title:"市場で買い物する", color:"var(--pink)", count:"23", sample:"値段交渉・サイズ・会計など", phrases:[
+  { icon:"sit_market", title:"市場で買い物する", color:"#CA2156", count:"23", sample:"値段交渉・サイズ・会計など", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
     {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true, modes:priceModes}},
     {base:"ลดได้ไหม", type:'q', jp:"安くなりますか？"},
@@ -2279,7 +2279,7 @@ const situations = [
     {base:"มีไซส์อื่นไหม", type:'q', jp:"他のサイズはありますか？"},
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
   ]},
-  { icon:"sit_massage", title:"マッサージ", color:"var(--marigold-deep)", count:"21", sample:"タイ・フット・オイル、強さ調整、会計など", phrases:[
+  { icon:"sit_massage", title:"マッサージ", color:"#B57526", count:"21", sample:"タイ・フット・オイル、強さ調整、会計など", phrases:[
     {base:"ขอนวดไทย {DURATION} นาที", type:'s', jp:"タイマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
     {base:"ขอนวดเท้า {DURATION} นาที", type:'s', jp:"フットマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
     {base:"ขอนวดน้ำมัน {DURATION} นาที", type:'s', jp:"オイルマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
@@ -2302,7 +2302,7 @@ const situations = [
     {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？", timeAnswer:true},
     {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？", timeAnswer:true},
   ]},
-  { icon:"sit_pharmacy", title:"薬局・コンビニで薬を買う", color:"var(--marigold)", count:"28", sample:"症状の伝え方・薬の相談など", phrases:[
+  { icon:"sit_pharmacy", title:"薬局・コンビニで薬を買う", color:"#9C6511", count:"28", sample:"症状の伝え方・薬の相談など", phrases:[
     {base:"ปวดหัว", type:'s', jp:"頭が痛いです"},
     {base:"เป็นไข้", type:'s', jp:"熱があります"},
     {base:"น้ำมูกไหล", type:'s', jp:"鼻水が出ます"},

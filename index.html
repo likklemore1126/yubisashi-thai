@@ -498,6 +498,33 @@
     margin:14px 0 6px;
   }
   .proc-sub-heading:first-child{ margin-top:0; }
+  .weekday-color-table{ width:100%; border-collapse:collapse; margin:4px 0 2px; }
+  .weekday-color-table td{ font-size:14px; color:var(--ink); padding:7px 4px; border-bottom:1px solid var(--line); }
+  .weekday-color-table td:last-child{ text-align:right; color:#6b6355; }
+  .wc-dot{ display:inline-block; width:13px; height:13px; border-radius:50%; margin-right:8px; vertical-align:-1.5px; border:1px solid rgba(0,0,0,0.12); }
+  .birthday-tool{
+    margin-top:6px; background:var(--sand); border-radius:12px; padding:14px;
+  }
+  .birthday-date-input{
+    width:100%; box-sizing:border-box; padding:10px 12px; border-radius:8px; border:1.3px solid var(--line);
+    font-size:15px; font-family:inherit; color:var(--ink); background:#fff; margin-bottom:10px;
+  }
+  .birthday-check-btn{
+    width:100%; padding:11px; border-radius:999px; border:none; background:var(--marigold-deep);
+    color:#fff; font-weight:700; font-size:14.5px; cursor:pointer; font-family:inherit;
+  }
+  .birthday-check-btn:active{ background:var(--marigold); }
+  .birthday-result{ margin-top:4px; }
+  .birthday-result-empty{ font-size:13px; color:#B08A4A; margin-top:10px; }
+  .birthday-result-box{
+    display:flex; align-items:center; gap:12px; background:#fff; border-radius:10px;
+    padding:12px 14px; margin-top:12px; border:1.3px solid var(--line);
+  }
+  .birthday-result-box .wc-dot{ width:26px; height:26px; margin-right:0; flex:0 0 auto; }
+  .birthday-result-day{ font-family:'Kanit', sans-serif; font-weight:700; font-size:16px; color:var(--ink); }
+  .birthday-result-color{ font-size:13px; color:#6b6355; margin-top:2px; }
+  .birthday-result-note{ font-size:12px; line-height:1.7; color:#8B5A2B; margin-top:8px; }
+  .birthday-result-tip{ font-size:13px; color:var(--teal-deep); font-weight:600; margin-top:10px; }
   .proc-sub-subnote{ font-size:11.5px; color:#9A8F7A; margin:-3px 0 8px; padding-left:30px; padding-right:34px; line-height:1.5; }
   .pack-photo-row{ display:flex; gap:8px; margin:0 0 14px; }
   .pack-photo{ flex:1; text-align:center; cursor:zoom-in; }
@@ -3020,6 +3047,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
     const osBadgeHtml = it.os ? `<span class="proc-os-badge ${it.os}">${it.os === 'ios' ? 'iPhone専用' : 'Android専用'}</span>` : '';
     const prBadgeHtml = it.pr ? `<span class="proc-pr-badge">PR</span>` : '';
     const leadHtml = it.lead ? `<div class="proc-manner-lead">${it.lead}</div>` : '';
+    const customHtml = it.customHtml || '';
     const bodyInner = `${imageHtml}${leadHtml}
         ${bulletsHtml}
         ${paraHtml}
@@ -3030,6 +3058,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
         ${infoRowsHtml}
         ${phoneRows2Html}
         ${bullets2Html}
+        ${customHtml}
         ${noteHtml}
         ${sourceHtml}`;
     if(alwaysOpen){
@@ -3106,6 +3135,40 @@ function openProcApps(){
 function closeProcApps(){
   document.getElementById('procAppsScreen').classList.remove('show');
 }
+const THAI_DAY_COLORS = [
+  {day:'日曜日', color:'赤', hex:'#E23F73'},
+  {day:'月曜日', color:'黄色', hex:'#F5C518'},
+  {day:'火曜日', color:'ピンク', hex:'#F48FB1'},
+  {day:'水曜日', color:'緑(昼生まれ)', hex:'#4CAF50'},
+  {day:'木曜日', color:'オレンジ', hex:'#FF9800'},
+  {day:'金曜日', color:'青・水色', hex:'#29B6F6'},
+  {day:'土曜日', color:'紫', hex:'#9C27B0'},
+];
+function calcBirthdayColor(){
+  const input = document.getElementById('birthdayInput');
+  const resultEl = document.getElementById('birthdayResult');
+  if(!input.value){
+    resultEl.innerHTML = `<div class="birthday-result-empty">生年月日を選択してください</div>`;
+    return;
+  }
+  const d = new Date(input.value + 'T00:00:00');
+  const info = THAI_DAY_COLORS[d.getDay()];
+  const wedNote = d.getDay() === 3
+    ? `<div class="birthday-result-note">水曜日生まれは、生まれた時間が昼か夜かで色が変わります(昼:緑 / 夜:黒・濃い緑)。詳しい時間がわかる場合は確認してみてください。</div>`
+    : '';
+  resultEl.innerHTML = `
+    <div class="birthday-result-box">
+      <span class="wc-dot"></span>
+      <div>
+        <div class="birthday-result-day">${info.day}生まれ</div>
+        <div class="birthday-result-color">ラッキーカラー:${info.color}</div>
+      </div>
+    </div>
+    ${wedNote}
+    <div class="birthday-result-tip">🛕 お寺ではこの曜日の仏像を探してお参りしてみましょう</div>
+  `;
+  resultEl.querySelector('.birthday-result-box .wc-dot').style.background = info.hex;
+}
 const PROC_MANNER_TOPICS = [
   { image:"images/manners/manner_head_feet.jpg", imageLightbox:true, title:"頭と足に注意", category:"体の部位に関するマナー",
     sub:"頭は大切な場所、足は低いものとされる文化",
@@ -3115,6 +3178,28 @@ const PROC_MANNER_TOPICS = [
     sub:"服装・写真撮影・声の大きさに注意",
     lead:"寺院は観光地であると同時に、大切な信仰の場です。",
     bullets:["露出の多い服装は避ける", "仏像によじ登ったり、不敬なポーズで写真を撮らない", "大声で騒がない", "靴を脱ぐ場所では周囲に合わせる", "お坊さんに必要以上に近づいたり触れたりしない"] },
+  { title:"お寺では自分の仏像にお参りする", category:"宗教施設での過ごし方",
+    sub:"生まれた曜日ごとに色と仏像がある",
+    lead:"タイでは、生まれた曜日ごとに決まった色があり、日常生活や仏教文化の中でも親しまれています。特にお寺では、曜日ごとに異なる姿勢の仏像が置かれていることがあり、自分の生まれた曜日の仏像にお参りする習慣があります。タイのお寺を訪れる前に、自分が何曜日生まれなのか、そしてその曜日の色を知っておくと、よりタイの文化を楽しめます。",
+    customHtml:`
+      <div class="proc-sub-heading">曜日ごとの色</div>
+      <table class="weekday-color-table">
+        <tr><td><span class="wc-dot" style="background:#E23F73"></span>日曜日</td><td>赤</td></tr>
+        <tr><td><span class="wc-dot" style="background:#F5C518"></span>月曜日</td><td>黄色</td></tr>
+        <tr><td><span class="wc-dot" style="background:#F48FB1"></span>火曜日</td><td>ピンク</td></tr>
+        <tr><td><span class="wc-dot" style="background:#4CAF50"></span>水曜日(昼)</td><td>緑</td></tr>
+        <tr><td><span class="wc-dot" style="background:#2E3B2E"></span>水曜日(夜)</td><td>黒・濃い緑</td></tr>
+        <tr><td><span class="wc-dot" style="background:#FF9800"></span>木曜日</td><td>オレンジ</td></tr>
+        <tr><td><span class="wc-dot" style="background:#29B6F6"></span>金曜日</td><td>青・水色</td></tr>
+        <tr><td><span class="wc-dot" style="background:#9C27B0"></span>土曜日</td><td>紫</td></tr>
+      </table>
+      <div class="proc-sub-heading">🛕 あなたは何曜日生まれ？</div>
+      <div class="birthday-tool">
+        <input type="date" id="birthdayInput" class="birthday-date-input">
+        <button class="birthday-check-btn" type="button" onclick="calcBirthdayColor()">生まれた曜日と色を調べる</button>
+        <div id="birthdayResult" class="birthday-result"></div>
+      </div>`,
+    note:"これはタイで広く親しまれている文化・習慣で、必ず自分の曜日の仏像にお参りしなければならないという決まりではありません。" },
   { image:"images/manners/manner_royal.jpg", imageLightbox:true, title:"王室や紙幣を軽く扱わない", category:"王室に関するマナー",
     sub:"王室への敬意はタイで特に大切なマナー",
     lead:"タイでは王室への敬意がとても大切にされています。",

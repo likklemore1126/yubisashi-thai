@@ -525,6 +525,17 @@
   .birthday-result-color{ font-size:13px; color:#6b6355; margin-top:2px; }
   .birthday-result-note{ font-size:12px; line-height:1.7; color:#8B5A2B; margin-top:8px; }
   .birthday-result-tip{ font-size:13px; color:var(--teal-deep); font-weight:600; margin-top:10px; }
+  .proc-step-list{ margin:4px 0 2px; }
+  .proc-step-item{ display:flex; gap:10px; margin-bottom:14px; }
+  .proc-step-item:last-child{ margin-bottom:0; }
+  .proc-step-num{
+    flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--marigold);
+    color:var(--ink); font-family:'Kanit', sans-serif; font-weight:700; font-size:13px;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .proc-step-body{ flex:1; min-width:0; }
+  .proc-step-title{ font-weight:700; font-size:14.5px; color:var(--ink); margin-bottom:3px; }
+  .proc-step-desc{ font-size:13.5px; line-height:1.75; color:#5c4415; }
   .proc-sub-subnote{ font-size:11.5px; color:#9A8F7A; margin:-3px 0 8px; padding-left:30px; padding-right:34px; line-height:1.5; }
   .pack-photo-row{ display:flex; gap:8px; margin:0 0 14px; }
   .pack-photo{ flex:1; text-align:center; cursor:zoom-in; }
@@ -3243,6 +3254,48 @@ const PROC_MANNER_TOPICS = [
       "【ワイは無理にしなくてもOK】タイの挨拶「ワイ」は、旅行者が全員にする必要はありません。相手からワイをされたら、笑顔で返すくらいで十分です。",
       "【食事はスプーンとフォークがメイン】一般的なタイ料理は、スプーンとフォークで食べる事が多いです。フォークで料理をスプーンに乗せて食べます。麺類では箸をつかいますが、麺を直接啜らずにレンゲにのせて口に運ぶスタイルで食べる方が多いです。麺をズルズル啜ったりスープを音を立てて飲むのはマナー的にNGです。",
     ] },
+  { image:"images/manners/manner_foodcourt.jpg", imageLightbox:true, title:"フードコートの一般的な利用方法", category:"食事のマナー・習慣",
+    sub:"専用プリペイドカードにチャージして使うスタイルが一般的",
+    lead:"タイのショッピングモールなどにあるフードコートは、専用のプリペイドカードにお金をチャージして利用するスタイルが一般的です。",
+    customHtml:`
+      <div class="proc-step-list">
+        <div class="proc-step-item">
+          <div class="proc-step-num">1</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">まずカウンターでカードを購入・チャージ</div>
+            <div class="proc-step-desc">フードコートの入口付近にあるカウンターで、専用カードに現金をチャージします。「500バーツ入れてください」など、希望する金額を伝えればOKです。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">2</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">好きなお店で料理を注文</div>
+            <div class="proc-step-desc">フードコートには、タイ料理・麺・ご飯・スイーツなど、さまざまなお店があります。食べたい料理を選んで注文します。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">3</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">カードで支払う</div>
+            <div class="proc-step-desc">料理を受け取るときに、チャージした専用カードで支払います。料理の料金がカードの残高から引かれます。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">4</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">席を探して食べる</div>
+            <div class="proc-step-desc">料理を受け取ったら、空いている席で食べます。スプーン・フォーク・箸・調味料などは、共用スペースに置かれていることが多いです。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">5</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">食後にカードを返却</div>
+            <div class="proc-step-desc">食べ終わったら、最初にチャージしたカウンターへカードを返します。カードに残っている金額は払い戻してもらえます。</div>
+          </div>
+        </div>
+      </div>`,
+    note:"フードコートによってカードの仕組みや払い戻し方法が異なる場合があります。" },
   { image:"images/manners/manner_outro.jpg", imageLightbox:true, title:"迷ったら現地の方に合わせよう", category:"まとめ",
     sub:"細かいマナーを全部覚える必要はありません",
     paragraphs:[

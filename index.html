@@ -792,6 +792,9 @@
     color:#fff; font-family:inherit; font-weight:700; font-size:14px; cursor:pointer;
   }
   .duration-chip.active{ background:var(--marigold); color:var(--ink); }
+  .selfnum-hint{ font-size:12.5px; color:#8B7355; text-align:center; margin-bottom:6px; }
+  .selfnum-th{ font-size:19px; font-weight:700; line-height:1.5; }
+  .selfnum-jp{ font-size:14px; color:#6b6355; margin-top:4px; }
   .pharmacy-qa-result{
     margin-top:12px; background:rgba(255,255,255,0.12); border-radius:12px; padding:12px;
   }
@@ -2231,6 +2234,17 @@ const situations = [
     {base:"อร่อยมาก ขอบคุณ", type:'s', jp:"美味しかったです、ありがとうございました"},
     {base:"อร่อยสุดๆเลย", type:'s', jp:"めちゃくちゃ美味しかったです"},
     {base:"จะกลับมาอีก", type:'s', jp:"また来ます"},
+  ]},
+  { icon:"store", title:"フードコート", color:"var(--marigold-deep)", count:"9", sample:"チャージ・注文・返却など", phrases:[
+    {base:"เติมเงินให้หน่อย {NUM} บาท", type:'s', jp:"{NUM}バーツチャージしてください", numInput:{defaultVal:100, placeholder:"例:500"}},
+    {base:"เอาอันนี้", type:'s', jp:"これください"},
+    {base:"เอาอันนี้ {NUM} อัน", type:'s', jp:"これを{NUM}個ください", numInput:{defaultVal:1, placeholder:"例:3"}},
+    {base:"เอาหมายเลข {NUM}", type:'s', jp:"これください(番号で注文:{NUM}番)", numInput:{defaultVal:1, placeholder:"例:5"}},
+    {base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+    {base:"ช้อนกับส้อมอยู่ที่ไหน", type:'q', jp:"スプーンとフォークはどこにありますか？"},
+    {base:"เอาจานไปคืนที่ไหน", type:'q', jp:"食器はどこに返せばいいですか？"},
+    {base:"นั่งตรงนี้ได้ไหม", type:'q', jp:"ここに座ってもいいですか？"},
+    {base:"ขอเงินคืนด้วย", type:'s', jp:"払い戻しをお願いします"},
   ]},
   { icon:"bag", title:"市場で買い物する", color:"var(--teal-deep)", count:"23", sample:"値段交渉・サイズ・会計など", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
@@ -4765,11 +4779,15 @@ function toggleAnchorExpand(){
 
 let selectedCategoryIdx = null;
 let categoryDurationVal = null;
+let categoryNumInputVal = null;
 function durationDefaultVal(p){
   return (p.durationOptions && p.durationOptions.length) ? p.durationOptions[0] : null;
 }
 function applyDuration(text, val){
   return (val === null || val === undefined) ? text : text.replace('{DURATION}', val);
+}
+function applyNum(text, val){
+  return (val === null || val === undefined) ? text : text.replace('{NUM}', val);
 }
 function durationChipsHtml(options, current){
   if(!options) return '';
@@ -4783,6 +4801,10 @@ function selectCategoryDuration(v){
   categoryDurationVal = v;
   renderCategoryFixed();
   renderCategoryList();
+}
+function numInputHtml(config){
+  if(!config) return '';
+  return `<button class="nb-trigger" onclick="event.stopPropagation(); openSelfNumBoard();">${iconSvg('calculator', 18)} 電卓で数字を入力する</button>`;
 }
 
 function openSituation(i){
@@ -4842,14 +4864,17 @@ function renderCategoryFixed(){
   } else {
     const p = s.phrases[selectedCategoryIdx];
     const durVal = p.durationOptions ? (categoryDurationVal !== null ? categoryDurationVal : durationDefaultVal(p)) : null;
-    const th = applyDuration(fullTh(p.base, p.type), durVal);
-    const jp = applyDuration(p.jp, durVal);
+    const numVal = p.numInput ? (categoryNumInputVal !== null ? categoryNumInputVal : p.numInput.defaultVal) : null;
+    let th = applyDuration(fullTh(p.base, p.type), durVal);
+    th = applyNum(th, numVal);
+    let jp = applyDuration(p.jp, durVal);
+    jp = applyNum(jp, numVal);
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + pharmacyEntryHtml + `<div class="selected-phrase">
       <div class="sp-header"><button class="sp-clear-btn" onclick="clearCategoryPhrase()">✕ 選択を解除</button></div>
       <div class="sp-th">${th}</div>
       <div class="sp-jp">${jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
-      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${timeRangeTriggerHtml(p.timeRangeAnswer)}${durationChipsHtml(p.durationOptions, durVal)}${favStarHtml(th, jp)}
+      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${timeRangeTriggerHtml(p.timeRangeAnswer)}${durationChipsHtml(p.durationOptions, durVal)}${numInputHtml(p.numInput)}${favStarHtml(th, jp)}
     </div>`;
     setLastPhrase(th, jp);
   }
@@ -4866,13 +4891,17 @@ function renderCategoryList(){
     const sel = selectedCategoryIdx === idx ? 'selected' : '';
     const isSelectedNow = selectedCategoryIdx === idx;
     const durVal = p.durationOptions ? ((isSelectedNow && categoryDurationVal !== null) ? categoryDurationVal : durationDefaultVal(p)) : null;
-    const th = applyDuration(fullTh(p.base, p.type), durVal);
-    const jp = applyDuration(p.jp, durVal);
+    const numVal = p.numInput ? ((isSelectedNow && categoryNumInputVal !== null) ? categoryNumInputVal : p.numInput.defaultVal) : null;
+    let th = applyDuration(fullTh(p.base, p.type), durVal);
+    th = applyNum(th, numVal);
+    let jp = applyDuration(p.jp, durVal);
+    jp = applyNum(jp, numVal);
     const durationBadge = (p.durationOptions && !isSelectedNow) ? `<span class="fi-editable-badge">✏️ タップ後に時間を変更できます</span>` : '';
+    const numBadge = (p.numInput && !isSelectedNow) ? `<span class="fi-editable-badge">✏️ タップ後に数字を変更できます</span>` : '';
     html += `<div class="follow-item ${sel}" onclick="selectCategoryPhrase(${idx})">
       <div class="fi-th">${th}</div>
       <div class="fi-jp">${jp}</div>
-      ${durationBadge}
+      ${durationBadge}${numBadge}
       ${p.note ? `<div class="fi-note">${p.note}</div>` : ''}
       ${favStarHtml(th, jp)}
     </div>`;
@@ -4882,6 +4911,7 @@ function renderCategoryList(){
 function selectCategoryPhrase(idx){
   selectedCategoryIdx = (selectedCategoryIdx === idx) ? null : idx;
   categoryDurationVal = null;
+  categoryNumInputVal = null;
   renderCategoryFixed();
   renderCategoryList();
 }
@@ -5233,10 +5263,28 @@ function openNumberBoard(){
   const useSimpleKeys = !!config.modes;
   document.getElementById('calcKeysFull').style.display = useSimpleKeys ? 'none' : '';
   document.getElementById('calcKeysSimple').style.display = useSimpleKeys ? '' : 'none';
+  document.getElementById('rateStatus').style.display = '';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
 }
 
+function openSelfNumBoard(){
+  if(openState.type !== 'category' || selectedCategoryIdx === null) return;
+  const p = situations[openState.index].phrases[selectedCategoryIdx];
+  if(!p.numInput) return;
+  calcMode = 'selfnum';
+  calcPhraseConfig = { base: p.base, type: p.type, jp: p.jp, defaultVal: p.numInput.defaultVal };
+  document.getElementById('calcTitle').innerHTML = `${iconSvg('calculator', 20)}数字を入力する`;
+  document.getElementById('calcKeysFull').style.display = 'none';
+  document.getElementById('calcKeysSimple').style.display = '';
+  document.getElementById('rateStatus').style.display = 'none';
+  calcCurrent = String((categoryNumInputVal !== null ? categoryNumInputVal : p.numInput.defaultVal) || 0);
+  calcPrev = null;
+  calcOperator = null;
+  calcResetNext = true;
+  calcRender();
+  document.getElementById('calcScreen').classList.add('show');
+}
 function openRateSheet(){
   document.getElementById('topRateInput').value = thbToJpyRate || '';
   document.getElementById('rateOverlay').classList.add('show');
@@ -5281,10 +5329,18 @@ function openCalc(){
   document.getElementById('calcTitle').innerHTML = `${iconSvg('calculator', 20)}฿計算機`;
   document.getElementById('calcKeysFull').style.display = '';
   document.getElementById('calcKeysSimple').style.display = 'none';
+  document.getElementById('rateStatus').style.display = '';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
 }
 function closeCalc(){
+  if(calcMode === 'selfnum'){
+    categoryNumInputVal = parseInt(calcCurrent, 10) || 0;
+    document.getElementById('calcScreen').classList.remove('show');
+    restoreParentPhrase();
+    renderCategoryList();
+    return;
+  }
   document.getElementById('calcScreen').classList.remove('show');
   restoreParentPhrase();
 }
@@ -5355,8 +5411,18 @@ function setCalcMode(i){
 function calcRender(){
   const num = parseFloat(calcCurrent) || 0;
   const formatted = formatCalcDisplay(calcCurrent);
-  let mainText, mainTextPlain, showJpy, questionHtml = '';
-  if(calcMode === 'phrase' && calcPhraseConfig){
+  let mainText, mainTextPlain, showJpy, questionHtml = '', jpForLastPhrase = '';
+  if(calcMode === 'selfnum' && calcPhraseConfig){
+    const cfg = calcPhraseConfig;
+    const numStr = String(parseInt(calcCurrent, 10) || 0);
+    const th = applyNum(fullTh(cfg.base, cfg.type), numStr);
+    const jp = applyNum(cfg.jp, numStr);
+    questionHtml = `<div class="selfnum-hint">数字を入力すると、下のフレーズに反映されます</div>`;
+    mainText = `<div class="selfnum-th">${th}</div><div class="selfnum-jp">${jp}</div>`;
+    mainTextPlain = th;
+    jpForLastPhrase = jp;
+    showJpy = false;
+  } else if(calcMode === 'phrase' && calcPhraseConfig){
     const cfg = calcPhraseConfig;
     mainText = cfg.position === 'prefix' ? `${cfg.unit} ${formatted}` : `${formatted} ${cfg.unit}`;
     mainTextPlain = mainText;
@@ -5395,7 +5461,7 @@ function calcRender(){
     jpyHtml = `<div class="nb-jpy">(${formatted}${calcPhraseConfig.unitJp})</div>`;
   }
   document.getElementById('calcDisplay').innerHTML = `${questionHtml}<div class="calc-value${questionHtml ? ' compact' : ''}">${mainText}</div>${jpyHtml}`;
-  setLastPhrase(mainTextPlain, '');
+  setLastPhrase(mainTextPlain, jpForLastPhrase);
 }
 function saveRateFromCalc(){
   const v = parseFloat(document.getElementById('calcRateInput').value);

@@ -3147,27 +3147,59 @@ const THAI_DAY_COLORS = [
 function calcBirthdayColor(){
   const input = document.getElementById('birthdayInput');
   const resultEl = document.getElementById('birthdayResult');
-  if(!input.value){
-    resultEl.innerHTML = `<div class="birthday-result-empty">生年月日を選択してください</div>`;
+  const raw = input.value.trim();
+  if(!raw){
+    resultEl.innerHTML = `<div class="birthday-result-empty">生年月日を数字8桁で入力してください(例:19870926)</div>`;
     return;
   }
-  const d = new Date(input.value + 'T00:00:00');
+  if(!/^\d{8}$/.test(raw)){
+    resultEl.innerHTML = `<div class="birthday-result-empty">数字8桁で入力してください(例:19870926 → 1987年9月26日)</div>`;
+    return;
+  }
+  const year = parseInt(raw.slice(0, 4), 10);
+  const month = parseInt(raw.slice(4, 6), 10);
+  const day = parseInt(raw.slice(6, 8), 10);
+  const d = new Date(year, month - 1, day);
+  const isValidDate = d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
+  if(!isValidDate || month < 1 || month > 12 || day < 1 || day > 31){
+    resultEl.innerHTML = `<div class="birthday-result-empty">日付が正しくありません。西暦年4桁+月2桁+日2桁で入力してください(例:19870926)</div>`;
+    return;
+  }
   const info = THAI_DAY_COLORS[d.getDay()];
-  const wedNote = d.getDay() === 3
-    ? `<div class="birthday-result-note">水曜日生まれは、生まれた時間が昼か夜かで色が変わります(昼:緑 / 夜:黒・濃い緑)。詳しい時間がわかる場合は確認してみてください。</div>`
-    : '';
-  resultEl.innerHTML = `
-    <div class="birthday-result-box">
-      <span class="wc-dot"></span>
-      <div>
-        <div class="birthday-result-day">${info.day}生まれ</div>
-        <div class="birthday-result-color">ラッキーカラー:${info.color}</div>
+  let resultBoxHtml;
+  let wedNote = '';
+  if(d.getDay() === 3){
+    resultBoxHtml = `
+      <div class="birthday-result-box">
+        <span class="wc-dot" style="background:#4CAF50"></span>
+        <div>
+          <div class="birthday-result-day">水曜日(昼)生まれ</div>
+          <div class="birthday-result-color">ラッキーカラー:緑</div>
+        </div>
       </div>
-    </div>
+      <div class="birthday-result-box">
+        <span class="wc-dot" style="background:#2E3B2E"></span>
+        <div>
+          <div class="birthday-result-day">水曜日(夜)生まれ</div>
+          <div class="birthday-result-color">ラッキーカラー:黒・濃い緑</div>
+        </div>
+      </div>`;
+    wedNote = `<div class="birthday-result-note">水曜日生まれは、生まれた時間が昼か夜かで色が変わります。詳しい時間がわかる場合は確認してみてください。</div>`;
+  } else {
+    resultBoxHtml = `
+      <div class="birthday-result-box">
+        <span class="wc-dot" style="background:${info.hex}"></span>
+        <div>
+          <div class="birthday-result-day">${info.day}生まれ</div>
+          <div class="birthday-result-color">ラッキーカラー:${info.color}</div>
+        </div>
+      </div>`;
+  }
+  resultEl.innerHTML = `
+    ${resultBoxHtml}
     ${wedNote}
     <div class="birthday-result-tip">🛕 お寺ではこの曜日の仏像を探してお参りしてみましょう</div>
   `;
-  resultEl.querySelector('.birthday-result-box .wc-dot').style.background = info.hex;
 }
 const PROC_MANNER_TOPICS = [
   { image:"images/manners/manner_head_feet.jpg", imageLightbox:true, title:"頭と足に注意", category:"体の部位に関するマナー",
@@ -3195,7 +3227,7 @@ const PROC_MANNER_TOPICS = [
       </table>
       <div class="proc-sub-heading">🛕 あなたは何曜日生まれ？</div>
       <div class="birthday-tool">
-        <input type="date" id="birthdayInput" class="birthday-date-input">
+        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="8" id="birthdayInput" class="birthday-date-input" placeholder="例:19870926(西暦年月日 8桁)">
         <button class="birthday-check-btn" type="button" onclick="calcBirthdayColor()">生まれた曜日と色を調べる</button>
         <div id="birthdayResult" class="birthday-result"></div>
       </div>`,

@@ -4588,7 +4588,9 @@ function openModeList(mode){
   renderComposerFixed();
   renderTransportTabs();
   renderComposerList();
-  document.getElementById('composerScreen').classList.add('show');
+  const composerScreenEl = document.getElementById('composerScreen');
+  composerScreenEl.scrollTop = 0;
+  composerScreenEl.classList.add('show');
 }
 
 function openTransportComposer(){
@@ -4598,7 +4600,9 @@ function openTransportComposer(){
   renderComposerFixed();
   renderTransportTabs();
   renderComposerList();
-  document.getElementById('composerScreen').classList.add('show');
+  const composerScreenEl = document.getElementById('composerScreen');
+  composerScreenEl.scrollTop = 0;
+  composerScreenEl.classList.add('show');
 }
 function closeComposer(){
   document.getElementById('composerScreen').classList.remove('show');
@@ -4845,7 +4849,9 @@ function openCategoryComposer(i){
   document.getElementById('transportTabsFixed').innerHTML = '';
   renderCategoryFixed();
   renderCategoryList();
-  document.getElementById('composerScreen').classList.add('show');
+  const composerScreenEl = document.getElementById('composerScreen');
+  composerScreenEl.scrollTop = 0;
+  composerScreenEl.classList.add('show');
 }
 function renderCategoryFixed(){
   const s = situations[openState.index];

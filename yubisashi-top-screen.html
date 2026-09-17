@@ -258,7 +258,7 @@
   .sit-row:active{ transform:scale(0.98); }
   .sit-row::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--accent, var(--teal)); }
   .sit-icon{
-    width:50px; height:50px; border-radius:13px; background:var(--accent, var(--teal));
+    width:58px; height:58px; border-radius:15px; background:var(--accent, var(--teal));
     display:flex; align-items:center; justify-content:center; font-size:20px; flex:0 0 auto; margin-left:4px;
     color:#fff;
   }
@@ -406,6 +406,16 @@
   .proc-manner-bullets{ list-style:none; padding:0; margin:0; }
   .proc-manner-bullets li{ font-size:14.5px; line-height:2; padding-left:18px; position:relative; color:var(--ink); }
   .proc-manner-bullets li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); font-weight:700; }
+  .proc-manner-bullets li:has(> details.proc-inline-fold){ padding-left:0; }
+  .proc-manner-bullets li:has(> details.proc-inline-fold)::before{ display:none; }
+  .proc-inline-fold{ margin:8px 0 4px 18px; background:var(--sand); border:1px solid var(--line); border-radius:10px; padding:10px 13px; font-size:14px; line-height:1.85; color:var(--ink); }
+  .proc-inline-fold summary{ cursor:pointer; font-weight:700; color:var(--marigold-deep); list-style:none; }
+  .proc-inline-fold summary::-webkit-details-marker{ display:none; }
+  .proc-inline-fold summary::before{ content:"▸ "; }
+  .proc-inline-fold[open] summary::before{ content:"▾ "; }
+  .proc-inline-fold-body{ margin-top:8px; }
+  .proc-inline-fold ul{ margin:6px 0 8px; padding-left:18px; }
+  .proc-inline-fold li{ margin-bottom:3px; }
   .proc-manner-para{ font-size:14px; line-height:1.85; color:var(--ink); margin-bottom:10px; }
   .proc-manner-outro-title{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:16px; color:var(--teal-deep);
@@ -488,6 +498,44 @@
     margin:14px 0 6px;
   }
   .proc-sub-heading:first-child{ margin-top:0; }
+  .weekday-color-table{ width:100%; border-collapse:collapse; margin:4px 0 2px; }
+  .weekday-color-table td{ font-size:14px; color:var(--ink); padding:7px 4px; border-bottom:1px solid var(--line); }
+  .weekday-color-table td:last-child{ text-align:right; color:#6b6355; }
+  .wc-dot{ display:inline-block; width:13px; height:13px; border-radius:50%; margin-right:8px; vertical-align:-1.5px; border:1px solid rgba(0,0,0,0.12); }
+  .birthday-tool{
+    margin-top:6px; background:var(--sand); border-radius:12px; padding:14px;
+  }
+  .birthday-date-input{
+    width:100%; box-sizing:border-box; padding:10px 12px; border-radius:8px; border:1.3px solid var(--line);
+    font-size:15px; font-family:inherit; color:var(--ink); background:#fff; margin-bottom:10px;
+  }
+  .birthday-check-btn{
+    width:100%; padding:11px; border-radius:999px; border:none; background:var(--marigold-deep);
+    color:#fff; font-weight:700; font-size:14.5px; cursor:pointer; font-family:inherit;
+  }
+  .birthday-check-btn:active{ background:var(--marigold); }
+  .birthday-result{ margin-top:4px; }
+  .birthday-result-empty{ font-size:13px; color:#B08A4A; margin-top:10px; }
+  .birthday-result-box{
+    display:flex; align-items:center; gap:12px; background:#fff; border-radius:10px;
+    padding:12px 14px; margin-top:12px; border:1.3px solid var(--line);
+  }
+  .birthday-result-box .wc-dot{ width:26px; height:26px; margin-right:0; flex:0 0 auto; }
+  .birthday-result-day{ font-family:'Kanit', sans-serif; font-weight:700; font-size:16px; color:var(--ink); }
+  .birthday-result-color{ font-size:13px; color:#6b6355; margin-top:2px; }
+  .birthday-result-note{ font-size:12px; line-height:1.7; color:#8B5A2B; margin-top:8px; }
+  .birthday-result-tip{ font-size:13px; color:var(--teal-deep); font-weight:600; margin-top:10px; }
+  .proc-step-list{ margin:4px 0 2px; }
+  .proc-step-item{ display:flex; gap:10px; margin-bottom:14px; }
+  .proc-step-item:last-child{ margin-bottom:0; }
+  .proc-step-num{
+    flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--marigold);
+    color:var(--ink); font-family:'Kanit', sans-serif; font-weight:700; font-size:13px;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .proc-step-body{ flex:1; min-width:0; }
+  .proc-step-title{ font-weight:700; font-size:14.5px; color:var(--ink); margin-bottom:3px; }
+  .proc-step-desc{ font-size:13.5px; line-height:1.75; color:#5c4415; }
   .proc-sub-subnote{ font-size:11.5px; color:#9A8F7A; margin:-3px 0 8px; padding-left:30px; padding-right:34px; line-height:1.5; }
   .pack-photo-row{ display:flex; gap:8px; margin:0 0 14px; }
   .pack-photo{ flex:1; text-align:center; cursor:zoom-in; }
@@ -738,6 +786,15 @@
     color:#fff; font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; cursor:pointer;
   }
   .pharmacy-qa-chip.active{ background:var(--marigold); color:var(--ink); }
+  .duration-chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .duration-chip{
+    padding:9px 16px; border-radius:999px; border:none; background:rgba(255,255,255,0.18);
+    color:#fff; font-family:inherit; font-weight:700; font-size:14px; cursor:pointer;
+  }
+  .duration-chip.active{ background:var(--marigold); color:var(--ink); }
+  .selfnum-hint{ font-size:12.5px; color:#8B7355; text-align:center; margin-bottom:6px; }
+  .selfnum-th{ font-size:19px; font-weight:700; line-height:1.5; }
+  .selfnum-jp{ font-size:14px; color:#6b6355; margin-top:4px; }
   .pharmacy-qa-result{
     margin-top:12px; background:rgba(255,255,255,0.12); border-radius:12px; padding:12px;
   }
@@ -820,23 +877,10 @@
     flex:0 0 auto; font-size:20px; color:#C7BEA9; padding:8px 6px; cursor:grab; touch-action:none;
     user-select:none;
   }
-  .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:0 8px; width:100%; }
+  .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:0 8px; }
   .fav-chain-item{ margin-bottom:26px; text-align:center; }
-  .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; white-space:normal; word-break:normal; overflow-wrap:normal; }
-  .fav-chain-th::before{
-    content:""; display:inline-block; width:1em; height:0.72em; margin-right:0.18em; vertical-align:0.05em;
-    background-image:url('https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f1f9-1f1ed.png');
-    background-size:contain; background-repeat:no-repeat; background-position:center;
-  }
-  @media (orientation: portrait){
-    .fav-chain-th::before{ display:block; width:1.6em; height:1.15em; margin-right:0; margin-bottom:0.2em; }
-  }
+  .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; }
   .fav-chain-jp{ font-size:13px; opacity:0.6; margin-top:6px; }
-  .fav-chain-jp::before{
-    content:""; display:inline-block; width:1em; height:0.72em; margin-right:0.18em; vertical-align:0.02em;
-    background-image:url('https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f1ef-1f1f5.png');
-    background-size:contain; background-repeat:no-repeat; background-position:center;
-  }
   .landscape-close{
     position:absolute; top:calc(16px + env(safe-area-inset-top)); right:calc(20px + env(safe-area-inset-right)); font-size:13px; opacity:0.55;
     font-family:'Noto Sans JP', sans-serif;
@@ -984,9 +1028,7 @@
     font-family:'Noto Sans JP', sans-serif; font-size:12px; font-weight:600; color:#8B8272; cursor:pointer; white-space:nowrap;
   }
   .transport-tab.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
-  .transport-tab .icon-img{ filter:none; }
-  .transport-tab .icon-img[src*="taxi2.png"],
-  .transport-tab .icon-img[src*="songthaew2.png"]{ transform:scale(1.2); }
+  .transport-tab .icon-img{ filter:brightness(0); }
   .transport-tab.active .icon-img{ filter:brightness(0) invert(1); }
   .mode-group-label svg{ vertical-align:-3px; margin-right:2px; }
   .follow-item{
@@ -1166,7 +1208,7 @@
 
   <div class="composer-screen" id="timeBoardScreen" style="z-index:9;">
     <div class="composer-header">
-      <div class="ctitle"><span class="icon-slot" data-icon="clock" data-size="20"></span>時刻で答える</div>
+      <div class="ctitle" id="timeBoardTitle"><span class="icon-slot" data-icon="clock" data-size="20"></span>時刻で答える</div>
       <button class="fullscreen-btn" style="margin:0;" onclick="showFullscreenNow()"><span class="icon-slot" data-icon="search" data-size="17"></span>相手に見せる</button>
       <button class="composer-close" onclick="closeTimeBoard()">✕</button>
     </div>
@@ -1370,6 +1412,24 @@ const ICON_DATA = {
   rotu: "images/icons/rotu.png",
   ferry: "images/icons/ferry.png",
   plane: "images/icons/plane.png",
+  sit_transport: "images/icons/sit_transport.png",
+  sit_hotel: "images/icons/sit_hotel.png",
+  sit_restaurant: "images/icons/sit_restaurant.png",
+  sit_foodcourt: "images/icons/sit_foodcourt.png",
+  sit_market: "images/icons/sit_market.png",
+  sit_massage: "images/icons/sit_massage.png",
+  sit_pharmacy: "images/icons/sit_pharmacy.png",
+  sit_help: "images/icons/sit_help.png",
+  mode_plane: "images/icons/mode_plane.png",
+  mode_tuktuk: "images/icons/mode_tuktuk.png",
+  mode_guide: "images/icons/mode_guide.png",
+  mode_bus: "images/icons/mode_bus.png",
+  mode_tetsudo: "images/icons/mode_tetsudo.png",
+  mode_rotu: "images/icons/mode_rotu.png",
+  mode_ferry: "images/icons/mode_ferry.png",
+  mode_densha: "images/icons/mode_densha.png",
+  mode_taxi: "images/icons/mode_taxi.png",
+  mode_songthaew: "images/icons/mode_songthaew.png",
 };
 function iconSvg(key, size){
   const s = size || 24;
@@ -1391,15 +1451,15 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["かられ","kalare","kalare boxing stadium","むえたい","muay thai"], th:"สนามมวยกาแล", jp:"カラレ・ボクシング・スタジアム", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県", access:"ナイトバザール内、ターペー門から徒歩約5〜10分", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F80769-chiangmai-kalare-night-bazaar-boxing-stadium-muay-thai&aff_label1=blog', title:'ムエタイ観戦チケット(チェンマイ／Kalare Boxing Stadium提供)'}, {platform:'getyourguide', url:'https://gyg.me/qasr8FdF', title:'チェンマイ：カラーレ ナイト バザール ムエタイ 入場チケット'}] },
   { key:["あゆたや","ayutthaya","อยุธยา"], th:"อยุธยา", jp:"アユタヤ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"バンコクから電車で約1時間30分～2時間、ロットゥー(ミニバン)なら約1時間30分" , transport12go:[{from:"バンコク", url:"https://12go.asia/jp/travel/Bangkok/Ayutthaya/?z=16726565&sub_id=pwa_ayutthaya", note:"バスによっては、出発前にバウチャーを窓口で紙チケットへ交換する必要があります。予約後のバウチャーに記載されたカウンター・乗車場所を必ず確認してください。"}] , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F391-ayutthaya-historical-park-day-tour-bang-pa-in-summer-palace-ayutthaya-temples-night-market&aff_label1=blog', title:'アユタヤ必見ツアー：離宮、水上マーケット＆寺院'}, {platform:'klook', url:'https://affiliate.klook.com/sl/12gEsni', title:'アユタヤ寺院日帰りツアー（バンコク発）'}] },
   { key:["ちぇんまい","chiang mai","เชียงใหม่", "チェンマイ"], th:"เชียงใหม่", jp:"チェンマイ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"バンコクから飛行機で約1時間10分、寝台列車なら約12～13時間" , transport12go:[{from:"バンコク", url:"https://12go.asia/jp/travel/Bangkok/Chiang-Mai/?z=16726565&sub_id=pwa_chiangmai", note:"バスによっては、出発前にバウチャーを窓口で紙チケットへ交換する必要があります。予約後のバウチャーに記載されたカウンター・乗車場所を必ず確認してください。"}] , tours:[{platform:'getyourguide', url:'https://gyg.me/r9GDylMb', title:'2026年ランナー ランタン フェスティバル（チェンマイ・ランプーン）（公式）'}, {platform:'klook', url:'https://affiliate.klook.com/sl/1Zzey75', title:'ロイクラトン＆ランタンフェスティバル2026（ホライズンビレッジ チェンマイ）'}] },
-  { key:["わっとぷらけお","wat phra kaew","วัดพระแก้ว", "ワット プラケオ(エメラルド寺院)", "ワット・プラケオ(エメラルドじいん)", "วัดพระศรีรัตนศาสดาราม"], th:"วัดพระแก้ว", jp:"ワット・プラケオ(エメラルド寺院)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สนามไชย", jp:"MRTサナームチャイ駅", access:"徒歩約15分"} , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F22759-bangkok-grand-palace-emerald-buddha-tour&aff_label1=blog', title:'王宮とエメラルド寺院 半日ガイド付きツアー（バンコク発）'}, {platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3021-bangkok-must-visit-landmarks-day-tour&aff_label1=blog', title:'王宮・エメラルド寺院・ワットポー・ワットアルン 日帰りツアー（バンコク発）'}] },
-  { key:["わっとあるん","wat arun","วัดอรุณ", "ワット アルン(暁の寺)", "ワット・アルン(あかつきのてら)", "暁の寺", "暁寺", "ワットアルン", "วัดอรุณราชวราราม", "วัดอรุณราชวรารามราชวรมหาวิหาร"], th:"วัดอรุณ", jp:"ワット・アルン(暁の寺)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", station:{th:"อิสรภาพ", jp:"MRTイッサラパープ駅", access:"徒歩約15分"} , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3021-bangkok-must-visit-landmarks-day-tour&aff_label1=blog', title:'王宮・エメラルド寺院・ワットポー・ワットアルン 日帰りツアー（バンコク発）'}] },
-  { key:["わっとぽー","wat pho","วัดโพธิ์", "ワット ポー(涅槃寺)", "ワット・ポー(ねはんじ)", "วัดพระเชตุพนวิมลมังคลาราม", "วัดพระเชตุพนวิมลมังคลารามราชวรมหาวิหาร"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สนามไชย", jp:"MRTサナームチャイ駅", access:"徒歩約5分"} , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3021-bangkok-must-visit-landmarks-day-tour&aff_label1=blog', title:'王宮・エメラルド寺院・ワットポー・ワットアルン 日帰りツアー（バンコク発）'}] },
+  { key:["わっとぷらけお","wat phra kaew","วัดพระแก้ว", "ワット プラケオ(エメラルド寺院)", "ワット・プラケオ(エメラルドじいん)"], th:"วัดพระแก้ว", jp:"ワット・プラケオ(エメラルド寺院)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สนามไชย", jp:"MRTサナームチャイ駅", access:"徒歩約15分"} , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F22759-bangkok-grand-palace-emerald-buddha-tour&aff_label1=blog', title:'王宮とエメラルド寺院 半日ガイド付きツアー（バンコク発）'}, {platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3021-bangkok-must-visit-landmarks-day-tour&aff_label1=blog', title:'王宮・エメラルド寺院・ワットポー・ワットアルン 日帰りツアー（バンコク発）'}] },
+  { key:["わっとあるん","wat arun","วัดอรุณ", "ワット アルン(暁の寺)", "ワット・アルン(あかつきのてら)", "暁の寺", "暁寺", "ワットアルン"], th:"วัดอรุณ", jp:"ワット・アルン(暁の寺)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", station:{th:"อิสรภาพ", jp:"MRTイッサラパープ駅", access:"徒歩約15分"} , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3021-bangkok-must-visit-landmarks-day-tour&aff_label1=blog', title:'王宮・エメラルド寺院・ワットポー・ワットアルン 日帰りツアー（バンコク発）'}] },
+  { key:["わっとぽー","wat pho","วัดโพธิ์", "ワット ポー(涅槃寺)", "ワット・ポー(ねはんじ)"], th:"วัดโพธิ์", jp:"ワット・ポー(涅槃寺)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สนามไชย", jp:"MRTサナームチャイ駅", access:"徒歩約5分"} , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3021-bangkok-must-visit-landmarks-day-tour&aff_label1=blog', title:'王宮・エメラルド寺院・ワットポー・ワットアルン 日帰りツアー（バンコク発）'}] },
   { key:["ちゃとぅちゃっく","chatuchak","จตุจักร", "チャトゥチャック ウィークエンド マーケット", "ตลาดนัดจตุจักร"], th:"ตลาดนัดจตุจักร", jp:"チャトゥチャック・ウィークエンド・マーケット", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สวนจตุจักร", jp:"MRTチャトゥチャック・パーク駅／BTSモーチット駅", access:"徒歩約5分"} },
   { key:["めーくろーん","maeklong","ตลาดแม่กลอง", "メークローンせんろいちば"], th:"ตลาดแม่กลอง", jp:"メークローン線路市場", pref:"サムットソンクラーム県" , access:"メークローン駅 → 駅直結" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/2lesvZn', title:'ダムヌンサドゥアック水上マーケット・メークローン鉄道市場ツアー'}] },
   { key:["あんぱわー","amphawa","อัมพวา", "アンパワーすいじょうまーけっと"], th:"ตลาดน้ำอัมพวา", jp:"アンパワー水上マーケット", note:"週末のみ開催", pref:"サムットソンクラーム県" , access:"バンコクから車で約1時間30分、週末は乗合バン(ロットゥー)の便あり" , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F135111-meet-up-with-firefly-on-boat-thai-costume-wearing-in-amphawa&aff_label1=blog', title:'バンコク発 アンパワー・ホタル鑑賞ナイトツアー＆タイ衣装体験'}, {platform:'klook', url:'https://affiliate.klook.com/sl/1o5ZCUC', title:'アユタヤ・アンパワー プライベート日帰りツアー（バンコク）'}] },
   { key:["だむぬんさどぅあっく","damnoen saduak","ดำเนินสะดวก", "ダムヌンサドゥアックすいじょうまーけっと"], th:"ตลาดน้ำดำเนินสะดวก", jp:"ダムヌンサドゥアック水上マーケット", pref:"ラーチャブリー県" , access:"ラーチャブリー駅 → タクシー／ミニバス約40～50分" , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3020-floating-markets-day-tour-bangkok&aff_label1=blog', title:'ダムヌンサドゥアック水上マーケット・メークローン鉄道市場ツアー'}, {platform:'getyourguide', url:'https://gyg.me/epX8u3m9', title:'バンコクダムヌン・サドゥアクとメークロン市場'}] },
   { key:["かおるあん","khao luang","เขาหลวง", "カオルアンどうくつ"], th:"ถ้ำเขาหลวง", jp:"カオルアン洞窟", pref:"ペッチャブリー県" , access:"ペッチャブリー駅 → タクシー／Grab(配車アプリ)約15～20分" , tours:[{platform:'getyourguide', url:'https://gyg.me/4SAZLGSj', title:'ホアヒン：歴史観光＆ペッチャブリーのグルメツアーをお楽しみください'}] },
-  { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ", "วัดปากน้ำภาษีเจริญ"], th:"วัดปากน้ำ", jp:"ワットパクナム", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"บางหว้า", jp:"BTS/MRTバンワー駅"}, tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/5bvxoHv', title:'バンコク寺院ツアー MyProGuide提供(ワット・パクナム／ピンクガネーシャ／ワット・サマン)'}] },
+  { key:["わっとぱくなむ","wat paknam","วัดปากน้ำ"], th:"วัดปากน้ำ", jp:"ワットパクナム", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"บางหว้า", jp:"BTS/MRTバンワー駅"}, tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/5bvxoHv', title:'バンコク寺院ツアー MyProGuide提供(ワット・パクナム／ピンクガネーシャ／ワット・サマン)'}] },
   { key:["わっとさまーん","wat saman","สมานรัตนาราม"], th:"วัดสมานรัตนาราม", jp:"ワットサマーン・ラッタナーラーム(ピンクガネーシャ)", pref:"チャチューンサオ県" , access:"チャチューンサオ駅 → タクシー／Grab(配車アプリ)約30～40分" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/5bvxoHv', title:'バンコク寺院ツアー MyProGuide提供(ワット・パクナム／ピンクガネーシャ／ワット・サマン)'}] },
   { key:["くわいがわてっきょう","くうぇーがわてっきょう","river kwai bridge","สะพานข้ามแม่น้ำแคว", "クウェーがわてつきょう"], th:"สะพานข้ามแม่น้ำแคว", jp:"クウェー川鉄橋", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16223', title:'カンチャナブリーのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ZOoOeBlLyV2', title:'カンチャナブリーのホテルを探す(Trip.com)'}], pref:"カンチャナブリー県" , station:{th:"สถานีสะพานแม่น้ำแคว", jp:"River Kwai Bridge駅", access:"徒歩約3〜5分"}, tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/22JmQTi', title:'カンチャナブリー サファリパーク・クウェー川鉄橋 日帰りツアー'}, {platform:'getyourguide', url:'https://gyg.me/FndxNOQ4', title:'バンコク発：クウェー川への歴史的な1日ツアー'}] },
   { key:["えらわんのたき","erawan waterfall","น้ำตกเอราวัณ", "エラワンのたき"], th:"น้ำตกเอราวัณ", jp:"エラワンの滝", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16223', title:'カンチャナブリーのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ZOoOeBlLyV2', title:'カンチャナブリーのホテルを探す(Trip.com)'}], pref:"カンチャナブリー県", access:"カンチャナブリー・バスターミナルからバスで移動" , tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/1LlmKkn', title:'エレファントサンクチュアリ・エラワン滝 1日ツアー'}, {platform:'klook', url:'https://affiliate.klook.com/sl/139Nk3q', title:'エラワン国立公園 滝・クウェー川 1日ツアー（カンチャナブリー）'}] },
@@ -1409,7 +1469,7 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["わっとぷらやい","big buddha pattaya","วัดพระใหญ่", "ワット プラヤイ(パタヤ ビッグブッダ)"], th:"วัดพระใหญ่", jp:"ワット・プラヤイ(パタヤ・ビッグブッダ)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=8584', title:'パタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ag6vqWWLyV2', title:'パタヤのホテルを探す(Trip.com)'}], pref:"チョンブリー県" , access:"パタヤ・バスターミナル → タクシー／Grab(配車アプリ)約15～20分" },
   { key:["こーらん","koh larn","เกาะล้าน", "ランとう"], th:"เกาะล้าน", jp:"ラン島", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=8584', title:'パタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ag6vqWWLyV2', title:'パタヤのホテルを探す(Trip.com)'}], pref:"チョンブリー県" , station:{th:"ท่าเรือบาลีไฮ", jp:"バリハイ・ピア", access:"フェリー・スピードボートで移動"}, tours:[{platform:'klook', url:'https://affiliate.klook.com/sl/HseqgS5', title:'パタヤ ラン島 半日アイランドホッピング&シュノーケリングツアー'}, {platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F87515-join-pattaya-island-tour-drone-photos-water-activities-beach-bar-chonburi&aff_label1=blog', title:'ネイチャービーチでのアクティビティ＆ドローン撮影付き パタヤ島ツアー'}] },
   { key:["こーさめっと","koh samet","เกาะเสม็ด", "サメットとう"], th:"เกาะเสม็ด", jp:"サメット島", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17222', title:'サメット島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/6u07TGiMyV2', title:'サメット島のホテルを探す(Trip.com)'}], pref:"ラヨーン県" , access:"バンコク(エカマイ・バスターミナル発)からバスで約3時間20分→バンペー港→フェリーで約25分、合計約4時間" , transport12go:[{from:"バンコク", url:"https://12go.asia/jp/travel/Bangkok/Koh-Samet/?z=16726565&sub_id=pwa_kohsamet", note:"バスによっては、出発前にバウチャーを窓口で紙チケットへ交換する必要があります。予約後のバウチャーに記載されたカウンター・乗車場所を必ず確認してください。"}] , tours:[{platform:'getyourguide', url:'https://gyg.me/YZX06Btx', title:'サメット島5島または6島シュノーケリングツアー（ランチオプション付き'}, {platform:'getyourguide', url:'https://gyg.me/UXtjDA4M', title:'パタヤ発サメット島ツアー（ディナー＆ファイヤーショー付き）'}] },
-  { key:["どーいすてーぷ","どいすてーぷ","doi suthep","ดอยสุเทพ", "ワット プラタート ドーイステープ", "วัดพระธาตุดอยสุเทพ", "วัดพระธาตุดอยสุเทพราชวรวิหาร"], th:"วัดพระธาตุดอยสุเทพ", jp:"ワット・プラタート・ドーイステープ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ市内 → ソンテウ／タクシー約40～60分" },
+  { key:["どーいすてーぷ","どいすてーぷ","doi suthep","ดอยสุเทพ", "ワット プラタート ドーイステープ", "วัดพระธาตุดอยสุเทพ"], th:"วัดพระธาตุดอยสุเทพ", jp:"ワット・プラタート・ドーイステープ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ市内 → ソンテウ／タクシー約40～60分" },
   { key:["めーりむえれふぁんとほーむ","mae rim elephant home","ปางช้างแม่ริม"], th:"ปางช้างแม่ริม", jp:"メーリムエレファントホーム", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ市内 → タクシー／Grab(配車アプリ)約40～60分" },
   { key:["めーかんぽんむら","mae kampong","แม่กำปอง", "メーカンポンむら"], th:"บ้านแม่กำปอง", jp:"メーカンポン村", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ市内 → タクシー／Grab(配車アプリ)約1時間30分～2時間" },
   { key:["わっとろんくん","white temple","วัดร่องขุ่น", "ワット ローンクン(ホワイト テンプル)"], th:"วัดร่องขุ่น", jp:"ワット・ローンクン(ホワイト・テンプル)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=4234', title:'チェンライのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/7uhbNmdAzV2', title:'チェンライのホテルを探す(Trip.com)'}], pref:"チェンライ県" , access:"チェンライ第1バスターミナル → タクシー／Grab(配車アプリ)約20～30分" , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F80270-chiangrai-white-blue-black-temple-series-fullday-tour-from-chiangmai&aff_label1=blog', title:'チェンライ ホワイトテンプル・ブラックテンプル・ブルーテンプル 1日ツアー（チェンマイ発）'}] },
@@ -1427,12 +1487,12 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["まやべい","maya bay","อ่าวมาหยา", "マヤベイ(ピピ・レイとう)"], th:"อ่าวมาหยา", jp:"マヤベイ(ピピ・レイ島)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=15878', title:'ピピ島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/CsJhaGhMyV2', title:'ピピ島のホテルを探す(Trip.com)'}], pref:"クラビ県" , access:"アオナン／ノッパラッタラー・ピア → ボートツアー" },
   { key:["ちゃうぇんびーち","chaweng beach","เฉวง", "チャウェン ビーチ(サムイ島)", "หาดเฉวง", "チャウェン・ビーチ(サムイとう)"], th:"หาดเฉวง", jp:"チャウェン・ビーチ(サムイ島)", pref:"スラータニー県" , access:"サムイ空港 → タクシー／Grab(配車アプリ)約15分" },
   { key:["じぇーむずぼんどとう","james bond island","เกาะตะปู", "ジェームズ ボンド島", "ジェームズ・ボンドとう"], th:"เกาะตะปู", jp:"ジェームズ・ボンド島", pref:"パンガー県" , access:"パンガー／アオパンガー周辺の港 → ボートツアー" , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F76625-join-in-james-bond-by-chic-chic&aff_label1=blog', title:'プーケット発：パンガー湾、ジェームズ・ボンド島、シーカヌー日帰りツアー'}, {platform:'getyourguide', url:'https://gyg.me/8svkyjNs', title:'プーケット：ジェームズボンド島の豪華サンセットクルーズ'}] },
-  { key:["watsaket","วัดสระเกศ", "ワット・サケット(おうごんのおか)", "วัดสระเกศราชวรมหาวิหาร"], th:"วัดสระเกศ", jp:"ワット・サケット(黄金の丘)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สามยอด", jp:"MRTサームヨート駅", access:"徒歩約5分"} },
+  { key:["watsaket","วัดสระเกศ", "ワット・サケット(おうごんのおか)"], th:"วัดสระเกศ", jp:"ワット・サケット(黄金の丘)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สามยอด", jp:"MRTサームヨート駅", access:"徒歩約5分"} },
   { key:["jimthompson","บ้านจิมทอมป์สัน", "じむ・とんぷそんのいえ"], th:"บ้านจิมทอมป์สัน", jp:"ジム・トンプソンの家", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สนามกีฬาแห่งชาติ", jp:"BTSナショナルスタジアム駅", access:"徒歩約5分"} },
   { key:["iconsiam","ไอคอนสยาม", "ICONSIAM(アイコンサイアム)"], th:"ไอคอนสยาม", jp:"ICONSIAM(アイコンサイアム)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"เจริญนคร", jp:"ゴールドラインチャルンナコーン駅", access:"徒歩約3分"} , tours:[] },
   { key:["centralworld","เซ็นทรัลเวิลด์", "CentralWorld(セントラルワールド)"], th:"เซ็นทรัลเวิลด์", jp:"CentralWorld(セントラルワールド)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"ชิดลม", jp:"BTSチットロム駅", access:"徒歩約5分"} , tours:[] },
   { key:["siamparagon","สยามพารากอน", "Siam Paragon(サイアムパラゴン)"], th:"สยามพารากอน", jp:"Siam Paragon(サイアムパラゴン)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สยาม", jp:"BTSサイアム駅", access:"駅直結"} , tours:[] },
-  { key:["erawanshrine","ศาลพระพรหมเอราวัณ", "エラワン廟", "エラワンびょう", "ศาลท้าวมหาพรหม"], th:"ศาลพระพรหมเอราวัณ", jp:"エラワン廟", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"ชิดลม", jp:"BTSチットロム駅", access:"徒歩約5分"} , tours:[] },
+  { key:["erawanshrine","ศาลพระพรหมเอราวัณ", "エラワン廟", "エラワンびょう"], th:"ศาลพระพรหมเอราวัณ", jp:"エラワン廟", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"ชิดลม", jp:"BTSチットロム駅", access:"徒歩約5分"} , tours:[] },
   { key:["asiatique","เอเชียทีค เดอะ ริเวอร์ฟร้อนท์", "アジアティーク ザ リバーフロント"], th:"เอเชียทีค เดอะ ริเวอร์ฟร้อนท์", jp:"アジアティーク・ザ・リバーフロント", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"สะพานตากสิน", jp:"BTSサパーンタークシン駅", access:"シャトルボート"} , tours:[{platform:'getyourguide', url:'https://gyg.me/rNQWbr39', title:'バンコクホワイトオーキッド・チャオプラヤ・ディナークルーズ ビール無料サービス'}, {platform:'getyourguide', url:'https://gyg.me/yrlDjM0k', title:'バンコクアジアティーク・スカイ・エントリー・チケット'}] },
   { key:["lumpinipark","สวนลุมพินี", "ルンピニー公園", "ルンピニーこうえん"], th:"สวนลุมพินี", jp:"ルンピニー公園", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"ลุมพินี", jp:"MRTルンピニー駅／MRTシーロム駅／BTSサラデーン駅", access:"徒歩約5〜10分"} },
   { key:["benjakitti","สวนเบญจกิติ", "ベンジャキティこうえん"], th:"สวนเบญจกิติ", jp:"ベンジャキティ公園", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , station:{th:"ศูนย์การประชุมแห่งชาติสิริกิติ์", jp:"MRTクイーンシリキット駅"} },
@@ -1444,13 +1504,13 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["watmahathat","วัดมหาธาตุ", "ワット マハタート(木の中に埋もれた仏頭)", "ワット・マハタート(きのなかにうもれたぶっとう)"], th:"วัดมหาธาตุ", jp:"ワット・マハタート(木の中に埋もれた仏頭)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , station:{th:"สถานีรถไฟอยุธยา", jp:"アユタヤ駅", access:"トゥクトゥク・タクシーで約10分"}},
   { key:["watphrasisanphet","วัดพระศรีสรรเพชญ์", "ワット プラシーサンペット"], th:"วัดพระศรีสรรเพชญ์", jp:"ワット・プラシーサンペット", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , station:{th:"สถานีรถไฟอยุธยา", jp:"アユタヤ駅", access:"トゥクトゥク・タクシーで約15分"}},
   { key:["watchaiwatthanaram","วัดไชยวัฒนาราม"], th:"วัดไชยวัฒนาราม", jp:"ワット・チャイワッタナラーム", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , station:{th:"สถานีรถไฟอยุธยา", jp:"アユタヤ駅", access:"トゥクトゥク・タクシーで約20分"}},
-  { key:["watyaichaimongkhon","วัดใหญ่ชัยมงคล", "วัดใหญ่ชัยมงคลวรวิหาร"], th:"วัดใหญ่ชัยมงคล", jp:"ワット・ヤイチャイモンコン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"アユタヤ駅 → トゥクトゥク／タクシー約10分" },
+  { key:["watyaichaimongkhon","วัดใหญ่ชัยมงคล"], th:"วัดใหญ่ชัยมงคล", jp:"ワット・ヤイチャイモンコン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"アユタヤ駅 → トゥクトゥク／タクシー約10分" },
   { key:["watlokayasutharam","วัดโลกยสุธา", "ワット・ローカヤスータ(きょだいねしゃかぶつ)"], th:"วัดโลกยสุธา", jp:"ワット・ローカヤスータ(巨大寝釈迦仏)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"アユタヤ駅 → トゥクトゥク／タクシー約15分" },
   { key:["watratchaburana","วัดราชบูรณะ"], th:"วัดราชบูรณะ", jp:"ワット・ラーチャブーラナ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , station:{th:"สถานีรถไฟอยุธยา", jp:"アユタヤ駅", access:"トゥクトゥク・タクシーで約10分"}},
   { key:["watphukhaothong","วัดภูเขาทอง", "ワット・プーカオトーン(しろいだいぶっとう)"], th:"วัดภูเขาทอง", jp:"ワット・プーカオトーン(白い大仏塔)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"アユタヤ駅 → トゥクトゥク／タクシー約15分" },
   { key:["ayutthayafloatingmarket","ตลาดน้ำอโยธยา", "アユタヤすいじょうまーけっと"], th:"ตลาดน้ำอโยธยา", jp:"アユタヤ水上マーケット", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"アユタヤ駅 → トゥクトゥク／タクシー約10～15分" , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F391-ayutthaya-historical-park-day-tour-bang-pa-in-summer-palace-ayutthaya-temples-night-market&aff_label1=blog', title:'アユタヤ必見ツアー：離宮、水上マーケット＆寺院'}, {platform:'klook', url:'https://affiliate.klook.com/sl/kZHAhJb', title:'バンコク水上マーケット＆アユタヤユネスコプライベート終日ツアー'}] },
   { key:["bangpainpalace","พระราชวังบางปะอิน", "バンパインきゅうでん"], th:"พระราชวังบางปะอิน", jp:"バンパイン宮殿", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"バーンパーイン駅 → タクシー／ソンテウ約5～10分" },
-  { key:["watniwet","วัดนิเวศธรรมประวัติ", "ワット・ニウェートタマプラワット(ごしっくようしきじいん)", "วัดนิเวศธรรมประวัติราชวรวิหาร"], th:"วัดนิเวศธรรมประวัติ", jp:"ワット・ニウェートタマプラワット(ゴシック様式寺院)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"バーンパーイン駅 → タクシー約10～15分" },
+  { key:["watniwet","วัดนิเวศธรรมประวัติ", "ワット・ニウェートタマプラワット(ごしっくようしきじいん)"], th:"วัดนิเวศธรรมประวัติ", jp:"ワット・ニウェートタマプラワット(ゴシック様式寺院)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17704', title:'アユタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/I7IIgOaAzV2', title:'アユタヤのホテルを探す(Trip.com)'}], pref:"アユタヤ県" , access:"バーンパーイン駅 → タクシー約10～15分" },
   { key:["lopburisunflower","ทุ่งทานตะวันลพบุรี", "ロッブリーひまわりはたけ"], th:"ทุ่งทานตะวันลพบุรี", jp:"ロッブリーひまわり畑", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17762', title:'ロッブリーのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/XfoWBwsBzV2', title:'ロッブリーのホテルを探す(Trip.com)'}], pref:"ロッブリー県" , access:"ロッブリー駅 → タクシー／ソンテウ約30～60分" },
   { key:["watmuang","วัดม่วง", "ワット・ムアン(タイさいだいのざぶつぞう)"], th:"วัดม่วง", jp:"ワット・ムアン(タイ最大の座仏像)", pref:"アントーン県" , access:"アントーン・バスターミナル → タクシー／ソンテウ約20～30分" },
   { key:["watsamphran","วัดสามพราน", "ワット・サムプラン(りゅうがまきつくぴんくのたわー)"], th:"วัดสามพราน", jp:"ワット・サムプラン(龍が巻き付くピンクのタワー)", pref:"ナコンパトム県" , access:"ナコンパトム駅 → タクシー／Grab(配車アプリ)約30～40分" },
@@ -1467,8 +1527,8 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["kohchang","เกาะช้าง", "チャーンとう(Koh Chang)"], th:"เกาะช้าง", jp:"チャーン島(Koh Chang)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17023', title:'チャーン島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/R1WBDmgAzV2', title:'チャーン島のホテルを探す(Trip.com)'}], pref:"トラート県" , access:"トラート・バスターミナル → ソンテウ／シャトルバス → アオタンマチャート・ピア → フェリー" },
   { key:["kohkood","เกาะกูด", "クッドとう(Koh Kood)"], th:"เกาะกูด", jp:"クッド島(Koh Kood)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=21676', title:'クッド島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/Vxoo96sBzV2', title:'クッド島のホテルを探す(Trip.com)'}], pref:"トラート県" , access:"トラート・バスターミナル → レームソック・ピア → スピードボート／フェリー" , tours:[{platform:'getyourguide', url:'https://gyg.me/EvA6rF21', title:'クッド島：バンコクからのバスとカタマラン船による移動'}] },
   { key:["kohmak","เกาะหมาก", "マークとう(Koh Mak)"], th:"เกาะหมาก", jp:"マーク島(Koh Mak)", pref:"トラート県" , access:"トラート・バスターミナル → アオニット・ピア／レームゴップ方面 → ボート" },
-  { key:["watchedi_luang_cm","วัดเจดีย์หลวง", "วัดเจดีย์หลวงวรวิหาร"], th:"วัดเจดีย์หลวง", jp:"ワット・チェディルアン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ駅 → タクシー／ソンテウ約15～20分" },
-  { key:["watphrasingh","วัดพระสิงห์", "วัดพระสิงห์วรมหาวิหาร"], th:"วัดพระสิงห์", jp:"ワット・プラシン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ駅 → タクシー／ソンテウ約15～20分" },
+  { key:["watchedi_luang_cm","วัดเจดีย์หลวง"], th:"วัดเจดีย์หลวง", jp:"ワット・チェディルアン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ駅 → タクシー／ソンテウ約15～20分" },
+  { key:["watphrasingh","วัดพระสิงห์"], th:"วัดพระสิงห์", jp:"ワット・プラシン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ駅 → タクシー／ソンテウ約15～20分" },
   { key:["watumong","วัดอุโมงค์", "ワット・ウーモン(どうくつじいん)"], th:"วัดอุโมงค์", jp:"ワット・ウーモン(洞窟寺院)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ駅 → タクシー／Grab(配車アプリ)約20～30分" },
   { key:["watsuandok","วัดสวนดอก"], th:"วัดสวนดอก", jp:"ワット・スアンドーク", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ駅 → タクシー／ソンテウ約15～20分" },
   { key:["doiinthanon","อุทยานแห่งชาติดอยอินทนนท์", "ドーイ・インタノンこくりつこうえん"], th:"อุทยานแห่งชาติดอยอินทนนท์", jp:"ドーイ・インタノン国立公園", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=7401', title:'チェンマイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/x2KUFrYLyV2', title:'チェンマイのホテルを探す(Trip.com)'}], pref:"チェンマイ県" , access:"チェンマイ・バスターミナル → タクシー／ツアー約1時間30分～2時間" },
@@ -1485,7 +1545,7 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["watsichum","วัดศรีชุม"], th:"วัดศรีชุม", jp:"ワット・シーチュム", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=12546', title:'スコータイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/WMwBJOlBzV2', title:'スコータイのホテルを探す(Trip.com)'}], pref:"スコータイ県" , access:"スコータイ・バスターミナル → ソンテウ／タクシー約25～30分" },
   { key:["watsaphanhin","วัดสะพานหิน"], th:"วัดสะพานหิน", jp:"ワット・サパーンヒン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=12546', title:'スコータイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/WMwBJOlBzV2', title:'スコータイのホテルを探す(Trip.com)'}], pref:"スコータイ県" , access:"スコータイ・バスターミナル → タクシー／レンタルバイク約25～30分" },
   { key:["sisatchanalai","อุทยานประวัติศาสตร์ศรีสัชนาลัย", "シーサッチャナーライれきしこうえん"], th:"อุทยานประวัติศาสตร์ศรีสัชนาลัย", jp:"シーサッチャナーライ歴史公園", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=12546', title:'スコータイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/WMwBJOlBzV2', title:'スコータイのホテルを探す(Trip.com)'}], pref:"スコータイ県" , access:"スコータイ・バスターミナル → バス／タクシー約1時間～1時間30分" , tours:[{platform:'getyourguide', url:'https://gyg.me/eY2vaCsk', title:'スコータイ：スコータイ＆シーサッチャナライのプライベート日帰りツアー'}, {platform:'getyourguide', url:'https://gyg.me/ryUqxjs1', title:'シー サッチャナライ＆ランプーン経由のチェンマイ移動サービス'}] },
-  { key:["watphrasrirattanamahathat","วัดพระศรีรัตนมหาธาตุ", "วัดพระศรีรัตนมหาธาตุวรมหาวิหาร", "わっとぷらしーらったなまはたーと", "wat phra si rattana mahathat", "วัดใหญ่"], th:"วัดพระศรีรัตนมหาธาตุวรมหาวิหาร", jp:"ワット・プラシーラタナマハータート", pref:"ピサヌローク県" , access:"ピサヌローク駅 → 徒歩約10～15分" },
+  { key:["watphrasrirattanamahathat","วัดพระศรีรัตนมหาธาตุ"], th:"วัดพระศรีรัตนมหาธาตุ", jp:"ワット・プラシーラタナマハータート", pref:"ピサヌローク県" , access:"ピサヌローク駅 → 徒歩約10～15分" },
   { key:["watphrathatphasonkaew","วัดพระธาตุผาซ่อนแก้ว"], th:"วัดพระธาตุผาซ่อนแก้ว", jp:"ワット・プラタート・パーソーンケーオ", pref:"ペッチャブーン県" , access:"ロムサック・バスターミナル → タクシー／Grab(配車アプリ)約30～40分" },
   { key:["phimai","อุทยานประวัติศาสตร์พิมาย", "ピマーイれきしこうえん"], th:"อุทยานประวัติศาสตร์พิมาย", jp:"ピマーイ歴史公園", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=702243', title:'ナコンラチャシマのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/LgQtwtBCzV2', title:'ナコンラチャシマのホテルを探す(Trip.com)'}], pref:"ナコンラチャシマ県" , access:"ナコンラチャシマ第2バスターミナル → バス約1時間" },
   { key:["phanomrung","อุทยานประวัติศาสตร์พนมรุ้ง", "パノムルンれきしこうえん"], th:"อุทยานประวัติศาสตร์พนมรุ้ง", jp:"パノムルン歴史公園", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=105938', title:'ブリーラムのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/fk9qpsNCzV2', title:'ブリーラムのホテルを探す(Trip.com)'}], pref:"ブリーラム県" , access:"ブリーラム・バスターミナル → タクシー／Grab(配車アプリ)約1時間" },
@@ -1496,7 +1556,7 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["raksawarinhotspring","บ่อน้ำพุร้อนรักษะวาริน", "ラークサワリンおんせん"], th:"บ่อน้ำพุร้อนรักษะวาริน", jp:"ラークサワリン温泉", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=1037', title:'ラノーンのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/MwmxnLJCzV2', title:'ラノーンのホテルを探す(Trip.com)'}], pref:"ラノーン県" , access:"ラノーン・バスターミナル → タクシー／ソンテウ約10分" },
   { key:["kohphayam","เกาะพยาม", "パヤムとう"], th:"เกาะพยาม", jp:"パヤム島", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=1037', title:'ラノーンのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/MwmxnLJCzV2', title:'ラノーンのホテルを探す(Trip.com)'}], pref:"ラノーン県" , access:"ラノーン・ピア → スピードボート／フェリー約1～2時間" },
   { key:["lamaibeach","หาดละไม", "ラマイ ビーチ(サムイ島)", "ラマイ・ビーチ(サムイとう)"], th:"หาดละไม", jp:"ラマイ・ビーチ(サムイ島)", pref:"スラータニー県" , access:"サムイ空港 → タクシー／Grab(配車アプリ)約30分" },
-  { key:["watplailaem","วัดแหลมสอ", "ワット・プライレーム(せんじゅかんのんぞう)", "วัดแหลมสุวรรณาราม", "วัดปลายแหลม", "wat laem suwannaram"], th:"วัดแหลมสุวรรณาราม", jp:"ワット・プライレーム(千手観音像)", pref:"スラータニー県" , access:"サムイ空港 → タクシー／Grab(配車アプリ)約10分" },
+  { key:["watplailaem","วัดแหลมสอ", "ワット・プライレーム(せんじゅかんのんぞう)"], th:"วัดแหลมสอ", jp:"ワット・プライレーム(千手観音像)", pref:"スラータニー県" , access:"サムイ空港 → タクシー／Grab(配車アプリ)約10分" },
   { key:["haadrin","หาดริน", "ハードリン・ビーチ(パンガンとう)"], th:"หาดริน", jp:"ハードリン・ビーチ(パンガン島)", pref:"スラータニー県" , access:"トンサラ・ピア → ソンテウ／タクシー約20～30分" },
   { key:["haadyaobottlebeach","หาดยาว／อ่าวขวด", "ハード・ヤオ／ボトル・ビーチ(パンガンとう)"], th:"หาดยาว／อ่าวขวด", jp:"ハード・ヤオ／ボトル・ビーチ(パンガン島)", pref:"スラータニー県" , access:"トンサラ・ピア → タクシー／ボート" },
   { key:["kohnangyuan","เกาะนางยวน", "ナンユアンとう"], th:"เกาะนางยวน", jp:"ナンユアン島", pref:"スラータニー県" , access:"タオ島メーハート・ピア → ロングテールボート／ボートツアー" , tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F73970-koh-tao-koh-nangyuan-koh-pha-ngan-from-samui&aff_label1=blog', title:'タオ島・ナンユアン島・パガン島 日帰りアイランドホッピングツアー（サムイ発）'}, {platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F82280-join-snorkel-tour-koh-nangyuan-hidden-bays-koh-tao-suratthani&aff_label1=blog', title:'タオ島＆ナンユアン島半日ガイド付きシュノーケリング体験'}] },
@@ -1572,7 +1632,7 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["hatyaiterminal","สถานีขนส่งหาดใหญ่ 1", "ハートヤイ(ハジャイ)だい1ばすたーみなる(なんぶさいだいのきょてん)"], th:"สถานีขนส่งหาดใหญ่ 1", jp:"ハートヤイ(ハジャイ)第1バスターミナル(南部最大の拠点)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9312', title:'ハートヤイ(ハジャイ)のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/WMAPxpsLyV2', title:'ハートヤイ(ハジャイ)のホテルを探す(Trip.com)'}], pref:"ソンクラー県" , access:"ハートヤイ(ハジャイ)駅 → タクシー約10～15分" },
   { key:["trangterminal","สถานีขนส่งตรัง", "トラン バスターミナル"], th:"สถานีขนส่งตรัง", jp:"トラン・バスターミナル", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=4682', title:'トランのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/U6k7vF3CzV2', title:'トランのホテルを探す(Trip.com)'}], pref:"トラン県" , access:"トラン駅 → タクシー約10分" },
   { key:["satunterminal","สถานีขนส่งสตูล"], th:"สถานีขนส่งสตูล", jp:"サトゥーン・バスターミナル", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17797', title:'サトゥーンのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/q2HMW2HCzV2', title:'サトゥーンのホテルを探す(Trip.com)'}], pref:"サトゥーン県" , access:"ハートヤイ(ハジャイ)・バスターミナル → ミニバス約1時間30分" },
-  { key:["suvarnabhumi","ท่าอากาศยานสุวรรณภูมิ", "スワンナプームくうこう(BKK・こくさいせんメインハブ)"], th:"ท่าอากาศยานสุวรรณภูมิ", jp:"スワンナプーム空港(BKK・国際線メインハブ)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , access:"エアポート・レール・リンク スワンナプーム空港駅 → 駅直結" },
+  { key:["suvarnabhumi","ท่าอากาศยานสุวรรณภูมิ", "スワンナプームくうこう(BKK・こくさいせんメインハブ)","すわんなぷーむこくさいくうこう","suvarnabhumi airport bkk","スワンナプーム国際空港(BKK)","สนามบินสุวรรณภูมิ","スワンナプームこくさいくうこう(BKK)"], th:"ท่าอากาศยานสุวรรณภูมิ", jp:"スワンナプーム空港(BKK・国際線メインハブ)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"サムットプラーカーン県", access:"エアポート・レール・リンク スワンナプーム空港駅 → 駅直結。バンコク市街(スクンビット周辺)からは車で約45分〜1時間", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F135611-the-coral-executive-lounge-suvarnabhumi-airport-bkk&aff_label1=blog', title:'コーラルエグゼクティブラウンジ スワンナプーム国際空港(BKK)'}, {platform:'getyourguide', url:'https://gyg.me/F57ATI3h', title:'バンコク：スワンナプーム空港ファストトラックサービス＆アシスタント'}] },
   { key:["donmueang","ท่าอากาศยานดอนเมือง", "ドンムアン空港(DMK 格安航空メインハブ)", "ドンムアンくうこう(DMK・かくやすこうくうメインハブ)"], th:"ท่าอากาศยานดอนเมือง", jp:"ドンムアン空港(DMK・格安航空メインハブ)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク" , access:"ドンムアン駅 → 徒歩／連絡通路" },
   { key:["utapao","ท่าอากาศยานอู่ตะเภา", "ウタパオこくさいくうこう(パタヤきんこう)"], th:"ท่าอากาศยานอู่ตะเภา", jp:"ウタパオ国際空港(パタヤ近郊)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=217', title:'ラヨーンのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ZF51DWuLyV2', title:'ラヨーンのホテルを探す(Trip.com)'}], pref:"ラヨーン県" , access:"パタヤ・バスターミナル → タクシー／Grab(配車アプリ)約40～50分" , tours:[{platform:'getyourguide', url:'https://gyg.me/Rkq7G2QB', title:'バンコクまたはパタヤ発のパタヤ専用車チャーター'}] },
   { key:["huahinairport","ท่าอากาศยานหัวหิน", "フアヒンくうこう"], th:"ท่าอากาศยานหัวหิน", jp:"フアヒン空港", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17019', title:'ホアヒンのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/3VYmpJjLyV2', title:'ホアヒンのホテルを探す(Trip.com)'}], pref:"プラチュアップキーリーカン県" , access:"ホアヒン市街地 → タクシー約15～20分" },
@@ -1833,7 +1893,6 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["しりまはんのっぷ", "sirimahannop", "Sirimahannopすいじょうれすとらん(シリマハノップ)"], th:"ศิริมหรรณพ", jp:"Sirimahannop水上レストラン(シリマハノップ)", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"BTSサパーンタークシン駅から無料シャトルボートでアジアティークへ(会場はアジアティーク内)", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F97271-sirimahannop-voyage-of-culinary-discovery-luxury-dining-asiatique-the-riverfront-bangkok&aff_label1=blog', title:'Sirimahannop 水上レストランダイニング体験（バンコク）'}] },
   { key:["さいもんきゃばれー", "simon cabaret phuket patong"], th:"ไซม่อน คาบาเรต์", jp:"サイモンキャバレー", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16056', title:'プーケットのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/yxTMMdZLyV2', title:'プーケットのホテルを探す(Trip.com)'}], pref:"プーケット県", access:"パトンビーチ南端に位置、パトン中心部からバイクタクシー／タクシーで約5〜10分", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F292-simon-cabaret-show-phuket&aff_label1=blog', title:'サイモンキャバレー 公演チケット（プーケット パトン）'}] },
   { key:["さむいえれふぁんとほーむ", "samui elephant home"], th:"สมุย เอเลเฟ่นท์ โฮม", jp:"サムイ エレファント ホーム", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17198', title:'サムイ島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/grFLHPvLyV2', title:'サムイ島のホテルを探す(Trip.com)'}], pref:"スラータニー県", access:"サムイ島内ナームアン地区", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F40866-elephant-feeding-experience-samui&aff_label1=blog', title:'サムイ エレファント ホーム 餌やり体験'}, {platform:'getyourguide', url:'https://gyg.me/AIGJrcY1', title:'サムイ島：エレファント ホーム サンクチュアリ エシカル ツアー 送迎付き'}] },
-  { key:["すわんなぷーむこくさいくうこう", "suvarnabhumi airport bkk", "スワンナプーム国際空港(BKK)", "สนามบินสุวรรณภูมิ", "スワンナプームこくさいくうこう(BKK)"], th:"สนามบินสุวรรณภูมิ", jp:"スワンナプーム国際空港(BKK)", pref:"サムットプラーカーン県", access:"バンコク市街(スクンビット周辺)から車で約45分〜1時間、Airport Rail Linkで市内直結", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F135611-the-coral-executive-lounge-suvarnabhumi-airport-bkk&aff_label1=blog', title:'コーラルエグゼクティブラウンジ スワンナプーム国際空港(BKK)'}, {platform:'getyourguide', url:'https://gyg.me/F57ATI3h', title:'バンコク：スワンナプーム空港ファストトラックサービス＆アシスタント'}] },
   { key:["ぶらっくまうんてんうぉーたーぱーく", "black mountain water park hua hin"], th:"แบล็คเมาน์เท่น วอเตอร์ปาร์ค", jp:"ブラックマウンテンウォーターパーク", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17019', title:'ホアヒンのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/3VYmpJjLyV2', title:'ホアヒンのホテルを探す(Trip.com)'}], pref:"プラチュアップキーリーカン県", access:"ホアヒン中心部から車で約15分(ヒンレックファイ地区)", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F3970-black-mountain-water-park-day-pass-hua-hin&aff_label1=blog', title:'ブラックマウンテンウォーターパーク 入園チケット（ホアヒン）'}] },
   { key:["さまえさんじま", "さまえさんとう", "koh samae san", "サマエサンとう"], th:"เกาะแสมสาร", jp:"サマエサン島", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=8584', title:'パタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ag6vqWWLyV2', title:'パタヤのホテルを探す(Trip.com)'}], pref:"チョンブリー県", access:"パタヤから車で約1時間(サメサン桟橋まで。桟橋から船で島へ渡ります)", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F99883-join-pattaya-nemo-island-experience-drone-photos-lunch-pattaya&aff_label1=blog', title:'サマエサン島 日帰りツアー（パタヤ発 / ドローン写真撮影・昼食付き）'}, {platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F17219-snorkeling-experience-chaung-chan-islands-pattaya&aff_label1=blog', title:'ニモの世界へ飛び込もう！パタヤ発シュノーケリング体験'}] },
   { key:["ふろーはうすばんこく", "flow house bangkok surfing"], th:"โฟลว์เฮาส์ กรุงเทพ", jp:"フローハウスバンコク", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"BTSプロンポン駅から徒歩約10〜15分(スクンビットソイ26、A Square内)", tours:[{platform:'klook', url:'https://affiliate.klook.com/redirect?aid=130894&_currency=JPY&k_site=https%3A%2F%2Fwww.klook.com%2Fja%2Factivity%2F28557-surfing-experience-bangkok&aff_label1=blog', title:'フローハウスバンコクでサーフィン体験'}] },
@@ -1868,7 +1927,7 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["うぼんらーちゃたーにー", "ubon ratchathani"], th:"อุบลราชธานี", jp:"ウボンラーチャターニー", pref:"ウボンラーチャターニー県", access:"バンコクから飛行機で約1時間10分、バスなら約10時間", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=6771', title:'ウボンラーチャターニーのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/wQlYH5NCzV2', title:'ウボンラーチャターニーのホテルを探す(Trip.com)'}] },
   { key:["ぶりーらむ", "buriram"], th:"บุรีรัมย์", jp:"ブリーラム", pref:"ブリーラム県", access:"バンコクから飛行機で約1時間、バスなら約6時間", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=105938', title:'ブリーラムのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/fk9qpsNCzV2', title:'ブリーラムのホテルを探す(Trip.com)'}] },
   { key:["ならーてぃわーと", "narathiwat"], th:"นราธิวาส", jp:"ナラーティワート", pref:"ナラーティワート県", access:"バンコクから飛行機で約1時間40分、バスなら約16時間", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=21529', title:'ナラーティワートのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/rqKA5mPCzV2', title:'ナラーティワートのホテルを探す(Trip.com)'}] },
-  { key:["watchalong", "วัดฉลอง", "วัดไชยธาราราม"], th:"วัดฉลอง", jp:"ワット・チャロン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16056', title:'プーケットのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/yxTMMdZLyV2', title:'プーケットのホテルを探す(Trip.com)'}], pref:"プーケット県", access:"プーケット市内からタクシー／Grab(配車アプリ)で約20〜30分" },
+  { key:["watchalong", "วัดฉลอง"], th:"วัดฉลอง", jp:"ワット・チャロン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16056', title:'プーケットのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/yxTMMdZLyV2', title:'プーケットのホテルを探す(Trip.com)'}], pref:"プーケット県", access:"プーケット市内からタクシー／Grab(配車アプリ)で約20〜30分" },
   { key:["nakaweekendmarket", "ตลาดนัดกลางคืนภูเก็ต"], th:"ตลาดนัดกลางคืนภูเก็ต", jp:"ナカ・ウィークエンド・マーケット", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16056', title:'プーケットのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/yxTMMdZLyV2', title:'プーケットのホテルを探す(Trip.com)'}], pref:"プーケット県", access:"プーケットタウンからタクシー／Grab(配車アプリ)で約10〜15分" },
   { key:["tigerkingdomphuket", "Tiger Kingdom Phuket"], th:"Tiger Kingdom Phuket", jp:"タイガーキングダム・プーケット", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16056', title:'プーケットのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/yxTMMdZLyV2', title:'プーケットのホテルを探す(Trip.com)'}], pref:"プーケット県", access:"パトンビーチから車／Grab(配車アプリ)で約20〜30分" },
   { key:["rachayai", "เกาะราชาใหญ่", "ラチャ・ヤイとう"], th:"เกาะราชาใหญ่", jp:"ラチャ・ヤイ島", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=16056', title:'プーケットのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/yxTMMdZLyV2', title:'プーケットのホテルを探す(Trip.com)'}], pref:"プーケット県", access:"プーケット南部の港からスピードボートで約30〜40分" },
@@ -1879,10 +1938,10 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["namuangwaterfall", "น้ำตกหน้าเมือง", "ナムアンたき"], th:"น้ำตกหน้าเมือง", jp:"ナムアン滝", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17198', title:'サムイ島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/grFLHPvLyV2', title:'サムイ島のホテルを探す(Trip.com)'}], pref:"スラータニー県", access:"サムイ島中心部から車／Grabで約30〜40分" },
   { key:["angthongmarinepark", "อุทยานแห่งชาติหมู่เกาะอ่างทอง", "アーントーンしょとうこくりつかいようこうえん"], th:"อุทยานแห่งชาติหมู่เกาะอ่างทอง", jp:"アーントーン諸島国立海洋公園", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17198', title:'サムイ島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/grFLHPvLyV2', title:'サムイ島のホテルを探す(Trip.com)'}], pref:"スラータニー県", access:"サムイ島の港からボートで約1〜2時間" },
   { key:["fullmoonparty", "Full Moon Party"], th:"Full Moon Party", jp:"フルムーンパーティー", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17402', title:'パンガン島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ybYURFcAzV2', title:'パンガン島のホテルを探す(Trip.com)'}], pref:"スラータニー県", access:"サムイ島からフェリーでパンガン島へ約30分〜1時間" },
-  { key:["wattraimit", "วัดไตรมิตรวิทยาราม", "ワット・トライミット（おうごんぶつじ）", "วัดไตรมิตรวิทยารามวรวิหาร"], th:"วัดไตรมิตรวิทยาราม", jp:"ワット・トライミット（黄金仏寺）", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTフアランポーン駅から徒歩約5分" },
-  { key:["watsuthat", "วัดสุทัศนเทพวราราม", "วัดสุทัศนเทพวรารามราชวรมหาวิหาร"], th:"วัดสุทัศนเทพวราราม", jp:"ワット・スタット", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTサームヨート駅から徒歩約10分" },
-  { key:["watbenchamabophit", "วัดเบญจมบพิตร", "ワット・ベンチャマボピット（だいりせきじいん）", "วัดเบญจมบพิตรดุสิตวนาราม", "วัดเบญจมบพิตรดุสิตวนารามราชวรวิหาร"], th:"วัดเบญจมบพิตร", jp:"ワット・ベンチャマボピット（大理石寺院）", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTサナームチャイ駅からタクシー／Grabで約15〜20分" },
-  { key:["loh prasat", "โลหะปราสาท", "วัดราชนัดดาราม", "วัดราชนัดดารามวรวิหาร"], th:"โลหะปราสาท", jp:"ローハ・プラーサート", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTサームヨート駅から徒歩約10分" },
+  { key:["wattraimit", "วัดไตรมิตรวิทยาราม", "ワット・トライミット（おうごんぶつじ）"], th:"วัดไตรมิตรวิทยาราม", jp:"ワット・トライミット（黄金仏寺）", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTフアランポーン駅から徒歩約5分" },
+  { key:["watsuthat", "วัดสุทัศนเทพวราราม"], th:"วัดสุทัศนเทพวราราม", jp:"ワット・スタット", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTサームヨート駅から徒歩約10分" },
+  { key:["watbenchamabophit", "วัดเบญจมบพิตร", "ワット・ベンチャマボピット（だいりせきじいん）"], th:"วัดเบญจมบพิตร", jp:"ワット・ベンチャマボピット（大理石寺院）", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTサナームチャイ駅からタクシー／Grabで約15〜20分" },
+  { key:["loh prasat", "โลหะปราสาท"], th:"โลหะปราสาท", jp:"ローハ・プラーサート", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTサームヨート駅から徒歩約10分" },
   { key:["giantswing", "เสาชิงช้า"], th:"เสาชิงช้า", jp:"ジャイアント・スイング", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTサームヨート駅から徒歩約10分" },
   { key:["たらーとのーい", "talat noi", "talad noi", "talatnoy", "talat noi bangkok", "ตลาดน้อย", "チャルーンクルン", "chao phraya"], th:"ตลาดน้อย", jp:"タラートノーイ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"MRTフアランポーン駅 → 徒歩約10〜15分" },
   { key:["ばんかちゃお", "bang krachao", "bangkachao", "bang kachao", "บางกระเจ้า", "バーンガジャオ"], th:"บางกระเจ้า", jp:"バンカチャオ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"サムットプラーカーン県", access:"BTSバンナー駅 → タクシー・渡し船で約20〜30分" },
@@ -1932,6 +1991,7 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["わっとぱーたーとなんぶあ", "wat pha phra that nong bua", "วัดป่าพระธาตุหนองบัว"], th:"วัดป่าพระธาตุหนองบัว", jp:"ワット・パー・タート・ノンブア", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=6771', title:'ウボンラーチャターニーのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/wQlYH5NCzV2', title:'ウボンラーチャターニーのホテルを探す(Trip.com)'}], pref:"ウボンラーチャターニー県", access:"ウボンラーチャターニー市街 → タクシー約15分" },
   { key:["さおちりあん", "sao chaliang", "เสาเฉลียง"], th:"เสาเฉลียง", jp:"サオ・チア・サン・ラカーン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=6771', title:'ウボンラーチャターニーのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/wQlYH5NCzV2', title:'ウボンラーチャターニーのホテルを探す(Trip.com)'}], pref:"ウボンラーチャターニー県", access:"パー・テーム国立公園内、ウボンラーチャターニー市街から車で約1時間30分" },
   { key:["なくるあ", "naklua", "naklua market", "นาเกลือ", "ナクルア"], th:"นาเกลือ", jp:"ナクルア", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=8584', title:'パタヤのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/ag6vqWWLyV2', title:'パタヤのホテルを探す(Trip.com)'}], pref:"チョンブリー県", access:"パタヤ・バスターミナル → タクシー約15分" },
+  { key:["わっとぷらしーらったなまはたーと", "wat phra si rattana mahathat", "วัดใหญ่"], th:"วัดพระศรีรัตนมหาธาตุวรมหาวิหาร", jp:"ワット・プラ・シー・ラッタナ・マハタート", pref:"ピサヌローク県", access:"ピサヌローク駅 → 徒歩約10〜15分" },
   { key:["うたいたーに", "uthai thani", "อุทัยธานี"], th:"อุทัยธานี", jp:"ウタイターニー", pref:"ウタイターニー県", access:"バンコクから車で約3時間30分" },
   { key:["なむとっちぇっさおのい", "nam tok chet sao noi", "saraburi", "カオ・チョンこくりつこうえん"], th:"อุทยานแห่งชาติน้ำตกเจ็ดสาวน้อย", jp:"カオ・チョン国立公園", pref:"サラブリー県", access:"バンコクから車で約2時間30分" },
   { key:["なこんなよっく", "nakhon nayok", "นครนายก"], th:"นครนายก", jp:"ナコーンナーヨック", pref:"ナコンナーヨック県", access:"バンコクから車で約1時間30分" },
@@ -1940,7 +2000,7 @@ const destinations = [  { key:["ばんこく","bangkok","กรุงเทพ",
   { key:["ぷらなこんきーりー", "phra nakhon khiri", "khao wang", "พระนครคีรี"], th:"อุทยานประวัติศาสตร์พระนครคีรี", jp:"プラ・ナコーン・キーリー", pref:"ペッチャブリー県", access:"ペッチャブリー駅 → タクシー約5分" },
   { key:["ちゃあむ", "cha-am beach", "cha am", "หาดชะอำ"], th:"หาดชะอำ", jp:"チャアム・ビーチ", pref:"ペッチャブリー県", access:"ホアヒン市街 → タクシー約20〜30分" },
   { key:["とらーと", "trat", "ตราด", "トラートきゅうしがい"], th:"ตราด", jp:"トラート旧市街", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=17023', title:'チャーン島のホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/R1WBDmgAzV2', title:'チャーン島のホテルを探す(Trip.com)'}], pref:"トラート県", access:"トラート・バスターミナル → 徒歩約10分" },
-  { key:["わっとぼーうぉーん", "wat bowonniwet", "วัดบวรนิเวศ", "วัดบวรนิเวศราชวรวิหาร"], th:"วัดบวรนิเวศวิหาร", jp:"ワット・ボーウォーンニウェート", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"カオサン通り → 徒歩約5分" },
+  { key:["わっとぼーうぉーん", "wat bowonniwet", "วัดบวรนิเวศ"], th:"วัดบวรนิเวศวิหาร", jp:"ワット・ボーウォーンニウェート", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"カオサン通り → 徒歩約5分" },
   { key:["さいあむすくえあ", "siam square", "สยามสแควร์"], th:"สยามสแควร์", jp:"サイアム・スクエア", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=9395', title:'バンコクのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/i0v8ACOLyV2', title:'バンコクのホテルを探す(Trip.com)'}], pref:"バンコク", access:"BTSサイアム駅 → 駅直結" },
   { key:["ぱーいきゃにおん", "pai canyon", "kong lan", "กองแลน"], th:"กองแลน", jp:"パーイ・キャニオン", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=78905', title:'パーイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/zDj4qGeAzV2', title:'パーイのホテルを探す(Trip.com)'}], pref:"メーホンソーン県", access:"パーイ・バスターミナル → タクシー約10分" },
   { key:["めーほんそーんるーぷ", "mae hong son loop", "แม่ฮ่องสอน"], th:"เส้นทางแม่ฮ่องสอน", jp:"メーホンソーン・ループ", hotels:[{platform:'agoda', url:'https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1886448&city=78905', title:'パーイのホテルを探す(Agoda)'}, {platform:'trip', url:'https://www.trip.com/t/zDj4qGeAzV2', title:'パーイのホテルを探す(Trip.com)'}], pref:"メーホンソーン県", access:"チェンマイ発の周遊ルート(車・バイクで数日かけて周遊)" },
@@ -1977,6 +2037,10 @@ const transportItems = [
   {mode:'densha', base:"ระหว่างทางต้องเปลี่ยนรถไหม", type:'q', jp:"途中で乗り換えはありますか？"},
   {mode:'densha', base:"ต้องเปลี่ยนรถที่ไหน", type:'q', jp:"乗り換えはどこですか？"},
   {mode:'densha', base:"ตอนเปลี่ยนรถต้องซื้อตั๋วใหม่ไหม", type:'q', jp:"乗り換え時にチケットを再度購入する必要がありますか？"},
+  {mode:'densha', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+  {mode:'densha', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+  {mode:'densha', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+  {mode:'densha', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
   {mode:'tetsudo', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'tetsudo', base:"ซื้อตั๋วได้ที่ไหน", type:'q', jp:"乗車券はどこで買えますか？"},
   {mode:'tetsudo', base:"ต้องไปช่องไหน", type:'q', jp:"どの窓口に行けばいいですか？"},
@@ -2024,11 +2088,11 @@ const transportItems = [
   {mode:'tuktuk', base:"จะรีบกลับมา รอตรงนี้แป๊บนึงได้ไหม", type:'q', jp:"直ぐに戻るのでここで少し待ってもらえますか？"},
   {mode:'tuktuk', base:"พวกเรามี {N} คน นั่งคันเดียวได้ไหม", type:'q', jp:"{N}人ですが、1台に乗れますか？", peopleInput:true},
   {mode:'songthaew', base:"สองแถวคันนี้ไป {DEST} ไหม", type:'q', jp:"このソンテウは{DEST}へ行きますか？", destInsert:true},
-  {mode:'songthaew', base:"ผมอยากไป {DEST} ต้องขึ้นสองแถวคันไหน", type:'q', jp:"{DEST}へ行きたいのですが、どのソンテウに乗ればいいですか？", destInsert:true},
+  {mode:'songthaew', base:"อยากไป {DEST} ต้องขึ้นสองแถวคันไหน", type:'q', jp:"{DEST}へ行きたいのですが、どのソンテウに乗ればいいですか？", destInsert:true},
   {mode:'songthaew', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'songthaew', base:"อยากนั่งสองแถว ต้องขึ้นยังไง", type:'q', jp:"ソンテウに乗りたいのですが、どうやって乗りますか？"},
   {mode:'songthaew', base:"ที่ขึ้นสองแถวอยู่ที่ไหน", type:'q', jp:"ソンテウ乗り場はどこですか？"},
-  {mode:'songthaew', base:"ผมอยากลงแถวนี้ ต้องทำยังไง", type:'q', jp:"この辺で降りたいのですが、どうすればいいですか？"},
+  {mode:'songthaew', base:"อยากลงแถวนี้ ต้องทำยังไง", type:'q', jp:"この辺で降りたいのですが、どうすればいいですか？"},
   {mode:'songthaew', base:"ต้องกดปุ่มไหนถึงจะจอด", type:'q', jp:"どのボタンを押せば止まりますか？"},
   {mode:'songthaew', base:"เหมาคันได้ไหม {H} ชั่วโมง", type:'q', jp:"{H}時間チャーターは可能ですか？", hourInput:true},
   {mode:'songthaew', base:"ไป-กลับได้ไหม", type:'q', jp:"往復の利用可能ですか？"},
@@ -2059,6 +2123,10 @@ const transportItems = [
   {mode:'plane', base:"เลานจ์ของสายการบิน {AIRLINE} อยู่ที่ไหน", type:'q', jp:"{AIRLINE}のラウンジはどこですか？", airlineInput:true, loungeAirline:true},
   {mode:'plane', base:"เลานจ์ที่ใช้ Priority Pass ได้อยู่ที่ไหน", type:'q', jp:"プライオリティパスの使えるラウンジの場所はどこですか？"},
   {mode:'plane', base:"ห้องสูบบุหรี่อยู่ที่ไหน", type:'q', jp:"喫煙所はどこですか？"},
+  {mode:'plane', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+  {mode:'plane', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+  {mode:'plane', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+  {mode:'plane', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
   {mode:'ferry', base:"เรือลำนี้ไป {DEST} ไหม", type:'q', jp:"この船は{DEST}へ行きますか？", destInsert:true},
   {mode:'ferry', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'ferry', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
@@ -2069,15 +2137,23 @@ const transportItems = [
   {mode:'ferry', base:"เรือลำต่อไปกี่โมง", type:'q', jp:"次の船は何時ですか？", timeAnswer:true},
   {mode:'ferry', base:"ถึงที่หมายใช้เวลาเท่าไหร่", type:'q', jp:"到着までどのくらいの時間がかかりますか？", numberAnswer:{unit:'นาที', position:'suffix', jpy:false, unitJp:'分'}},
   {mode:'ferry', base:"มีเสื้อชูชีพไหม", type:'q', jp:"救命胴衣はありますか？"},
-  {mode:'other', base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
-  {mode:'other', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
-  {mode:'other', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
-  {mode:'other', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+  {mode:'guide', base:"ตรงนี้คือที่ไหน", type:'q', jp:"ここはどこですか？"},
+  {mode:'guide', base:"เดินไปทางไหน", type:'q', jp:"どちらの方向に歩けばいいですか？"},
+  {mode:'guide', base:"ควรทำอย่างไรดี", type:'q', jp:"どうしたらいいですか？"},
+  {mode:'guide', base:"หลงทาง", type:'s', jp:"道に迷いました"},
+  {mode:'guide', base:"ทางนี้ใช่ไหม", type:'q', jp:"こちらの方向で合っていますか？"},
+  {mode:'guide', base:"ไปทางนี้ใช่ไหม", type:'q', jp:"こちらへ行けばいいですか？"},
+  {mode:'guide', base:"ทางนี้ไปได้ไหม", type:'q', jp:"こちらから行けますか？"},
+  {mode:'guide', base:"เดินไปได้ไหม", type:'q', jp:"歩いて行けますか？"},
+  {mode:'guide', base:"มาถูกทางไหม", type:'q', jp:"道は合っていますか？"},
+  {mode:'guide', base:"ต้องข้ามถนนไหม", type:'q', jp:"道路を渡りますか？"},
+  {mode:'guide', base:"ต้องเลี้ยวไหม", type:'q', jp:"曲がりますか？"},
+  {mode:'guide', base:"ไกลไหม", type:'q', jp:"遠いですか？"},
   {mode:'other', base:"อยากเช่ารถยนต์ {D} วัน", type:'s', jp:"車を{D}日間借りたいです", dayInput:true},
   {mode:'other', base:"อยากเช่ามอเตอร์ไซค์ {D} วัน", type:'s', jp:"バイクを{D}日間借りたいです", dayInput:true},
 ];
-const modeMeta = { bus:{icon:'bus2', label:'バス'}, densha:{icon:'train2', label:'電車'}, tetsudo:{icon:'tetsudo', label:'鉄道'}, taxi:{icon:'taxi2', label:'タクシー'}, tuktuk:{icon:'tuktuk2', label:'トゥクトゥク'}, songthaew:{icon:'songthaew2', label:'ソンテウ'}, rotu:{icon:'rotu', label:'ロットゥー'}, plane:{icon:'plane', label:'飛行機'}, ferry:{icon:'ferry', label:'船'}, other:{icon:'pin', label:'その他'} };
-const TRANSPORT_MODE_ORDER = ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','other'];
+const modeMeta = { bus:{icon:'mode_bus', label:'バス'}, densha:{icon:'mode_densha', label:'電車'}, tetsudo:{icon:'mode_tetsudo', label:'鉄道'}, taxi:{icon:'mode_taxi', label:'タクシー'}, tuktuk:{icon:'mode_tuktuk', label:'トゥクトゥク'}, songthaew:{icon:'mode_songthaew', label:'ソンテウ'}, rotu:{icon:'mode_rotu', label:'ロットゥー'}, plane:{icon:'mode_plane', label:'飛行機'}, ferry:{icon:'mode_ferry', label:'船'}, guide:{icon:'mode_guide', label:'道案内'}, other:{icon:'pin', label:'その他'} };
+const TRANSPORT_MODE_ORDER = ['bus','densha','tetsudo','taxi','tuktuk','songthaew','rotu','plane','ferry','guide','other'];
 function metaIconHtml(meta){
   return ICON_DATA[meta.icon] ? iconSvg(meta.icon, 48) : meta.icon;
 }
@@ -2103,8 +2179,8 @@ const nearby = [
 ];
 
 const situations = [
-  { icon:"taxi", title:"移動する", color:"var(--teal)", count:"44", sample:"バス・タクシー・電車など", phrases:[] },
-  { icon:"hotel", title:"ホテルにチェックインする", color:"var(--marigold)", count:"33", sample:"チェックイン・部屋の不具合など", phrases:[
+  { icon:"sit_transport", title:"移動する", color:"#9C6511", count:"136", sample:"バス・タクシー・電車など", phrases:[] },
+  { icon:"sit_hotel", title:"ホテルにチェックインする", color:"#CA2156", count:"35", sample:"チェックイン・部屋の不具合など", phrases:[
     {base:"ต้องการเช็คอิน", type:'s', jp:"チェックインをお願いします"},
     {base:"กี่โมงต้องเช็คเอาท์", type:'q', jp:"チェックアウトは何時ですか？", timeAnswer:true},
     {base:"เช็คอินกี่โมง", type:'q', jp:"チェックインは何時ですか？", timeAnswer:true},
@@ -2125,12 +2201,14 @@ const situations = [
     {base:"ช่วยแนะนำร้านอาหารหน่อย", type:'s', jp:"おすすめのレストランを教えてください"},
     {base:"มีที่จอดรถไหม", type:'q', jp:"駐車場はありますか？"},
     {base:"ใช้ที่จอดรถได้ไหม", type:'q', jp:"駐車場を利用する事は可能ですか？"},
-    {base:"สระว่ายน้ำเปิดกี่โมงถึงกี่โมง", type:'q', jp:"プールは何時から何時まで利用可能ですか？"},
-    {base:"ฟิตเนสเปิดกี่โมงถึงกี่โมง", type:'q', jp:"ジムは何時から何時まで利用可能ですか？"},
+    {base:"สระว่ายน้ำเปิดกี่โมงถึงกี่โมง", type:'q', jp:"プールは何時から何時まで利用可能ですか？", timeRangeAnswer:true},
+    {base:"ฟิตเนสเปิดกี่โมงถึงกี่โมง", type:'q', jp:"ジムは何時から何時まで利用可能ですか？", timeRangeAnswer:true},
     {base:"แถวนี้มีตลาดนัดกลางคืนไหม", type:'q', jp:"近くにナイトマーケットはありますか？"},
     {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
     {base:"จ่ายเงินตอนจองแล้ว", type:'s', jp:"予約時に支払い済みです"},
     {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+    {base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+    {base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
     {base:"ห้องอยู่ชั้นไหน", type:'q', jp:"部屋は何階ですか？"},
     {base:"ขอเปลี่ยนห้องได้ไหม", type:'q', jp:"部屋を変えていただけますか？"},
     {base:"เสียงดังมาก", type:'s', jp:"騒音がひどいです"},
@@ -2139,10 +2217,14 @@ const situations = [
     {base:"มีแมลงหรือจิ้งจก", type:'s', jp:"虫やトカゲがいます"},
     {base:"ได้พักอย่างสบายมาก ขอบคุณมากค่ะ", type:'s', jp:"とても快適に過ごすことができ大変お世話になりました"},
   ]},
-  { icon:"bowl", title:"レストラン・屋台で注文する", color:"var(--pink)", count:"25", sample:"注文・辛さ調整・会計など", phrases:[
+  { icon:"sit_restaurant", title:"レストラン・屋台で注文する", color:"#793F8D", count:"34", sample:"注文・辛さ調整・会計など", phrases:[
     {base:"ขอเมนูหน่อย", type:'s', jp:"メニューをください"},
     {base:"อันนี้เผ็ดไหม", type:'q', jp:"これは辛いですか？"},
     {base:"เก็บเงินด้วย", type:'s', jp:"お会計お願いします"},
+    {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+    {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+    {base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+    {base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
     {base:"มีอะไรแนะนำไหม", type:'q', jp:"おすすめはどれですか？"},
     {base:"ไม่ใส่พริก", type:'s', jp:"唐辛子を入れないでください"},
     {base:"ไม่ใส่ผักชี", type:'s', jp:"パクチーを入れないでください"},
@@ -2164,9 +2246,25 @@ const situations = [
     {base:"ขอหลอดหน่อย", type:'q', jp:"ストローをもらえますか？"},
     {base:"ขอน้ำแข็งด้วย", type:'s', jp:"氷をください(飲み物を注文する時)"},
     {base:"วันไหนหยุด", type:'q', jp:"何曜日が店休日ですか？"},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？", timeAnswer:true},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？", timeAnswer:true},
     {base:"เมนูนี้เรียกว่าอะไร", type:'q', jp:"これは何という料理ですか？"},
+    {base:"อร่อยมาก ขอบคุณ", type:'s', jp:"美味しかったです、ありがとうございました"},
+    {base:"อร่อยสุดๆเลย", type:'s', jp:"めちゃくちゃ美味しかったです"},
+    {base:"จะกลับมาอีก", type:'s', jp:"また来ます"},
   ]},
-  { icon:"bag", title:"市場で買い物する", color:"var(--teal-deep)", count:"17", sample:"値段交渉・サイズ・会計など", phrases:[
+  { icon:"sit_foodcourt", title:"フードコート", color:"#9C6511", count:"9", sample:"チャージ・注文・返却など", phrases:[
+    {base:"เติมเงินให้หน่อย {NUM} บาท", type:'s', jp:"{NUM}バーツチャージしてください", numInput:{defaultVal:100, placeholder:"例:500"}},
+    {base:"เอาอันนี้", type:'s', jp:"これください"},
+    {base:"เอาอันนี้ {NUM} อัน", type:'s', jp:"これを{NUM}個ください", numInput:{defaultVal:1, placeholder:"例:3"}},
+    {base:"เอาหมายเลข {NUM}", type:'s', jp:"これください(番号で注文:{NUM}番)", numInput:{defaultVal:1, placeholder:"例:5"}},
+    {base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+    {base:"ช้อนกับส้อมอยู่ที่ไหน", type:'q', jp:"スプーンとフォークはどこにありますか？"},
+    {base:"เอาจานไปคืนที่ไหน", type:'q', jp:"食器はどこに返せばいいですか？"},
+    {base:"นั่งตรงนี้ได้ไหม", type:'q', jp:"ここに座ってもいいですか？"},
+    {base:"ขอเงินคืนด้วย", type:'s', jp:"払い戻しをお願いします"},
+  ]},
+  { icon:"sit_market", title:"市場で買い物する", color:"#CA2156", count:"23", sample:"値段交渉・サイズ・会計など", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
     {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true, modes:priceModes}},
     {base:"ลดได้ไหม", type:'q', jp:"安くなりますか？"},
@@ -2175,17 +2273,46 @@ const situations = [
     {base:"มีไซส์เล็กกว่านี้ไหม", type:'q', jp:"もっと小さいサイズはありますか？"},
     {base:"ลองได้ไหม", type:'q', jp:"試着してもいいですか？"},
     {base:"เอาอันนี้", type:'s', jp:"これをください"},
+    {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+    {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+    {base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+    {base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
     {base:"ขอคิดดูก่อน", type:'s', jp:"少し考えさせてください"},
     {base:"เดี๋ยวมาใหม่", type:'s', jp:"また後で来ます"},
     {base:"ซื้อหลายชิ้น ช่วยลดราคาหน่อย", type:'s', jp:"複数購入するので値引きしてください"},
     {base:"อยากซื้อหลายชิ้น มีของเหลือกี่ชิ้น", type:'q', jp:"複数購入したいのですが在庫はいくつありますか？"},
     {base:"ขอถุงด้วย", type:'s', jp:"袋をください"},
     {base:"เปิดถึงกี่โมง", type:'q', jp:"何時まで営業していますか？", timeAnswer:true},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？", timeAnswer:true},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？", timeAnswer:true},
     {base:"วันไหนหยุด", type:'q', jp:"何曜日が店休日ですか？"},
     {base:"มีไซส์อื่นไหม", type:'q', jp:"他のサイズはありますか？"},
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
   ]},
-  { icon:"cross", title:"薬局・コンビニで薬を買う", color:"var(--teal-deep)", count:"11", sample:"症状の伝え方・薬の相談など", phrases:[
+  { icon:"sit_massage", title:"マッサージ", color:"#793F8D", count:"21", sample:"タイ・フット・オイル、強さ調整、会計など", phrases:[
+    {base:"ขอนวดไทย {DURATION} นาที", type:'s', jp:"タイマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
+    {base:"ขอนวดเท้า {DURATION} นาที", type:'s', jp:"フットマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
+    {base:"ขอนวดน้ำมัน {DURATION} นาที", type:'s', jp:"オイルマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},
+    {base:"มีอะไรแนะนำไหม", type:'q', jp:"おすすめはどれですか？"},
+    {base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
+    {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+    {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+    {base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+    {base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+    {base:"เป็นรอยช้ำง่าย ขอเบาๆหน่อย", type:'s', jp:"痣ができやすいので弱めでお願いします"},
+    {base:"เมื่อยมาก ขอแรงๆหน่อย", type:'s', jp:"体が疲れてるので強めでお願いします"},
+    {base:"เจ็บ", type:'s', jp:"痛いです"},
+    {base:"จั๊กจี้", type:'s', jp:"くすぐったいです"},
+    {base:"ขอโทษนะ มีธุระต้องไป ขอหยุดแค่นี้ก่อนได้ไหม", type:'q', jp:"すみませんが予定があるのでもう終わりにしてください"},
+    {base:"ขอต่อเวลาอีก {DURATION} นาทีได้ไหม", type:'q', jp:"あと{DURATION}分延長できますか？", durationOptions:[30,60,90,120]},
+    {base:"ผ่อนคลายมาก", type:'s', jp:"リラックスできました"},
+    {base:"ขอบคุณมาก", type:'s', jp:"ありがとうございました"},
+    {base:"ขอทราบชื่อได้ไหม", type:'q', jp:"お名前を伺ってもよろしいでしょうか？"},
+    {base:"อยากมาอีก จองคิวได้ไหม", type:'q', jp:"またお願いしたいのですが予約は可能ですか？"},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？", timeAnswer:true},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？", timeAnswer:true},
+  ]},
+  { icon:"sit_pharmacy", title:"薬局・コンビニで薬を買う", color:"#9C6511", count:"28", sample:"症状の伝え方・薬の相談など", phrases:[
     {base:"ปวดหัว", type:'s', jp:"頭が痛いです"},
     {base:"เป็นไข้", type:'s', jp:"熱があります"},
     {base:"น้ำมูกไหล", type:'s', jp:"鼻水が出ます"},
@@ -2196,40 +2323,36 @@ const situations = [
     {base:"เจ็บคอ", type:'s', jp:"喉が痛いです"},
     {base:"ไอ", type:'s', jp:"咳が出ます"},
     {base:"ปวดท้อง", type:'s', jp:"お腹が痛いです"},
+    {base:"ปวดฟัน", type:'s', jp:"歯が痛いです"},
+    {base:"โดนยุงกัด คันมาก", type:'s', jp:"蚊に刺されて痒いです"},
     {base:"มีแผ่นแปะแก้ปวดกล้ามเนื้อไหม", type:'q', jp:"筋肉痛用の張り薬(湿布)はありますか？"},
     {base:"มียานอนหลับไหม", type:'q', jp:"睡眠導入剤はありますか？"},
+    {base:"มีสเปรย์กันแมลงไหม", type:'q', jp:"虫よけスプレーはありますか？"},
+    {base:"มียาหยอดตาไหม", type:'q', jp:"目薬はありますか？"},
+    {base:"มียาแก้หวัดไหม", type:'q', jp:"風邪薬はありますか？"},
+    {base:"มียาลดไข้ไหม", type:'q', jp:"解熱剤はありますか？"},
+    {base:"มีผ้าพันแผลไหม", type:'q', jp:"包帯はありますか？"},
+    {base:"มีพลาสเตอร์ปิดแผลไหม", type:'q', jp:"絆創膏はありますか？"},
+    {base:"มียาฆ่าเชื้อไหม", type:'q', jp:"消毒液はありますか？"},
+    {base:"ควรกินยาตัวไหน", type:'q', jp:"どの薬を飲めばいいですか？"},
+    {base:"รับบัตรเครดิตไหม", type:'q', jp:"クレジットカードは使えますか？"},
+    {base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
+    {base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
+    {base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+    {base:"ร้านนี้เปิดกี่โมง", type:'q', jp:"このお店のオープンは何時ですか？", timeAnswer:true},
+    {base:"ร้านนี้ปิดกี่โมง", type:'q', jp:"このお店のクローズは何時ですか？", timeAnswer:true},
   ]},
-  { icon:"compass", title:"道をたずねる", color:"var(--teal)", count:"4", sample:"場所・行き方をたずねる", phrases:[
-    {base:"ตรงนี้คือที่ไหน", type:'q', jp:"ここはどこですか？"},
-    {base:"เดินไปทางไหน", type:'q', jp:"どちらの方向に歩けばいいですか？"},
-    {base:"ควรทำอย่างไรดี", type:'q', jp:"どうしたらいいですか？"},
-    {base:"หลงทาง", type:'s', jp:"道に迷いました"},
-  ]},
-  { icon:"hand", title:"助けを求める", color:"var(--pink-deep)", count:"24", sample:"急病・けが・トラブル時の一言", phrases:[
+  { icon:"sit_help", title:"助けを求める", color:"var(--pink-deep)", count:"10", sample:"急病・けが・トラブル時の一言", phrases:[
     {base:"ช่วยด้วย", type:'s', jp:"助けてください"},
     {base:"โทรเรียกตำรวจได้ไหม", type:'q', jp:"警察を呼んでもらえますか？"},
     {base:"บาดเจ็บ", type:'s', jp:"怪我をしました"},
     {base:"เรียกรถพยาบาลได้ไหม", type:'q', jp:"救急車を呼んでもらえますか？"},
     {base:"อยากไปโรงพยาบาล ควรทำยังไงดี", type:'q', jp:"病院に行きたいのですがどうすればいいですか？"},
-    {base:"ปวดหัว", type:'s', jp:"頭が痛いです"},
-    {base:"ปวดท้อง", type:'s', jp:"お腹が痛いです"},
-    {base:"ควรกินยาตัวไหน", type:'q', jp:"どの薬を飲めばいいですか？"},
-    {base:"ปวดฟัน", type:'s', jp:"歯が痛いです"},
     {base:"เหมือนข้อเท้าแพลง", type:'s', jp:"捻挫したようです"},
     {base:"เหมือนนิ้วซ้น", type:'s', jp:"つき指したようです"},
-    {base:"มีผ้าพันแผลไหม", type:'q', jp:"包帯はありますか？"},
-    {base:"มีพลาสเตอร์ปิดแผลไหม", type:'q', jp:"絆創膏はありますか？"},
-    {base:"มียาฆ่าเชื้อไหม", type:'q', jp:"消毒液はありますか？"},
     {base:"โดนหมากัด", type:'s', jp:"犬に嚙まれました"},
     {base:"โดนลิงกัด", type:'s', jp:"猿に噛まれました"},
     {base:"โดนแมวกัด", type:'s', jp:"猫に噛まれました"},
-    {base:"โดนยุงกัด คันมาก", type:'s', jp:"蚊に刺されて痒いです"},
-    {base:"มีสเปรย์กันแมลงไหม", type:'q', jp:"虫よけスプレーはありますか？"},
-    {base:"มียาหยอดตาไหม", type:'q', jp:"目薬はありますか？"},
-    {base:"เจ็บคอ", type:'s', jp:"喉が痛いです"},
-    {base:"มียาแก้หวัดไหม", type:'q', jp:"風邪薬はありますか？"},
-    {base:"มียาลดไข้ไหม", type:'q', jp:"解熱剤はありますか？"},
-    {base:"มีไข้", type:'s', jp:"熱があります"},
   ]},
 ];
 
@@ -2597,6 +2720,7 @@ const PROC_MONEY_ITEMS = [
       "引き出し回数をまとめる(滞在中1〜2回にする)ことで、220バーツ×回数のロスを抑えられる",
       "⚠️タイのATMは日本と逆で、現金が先に出てカードは後から返却される仕様。現金だけ受け取ってカードを取り忘れる事例が多いので要注意",
       "カードを抜き取らずに一定時間放置すると、盗難防止のためカードがATM内に取り込まれてしまい、取り出すのに大きな手間と時間がかかる",
+      "<details class=\"proc-inline-fold\"><summary>カードが取り込まれてしまった時は</summary><div class=\"proc-inline-fold-body\">まずは慌てずに、以下の情報をメモや写真で記録しておきましょう。<ul><li>ATMを利用した時間</li><li>ATMの端末番号</li><li>取引金額</li></ul>その後、利用した銀行の支店に連絡し、規定の手続きに沿ってカード返却を申請する必要があります。空港では、ツーリストポリスが手続きを手伝ってくれたという情報もあります。</div></details>",
       "心配な場合は、銀行の支店窓口のすぐ横にあるATMを優先的に使うと安心。万一トラブルが起きても近くに銀行スタッフがいて、すぐに対応してもらいやすい",
     ],
     note:"目安: 短期・少額の旅行なら両替の手軽さで十分。1週間以上の滞在やまとまった金額が必要なら、レート面でATM引き出しが有利になりやすいです。",
@@ -2622,7 +2746,7 @@ const PROC_MONEY_ITEMS = [
       "「自動付帯」: カードを持っているだけで保険が有効になるタイプ(支払いに使う必要なし)",
       "複数枚のカードを持っていると、それぞれの補償額が合算される「補償の上乗せ」ができる場合もある",
       "楽天プレミアムカードは「自動付帯」なので、持っているだけで保険が有効。スマホやカメラを盗まれた、スーツケースが破損した、現地の病院で治療を受けた、といった場面でも補償の対象になり得る",
-      "プライオリティ・パスも付帯していて、国内海外含め1,900以上のラウンジを年5回まで無料利用できる",
+      "プライオリティ・パスも付帯していて、海外空港ラウンジを年5回まで無料利用できる",
     ],
     linksLabel:"🔗 詳しく見る",
     links:[{ label:"楽天プレミアムカード", url:"https://a.r10.to/hFO1f2" }],
@@ -2786,7 +2910,7 @@ const PROC_MANNER_EXTRA_ITEMS = [
       "【タクシーの選び方】通りを走っているタクシーを止め、ドアを開けたまま乗り込む前に行き先を告げる。ドライバーがOKサインや行く意思を見せたら乗車。このタイプはほとんどがメーター使用タクシー(初乗り35バーツ前後が目安)",
       "行き先を告げた時点で「200バーツ」のように金額提示された場合はメーター不使用タクシー。金額的に気にならなくても、後で料金トラブルになりやすいのでおすすめしない。次のタクシーを待つか、Grab配車アプリを利用するのが安全",
       "【親切な声かけ】「今日は寺が閉まってる」「特別なセールをやってる」などと親切に話しかけ、宝石店やスーツ店に誘導する詐欺(いわゆるGem Scam)が定番。見知らぬ人からの急な提案にはついていかない",
-      "【お金を見せて詐欺】観光客の多いエリアで、外国人(中東系の人物を含む)が日本人を狙って声をかけ、お金や貴重品を見せるよう仕向けてくるケースが報告されている。求められても人前で財布やお金を見せない",
+      "【お金を見せる詐欺】観光客の多いエリアで、外国人(中東系の人物を含む)が日本人を狙って声をかけ、お金や貴重品を見せるよう仕向けてくるケースが報告されている。求められても人前で財布やお金を見せない",
     ],
     note:"「怪しいな」と思ったら、はっきり断ってその場を離れるのが一番の対策です。" },
   { title:"水道水・氷・トイレの注意点", category:"生活インフラ", sub:"水道水は飲めない、トイレットペーパーは流せないなど", ready:true,
@@ -2808,6 +2932,16 @@ const PROC_MANNER_EXTRA_ITEMS = [
       "【不要な場面】コンビニ・スーパー・市場・屋台などでは基本的にチップは不要",
     ],
     note:"迷ったら「サービス料が会計に含まれているかどうか」を確認するのが一番の目安です。おつりをそのまま渡す場面以外でチップを渡す時は、コインではなく紙幣で渡すのが一般的。金額が50バーツ程度でも、紙幣で渡す方が感謝の気持ちが伝わりやすいです。" },
+  { title:"タイ暦(仏暦)の表示", category:"生活・慣習", sub:"西暦+543年で表示される、レシートや賞味期限の見方", ready:true,
+    lead:"タイでは西暦(ค.ศ.)よりも仏暦(พ.ศ.)が日常的に使われています。レシートや賞味期限の年号が妙に大きくて「え、未来?」と驚くことがありますが、単に暦の数え方が違うだけなので安心してください。",
+    bullets:[
+      "仏暦は西暦+543年で表示される(例:西暦2026年 → 仏暦2569年)",
+      "レシート・領収書の日付、食品や薬の賞味期限・使用期限、パスポート以外の公的書類などで仏暦表示がよく使われる",
+      "西暦に戻したい時は、表示されている年から543を引けばOK(例:2569 − 543 = 2026)",
+      "商品パッケージによっては西暦(ค.ศ.)と仏暦(พ.ศ.)が併記されていることもある",
+      "会話やSNS上では西暦が使われることも多く、仏暦は主に公的・商業的な書類でよく見かける、というイメージ",
+    ],
+    note:"賞味期限などで「随分先の日付だな」と思ったら、まず仏暦を疑って543引いてみてください。" },
   { title:"緊急連絡先一覧", category:"緊急時の備え", sub:"警察・救急車・大使館の番号をまとめて確認", ready:true,
     lead:"いざという時、番号だけサッと確認できるようにまとめました。",
     phoneRows:[
@@ -2956,6 +3090,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
     const osBadgeHtml = it.os ? `<span class="proc-os-badge ${it.os}">${it.os === 'ios' ? 'iPhone専用' : 'Android専用'}</span>` : '';
     const prBadgeHtml = it.pr ? `<span class="proc-pr-badge">PR</span>` : '';
     const leadHtml = it.lead ? `<div class="proc-manner-lead">${it.lead}</div>` : '';
+    const customHtml = it.customHtml || '';
     const bodyInner = `${imageHtml}${leadHtml}
         ${bulletsHtml}
         ${paraHtml}
@@ -2966,6 +3101,7 @@ function buildAccordionItemsHtml(items, idPrefix, alwaysOpen){
         ${infoRowsHtml}
         ${phoneRows2Html}
         ${bullets2Html}
+        ${customHtml}
         ${noteHtml}
         ${sourceHtml}`;
     if(alwaysOpen){
@@ -3042,6 +3178,72 @@ function openProcApps(){
 function closeProcApps(){
   document.getElementById('procAppsScreen').classList.remove('show');
 }
+const THAI_DAY_COLORS = [
+  {day:'日曜日', color:'赤', hex:'#E23F73'},
+  {day:'月曜日', color:'黄色', hex:'#F5C518'},
+  {day:'火曜日', color:'ピンク', hex:'#F48FB1'},
+  {day:'水曜日', color:'緑(昼生まれ)', hex:'#4CAF50'},
+  {day:'木曜日', color:'オレンジ', hex:'#FF9800'},
+  {day:'金曜日', color:'青・水色', hex:'#29B6F6'},
+  {day:'土曜日', color:'紫', hex:'#9C27B0'},
+];
+function calcBirthdayColor(){
+  const input = document.getElementById('birthdayInput');
+  const resultEl = document.getElementById('birthdayResult');
+  const raw = input.value.trim();
+  if(!raw){
+    resultEl.innerHTML = `<div class="birthday-result-empty">生年月日を数字8桁で入力してください(例:19870926)</div>`;
+    return;
+  }
+  if(!/^\d{8}$/.test(raw)){
+    resultEl.innerHTML = `<div class="birthday-result-empty">数字8桁で入力してください(例:19870926 → 1987年9月26日)</div>`;
+    return;
+  }
+  const year = parseInt(raw.slice(0, 4), 10);
+  const month = parseInt(raw.slice(4, 6), 10);
+  const day = parseInt(raw.slice(6, 8), 10);
+  const d = new Date(year, month - 1, day);
+  const isValidDate = d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
+  if(!isValidDate || month < 1 || month > 12 || day < 1 || day > 31){
+    resultEl.innerHTML = `<div class="birthday-result-empty">日付が正しくありません。西暦年4桁+月2桁+日2桁で入力してください(例:19870926)</div>`;
+    return;
+  }
+  const info = THAI_DAY_COLORS[d.getDay()];
+  let resultBoxHtml;
+  let wedNote = '';
+  if(d.getDay() === 3){
+    resultBoxHtml = `
+      <div class="birthday-result-box">
+        <span class="wc-dot" style="background:#4CAF50"></span>
+        <div>
+          <div class="birthday-result-day">水曜日(昼)生まれ</div>
+          <div class="birthday-result-color">ラッキーカラー:緑</div>
+        </div>
+      </div>
+      <div class="birthday-result-box">
+        <span class="wc-dot" style="background:#2E3B2E"></span>
+        <div>
+          <div class="birthday-result-day">水曜日(夜)生まれ</div>
+          <div class="birthday-result-color">ラッキーカラー:黒・濃い緑</div>
+        </div>
+      </div>`;
+    wedNote = `<div class="birthday-result-note">水曜日生まれは、生まれた時間が昼か夜かで色が変わります。詳しい時間がわかる場合は確認してみてください。</div>`;
+  } else {
+    resultBoxHtml = `
+      <div class="birthday-result-box">
+        <span class="wc-dot" style="background:${info.hex}"></span>
+        <div>
+          <div class="birthday-result-day">${info.day}生まれ</div>
+          <div class="birthday-result-color">ラッキーカラー:${info.color}</div>
+        </div>
+      </div>`;
+  }
+  resultEl.innerHTML = `
+    ${resultBoxHtml}
+    ${wedNote}
+    <div class="birthday-result-tip">🛕 お寺ではこの曜日の仏像を探してお参りしてみましょう</div>
+  `;
+}
 const PROC_MANNER_TOPICS = [
   { image:"images/manners/manner_head_feet.jpg", imageLightbox:true, title:"頭と足に注意", category:"体の部位に関するマナー",
     sub:"頭は大切な場所、足は低いものとされる文化",
@@ -3051,6 +3253,28 @@ const PROC_MANNER_TOPICS = [
     sub:"服装・写真撮影・声の大きさに注意",
     lead:"寺院は観光地であると同時に、大切な信仰の場です。",
     bullets:["露出の多い服装は避ける", "仏像によじ登ったり、不敬なポーズで写真を撮らない", "大声で騒がない", "靴を脱ぐ場所では周囲に合わせる", "お坊さんに必要以上に近づいたり触れたりしない"] },
+  { title:"お寺では自分の仏像にお参りする", category:"宗教施設での過ごし方",
+    sub:"生まれた曜日ごとに色と仏像がある",
+    lead:"タイでは、生まれた曜日ごとに決まった色があり、日常生活や仏教文化の中でも親しまれています。特にお寺では、曜日ごとに異なる姿勢の仏像が置かれていることがあり、自分の生まれた曜日の仏像にお参りする習慣があります。タイのお寺を訪れる前に、自分が何曜日生まれなのか、そしてその曜日の色を知っておくと、よりタイの文化を楽しめます。",
+    customHtml:`
+      <div class="proc-sub-heading">曜日ごとの色</div>
+      <table class="weekday-color-table">
+        <tr><td><span class="wc-dot" style="background:#E23F73"></span>日曜日</td><td>赤</td></tr>
+        <tr><td><span class="wc-dot" style="background:#F5C518"></span>月曜日</td><td>黄色</td></tr>
+        <tr><td><span class="wc-dot" style="background:#F48FB1"></span>火曜日</td><td>ピンク</td></tr>
+        <tr><td><span class="wc-dot" style="background:#4CAF50"></span>水曜日(昼)</td><td>緑</td></tr>
+        <tr><td><span class="wc-dot" style="background:#2E3B2E"></span>水曜日(夜)</td><td>黒・濃い緑</td></tr>
+        <tr><td><span class="wc-dot" style="background:#FF9800"></span>木曜日</td><td>オレンジ</td></tr>
+        <tr><td><span class="wc-dot" style="background:#29B6F6"></span>金曜日</td><td>青・水色</td></tr>
+        <tr><td><span class="wc-dot" style="background:#9C27B0"></span>土曜日</td><td>紫</td></tr>
+      </table>
+      <div class="proc-sub-heading">🛕 あなたは何曜日生まれ？</div>
+      <div class="birthday-tool">
+        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="8" id="birthdayInput" class="birthday-date-input" placeholder="例:19870926(西暦年月日 8桁)">
+        <button class="birthday-check-btn" type="button" onclick="calcBirthdayColor()">生まれた曜日と色を調べる</button>
+        <div id="birthdayResult" class="birthday-result"></div>
+      </div>`,
+    note:"これはタイで広く親しまれている文化・習慣で、必ず自分の曜日の仏像にお参りしなければならないという決まりではありません。" },
   { image:"images/manners/manner_royal.jpg", imageLightbox:true, title:"王室や紙幣を軽く扱わない", category:"王室に関するマナー",
     sub:"王室への敬意はタイで特に大切なマナー",
     lead:"タイでは王室への敬意がとても大切にされています。",
@@ -3062,6 +3286,48 @@ const PROC_MANNER_TOPICS = [
       "【ワイは無理にしなくてもOK】タイの挨拶「ワイ」は、旅行者が全員にする必要はありません。相手からワイをされたら、笑顔で返すくらいで十分です。",
       "【食事はスプーンとフォークがメイン】一般的なタイ料理は、スプーンとフォークで食べる事が多いです。フォークで料理をスプーンに乗せて食べます。麺類では箸をつかいますが、麺を直接啜らずにレンゲにのせて口に運ぶスタイルで食べる方が多いです。麺をズルズル啜ったりスープを音を立てて飲むのはマナー的にNGです。",
     ] },
+  { image:"images/manners/manner_foodcourt.jpg", imageLightbox:true, title:"フードコートの一般的な利用方法", category:"食事のマナー・習慣",
+    sub:"専用プリペイドカードにチャージして使うスタイルが一般的",
+    lead:"タイのショッピングモールなどにあるフードコートは、専用のプリペイドカードにお金をチャージして利用するスタイルが一般的です。",
+    customHtml:`
+      <div class="proc-step-list">
+        <div class="proc-step-item">
+          <div class="proc-step-num">1</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">まずカウンターでカードを購入・チャージ</div>
+            <div class="proc-step-desc">フードコートの入口付近にあるカウンターで、専用カードに現金をチャージします。「500バーツ入れてください」など、希望する金額を伝えればOKです。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">2</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">好きなお店で料理を注文</div>
+            <div class="proc-step-desc">フードコートには、タイ料理・麺・ご飯・スイーツなど、さまざまなお店があります。食べたい料理を選んで注文します。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">3</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">カードで支払う</div>
+            <div class="proc-step-desc">料理を受け取るときに、チャージした専用カードで支払います。料理の料金がカードの残高から引かれます。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">4</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">席を探して食べる</div>
+            <div class="proc-step-desc">料理を受け取ったら、空いている席で食べます。スプーン・フォーク・箸・調味料などは、共用スペースに置かれていることが多いです。</div>
+          </div>
+        </div>
+        <div class="proc-step-item">
+          <div class="proc-step-num">5</div>
+          <div class="proc-step-body">
+            <div class="proc-step-title">食後にカードを返却</div>
+            <div class="proc-step-desc">食べ終わったら、最初にチャージしたカウンターへカードを返します。カードに残っている金額は払い戻してもらえます。</div>
+          </div>
+        </div>
+      </div>`,
+    note:"フードコートによってカードの仕組みや払い戻し方法が異なる場合があります。" },
   { image:"images/manners/manner_outro.jpg", imageLightbox:true, title:"迷ったら現地の方に合わせよう", category:"まとめ",
     sub:"細かいマナーを全部覚える必要はありません",
     paragraphs:[
@@ -3259,55 +3525,10 @@ function openFavoritesChain(){
     </div>
   `).join('');
   document.getElementById('favChainDisplay').classList.add('show');
-  requestAnimationFrame(() => {
-    document.querySelectorAll('#favChainList .fav-chain-th').forEach(fitFavChainText);
-  });
-}
-function fitFavChainText(el){
-  const item = el.closest('.fav-chain-item');
-  const container = document.getElementById('favChainList');
-  if(!el || !item || !container) return;
-  const cs = getComputedStyle(container);
-  const padL = parseFloat(cs.paddingLeft) || 0;
-  const padR = parseFloat(cs.paddingRight) || 0;
-  const fullMaxWidth = (container.clientWidth - padL - padR) * 0.95;
-  const isLandscape = window.innerWidth > window.innerHeight;
-  const maxHeight = window.innerHeight * (isLandscape ? 0.8 : 0.55); // タイ語+日本語訳+余白を含めて1画面に収める(横画面は高さに余裕が無いぶん比率を緩める)
-  const widthFractions = [1, 0.8, 0.65, 0.5, 0.38, 0.28];
-  let best = null;
-  widthFractions.forEach(frac => {
-    const w = fullMaxWidth * frac;
-    let fontSize = 200;
-    el.style.maxWidth = w + 'px';
-    el.style.fontSize = fontSize + 'px';
-    while(fontSize > 16 && (el.scrollWidth > w || item.scrollHeight > maxHeight)){
-      fontSize -= 4;
-      el.style.fontSize = fontSize + 'px';
-    }
-    if(!best || fontSize > best.fontSize){
-      best = {fontSize, width: w};
-    }
-  });
-  el.style.maxWidth = best.width + 'px';
-  el.style.marginLeft = 'auto';
-  el.style.marginRight = 'auto';
-  el.style.fontSize = best.fontSize + 'px';
 }
 function closeFavChain(){
   document.getElementById('favChainDisplay').classList.remove('show');
 }
-window.addEventListener('resize', () => {
-  if(document.getElementById('favChainDisplay').classList.contains('show')){
-    document.querySelectorAll('#favChainList .fav-chain-th').forEach(fitFavChainText);
-  }
-});
-window.addEventListener('orientationchange', () => {
-  setTimeout(() => {
-    if(document.getElementById('favChainDisplay').classList.contains('show')){
-      document.querySelectorAll('#favChainList .fav-chain-th').forEach(fitFavChainText);
-    }
-  }, 150);
-});
 
 // ---------- ホテル情報の保存欄 ----------
 let hotelInfo = {name:'', floor:'', room:'', checkin:'', checkout:''};
@@ -3423,113 +3644,113 @@ function pharmacyMods(drugTh, drugJp){
 }
 const dishes = [
   { th:'ผัดไทย', jp:'パッタイ', desc:'甘酸っぱいタマリンドソースで炒めた米粉の焼きそば。エビやナッツ、もやしが入った代表的な料理。',
-    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่ถั่วงอก', jp:'もやし抜き'}, {th:'ไม่ใส่กุ้ง', jp:'エビ抜き'}, {th:'ไม่ใส่ไข่', jp:'玉子抜き'}, {th:'ไม่ใส่กุยช่าย', jp:'ニラ抜き'}, {th:'เส้นน้อย', jp:'麺少なめで'}, {th:'เส้นเยอะ', jp:'麺大盛りで'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ไม่ใส่ถั่วงอก', jp:'もやし抜き', ctype:'remove', nounJp:'もやし', nounTh:'ถั่วงอก'}, {th:'ไม่ใส่กุ้ง', jp:'エビ抜き', ctype:'remove', nounJp:'エビ', nounTh:'กุ้ง'}, {th:'ไม่ใส่ไข่', jp:'玉子抜き', ctype:'remove', nounJp:'玉子', nounTh:'ไข่'}, {th:'ไม่ใส่กุยช่าย', jp:'ニラ抜き', ctype:'remove', nounJp:'ニラ', nounTh:'กุยช่าย'}, {th:'เส้นน้อย', jp:'麺少なめで', group:'qty'}, {th:'เส้นเยอะ', jp:'麺大盛りで', group:'qty'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて', ctype:'add', nounJp:'目玉焼き', nounTh:'ไข่ดาว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ผัดกะเพรา', jp:'ガパオライス', desc:'豚や鶏のひき肉をバジルと唐辛子で炒めた、目玉焼きのせた定番ごはん。',
-    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'เผ็ดมาก', jp:'辛くして'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで'}, {th:'เนื้อไก่', jp:'鶏肉で'}, {th:'หมูสับ', jp:'豚挽き肉で'}, {th:'หมูกรอบ', jp:'カリカリ豚肉で'}, {th:'ข้าวน้อย', jp:'ライス少なめで'}, {th:'ข้าวเยอะ', jp:'ライス大盛りで'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで', group:'spice'}, {th:'เผ็ดมาก', jp:'辛くして', group:'spice'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで', ctype:'remove', nounJp:'唐辛子', nounTh:'พริก'}, {th:'เนื้อไก่', jp:'鶏肉で', group:'protein'}, {th:'หมูสับ', jp:'豚挽き肉で', group:'protein'}, {th:'หมูกรอบ', jp:'カリカリ豚肉で', group:'protein'}, {th:'ข้าวน้อย', jp:'ライス少なめで', group:'qty'}, {th:'ข้าวเยอะ', jp:'ライス大盛りで', group:'qty'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて', ctype:'add', nounJp:'目玉焼き', nounTh:'ไข่ดาว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ข้าวมันไก่', jp:'カオマンガイ', desc:'茹で鶏と鶏の出汁で炊いたご飯のセット。特製ソースをかけて食べる人気料理。',
-    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่เอาหนังไก่', jp:'鶏皮抜き'}, {th:'ไม่เอาน้ำซุป', jp:'スープ無しで'}, {th:'ไม่ใส่เลือดไก่', jp:'鶏の血抜き'}, {th:'ไม่ใส่แตงกวา', jp:'きゅうり抜き'}, {th:'ข้าวน้อย', jp:'ライス少なめで'}, {th:'ข้าวเยอะ', jp:'ライス大盛りで'}, {th:'ไก่ผสม', jp:'茹で鶏と揚げ鶏のセット'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ไม่เอาหนังไก่', jp:'鶏皮抜き', ctype:'remove', nounJp:'鶏皮', nounTh:'หนังไก่'}, {th:'ไม่เอาน้ำซุป', jp:'スープ無しで', ctype:'remove', nounJp:'スープ', nounTh:'น้ำซุป'}, {th:'ไม่ใส่เลือดไก่', jp:'鶏の血抜き', ctype:'remove', nounJp:'鶏の血', nounTh:'เลือดไก่'}, {th:'ไม่ใส่แตงกวา', jp:'きゅうり抜き', ctype:'remove', nounJp:'きゅうり', nounTh:'แตงกวา'}, {th:'ข้าวน้อย', jp:'ライス少なめで', group:'qty'}, {th:'ข้าวเยอะ', jp:'ライス大盛りで', group:'qty'}, {th:'ไก่ผสม', jp:'茹で鶏と揚げ鶏のセット'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ข้าวผัด', jp:'カオパッド', desc:'タイ風チャーハン。えびや豚肉が一般的で、ライムを絞ると爽やかな風味に。',
-    mods:[{th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'กุ้ง', jp:'エビで'}, {th:'ทะเล', jp:'海鮮で'}, {th:'ข้าวน้อย', jp:'ライス少なめで'}, {th:'ข้าวเยอะ', jp:'ライス大盛りで'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไก่', jp:'鶏肉で', group:'protein'}, {th:'หมู', jp:'豚肉で', group:'protein'}, {th:'กุ้ง', jp:'エビで', group:'protein'}, {th:'ทะเล', jp:'海鮮で', group:'protein'}, {th:'ข้าวน้อย', jp:'ライス少なめで', group:'qty'}, {th:'ข้าวเยอะ', jp:'ライス大盛りで', group:'qty'}, {th:'ใส่ไข่ดาว', jp:'目玉焼きをのせて', ctype:'add', nounJp:'目玉焼き', nounTh:'ไข่ดาว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ข้าวซอย', jp:'カオソイ', desc:'チェンマイ名物のココナッツカレーラーメン。生麺の上に揚げ麺がのった独特の一杯。',
-    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？'}, {th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'เนื้อวัว', jp:'牛肉で'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'เส้นน้อย', jp:'麺少なめで'}, {th:'เส้นเยอะ', jp:'麺大盛りで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？', group:'spice'}, {th:'ไก่', jp:'鶏肉で', group:'protein'}, {th:'หมู', jp:'豚肉で', group:'protein'}, {th:'เนื้อวัว', jp:'牛肉で', group:'protein'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'เส้นน้อย', jp:'麺少なめで', group:'qty'}, {th:'เส้นเยอะ', jp:'麺大盛りで', group:'qty'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ก๋วยเตี๋ยว', jp:'クイッティアオ', desc:'タイの定番米粉麺。スープの有無や麺の種類、具材を選べる屋台の人気メニュー。',
-    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่ถั่วงอก', jp:'もやし抜き'}, {th:'เส้นน้อย', jp:'麺少なめで'}, {th:'เส้นเยอะ', jp:'麺大盛りで'}, {th:'แห้ง', jp:'汁なしで'}, {th:'น้ำ', jp:'汁ありで'}, {th:'เส้นเล็ก', jp:'細い米麺で(センレック)'}, {th:'เส้นใหญ่', jp:'太い米麺で(センヤイ)'}, {th:'เส้นหมี่', jp:'極細米麺で(センミー)'}, {th:'บะหมี่', jp:'卵麺で(バミー)'}, {th:'วุ้นเส้น', jp:'春雨で(ウンセン)'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ไม่ใส่ถั่วงอก', jp:'もやし抜き', ctype:'remove', nounJp:'もやし', nounTh:'ถั่วงอก'}, {th:'เส้นน้อย', jp:'麺少なめで', group:'qty'}, {th:'เส้นเยอะ', jp:'麺大盛りで', group:'qty'}, {th:'แห้ง', jp:'汁なしで', group:'noodle-style'}, {th:'น้ำ', jp:'汁ありで', group:'noodle-style'}, {th:'เส้นเล็ก', jp:'細い米麺で(センレック)', group:'noodle-style'}, {th:'เส้นใหญ่', jp:'太い米麺で(センヤイ)', group:'noodle-style'}, {th:'เส้นหมี่', jp:'極細米麺で(センミー)', group:'noodle-style'}, {th:'บะหมี่', jp:'卵麺で(バミー)', group:'noodle-style'}, {th:'วุ้นเส้น', jp:'春雨で(ウンセン)', group:'noodle-style'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ต้มยำกุ้ง', jp:'トムヤムクン', desc:'世界三大スープのひとつ。海老の旨味とレモングラスやハーブが効いた、酸辣と辛味が特徴のスープ。',
-    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？'}, {th:'ขอไม่ใส่พริกได้ไหม', jp:'唐辛子を入れないでできますか？'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่กะทิ', jp:'ココナッツミルク抜き'}, {th:'ไม่ใส่ตะไคร้', jp:'レモングラス抜き'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？', group:'spice'}, {th:'ขอไม่ใส่พริกได้ไหม', jp:'唐辛子を入れないでできますか？', ctype:'question'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ไม่ใส่กะทิ', jp:'ココナッツミルク抜き', ctype:'remove', nounJp:'ココナッツミルク', nounTh:'กะทิ'}, {th:'ไม่ใส่ตะไคร้', jp:'レモングラス抜き', ctype:'remove', nounJp:'レモングラス', nounTh:'ตะไคร้'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ต้มข่าไก่', jp:'トムカーガイ', desc:'鶏肉とココナッツミルクのスープ。まろやかで香り高く、辛さは控えめ。タイ初心者にもおすすめ。',
-    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？'}, {th:'ขอไม่ใส่พริกได้ไหม', jp:'唐辛子を入れないでできますか？'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？', group:'spice'}, {th:'ขอไม่ใส่พริกได้ไหม', jp:'唐辛子を入れないでできますか？', ctype:'question'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'แกงเขียวหวาน', jp:'グリーンカレー', desc:'青唐辛子とココナッツミルクの代表的なカレー。辛くて香り豊か。ご飯との相性抜群。',
-    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？'}, {th:'ขอไม่ใส่พริกได้ไหม', jp:'唐辛子を入れないでできますか？'}, {th:'ไก่', jp:'鶏肉で(お店によって選べる場合もある)'}, {th:'หมู', jp:'豚肉で(お店によって選べる場合もある)'}, {th:'เนื้อวัว', jp:'牛肉で(お店によって選べる場合もある)'}, {th:'ไม่ใส่มะเขือ', jp:'茄子抜き'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอเผ็ดน้อยได้ไหม', jp:'辛さ控えめにできますか？', group:'spice'}, {th:'ขอไม่ใส่พริกได้ไหม', jp:'唐辛子を入れないでできますか？', ctype:'question'}, {th:'ไก่', jp:'鶏肉で(お店によって選べる場合もある)', group:'protein'}, {th:'หมู', jp:'豚肉で(お店によって選べる場合もある)', group:'protein'}, {th:'เนื้อวัว', jp:'牛肉で(お店によって選べる場合もある)', group:'protein'}, {th:'ไม่ใส่มะเขือ', jp:'茄子抜き', ctype:'remove', nounJp:'茄子', nounTh:'มะเขือ'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に', ctype:'add', nounJp:'ライス', nounTh:'ข้าว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'แกงมัสมั่น', jp:'マッサマンカレー', desc:'イスラム文化の影響を受けたマイルドなカレー。甘みとコクがあり、日本人にも食べやすい味。',
-    mods:[{th:'ไก่', jp:'鶏肉で(お店によって選べる場合もある)'}, {th:'หมู', jp:'豚肉で(お店によって選べる場合もある)'}, {th:'เนื้อวัว', jp:'牛肉で(お店によって選べる場合もある)'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไก่', jp:'鶏肉で(お店によって選べる場合もある)', group:'protein'}, {th:'หมู', jp:'豚肉で(お店によって選べる場合もある)', group:'protein'}, {th:'เนื้อวัว', jp:'牛肉で(お店によって選べる場合もある)', group:'protein'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に', ctype:'add', nounJp:'ライス', nounTh:'ข้าว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ปูผัดผงกะหรี่', jp:'プーパッポンカリー', desc:'カニと玉子をカレー粉で炒めた贅沢な一品。ふわとろの卵とカレーの香りが絶妙なシーフード料理。',
-    mods:[{th:'ไม่เอากระดอง', jp:'カニの殻なしで'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เอากระดอง', jp:'カニの殻なしで', ctype:'remove', nounJp:'カニの殻', nounTh:'กระดอง'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に', ctype:'add', nounJp:'ライス', nounTh:'ข้าว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ส้มตำ', jp:'ソムタム', desc:'青パパイヤのシャキシャキサラダ。ナンプラー、唐辛子、ライムの酸味と甘酸っぱさがクセになる。',
-    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่ถั่ว', jp:'ピーナッツ抜き'}, {th:'ใส่น้อย', jp:'量少なめ'}, {th:'พิเศษ', jp:'大盛り'}, {th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで', group:'spice'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで', ctype:'remove', nounJp:'唐辛子', nounTh:'พริก'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ไม่ใส่ถั่ว', jp:'ピーナッツ抜き', ctype:'remove', nounJp:'ピーナッツ', nounTh:'ถั่ว'}, {th:'ใส่น้อย', jp:'量少なめ', group:'qty'}, {th:'พิเศษ', jp:'大盛り', group:'qty'}, {th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に', ctype:'add', nounJp:'もち米', nounTh:'ข้าวเหนียว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ลาบ', jp:'ラープ', desc:'イサーン地方発祥のひき肉サラダ。ライムやハーブ、炒り米粉の香ばしさが食欲をそそる!',
-    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで'}, {th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に'}, {th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで', group:'spice'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで', ctype:'remove', nounJp:'唐辛子', nounTh:'พริก'}, {th:'ไก่', jp:'鶏肉で', group:'protein'}, {th:'หมู', jp:'豚肉で', group:'protein'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に', ctype:'add', nounJp:'ライス', nounTh:'ข้าว'}, {th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に', ctype:'add', nounJp:'もち米', nounTh:'ข้าวเหนียว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ยำวุ้นเส้น', jp:'ヤムウンセン', desc:'春雨、エビ、ひき肉、野菜を甘酸っぱく和えたサラダ。さっぱりしていて食べやすい人気メニュー。',
-    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่กุ้ง', jp:'エビ抜き'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで', group:'spice'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで', ctype:'remove', nounJp:'唐辛子', nounTh:'พริก'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ไม่ใส่กุ้ง', jp:'エビ抜き', ctype:'remove', nounJp:'エビ', nounTh:'กุ้ง'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ไก่ย่าง', jp:'ガイヤーン', desc:'ハーブやスパイスに漬け込んで香ばしく焼き上げたタイ風ローストチキン。甘辛のタレが絶品。',
-    mods:[{th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に', ctype:'add', nounJp:'もち米', nounTh:'ข้าวเหนียว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'หมูสะเต๊ะ', jp:'ムーサテ', desc:'ターメリックで黄色く色付けした豚肉の串焼き。濃厚なピーナッツソースをつけて食べるのが定番。',
-    mods:[{th:'ใส่ซอสถั่วเยอะๆ', jp:'ピーナッツソース多めで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ใส่ซอสถั่วเยอะๆ', jp:'ピーナッツソース多めで', group:'qty'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'หอยทอด', jp:'ホイトート', desc:'カキ(またはムール貝)を卵と粉でカリッと焼き上げたタイ風オムレツ。屋台の人気メニュー!',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ผัดผักบุ้งไฟแดง', jp:'パックブンファイデーン', desc:'空心菜を強火で一気に炒めた定番野菜料理。ニンニクと唐辛子の香りが食欲をそそる。',
-    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで', group:'spice'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで', ctype:'remove', nounJp:'唐辛子', nounTh:'พริก'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'หมูปิ้ง', jp:'ムーピン', desc:'甘辛いタレに漬け込んだ豚肉の串焼き。もち米(カオニャオ)と一緒に食べるのがタイ流!',
-    mods:[{th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に', ctype:'add', nounJp:'もち米', nounTh:'ข้าวเหนียว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ไข่เจียว', jp:'カイジアオ', desc:'タイ風オムレツ。たっぷりの油で揚げ焼きにするので外はカリッと、中はふんわり。ケチャップやスイートチリソースをかけて食べるのが一般的です。',
-    mods:[{th:'ใส่หมูสับ', jp:'豚ひき肉入りで'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ใส่หมูสับ', jp:'豚ひき肉入りで', ctype:'add', nounJp:'豚ひき肉', nounTh:'หมูสับ'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に', ctype:'add', nounJp:'ライス', nounTh:'ข้าว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ราดหน้า', jp:'ラートナー', desc:'幅広の米麺(センヤイ)にとろみのある餡と青菜をかけた一品。カリカリ麺で食べるスタイルもある。',
-    mods:[{th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'ทะเล', jp:'海鮮で'}, {th:'หมี่กรอบ', jp:'麺をパリパリに(ラートナーミークロープ)'}, {th:'เส้นใหญ่', jp:'太い米麺で(センヤイ)'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไก่', jp:'鶏肉で', group:'protein'}, {th:'หมู', jp:'豚肉で', group:'protein'}, {th:'ทะเล', jp:'海鮮で', group:'protein'}, {th:'หมี่กรอบ', jp:'麺をパリパリに(ラートナーミークロープ)'}, {th:'เส้นใหญ่', jp:'太い米麺で(センヤイ)', group:'noodle-style'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ข้าวขาหมู', jp:'カオカームー', desc:'豚足を甘辛いタレでとろとろに煮込み、ご飯にのせた人気のごはんもの。',
-    mods:[{th:'ขอหนังเยอะๆ', jp:'皮多めで'}, {th:'ขอมันน้อย', jp:'脂身少なめで'}, {th:'ข้าวน้อย', jp:'ご飯少なめで'}, {th:'ข้าวเยอะ', jp:'ご飯大盛りで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอหนังเยอะๆ', jp:'皮多めで', group:'qty'}, {th:'ขอมันน้อย', jp:'脂身少なめで', group:'qty'}, {th:'ข้าวน้อย', jp:'ご飯少なめで', group:'qty'}, {th:'ข้าวเยอะ', jp:'ご飯大盛りで', group:'qty'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'คอหมูย่าง', jp:'コームーヤーン', desc:'豚の首肉を炭火で香ばしく焼き上げた一品。ジューシーな脂身と赤身のバランスが人気。',
-    mods:[{th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอข้าวเหนียวด้วย', jp:'もち米も一緒に', ctype:'add', nounJp:'もち米', nounTh:'ข้าวเหนียว'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に', ctype:'add', nounJp:'ライス', nounTh:'ข้าว'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'โจ๊ก', jp:'ジョーク', desc:'とろとろに炊いたお粥に、ひき肉と卵をのせたタイの朝食の定番。',
-    mods:[{th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'ใส่ขิงเยอะๆ', jp:'生姜多めで'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ไม่ใส่ต้นหอม', jp:'青ねぎ抜き'}, {th:'ใส่ไข่ลวกด้วย', jp:'温玉付きで'}, {th:'ใส่ไข่เยี่ยวม้าด้วย', jp:'ピータン付きで'}, {th:'ใส่ไข่เค็มด้วย', jp:'塩卵付きで'}, {th:'ใส่หมูกรอบด้วย', jp:'カリカリ豚付きで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไก่', jp:'鶏肉で', group:'protein'}, {th:'หมู', jp:'豚肉で', group:'protein'}, {th:'ใส่ขิงเยอะๆ', jp:'生姜多めで', group:'qty'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ไม่ใส่ต้นหอม', jp:'青ねぎ抜き', ctype:'remove', nounJp:'青ねぎ', nounTh:'ต้นหอม'}, {th:'ใส่ไข่ลวกด้วย', jp:'温玉付きで', ctype:'add', nounJp:'温玉', nounTh:'ไข่ลวก'}, {th:'ใส่ไข่เยี่ยวม้าด้วย', jp:'ピータン付きで', ctype:'add', nounJp:'ピータン', nounTh:'ไข่เยี่ยวม้า'}, {th:'ใส่ไข่เค็มด้วย', jp:'塩卵付きで', ctype:'add', nounJp:'塩卵', nounTh:'ไข่เค็ม'}, {th:'ใส่หมูกรอบด้วย', jp:'カリカリ豚付きで', ctype:'add', nounJp:'カリカリ豚', nounTh:'หมูกรอบ'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ผัดซีอิ๊ว', jp:'パッシーユ', desc:'幅広の米麺を醤油ベースの甘辛いタレで炒めた、パッタイと並ぶ人気の焼きそば。',
-    mods:[{th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'ทะเล', jp:'海鮮で'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'เส้นน้อย', jp:'麺少なめで'}, {th:'เส้นเยอะ', jp:'麺大盛りで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไก่', jp:'鶏肉で', group:'protein'}, {th:'หมู', jp:'豚肉で', group:'protein'}, {th:'ทะเล', jp:'海鮮で', group:'protein'}, {th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'เส้นน้อย', jp:'麺少なめで', group:'qty'}, {th:'เส้นเยอะ', jp:'麺大盛りで', group:'qty'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ไข่ตุ๋นทะเลหม้อไฟ', jp:'カイトンタレーモーファイ', desc:'海鮮入りの茶碗蒸しを、土鍋風の器でグツグツ熱々のまま提供する一品。',
-    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่ใส่ผักชี', jp:'パクチー抜き', ctype:'remove', nounJp:'パクチー', nounTh:'ผักชี'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'หมูกระทะ', jp:'ムーガタ', desc:'中央のドーム型鉄板で肉を焼き、まわりのスープで野菜や麺を煮込むタイ式焼肉料理。ブッフェ形式の店が多いが、そうでない店もあるので要確認。', standalone:true,
-    mods:[{th:'กินได้ที่ไหนบ้าง', jp:'何処で食べる事ができますか？'}, {th:'มีร้านแนะนำไหม', jp:'おすすめのお店はありますか？'}, {th:'ไม่เข้าใจระบบการกิน ช่วยอธิบายได้ไหม', jp:'システムが分からないので教えていただけますか？'}, {th:'คนละเท่าไหร่', jp:'1人あたりいくらですか？'}, {th:'มีจำกัดเวลาไหม', jp:'時間制ですか？'}, {th:'เป็นบุฟเฟ่ต์ไหม', jp:'ブッフェ形式ですか？'}, {th:'ช่วยสอนวิธีกินได้ไหม', jp:'食べ方を教えていただけますか？'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'กินได้ที่ไหนบ้าง', jp:'何処で食べる事ができますか？', ctype:'question'}, {th:'มีร้านแนะนำไหม', jp:'おすすめのお店はありますか？', ctype:'question'}, {th:'ไม่เข้าใจระบบการกิน ช่วยอธิบายได้ไหม', jp:'システムが分からないので教えていただけますか？', ctype:'question'}, {th:'คนละเท่าไหร่', jp:'1人あたりいくらですか？', ctype:'question'}, {th:'มีจำกัดเวลาไหม', jp:'時間制ですか？', ctype:'question'}, {th:'เป็นบุฟเฟ่ต์ไหม', jp:'ブッフェ形式ですか？', ctype:'question'}, {th:'ช่วยสอนวิธีกินได้ไหม', jp:'食べ方を教えていただけますか？', ctype:'question'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ผัดผักรวมมิตร', jp:'パットパックルアムミット', desc:'数種類の野菜をオイスターソースなどで炒め合わせた、彩り豊かな一品。',
-    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ไก่', jp:'鶏肉で'}, {th:'หมู', jp:'豚肉で'}, {th:'ทะเล', jp:'海鮮で'}, {th:'กุ้ง', jp:'エビで'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで', group:'spice'}, {th:'ไก่', jp:'鶏肉で', group:'protein'}, {th:'หมู', jp:'豚肉で', group:'protein'}, {th:'ทะเล', jp:'海鮮で', group:'protein'}, {th:'กุ้ง', jp:'エビで', group:'protein'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで', ctype:'remove', nounJp:'唐辛子', nounTh:'พริก'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'กุ้งกระเทียม', jp:'グングラティアム', desc:'エビをニンニクとコショウで香ばしく炒めた、ご飯にもお酒にも合う一品。',
-    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ไม่เผ็ดมาก', jp:'辛さ控えめで', group:'spice'}, {th:'ขอข้าวด้วย', jp:'ライスも一緒に', ctype:'add', nounJp:'ライス', nounTh:'ข้าว'}, {th:'ไม่ใส่พริก', jp:'唐辛子を入れないで', ctype:'remove', nounJp:'唐辛子', nounTh:'พริก'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ปอเปี๊ยะทอด', jp:'ポーピアトード', desc:'春雨や野菜を薄い皮で包んでカリッと揚げた、タイ風春巻き。',
-    mods:[{th:'ใส่ซอสสวีทชิลลี่', jp:'スイートチリソースで'}, {th:'ใส่ซอสเผ็ด', jp:'辛いソースで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ใส่ซอสสวีทชิลลี่', jp:'スイートチリソースで', group:'sauce'}, {th:'ใส่ซอสเผ็ด', jp:'辛いソースで', group:'sauce'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ข้าวเหนียวมะม่วง', jp:'カオニャオ・マムアン', desc:'ココナッツミルクで甘く炊いたもち米に、完熟マンゴーを添えたタイの代表的スイーツ。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'โรตี', jp:'ロティ', desc:'小麦粉の生地を薄く伸ばして鉄板でサクサクに焼き上げるタイ風クレープ。バナナ入り+練乳/チョコソースが定番。', cat:'sweet',
-    mods:[{th:'ใส่กล้วย', jp:'バナナ入りで'}, {th:'ใส่นมข้น', jp:'練乳がけで'}, {th:'ใส่ช็อกโกแลต', jp:'チョコソースがけで'}, {th:'ไม่ใส่น้ำตาล', jp:'砂糖なしで'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ใส่กล้วย', jp:'バナナ入りで', ctype:'add', nounJp:'バナナ', nounTh:'กล้วย'}, {th:'ใส่นมข้น', jp:'練乳がけで', ctype:'add', nounJp:'練乳', nounTh:'นมข้น'}, {th:'ใส่ช็อกโกแลต', jp:'チョコソースがけで', ctype:'add', nounJp:'チョコソース', nounTh:'ช็อกโกแลต'}, {th:'ไม่ใส่น้ำตาล', jp:'砂糖なしで', ctype:'remove', nounJp:'砂糖', nounTh:'น้ำตาล'}, {th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'โรตีสายไหม', jp:'ロティ・サイマイ', desc:'アユタヤ名物。糸状の綿菓子(サイマイ)を、パンダンリーフなどで風味付けした薄い生地で巻いて食べるスイーツ。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ขนมครก', jp:'カノム・クロック', desc:'たこ焼き器のような鉄板で焼くココナッツミルクのお菓子。外はカリッと、中はとろりとした食感。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ไอศกรีมกะทิ', jp:'ココナッツアイスクリーム', desc:'ナイトマーケットや屋台で人気。ココナッツの殻を器にし、ナッツやとうもろこし、もち米などのトッピングを選ぶスタイル。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'บัวลอย', jp:'ブアローイ', desc:'タロイモやかぼちゃを練り込んだカラフルなモチモチの団子を、温かいココナッツミルクに浮かべた伝統的なデザート。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ขนมหม้อแกง', jp:'カノム・モーケン', desc:'タロイモや緑豆、ココナッツミルク、卵で作るタイ風の焼きプリン。表面の揚げ玉ねぎの香ばしさがアクセント。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'เฉาก๊วย', jp:'チャオクワイ', desc:'仙草という薬草から作られる真っ黒なゼリー。氷や黒砂糖をかけて清涼感とともにさっぱり味わう。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ลูกชุบ', jp:'ルークチュップ', desc:'緑豆の甘い餡でミニチュアの果物や野菜の形を作り、カラフルにコーティングした見た目も愛らしいお菓子。もとは宮廷料理。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ทับทิมกรอบ', jp:'タップティム・クロープ', desc:'クワイの実をピンクのゼリーで包み、ココナッツミルクと氷でいただくかき氷スタイルの涼味スイーツ。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ขนมปังสังขยา', jp:'カノム・パン・サンカヤー', desc:'蒸したフワフワの食パンを、パンダンリーフ香るココナッツカスタード(サンカヤー)にたっぷりつけて味わう温かいデザート。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ขนมเบื้อง', jp:'カノム・ブアン', desc:'パリパリに焼いた小ぶりの薄い生地に、甘いメレンゲと刻んだ卵黄のシロップ煮を挟んだタイ風の小さなタコス。', cat:'sweet',
-    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします'}] },
+    mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ชานมเย็น', jp:'チャーノムイェン', desc:'バニラやスパイスの香りが広がるオレンジ色のタイ式ミルクティー。濃く抽出した紅茶に練乳をたっぷり加えた甘く濃厚な定番ドリンク。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘く強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'นมเย็น', jp:'ノムイェン', desc:'「サラ」のフレーバーシロップ(ヘイルズブルーボーイ)に牛乳を混ぜたピンク色のミルク。イチゴミルクのような見た目と甘さが人気。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'ชามะนาว', jp:'チャーマナオ', desc:'タイの紅茶に新鮮なマナオ(タイライム)の果汁と甘みを加えたアイスティー。甘酸っぱくすっきりとした味わい。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'มะม่วงปั่น', jp:'マムアンパン', desc:'完熟マンゴーの濃厚な甘みと果汁をそのまま閉じ込めた大人気スムージー。とろけるような口当たり。', cat:'drink',
-    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'แตงโมปั่น', jp:'テンモーパン', desc:'フレッシュなスイカと氷をミキサーにかけた定番スムージー。すっきりとした甘さで喉ごしが良い。', cat:'drink',
-    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'สับปะรดปั่น', jp:'サパロットパン', desc:'甘酸っぱいパイナップルを贅沢に使ったフローズンドリンク。爽やかな酸味とすっきりした甘み。', cat:'drink',
-    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'น้ำมะพร้าว', jp:'ナムマプラオ', desc:'ココナッツの実を割ってそのまま飲む天然の果汁。やさしい甘みと電解質が豊富で、暑いタイでの水分補給に欠かせない。', cat:'drink',
-    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'น้ำอ้อย', jp:'ナムオーイ', desc:'サトウキビの茎をその場で絞ったフレッシュジュース。自然でまろやかな甘みと、青々とした香ばしい風味。', cat:'drink',
-    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'น้ำส้ม', jp:'ナムソム', desc:'小ぶりなタイのオレンジを丸ごと絞った果汁100%ジュース。果肉感たっぷりで、甘みとほどよい酸味が絶妙。', cat:'drink',
-    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'น้ำทับทิม', jp:'ナムタプティム', desc:'屋台の絞り器でその場で抽出される贅沢な生搾りザクロジュース。深紅の美しい色合いと、甘酸っぱく濃厚な果汁。', cat:'drink',
-    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'อเมริกาโน่น้ำส้ม', jp:'アメリカーノ・ソム', desc:'フレッシュなオレンジジュースの上にエスプレッソショットを注いだカフェの人気メニュー。フルーティーな甘みとコーヒーの苦みがマッチ。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'โอเลี้ยง', jp:'オーリアン', desc:'ロブスタ種のコーヒー豆にトウモロコシやゴマ、タマリンドの種などをブレンドし、布フィルターで濃く抽出したタイの昔ながらのアイスコーヒー。たっぷりの砂糖と氷で提供される。', cat:'drink',
-    mods:[{th:'หวานน้อย', jp:'甘さ控えめで'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで'}, {th:'ใส่นม', jp:'ミルクを入れて'}, {th:'หวานปกติ', jp:'甘さ普通で'}, {th:'หวานๆ', jp:'甘さ強めで'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください'}] },
+    mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่นม', jp:'ミルクを入れて', ctype:'add', nounJp:'ミルク', nounTh:'นม'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'พานาดอล', jp:'パナドーン(Panadol)', desc:'成分はパラセタモール(Paracetamol)。タイで非常に一般的な解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('พานาดอล','パナドーン') },
   { th:'ซาร่า', jp:'サーラー(Sara)', desc:'成分はパラセタモール(Paracetamol)。Panadolと同成分の定番解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
@@ -3779,16 +4000,59 @@ function renderDishList(){
   `).join('') + `</div>`;
   document.getElementById('dishList').innerHTML = html;
 }
+function joinListJp(nouns){
+  if(nouns.length <= 1) return nouns.join('');
+  return nouns.slice(0, -1).join('、') + 'と' + nouns[nouns.length - 1];
+}
+function joinListTh(nouns){
+  if(nouns.length <= 1) return nouns.join('');
+  return nouns.slice(0, -1).join(' ') + ' และ' + nouns[nouns.length - 1];
+}
+// 選択された追加指示を、タップ順ではなくdish.mods本来の並び順に整列し、
+// 「入れて系」「抜き系」がそれぞれ複数選ばれた場合は名詞だけをつないで
+// 動詞(入れてください/抜きで)を1回にまとめる。持ち帰りは常に最後に回す。
+function composeDishClauses(d, selectedMods){
+  const sorted = [...selectedMods].sort((a, b) => a - b);
+  const addIdx = sorted.filter(i => d.mods[i].ctype === 'add');
+  const removeIdx = sorted.filter(i => d.mods[i].ctype === 'remove');
+  const takeoutIdx = sorted.filter(i => d.mods[i].ctype === 'takeout');
+  const otherIdx = sorted.filter(i => !addIdx.includes(i) && !removeIdx.includes(i) && !takeoutIdx.includes(i));
+
+  const clauses = [];
+  if(addIdx.length === 1){
+    const m = d.mods[addIdx[0]];
+    clauses.push({ pos: addIdx[0], th: m.th, jp: m.jp });
+  } else if(addIdx.length > 1){
+    const nounsJp = addIdx.map(i => d.mods[i].nounJp);
+    const nounsTh = addIdx.map(i => d.mods[i].nounTh);
+    clauses.push({ pos: addIdx[0], jp: joinListJp(nounsJp) + 'を入れてください', th: 'ใส่' + joinListTh(nounsTh) + 'ด้วย' });
+  }
+  if(removeIdx.length === 1){
+    const m = d.mods[removeIdx[0]];
+    clauses.push({ pos: removeIdx[0], th: m.th, jp: m.jp });
+  } else if(removeIdx.length > 1){
+    const nounsJp = removeIdx.map(i => d.mods[i].nounJp);
+    const nounsTh = removeIdx.map(i => d.mods[i].nounTh);
+    clauses.push({ pos: removeIdx[0], jp: joinListJp(nounsJp) + '抜きで', th: 'ไม่ใส่' + joinListTh(nounsTh) });
+  }
+  otherIdx.forEach(i => clauses.push({ pos: i, th: d.mods[i].th, jp: d.mods[i].jp }));
+  clauses.sort((a, b) => a.pos - b.pos);
+  takeoutIdx.forEach(i => clauses.push({ th: d.mods[i].th, jp: d.mods[i].jp }));
+  return clauses;
+}
 function dishComposedTh(){
   const d = dishes[dishSelectedIdx];
   let th = `ขอ${d.th}`;
-  dishSelectedMods.forEach(mi => { th += ' ' + d.mods[mi].th; });
+  const thClauses = composeDishClauses(d, dishSelectedMods).map(c => c.th);
+  // 性質の異なる指示同士(抜き系→量→追加→持ち帰り、など)は「แล้วก็」で繋ぎ、
+  // 会話として自然な一続きの依頼に見せる(同じ種類の列挙内の「と」は joinListTh の「และ」が担当)
+  if(thClauses.length) th += ' ' + thClauses.join(' แล้วก็');
   return th + particle('s');
 }
 function dishComposedJp(){
   const d = dishes[dishSelectedIdx];
   let jp = `${d.jp}をください`;
-  const modsJp = dishSelectedMods.map(mi => d.mods[mi].jp);
+  const modsJp = composeDishClauses(d, dishSelectedMods).map(c => c.jp);
   if(modsJp.length){
     const joined = modsJp.join('・');
     jp += joined.includes('(') ? `、${joined}` : `(${joined})`;
@@ -3842,11 +4106,22 @@ function clearDishSelectedPhrase(){
   renderDishDetailStandalone(dishes[dishSelectedIdx]);
 }
 function toggleDishMod(mi){
+  const d = dishes[dishSelectedIdx];
+  const mod = d.mods[mi];
   const idx = dishSelectedMods.indexOf(mi);
-  if(idx >= 0) dishSelectedMods.splice(idx, 1);
-  else dishSelectedMods.push(mi);
+  if(idx >= 0){
+    dishSelectedMods.splice(idx, 1);
+  } else {
+    // 肉の種類・辛さ・量など「本来1つしか選べない」グループは、
+    // 新しく選んだ時点で同じグループの他の選択を自動的に外す
+    if(mod.group){
+      dishSelectedMods = dishSelectedMods.filter(i => d.mods[i].group !== mod.group);
+    }
+    dishSelectedMods.push(mi);
+  }
   renderDishDetail();
 }
+
 function dishRecommendTh(){
   const d = dishes[dishSelectedIdx];
   return `มีร้านแนะนำสำหรับกิน${d.th}ไหม`;
@@ -4269,7 +4544,7 @@ function renderNearby(){
 function renderSituations(){
   document.getElementById('situationList').innerHTML = situations.map((s,i) =>
     `<div class="sit-row" style="--accent:${s.color}" onclick="openSituation(${i})">
-       <div class="sit-icon" style="--accent:${s.color}">${iconSvg(s.icon, 40)}</div>
+       <div class="sit-icon" style="--accent:${s.color}">${iconSvg(s.icon, 50)}</div>
        <div class="sit-text">
          <div class="sit-title">${s.title}</div>
          <div class="sit-sub">${s.sample || (s.count+'フレーズ')}</div>
@@ -4313,7 +4588,9 @@ function openModeList(mode){
   renderComposerFixed();
   renderTransportTabs();
   renderComposerList();
-  document.getElementById('composerScreen').classList.add('show');
+  const composerScreenEl = document.getElementById('composerScreen');
+  composerScreenEl.scrollTop = 0;
+  composerScreenEl.classList.add('show');
 }
 
 function openTransportComposer(){
@@ -4323,7 +4600,9 @@ function openTransportComposer(){
   renderComposerFixed();
   renderTransportTabs();
   renderComposerList();
-  document.getElementById('composerScreen').classList.add('show');
+  const composerScreenEl = document.getElementById('composerScreen');
+  composerScreenEl.scrollTop = 0;
+  composerScreenEl.classList.add('show');
 }
 function closeComposer(){
   document.getElementById('composerScreen').classList.remove('show');
@@ -4521,6 +4800,34 @@ function toggleAnchorExpand(){
 }
 
 let selectedCategoryIdx = null;
+let categoryDurationVal = null;
+let categoryNumInputVal = null;
+function durationDefaultVal(p){
+  return (p.durationOptions && p.durationOptions.length) ? p.durationOptions[0] : null;
+}
+function applyDuration(text, val){
+  return (val === null || val === undefined) ? text : text.replace('{DURATION}', val);
+}
+function applyNum(text, val){
+  return (val === null || val === undefined) ? text : text.replace('{NUM}', val);
+}
+function durationChipsHtml(options, current){
+  if(!options) return '';
+  const chips = options.map(v => {
+    const active = current === v ? 'active' : '';
+    return `<button class="duration-chip ${active}" onclick="event.stopPropagation(); selectCategoryDuration(${v});">${v}分</button>`;
+  }).join('');
+  return `<div class="duration-chip-row">${chips}</div>`;
+}
+function selectCategoryDuration(v){
+  categoryDurationVal = v;
+  renderCategoryFixed();
+  renderCategoryList();
+}
+function numInputHtml(config){
+  if(!config) return '';
+  return `<button class="nb-trigger" onclick="event.stopPropagation(); openSelfNumBoard();">${iconSvg('calculator', 18)} 電卓で数字を入力する</button>`;
+}
 
 function openSituation(i){
   const s = situations[i];
@@ -4542,7 +4849,9 @@ function openCategoryComposer(i){
   document.getElementById('transportTabsFixed').innerHTML = '';
   renderCategoryFixed();
   renderCategoryList();
-  document.getElementById('composerScreen').classList.add('show');
+  const composerScreenEl = document.getElementById('composerScreen');
+  composerScreenEl.scrollTop = 0;
+  composerScreenEl.classList.add('show');
 }
 function renderCategoryFixed(){
   const s = situations[openState.index];
@@ -4578,15 +4887,20 @@ function renderCategoryFixed(){
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + pharmacyEntryHtml + `<div class="selected-phrase empty">下の項目から伝えたいことを選んでください</div>`;
   } else {
     const p = s.phrases[selectedCategoryIdx];
-    const th = fullTh(p.base, p.type);
+    const durVal = p.durationOptions ? (categoryDurationVal !== null ? categoryDurationVal : durationDefaultVal(p)) : null;
+    const numVal = p.numInput ? (categoryNumInputVal !== null ? categoryNumInputVal : p.numInput.defaultVal) : null;
+    let th = applyDuration(fullTh(p.base, p.type), durVal);
+    th = applyNum(th, numVal);
+    let jp = applyDuration(p.jp, durVal);
+    jp = applyNum(jp, numVal);
     document.getElementById('composerFixed').innerHTML = hotelHtml + dishEntryHtml + pharmacyEntryHtml + `<div class="selected-phrase">
       <div class="sp-header"><button class="sp-clear-btn" onclick="clearCategoryPhrase()">✕ 選択を解除</button></div>
       <div class="sp-th">${th}</div>
-      <div class="sp-jp">${p.jp}</div>
+      <div class="sp-jp">${jp}</div>
       ${p.note ? `<div class="sp-note">${p.note}</div>` : ''}
-      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${favStarHtml(th, p.jp)}
+      ${fullscreenBtnHtml()}${nbTriggerHtml(p.numberAnswer)}${timeTriggerHtml(p.timeAnswer)}${timeRangeTriggerHtml(p.timeRangeAnswer)}${durationChipsHtml(p.durationOptions, durVal)}${numInputHtml(p.numInput)}${favStarHtml(th, jp)}
     </div>`;
-    setLastPhrase(th, p.jp);
+    setLastPhrase(th, jp);
   }
 }
 function clearCategoryPhrase(){
@@ -4599,18 +4913,29 @@ function renderCategoryList(){
   let html = '';
   s.phrases.forEach((p, idx) => {
     const sel = selectedCategoryIdx === idx ? 'selected' : '';
-    const th = fullTh(p.base, p.type);
+    const isSelectedNow = selectedCategoryIdx === idx;
+    const durVal = p.durationOptions ? ((isSelectedNow && categoryDurationVal !== null) ? categoryDurationVal : durationDefaultVal(p)) : null;
+    const numVal = p.numInput ? ((isSelectedNow && categoryNumInputVal !== null) ? categoryNumInputVal : p.numInput.defaultVal) : null;
+    let th = applyDuration(fullTh(p.base, p.type), durVal);
+    th = applyNum(th, numVal);
+    let jp = applyDuration(p.jp, durVal);
+    jp = applyNum(jp, numVal);
+    const durationBadge = (p.durationOptions && !isSelectedNow) ? `<span class="fi-editable-badge">✏️ タップ後に時間を変更できます</span>` : '';
+    const numBadge = (p.numInput && !isSelectedNow) ? `<span class="fi-editable-badge">✏️ タップ後に数字を変更できます</span>` : '';
     html += `<div class="follow-item ${sel}" onclick="selectCategoryPhrase(${idx})">
       <div class="fi-th">${th}</div>
-      <div class="fi-jp">${p.jp}</div>
+      <div class="fi-jp">${jp}</div>
+      ${durationBadge}${numBadge}
       ${p.note ? `<div class="fi-note">${p.note}</div>` : ''}
-      ${favStarHtml(th, p.jp)}
+      ${favStarHtml(th, jp)}
     </div>`;
   });
   document.getElementById('composerList').innerHTML = html;
 }
 function selectCategoryPhrase(idx){
   selectedCategoryIdx = (selectedCategoryIdx === idx) ? null : idx;
+  categoryDurationVal = null;
+  categoryNumInputVal = null;
   renderCategoryFixed();
   renderCategoryList();
 }
@@ -4793,19 +5118,31 @@ function nbTriggerHtml(config){
 }
 function timeTriggerHtml(flag){
   if(!flag) return '';
-  return `<button class="nb-trigger" onclick="openTimeBoard()">${iconSvg('clock', 18)} 時刻で答えてもらう</button>`;
+  return `<button class="nb-trigger" onclick="openTimeBoard(false)">${iconSvg('clock', 18)} 時刻で答えてもらう</button>`;
+}
+function timeRangeTriggerHtml(flag){
+  if(!flag) return '';
+  return `<button class="nb-trigger" onclick="openTimeBoard(true)">${iconSvg('clock', 18)} 開始〜終了時刻で答えてもらう</button>`;
 }
 let timeHH = '';
 let timeMM = '';
 let timeField = 'hh';
 let timePeriod = null;
-function openTimeBoard(){
+let timeRangeMode = false;
+let timeRangeStage = 'from';
+let timeFromResult = null;
+function openTimeBoard(isRange){
   timeHH = '';
   timeMM = '';
   timeField = 'hh';
   timePeriod = null;
+  timeRangeMode = !!isRange;
+  timeRangeStage = 'from';
+  timeFromResult = null;
   document.getElementById('tpAm').classList.remove('selected');
   document.getElementById('tpPm').classList.remove('selected');
+  const titleEl = document.getElementById('timeBoardTitle');
+  titleEl.innerHTML = `${iconSvg('clock', 20)}${timeRangeMode ? '開始時刻を答える' : '時刻で答える'}`;
   renderTimeDisplay();
   document.getElementById('timeBoardScreen').classList.add('show');
 }
@@ -4875,6 +5212,21 @@ function renderTimeDisplay(){
   const ampmTag = timePeriod === 'am' ? 'AM' : (timePeriod === 'pm' ? 'PM' : '');
   const isComplete = timeHH !== '' && timeMM.length === 2 && timePeriod !== null;
 
+  // 範囲モード:開始時刻が完了したら、自動的に終了時刻の入力へ切り替える
+  if(isComplete && timeRangeMode && timeRangeStage === 'from'){
+    timeFromResult = `${ampmTag} ${hhDisp}:${mmDisp}`;
+    timeRangeStage = 'to';
+    timeHH = '';
+    timeMM = '';
+    timeField = 'hh';
+    timePeriod = null;
+    document.getElementById('tpAm').classList.remove('selected');
+    document.getElementById('tpPm').classList.remove('selected');
+    document.getElementById('timeBoardTitle').innerHTML = `${iconSvg('clock', 20)}終了時刻を答える`;
+    renderTimeDisplay();
+    return;
+  }
+
   // phase: 'period' (choosing AM/PM) -> 'digits' (typing hour/minute) -> 'done'
   const phase = timePeriod === null ? 'period' : (isComplete ? 'done' : 'digits');
   document.getElementById('tpAm').classList.toggle('phase-active', phase === 'period');
@@ -4883,8 +5235,14 @@ function renderTimeDisplay(){
 
   let timeLine;
   if(isComplete){
-    timeLine = `${ampmTag} ${hhDisp}:${mmDisp}`;
-    setLastPhrase(timeLine, '');
+    const nowResult = `${ampmTag} ${hhDisp}:${mmDisp}`;
+    if(timeRangeMode){
+      timeLine = `${timeFromResult} 〜 ${nowResult}`;
+      setLastPhrase(timeLine, '');
+    } else {
+      timeLine = nowResult;
+      setLastPhrase(timeLine, '');
+    }
   } else {
     const hhCls = (phase === 'digits' && timeField === 'hh') ? ' time-active' : '';
     const mmCls = (phase === 'digits' && timeField === 'mm') ? ' time-active' : '';
@@ -4892,7 +5250,8 @@ function renderTimeDisplay(){
     const ampmHtml = phase === 'period'
       ? `<span class="time-ampm-placeholder">AM<br>PM</span> `
       : (ampmTag ? `${ampmTag} ` : '');
-    timeLine = `${ampmHtml}<span class="${hhCls}">${hhDisp}</span><span class="${colonCls}">:</span><span class="${mmCls}">${mmDisp}</span>`;
+    const fromPrefix = (timeRangeMode && timeRangeStage === 'to') ? `<div class="calc-rate-hint confirmed">開始:${timeFromResult}</div>` : '';
+    timeLine = `${fromPrefix}${ampmHtml}<span class="${hhCls}">${hhDisp}</span><span class="${colonCls}">:</span><span class="${mmCls}">${mmDisp}</span>`;
   }
 
   let periodLabel;
@@ -4928,10 +5287,28 @@ function openNumberBoard(){
   const useSimpleKeys = !!config.modes;
   document.getElementById('calcKeysFull').style.display = useSimpleKeys ? 'none' : '';
   document.getElementById('calcKeysSimple').style.display = useSimpleKeys ? '' : 'none';
+  document.getElementById('rateStatus').style.display = '';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
 }
 
+function openSelfNumBoard(){
+  if(openState.type !== 'category' || selectedCategoryIdx === null) return;
+  const p = situations[openState.index].phrases[selectedCategoryIdx];
+  if(!p.numInput) return;
+  calcMode = 'selfnum';
+  calcPhraseConfig = { base: p.base, type: p.type, jp: p.jp, defaultVal: p.numInput.defaultVal };
+  document.getElementById('calcTitle').innerHTML = `${iconSvg('calculator', 20)}数字を入力する`;
+  document.getElementById('calcKeysFull').style.display = 'none';
+  document.getElementById('calcKeysSimple').style.display = '';
+  document.getElementById('rateStatus').style.display = 'none';
+  calcCurrent = String((categoryNumInputVal !== null ? categoryNumInputVal : p.numInput.defaultVal) || 0);
+  calcPrev = null;
+  calcOperator = null;
+  calcResetNext = true;
+  calcRender();
+  document.getElementById('calcScreen').classList.add('show');
+}
 function openRateSheet(){
   document.getElementById('topRateInput').value = thbToJpyRate || '';
   document.getElementById('rateOverlay').classList.add('show');
@@ -4976,10 +5353,18 @@ function openCalc(){
   document.getElementById('calcTitle').innerHTML = `${iconSvg('calculator', 20)}฿計算機`;
   document.getElementById('calcKeysFull').style.display = '';
   document.getElementById('calcKeysSimple').style.display = 'none';
+  document.getElementById('rateStatus').style.display = '';
   calcClearAll();
   document.getElementById('calcScreen').classList.add('show');
 }
 function closeCalc(){
+  if(calcMode === 'selfnum'){
+    categoryNumInputVal = parseInt(calcCurrent, 10) || 0;
+    document.getElementById('calcScreen').classList.remove('show');
+    restoreParentPhrase();
+    renderCategoryList();
+    return;
+  }
   document.getElementById('calcScreen').classList.remove('show');
   restoreParentPhrase();
 }
@@ -5050,8 +5435,18 @@ function setCalcMode(i){
 function calcRender(){
   const num = parseFloat(calcCurrent) || 0;
   const formatted = formatCalcDisplay(calcCurrent);
-  let mainText, mainTextPlain, showJpy, questionHtml = '';
-  if(calcMode === 'phrase' && calcPhraseConfig){
+  let mainText, mainTextPlain, showJpy, questionHtml = '', jpForLastPhrase = '';
+  if(calcMode === 'selfnum' && calcPhraseConfig){
+    const cfg = calcPhraseConfig;
+    const numStr = String(parseInt(calcCurrent, 10) || 0);
+    const th = applyNum(fullTh(cfg.base, cfg.type), numStr);
+    const jp = applyNum(cfg.jp, numStr);
+    questionHtml = `<div class="selfnum-hint">数字を入力すると、下のフレーズに反映されます</div>`;
+    mainText = `<div class="selfnum-th">${th}</div><div class="selfnum-jp">${jp}</div>`;
+    mainTextPlain = th;
+    jpForLastPhrase = jp;
+    showJpy = false;
+  } else if(calcMode === 'phrase' && calcPhraseConfig){
     const cfg = calcPhraseConfig;
     mainText = cfg.position === 'prefix' ? `${cfg.unit} ${formatted}` : `${formatted} ${cfg.unit}`;
     mainTextPlain = mainText;
@@ -5090,7 +5485,7 @@ function calcRender(){
     jpyHtml = `<div class="nb-jpy">(${formatted}${calcPhraseConfig.unitJp})</div>`;
   }
   document.getElementById('calcDisplay').innerHTML = `${questionHtml}<div class="calc-value${questionHtml ? ' compact' : ''}">${mainText}</div>${jpyHtml}`;
-  setLastPhrase(mainTextPlain, '');
+  setLastPhrase(mainTextPlain, jpForLastPhrase);
 }
 function saveRateFromCalc(){
   const v = parseFloat(document.getElementById('calcRateInput').value);
@@ -5148,7 +5543,7 @@ function refreshVisible(){
 }
 
 function normalizeSearch(str){
-  return str.toLowerCase().replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)).replace(/\s+/g, '').replace(/ー/g, '');
+  return str.toLowerCase().replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
 }
 function isSubsequence(query, target){
   let qi = 0;
@@ -5168,17 +5563,9 @@ function matchScore(d, nq){
 function findMatches(query){
   const nq = normalizeSearch(query);
   if(!nq) return [];
-  // Googleマップ等からコピーした正式名称は、登録名(通称)より長くなることが多いため、
-  // 「登録名に検索語が含まれる」だけでなく「検索語に登録名が含まれる」逆方向も見る
-  const reverseOk = nq.length >= 6;
   const exact = destinations.filter(d => {
     const pool = [...d.key, d.th, d.jp, d.pref];
-    return pool.some(k => {
-      const nk = normalizeSearch(k);
-      if(nk.includes(nq)) return true;
-      if(reverseOk && nk.length >= 4 && nq.includes(nk)) return true;
-      return false;
-    });
+    return pool.some(k => normalizeSearch(k).includes(nq));
   });
   if(exact.length > 0){
     exact.sort((a, b) => matchScore(b, nq) - matchScore(a, nq));
@@ -5186,7 +5573,6 @@ function findMatches(query){
   }
 
   // 厳密一致が0件の場合だけ、飛び飛びでも順番通りなら一致とみなす緩い検索を試す
-  // (逆方向の部分列一致は短い登録名が無関係な長文にたまたま含まれるリスクが高いため、ここでは追加しない)
   if(nq.length < 3) return [];
   const loose = destinations.filter(d => {
     const pool = [...d.key, d.th, d.jp, d.pref];

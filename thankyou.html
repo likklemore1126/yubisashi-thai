@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ご購入ありがとうございます - 指さしタイ</title>
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17242A;
+    --paper:#FBF7EF;
+    --sand:#F1E9D8;
+    --marigold:#E8A33D;
+    --marigold-deep:#C9812A;
+    --teal:#0F6B62;
+    --teal-deep:#0A4C46;
+    --pink:#E23F73;
+    --pink-deep:#B92D5B;
+    --line:#E4DAC4;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background:#DED2B0;
+    font-family:'Noto Sans JP', sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:24px 16px;
+  }
+  .card{
+    width:100%;
+    max-width:400px;
+    background:var(--paper);
+    border-radius:20px;
+    padding:36px 28px;
+    box-shadow:0 20px 50px -20px rgba(23,36,42,0.35);
+    text-align:center;
+  }
+  .logo{
+    font-family:'Kanit', sans-serif;
+    font-weight:700;
+    font-size:26px;
+    margin-bottom:6px;
+  }
+  .tagline{
+    font-size:12.5px;
+    color:var(--ink);
+    opacity:0.6;
+    margin-bottom:28px;
+  }
+
+  /* --- 読み込み中 --- */
+  .spinner{
+    width:34px; height:34px; margin:0 auto 18px;
+    border:3px solid rgba(23,36,42,0.15);
+    border-top-color:var(--marigold);
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .status-text{
+    font-size:14px; line-height:1.7; color:var(--ink); opacity:0.85;
+  }
+
+  /* --- 成功 --- */
+  .success-icon{
+    width:52px; height:52px; margin:0 auto 16px;
+    border-radius:50%;
+    background:var(--teal);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px;
+  }
+  .success-title{
+    font-size:16px; font-weight:700; margin-bottom:18px;
+  }
+  .code-box{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:16px;
+  }
+  .code-label{
+    font-size:11.5px; color:var(--ink); opacity:0.6; margin-bottom:6px;
+  }
+  .code-value{
+    font-family:'Kanit', sans-serif;
+    font-size:24px; font-weight:600; letter-spacing:1.5px;
+    color:var(--ink);
+    word-break:break-all;
+  }
+  .copy-btn{
+    width:100%;
+    padding:12px;
+    font-size:14px; font-weight:700;
+    background:var(--marigold);
+    color:var(--ink);
+    border:none; border-radius:10px;
+    cursor:pointer;
+    font-family:'Noto Sans JP', sans-serif;
+    margin-bottom:14px;
+  }
+  .copy-btn.copied{ background:var(--teal); color:#fff; }
+  .hint-text{
+    font-size:12.5px; line-height:1.7; color:var(--ink); opacity:0.65;
+  }
+
+  /* --- タイムアウト・エラー --- */
+  .error-icon{
+    width:52px; height:52px; margin:0 auto 16px;
+    border-radius:50%;
+    background:var(--pink-deep);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; font-weight:700;
+  }
+  .error-title{
+    font-size:15px; font-weight:700; margin-bottom:10px;
+  }
+  .error-text{
+    font-size:13px; line-height:1.7; color:var(--ink); opacity:0.75; margin-bottom:20px;
+  }
+  .retry-btn{
+    width:100%;
+    padding:12px;
+    font-size:14px; font-weight:700;
+    background:var(--ink);
+    color:var(--paper);
+    border:none; border-radius:10px;
+    cursor:pointer;
+    font-family:'Noto Sans JP', sans-serif;
+  }
+
+  .state{ display:none; }
+  .state.active{ display:block; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">指さしタイ</div>
+  <div class="tagline">見せるだけで、伝わる。</div>
+
+  <!-- 読み込み中 -->
+  <div class="state active" id="stateLoading">
+    <div class="spinner"></div>
+    <div class="status-text">ご購入ありがとうございます。<br>利用コードを発行しています…</div>
+  </div>
+
+  <!-- 発行成功 -->
+  <div class="state" id="stateSuccess">
+    <div class="success-icon">✓</div>
+    <div class="success-title">ご購入ありがとうございます!</div>
+    <div class="code-box">
+      <div class="code-label">あなたの利用コード</div>
+      <div class="code-value" id="codeValue">----</div>
+    </div>
+    <button type="button" class="copy-btn" id="copyBtn">コードをコピー</button>
+    <div class="hint-text">「指さしタイ」アプリの初回起動時に、このコードを入力してください。<br>同じコードを記載したメールもお送りしています。</div>
+  </div>
+
+  <!-- タイムアウト -->
+  <div class="state" id="stateTimeout">
+    <div class="error-icon">!</div>
+    <div class="error-title">発行に時間がかかっています</div>
+    <div class="error-text">決済は完了しています。コードの発行にお時間がかかる場合がございます。しばらくしてからメールをご確認いただくか、下のボタンで再度お試しください。</div>
+    <button type="button" class="retry-btn" id="retryBtn">もう一度確認する</button>
+  </div>
+
+  <!-- session_idが無い等の異常系 -->
+  <div class="state" id="stateMissing">
+    <div class="error-icon">!</div>
+    <div class="error-title">決済情報が見つかりません</div>
+    <div class="error-text">このページは、購入完了後のリンクからアクセスしてください。すでに購入済みでコードが分からない場合は、購入時に届いたメールをご確認ください。</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var STATUS_ENDPOINT = 'https://yubisashi-thai-payment.takatobi.workers.dev/api/status';
+  var POLL_INTERVAL_MS = 2000;
+  var MAX_ATTEMPTS = 30; // 2秒 x 30回 = 60秒でタイムアウト
+
+  var states = {
+    loading: document.getElementById('stateLoading'),
+    success: document.getElementById('stateSuccess'),
+    timeout: document.getElementById('stateTimeout'),
+    missing: document.getElementById('stateMissing')
+  };
+
+  function showState(name){
+    Object.keys(states).forEach(function(key){
+      states[key].classList.toggle('active', key === name);
+    });
+  }
+
+  function getSessionId(){
+    try{
+      var params = new URLSearchParams(window.location.search);
+      return params.get('session_id');
+    }catch(e){
+      return null;
+    }
+  }
+
+  var sessionId = getSessionId();
+  var attempts = 0;
+  var pollTimer = null;
+
+  function checkStatus(){
+    attempts++;
+    fetch(STATUS_ENDPOINT + '?session_id=' + encodeURIComponent(sessionId))
+      .then(function(res){
+        if(!res.ok){ throw new Error('status ' + res.status); }
+        return res.json();
+      })
+      .then(function(data){
+        if(data.ready === true && data.code){
+          document.getElementById('codeValue').textContent = data.code;
+          showState('success');
+          return;
+        }
+        if(attempts >= MAX_ATTEMPTS){
+          showState('timeout');
+          return;
+        }
+        pollTimer = setTimeout(checkStatus, POLL_INTERVAL_MS);
+      })
+      .catch(function(){
+        if(attempts >= MAX_ATTEMPTS){
+          showState('timeout');
+          return;
+        }
+        pollTimer = setTimeout(checkStatus, POLL_INTERVAL_MS);
+      });
+  }
+
+  if(!sessionId){
+    showState('missing');
+  } else {
+    showState('loading');
+    checkStatus();
+  }
+
+  document.getElementById('retryBtn').addEventListener('click', function(){
+    attempts = 0;
+    showState('loading');
+    checkStatus();
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var code = document.getElementById('codeValue').textContent;
+    var btn = document.getElementById('copyBtn');
+    function markCopied(){
+      btn.textContent = 'コピーしました!';
+      btn.classList.add('copied');
+      setTimeout(function(){
+        btn.textContent = 'コードをコピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(markCopied).catch(function(){});
+    } else {
+      try{
+        var ta = document.createElement('textarea');
+        ta.value = code;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        markCopied();
+      }catch(e){}
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

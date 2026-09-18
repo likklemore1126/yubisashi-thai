@@ -124,6 +124,41 @@
   }
   @keyframes boot-spin{ to{ transform:rotate(360deg); } }
 
+  .license-gate{
+    position:fixed; inset:0; z-index:10000;
+    background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    transition:opacity 0.2s ease;
+  }
+  .license-gate.hide{ opacity:0; pointer-events:none; }
+  .license-gate-card{ width:100%; max-width:340px; text-align:center; }
+  .license-gate-logo{
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:26px;
+    color:var(--ink); margin-bottom:12px;
+  }
+  .license-gate-desc{
+    font-size:13.5px; color:var(--ink); opacity:0.75; line-height:1.6; margin-bottom:20px;
+  }
+  .license-gate-input{
+    width:100%; box-sizing:border-box; padding:12px 14px; font-size:16px;
+    border:1px solid var(--line); border-radius:10px; text-align:center;
+    letter-spacing:1px; font-family:'Noto Sans JP', sans-serif;
+    margin-bottom:12px; background:#fff; color:var(--ink);
+  }
+  .license-gate-input:focus{ outline:none; border-color:var(--marigold); }
+  .license-gate-btn{
+    width:100%; padding:13px; font-size:15px; font-weight:700;
+    background:var(--marigold); color:var(--ink); border:none; border-radius:10px;
+    cursor:pointer; font-family:'Noto Sans JP', sans-serif;
+  }
+  .license-gate-btn:disabled{ opacity:0.5; cursor:default; }
+  .license-gate-msg{
+    margin-top:12px; font-size:12.5px; min-height:16px; color:var(--pink-deep);
+    line-height:1.5;
+  }
+  .license-gate-msg.ok{ color:var(--teal-deep); }
+
   .gender-toggle{ position:absolute; top:calc(18px + env(safe-area-inset-top)); right:16px; display:flex; gap:4px; z-index:2; }
   .gender-toggle-single{
     position:absolute; top:calc(18px + env(safe-area-inset-top)); right:16px; z-index:2;
@@ -1050,6 +1085,100 @@
 </style>
 </head>
 <body>
+
+<div class="license-gate" id="licenseGate">
+  <div class="license-gate-card">
+    <div class="license-gate-logo">指さしタイ</div>
+    <p class="license-gate-desc">ご購入時にお送りしたメールに記載の利用コードを入力してください。</p>
+    <input type="text" id="licenseCodeInput" class="license-gate-input" placeholder="XXXX-XXXX-XXXX" maxlength="14" autocomplete="off" autocapitalize="characters" inputmode="text">
+    <button type="button" id="licenseVerifyBtn" class="license-gate-btn" onclick="submitLicenseCode()">認証する</button>
+    <div id="licenseGateMsg" class="license-gate-msg" role="status"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var GATE_ENDPOINT = 'https://yubisashi-thai-payment.takatobi.workers.dev/api/verify';
+  var STORAGE_KEY = 'yubisashi_license_verified';
+  var gate = document.getElementById('licenseGate');
+
+  // 既に認証済みなら、他の処理を待たずただちにゲートを隠す(再表示させない)
+  try{
+    if(localStorage.getItem(STORAGE_KEY) === 'true'){
+      if(gate) gate.classList.add('hide');
+    }
+  }catch(e){}
+
+  var input = document.getElementById('licenseCodeInput');
+  var btn = document.getElementById('licenseVerifyBtn');
+  var msg = document.getElementById('licenseGateMsg');
+
+  // 入力補助: 英数字以外を除去して大文字化し、4文字ごとにハイフンを自動挿入する
+  if(input){
+    input.addEventListener('input', function(){
+      var raw = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+      var formatted = raw.replace(/(.{4})(?=.)/g, '$1-');
+      input.value = formatted;
+    });
+    input.addEventListener('keydown', function(e){
+      if(e.key === 'Enter') submitLicenseCode();
+    });
+  }
+
+  window.submitLicenseCode = async function(){
+    if(!input || !btn || !msg) return;
+    var code = input.value.trim();
+    if(!code){
+      msg.textContent = 'コードを入力してください。';
+      msg.className = 'license-gate-msg';
+      return;
+    }
+    btn.disabled = true;
+    var originalLabel = btn.textContent;
+    btn.textContent = '確認中…';
+    msg.textContent = '';
+    msg.className = 'license-gate-msg';
+
+    try{
+      var res = await fetch(GATE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code })
+      });
+
+      if(res.status === 429){
+        msg.textContent = 'しばらく時間をおいてから、もう一度お試しください。';
+        return;
+      }
+      if(!res.ok){
+        msg.textContent = '通信エラーが発生しました。時間をおいて再度お試しください。';
+        return;
+      }
+
+      var data = await res.json();
+      if(data.valid === true){
+        try{ localStorage.setItem(STORAGE_KEY, 'true'); }catch(e){}
+        msg.textContent = '認証できました!';
+        msg.className = 'license-gate-msg ok';
+        if(gate){
+          setTimeout(function(){ gate.classList.add('hide'); }, 300);
+        }
+      } else if(data.reason === 'not_found'){
+        msg.textContent = 'コードが見つかりません。入力内容をご確認ください。';
+      } else if(data.reason === 'inactive'){
+        msg.textContent = 'このコードは現在ご利用いただけません。購入時のメールをご確認のうえ、サポートまでご連絡ください。';
+      } else {
+        msg.textContent = 'コードを確認できませんでした。入力内容をご確認ください。';
+      }
+    }catch(err){
+      // ネットワークエラー(オフライン、CORSブロックなど)
+      msg.textContent = 'インターネットに接続してから、もう一度お試しください。';
+    }finally{
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  };
+})();
+</script>
 
 <div class="boot-splash" id="bootSplash">
   <div class="boot-splash-spinner"></div>

@@ -11,52 +11,6 @@
   gtag('config', 'G-C3M22ZEFTT');
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script>
-  // iOS Safariはアドレスバーの表示/非表示でビューポート高さが動的に変わり、
-  // CSSのdvh単位だけだと再計算のタイミングがずれて.deviceの下端に隙間が出ることがある。
-  // JSで実際の innerHeight を測って --app-height に反映し、CSS側でdvhより優先させる。
-  (function(){
-    function setAppHeight(){
-      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
-    }
-    setAppHeight();
-    window.addEventListener('resize', setAppHeight);
-    window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
-  })();
-
-  // ▼▼▼ 調査用の一時的なデバッグ表示（原因特定用。リリース時は削除） ▼▼▼
-  window.addEventListener('DOMContentLoaded', function(){
-    var box = document.createElement('div');
-    box.id = 'debugBox';
-    box.style.cssText = 'position:fixed; top:0; left:0; right:0; z-index:999999; background:rgba(0,0,0,0.85); color:#0f0; font:11px/1.5 monospace; padding:8px; white-space:pre; pointer-events:none;';
-    document.body.appendChild(box);
-    function update(){
-      var d = document.querySelector('.device');
-      var rect = d ? d.getBoundingClientRect() : null;
-      var cs = d ? getComputedStyle(d) : null;
-      var vv = window.visualViewport;
-      var lines = [
-        'innerHeight: ' + window.innerHeight,
-        'visualViewport.height: ' + (vv ? vv.height : 'なし'),
-        'visualViewport.offsetTop: ' + (vv ? vv.offsetTop : 'なし'),
-        'screen.height: ' + window.screen.height,
-        'devicePixelRatio: ' + window.devicePixelRatio,
-        '--app-height var: ' + document.documentElement.style.getPropertyValue('--app-height'),
-        '.device computed height: ' + (cs ? cs.height : 'なし'),
-        '.device rect height: ' + (rect ? rect.height.toFixed(1) : 'なし'),
-        '.device rect top/bottom: ' + (rect ? rect.top.toFixed(1)+' / '+rect.bottom.toFixed(1) : 'なし'),
-        'body scrollHeight/clientHeight: ' + document.body.scrollHeight + ' / ' + document.body.clientHeight
-      ];
-      box.textContent = lines.join('\n');
-    }
-    update();
-    setInterval(update, 300);
-    window.addEventListener('resize', update);
-    window.addEventListener('scroll', update, true);
-    if(window.visualViewport){ window.visualViewport.addEventListener('resize', update); window.visualViewport.addEventListener('scroll', update); }
-  });
-  // ▲▲▲ 調査用の一時的なデバッグ表示ここまで ▲▲▲
-</script>
 <title>指さしタイ - トップ画面</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#17242A">
@@ -111,7 +65,6 @@
     .device{
       height:100vh;
       height:100dvh;
-      height:var(--app-height, 100dvh);
       max-width:100%;
       border-radius:0;
       box-shadow:none;
@@ -161,9 +114,9 @@
   .boot-splash{
     position:fixed; top:-15vh; left:-5vw; right:-5vw; bottom:-15vh;
     z-index:9999; background:#fff;
-    transition:opacity 0.25s ease, visibility 0s linear 0.25s;
+    transition:opacity 0.25s ease;
   }
-  .boot-splash.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .boot-splash.hide{ opacity:0; pointer-events:none; }
   .boot-splash-spinner{
     position:absolute; left:50%; top:50%; width:32px; height:32px; margin:-16px 0 0 -16px;
     border:3px solid rgba(23,36,42,0.15); border-top-color:var(--marigold);
@@ -176,9 +129,9 @@
     background:var(--paper);
     display:flex; align-items:center; justify-content:center;
     padding:24px;
-    transition:opacity 0.2s ease, visibility 0s linear 0.2s;
+    transition:opacity 0.2s ease;
   }
-  .license-gate.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .license-gate.hide{ opacity:0; pointer-events:none; }
   .license-gate-card{ width:100%; max-width:340px; text-align:center; }
   .license-gate-logo{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:26px;
@@ -330,7 +283,7 @@
   }
   .chip:active{ transform:scale(0.95); background:var(--marigold); border-color:var(--marigold-deep); }
 
-  .situations{ padding:0 14px 24px; display:flex; flex-direction:column; gap:8px; }
+  .situations{ padding:0 14px 24px; display:flex; flex-direction:column; gap:8px; max-height:45vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
   .sit-row{
     display:flex; align-items:center; gap:12px; background:#fff;
     border:1.5px solid var(--line); border-radius:14px; padding:12px 14px;
@@ -362,17 +315,16 @@
 
   .overlay{
     position:absolute; inset:0; background:rgba(23,36,42,0.45);
-    opacity:0; visibility:hidden; pointer-events:none; transition:opacity .2s ease, visibility 0s linear .2s; z-index:5;
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:5;
   }
-  .overlay.show{ opacity:1; visibility:visible; pointer-events:auto; transition:opacity .2s ease, visibility 0s linear 0s; }
+  .overlay.show{ opacity:1; pointer-events:auto; }
   .sheet{
     position:absolute; left:0; right:0; bottom:0; background:var(--paper);
     border-radius:22px 22px 0 0; padding:16px 18px 22px;
-    transform:translateY(100%); visibility:hidden;
-    transition:transform .25s cubic-bezier(.2,.8,.3,1), visibility 0s linear .25s;
+    transform:translateY(100%); transition:transform .25s cubic-bezier(.2,.8,.3,1);
     z-index:6; max-height:78%; overflow-y:auto;
   }
-  .sheet.show{ transform:translateY(0); visibility:visible; transition:transform .25s cubic-bezier(.2,.8,.3,1), visibility 0s linear 0s; }
+  .sheet.show{ transform:translateY(0); }
   .sheet-handle{ width:36px; height:4px; background:var(--line); border-radius:3px; margin:0 auto 14px; }
   .sheet-title{ font-family:'Kanit', sans-serif; font-weight:600; font-size:16px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
 
@@ -390,12 +342,12 @@
   .composer-screen{
     position:absolute; inset:0; background:var(--paper);
     display:flex; flex-direction:column;
-    transform:translateY(100%); visibility:hidden;
-    transition:transform .25s cubic-bezier(.2,.8,.3,1), visibility 0s linear .25s;
+    transform:translateY(100%);
+    transition:transform .25s cubic-bezier(.2,.8,.3,1);
     z-index:8; pointer-events:none;
     overflow-y:auto;
   }
-  .composer-screen.show{ transform:translateY(0); visibility:visible; pointer-events:auto; transition:transform .25s cubic-bezier(.2,.8,.3,1), visibility 0s linear 0s; }
+  .composer-screen.show{ transform:translateY(0); pointer-events:auto; }
   .composer-header{
     display:flex; align-items:center; gap:8px;
     padding:calc(18px + env(safe-area-inset-top)) 18px 10px; flex:0 0 auto;
@@ -417,7 +369,7 @@
     width:32px; height:32px; border-radius:50%; font-size:20px; font-weight:700; cursor:pointer;
     display:flex; align-items:center; justify-content:center; flex:0 0 auto; line-height:1; padding:0 0 2px;
   }
-  .proc-list{ flex:1 1 auto; padding:4px 18px 28px; }
+  .proc-list{ flex:1 1 auto; overflow-y:auto; padding:4px 18px 28px; }
   .proc-row{
     display:flex; align-items:center; gap:12px; padding:14px 14px;
     background:#fff; border:1.5px solid var(--line); border-radius:14px; margin-bottom:10px;
@@ -451,7 +403,7 @@
     border-radius:20px; padding:2px 8px; flex:0 0 auto;
   }
   .proc-arrow{ font-size:16px; color:#C7BEA9; }
-  .proc-booking-list{ flex:1 1 auto; padding:8px 18px 28px; border-top:1px solid var(--line); }
+  .proc-booking-list{ flex:1 1 auto; overflow-y:auto; padding:8px 18px 28px; border-top:1px solid var(--line); }
   .proc-book-link{
     display:block; padding:16px;
     background:#fff; border:1.5px solid var(--marigold); border-radius:14px; margin-bottom:12px;
@@ -473,7 +425,7 @@
   }
   .proc-book-features li{ font-size:12px; line-height:1.9; padding-left:16px; position:relative; color:#5c4415; }
   .proc-book-features li::before{ content:"・"; position:absolute; left:0; color:var(--marigold); }
-  .proc-manner-list{ flex:1 1 auto; padding:14px 18px 28px; }
+  .proc-manner-list{ flex:1 1 auto; overflow-y:auto; padding:14px 18px 28px; }
   .proc-manner-intro{ font-size:15px; line-height:1.8; color:#5c4415; margin-bottom:20px; font-weight:500; }
   .proc-manner-topic{ margin-bottom:26px; }
   .proc-manner-img{
@@ -658,7 +610,7 @@
   #dishContentWrap{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; overflow-x:hidden; touch-action:pan-y; }
   #dishList{ overflow-y:visible; flex:0 0 auto; }
   .composer-list{
-    flex:1 1 auto; padding:4px 18px 28px;
+    flex:1 1 auto; overflow-y:auto; padding:4px 18px 28px;
     border-top:1px solid var(--line);
   }
 
@@ -940,7 +892,7 @@
   .fav-handle-icon{ font-weight:700; color:var(--ink); }
   .fav-empty{ display:none; text-align:center; font-size:13px; color:#8B8272; padding:40px 20px; }
   .fav-empty.show{ display:block; }
-  .fav-list{ padding:0 18px; flex:1; position:relative; }
+  .fav-list{ padding:0 18px; overflow-y:auto; flex:1; position:relative; }
   .fav-row{
     display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid var(--line);
     border-radius:12px; padding:11px 12px; margin-bottom:8px; touch-action:pan-y;
@@ -1047,16 +999,16 @@
 
   .rate-overlay{
     position:absolute; inset:0; background:rgba(23,36,42,0.5);
-    opacity:0; visibility:hidden; pointer-events:none; transition:opacity .2s ease, visibility 0s linear .2s; z-index:20;
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:20;
   }
-  .rate-overlay.show{ opacity:1; visibility:visible; pointer-events:auto; transition:opacity .2s ease, visibility 0s linear 0s; }
+  .rate-overlay.show{ opacity:1; pointer-events:auto; }
   .rate-modal{
     position:absolute; left:50%; top:44%; width:82%;
-    transform:translate(-50%,-45%) scale(0.95); visibility:hidden;
+    transform:translate(-50%,-45%) scale(0.95);
     background:var(--paper); border-radius:18px; padding:22px 20px;
-    z-index:21; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
+    z-index:21; opacity:0; pointer-events:none; transition:all .2s ease;
   }
-  .rate-modal.show{ opacity:1; visibility:visible; pointer-events:auto; transform:translate(-50%,-50%) scale(1); transition:opacity .2s ease, transform .2s ease, visibility 0s linear 0s; }
+  .rate-modal.show{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
   .rate-modal-title{ font-family:'Kanit', sans-serif; font-weight:700; font-size:17px; margin-bottom:8px; }
   .rate-modal-desc{ font-size:12px; color:#6B6252; line-height:1.6; margin-bottom:16px; }
   .rate-modal-input-row{ display:flex; align-items:center; justify-content:center; gap:8px; font-size:15px; margin-bottom:18px; }

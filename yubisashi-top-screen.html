@@ -11,6 +11,19 @@
   gtag('config', 'G-C3M22ZEFTT');
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>
+  // iOS Safariはアドレスバーの表示/非表示でビューポート高さが動的に変わり、
+  // CSSのdvh単位だけだと再計算のタイミングがずれて.deviceの下端に隙間が出ることがある。
+  // JSで実際の innerHeight を測って --app-height に反映し、CSS側でdvhより優先させる。
+  (function(){
+    function setAppHeight(){
+      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+    }
+    setAppHeight();
+    window.addEventListener('resize', setAppHeight);
+    window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
+  })();
+</script>
 <title>指さしタイ - トップ画面</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#17242A">
@@ -65,6 +78,7 @@
     .device{
       height:100vh;
       height:100dvh;
+      height:var(--app-height, 100dvh);
       max-width:100%;
       border-radius:0;
       box-shadow:none;

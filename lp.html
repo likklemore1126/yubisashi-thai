@@ -333,6 +333,11 @@
   .lightbox{
     position:fixed; inset:0; background:rgba(10,14,16,0.97); z-index:9999;
     display:none; align-items:center;
+    /* Safariのツールバーが畳まれる前の「大きい方のビューポート」基準でinset:0の高さが
+       決まってしまい、実際に見えている画面より下にはみ出すことがあるため、
+       実際に見えている高さを基準にするdvh単位で明示的に高さを指定してクロップを防ぐ */
+    height:100vh;
+    height:100dvh;
   }
   .lightbox.open{ display:flex; }
   .lightbox-close{

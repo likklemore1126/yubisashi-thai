@@ -1,6 +1,6 @@
 {
-  "name": "指さしタイ語",
-  "short_name": "指さしタイ語",
+  "name": "指さしタイ",
+  "short_name": "指さしタイ",
   "description": "見せるだけで、伝わる。タイ語指差し会話アプリ",
   "start_url": "./index.html",
   "scope": "./",

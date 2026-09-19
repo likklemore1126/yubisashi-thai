@@ -7,23 +7,6 @@
 <meta name="description" content="タイ語が話せなくても大丈夫。スマホの画面を見せるだけで伝わる、旅行者専用のタイ語会話帳アプリ「指さしタイ」。買い切り2,000円、旅行中はオフラインでも使えます。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>
-  // iOS Safariはアドレスバーの表示/非表示でビューポート高さが動的に変わり、
-  // dvh単位だけだと拡大表示(ライトボックス)を開いた瞬間の再計算タイミングがずれて
-  // 画像の下側がフレームの外にはみ出すことがある。JSで実際の innerHeight を測って
-  // --app-height に反映し、CSS側でdvhより優先させる(本体アプリと同じ対策)。
-  (function(){
-    function setAppHeight(){
-      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
-    }
-    setAppHeight();
-    window.addEventListener('resize', setAppHeight);
-    window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
-    if(window.visualViewport){
-      window.visualViewport.addEventListener('resize', setAppHeight);
-    }
-  })();
-</script>
 <style>
   :root{
     --ink:#17242A;
@@ -350,14 +333,13 @@
   .lightbox{
     position:fixed; inset:0; background:rgba(10,14,16,0.97); z-index:9999;
     display:none; align-items:center;
-    /* Safariのツールバーが畳まれる前の「大きい方のビューポート」基準でinset:0の高さが
-       決まってしまい、実際に見えている画面より下にはみ出すことがあるため、
-       実際に見えている高さを基準に高さを指定してクロップを防ぐ。
-       dvh単体だとライトボックスを開いた瞬間の再計算タイミングがずれることがあるため、
-       本体アプリと同じくJSで測った--app-heightを優先させる */
+    /* iOS Safariは画面下部に半透明の操作バー(戻る/進む/共有など)を浮かせて表示することがあり、
+       これはページの座標計算(innerHeight/visualViewport/dvh)には一切含まれないため、
+       JSでどれだけ正確に測っても「実際に隠れている範囲」だけは検知できない。
+       そのため一番小さい安全な高さ(100svh=ツールバーが最大に広がった状態を想定した高さ)を
+       基準にして、常に確実に隠れない範囲だけを使うようにする */
     height:100vh;
-    height:100dvh;
-    height:var(--app-height, 100dvh);
+    height:100svh;
   }
   .lightbox.open{ display:flex; }
   .lightbox-close{
@@ -374,7 +356,9 @@
   .lightbox-slide{
     flex:0 0 100%; scroll-snap-align:center;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:64px 20px 26px; gap:14px;
+    /* 下側は、iOSのホームインジケーター分(env safe-area)+ 操作バーが浮いても
+       隠れないようにするための余白を追加で確保する */
+    padding:64px 20px calc(26px + env(safe-area-inset-bottom, 0px) + 40px); gap:14px;
   }
   .lightbox-caption{
     color:#fff; font-size:15px; font-weight:700; text-align:center; line-height:1.6;
@@ -1266,11 +1250,6 @@
     }
 
     function openLightbox(imgs, startIndex){
-      // 開く直前に必ず実際の表示高さを測り直す(Safariのツールバーが
-      // ちょうど畳まれる/開くタイミングと重なると値がずれることがあるため)
-      try{
-        document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
-      }catch(e){}
       scroller.innerHTML = '';
       var slots = imgs.map(function(){
         var slide = document.createElement('div');

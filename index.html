@@ -114,9 +114,9 @@
   .boot-splash{
     position:fixed; top:-15vh; left:-5vw; right:-5vw; bottom:-15vh;
     z-index:9999; background:#fff;
-    transition:opacity 0.25s ease;
+    transition:opacity 0.25s ease, visibility 0s linear 0.25s;
   }
-  .boot-splash.hide{ opacity:0; pointer-events:none; }
+  .boot-splash.hide{ opacity:0; visibility:hidden; pointer-events:none; }
   .boot-splash-spinner{
     position:absolute; left:50%; top:50%; width:32px; height:32px; margin:-16px 0 0 -16px;
     border:3px solid rgba(23,36,42,0.15); border-top-color:var(--marigold);
@@ -129,9 +129,9 @@
     background:var(--paper);
     display:flex; align-items:center; justify-content:center;
     padding:24px;
-    transition:opacity 0.2s ease;
+    transition:opacity 0.2s ease, visibility 0s linear 0.2s;
   }
-  .license-gate.hide{ opacity:0; pointer-events:none; }
+  .license-gate.hide{ opacity:0; visibility:hidden; pointer-events:none; }
   .license-gate-card{ width:100%; max-width:340px; text-align:center; }
   .license-gate-logo{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:26px;

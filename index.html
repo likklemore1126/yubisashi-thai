@@ -23,6 +23,39 @@
     window.addEventListener('resize', setAppHeight);
     window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
   })();
+
+  // ▼▼▼ 調査用の一時的なデバッグ表示（原因特定用。リリース時は削除） ▼▼▼
+  window.addEventListener('DOMContentLoaded', function(){
+    var box = document.createElement('div');
+    box.id = 'debugBox';
+    box.style.cssText = 'position:fixed; top:0; left:0; right:0; z-index:999999; background:rgba(0,0,0,0.85); color:#0f0; font:11px/1.5 monospace; padding:8px; white-space:pre; pointer-events:none;';
+    document.body.appendChild(box);
+    function update(){
+      var d = document.querySelector('.device');
+      var rect = d ? d.getBoundingClientRect() : null;
+      var cs = d ? getComputedStyle(d) : null;
+      var vv = window.visualViewport;
+      var lines = [
+        'innerHeight: ' + window.innerHeight,
+        'visualViewport.height: ' + (vv ? vv.height : 'なし'),
+        'visualViewport.offsetTop: ' + (vv ? vv.offsetTop : 'なし'),
+        'screen.height: ' + window.screen.height,
+        'devicePixelRatio: ' + window.devicePixelRatio,
+        '--app-height var: ' + document.documentElement.style.getPropertyValue('--app-height'),
+        '.device computed height: ' + (cs ? cs.height : 'なし'),
+        '.device rect height: ' + (rect ? rect.height.toFixed(1) : 'なし'),
+        '.device rect top/bottom: ' + (rect ? rect.top.toFixed(1)+' / '+rect.bottom.toFixed(1) : 'なし'),
+        'body scrollHeight/clientHeight: ' + document.body.scrollHeight + ' / ' + document.body.clientHeight
+      ];
+      box.textContent = lines.join('\n');
+    }
+    update();
+    setInterval(update, 300);
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, true);
+    if(window.visualViewport){ window.visualViewport.addEventListener('resize', update); window.visualViewport.addEventListener('scroll', update); }
+  });
+  // ▲▲▲ 調査用の一時的なデバッグ表示ここまで ▲▲▲
 </script>
 <title>指さしタイ - トップ画面</title>
 <link rel="manifest" href="manifest.json">

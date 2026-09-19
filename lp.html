@@ -7,6 +7,23 @@
 <meta name="description" content="タイ語が話せなくても大丈夫。スマホの画面を見せるだけで伝わる、旅行者専用のタイ語会話帳アプリ「指さしタイ」。買い切り2,000円、旅行中はオフラインでも使えます。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  // iOS Safariはアドレスバーの表示/非表示でビューポート高さが動的に変わり、
+  // dvh単位だけだと拡大表示(ライトボックス)を開いた瞬間の再計算タイミングがずれて
+  // 画像の下側がフレームの外にはみ出すことがある。JSで実際の innerHeight を測って
+  // --app-height に反映し、CSS側でdvhより優先させる(本体アプリと同じ対策)。
+  (function(){
+    function setAppHeight(){
+      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+    }
+    setAppHeight();
+    window.addEventListener('resize', setAppHeight);
+    window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
+    if(window.visualViewport){
+      window.visualViewport.addEventListener('resize', setAppHeight);
+    }
+  })();
+</script>
 <style>
   :root{
     --ink:#17242A;
@@ -335,9 +352,12 @@
     display:none; align-items:center;
     /* Safariのツールバーが畳まれる前の「大きい方のビューポート」基準でinset:0の高さが
        決まってしまい、実際に見えている画面より下にはみ出すことがあるため、
-       実際に見えている高さを基準にするdvh単位で明示的に高さを指定してクロップを防ぐ */
+       実際に見えている高さを基準に高さを指定してクロップを防ぐ。
+       dvh単体だとライトボックスを開いた瞬間の再計算タイミングがずれることがあるため、
+       本体アプリと同じくJSで測った--app-heightを優先させる */
     height:100vh;
     height:100dvh;
+    height:var(--app-height, 100dvh);
   }
   .lightbox.open{ display:flex; }
   .lightbox-close{
@@ -1246,6 +1266,11 @@
     }
 
     function openLightbox(imgs, startIndex){
+      // 開く直前に必ず実際の表示高さを測り直す(Safariのツールバーが
+      // ちょうど畳まれる/開くタイミングと重なると値がずれることがあるため)
+      try{
+        document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+      }catch(e){}
       scroller.innerHTML = '';
       var slots = imgs.map(function(){
         var slide = document.createElement('div');

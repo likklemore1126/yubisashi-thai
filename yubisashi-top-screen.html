@@ -766,6 +766,10 @@
     background:var(--sand); border:1.5px solid var(--line); border-radius:0 0 14px 14px;
     padding:10px 14px; margin-bottom:10px; font-size:13.5px; line-height:1.6; color:#5c4415;
   }
+  .dish-desc-kana{
+    font-family:'Kanit', sans-serif; font-weight:700; font-size:14px; color:var(--teal-deep);
+    margin-bottom:6px; padding-bottom:6px; border-bottom:1px dashed var(--line);
+  }
   .dish-standalone-th{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:26px; color:var(--teal);
     background:var(--sand); border:1.5px solid var(--line); border-top:none; border-radius:0 0 14px 14px;
@@ -3876,29 +3880,29 @@ const dishes = [
     mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
   { th:'ขนมเบื้อง', jp:'カノム・ブアン', desc:'パリパリに焼いた小ぶりの薄い生地に、甘いメレンゲと刻んだ卵黄のシロップ煮を挟んだタイ風の小さなタコス。', cat:'sweet',
     mods:[{th:'ขอห่อกลับบ้าน', jp:'持ち帰りでお願いします', ctype:'takeout'}] },
-  { th:'ชานมเย็น', jp:'チャーノムイェン', desc:'バニラやスパイスの香りが広がるオレンジ色のタイ式ミルクティー。濃く抽出した紅茶に練乳をたっぷり加えた甘く濃厚な定番ドリンク。', cat:'drink',
+  { th:'ชานมเย็น', jp:'タイティー', kana:'チャーノムイェン', desc:'バニラやスパイスの香りが広がるオレンジ色のタイ式ミルクティー。濃く抽出した紅茶に練乳をたっぷり加えた甘く濃厚な定番ドリンク。', cat:'drink',
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'นมเย็น', jp:'ノムイェン', desc:'「サラ」のフレーバーシロップ(ヘイルズブルーボーイ)に牛乳を混ぜたピンク色のミルク。イチゴミルクのような見た目と甘さが人気。', cat:'drink',
+  { th:'นมเย็น', jp:'タイピンクミルク', kana:'ノムイェン', desc:'「サラ」のフレーバーシロップ(ヘイルズブルーボーイ)に牛乳を混ぜたピンク色のミルク。イチゴミルクのような見た目と甘さが人気。', cat:'drink',
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'ชามะนาว', jp:'チャーマナオ', desc:'タイの紅茶に新鮮なマナオ(タイライム)の果汁と甘みを加えたアイスティー。甘酸っぱくすっきりとした味わい。', cat:'drink',
+  { th:'ชามะนาว', jp:'ライムティー', kana:'チャーマナオ', desc:'タイの紅茶に新鮮なマナオ(タイライム)の果汁と甘みを加えたアイスティー。甘酸っぱくすっきりとした味わい。', cat:'drink',
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'มะม่วงปั่น', jp:'マムアンパン', desc:'完熟マンゴーの濃厚な甘みと果汁をそのまま閉じ込めた大人気スムージー。とろけるような口当たり。', cat:'drink',
+  { th:'มะม่วงปั่น', jp:'マンゴースムージー', kana:'マムアンパン', desc:'完熟マンゴーの濃厚な甘みと果汁をそのまま閉じ込めた大人気スムージー。とろけるような口当たり。', cat:'drink',
     mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'แตงโมปั่น', jp:'テンモーパン', desc:'フレッシュなスイカと氷をミキサーにかけた定番スムージー。すっきりとした甘さで喉ごしが良い。', cat:'drink',
+  { th:'แตงโมปั่น', jp:'スイカスムージー', kana:'テンモーパン', desc:'フレッシュなスイカと氷をミキサーにかけた定番スムージー。すっきりとした甘さで喉ごしが良い。', cat:'drink',
     mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'สับปะรดปั่น', jp:'サパロットパン', desc:'甘酸っぱいパイナップルを贅沢に使ったフローズンドリンク。爽やかな酸味とすっきりした甘み。', cat:'drink',
+  { th:'สับปะรดปั่น', jp:'パイナップルスムージー', kana:'サパロットパン', desc:'甘酸っぱいパイナップルを贅沢に使ったフローズンドリンク。爽やかな酸味とすっきりした甘み。', cat:'drink',
     mods:[{th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'น้ำมะพร้าว', jp:'ナムマプラオ', desc:'ココナッツの実を割ってそのまま飲む天然の果汁。やさしい甘みと電解質が豊富で、暑いタイでの水分補給に欠かせない。', cat:'drink',
+  { th:'น้ำมะพร้าว', jp:'ココナッツジュース', kana:'ナムマプラオ', desc:'ココナッツの実を割ってそのまま飲む天然の果汁。やさしい甘みと電解質が豊富で、暑いタイでの水分補給に欠かせない。', cat:'drink',
     mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'น้ำอ้อย', jp:'ナムオーイ', desc:'サトウキビの茎をその場で絞ったフレッシュジュース。自然でまろやかな甘みと、青々とした香ばしい風味。', cat:'drink',
+  { th:'น้ำอ้อย', jp:'サトウキビジュース', kana:'ナムオーイ', desc:'サトウキビの茎をその場で絞ったフレッシュジュース。自然でまろやかな甘みと、青々とした香ばしい風味。', cat:'drink',
     mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'น้ำส้ม', jp:'ナムソム', desc:'小ぶりなタイのオレンジを丸ごと絞った果汁100%ジュース。果肉感たっぷりで、甘みとほどよい酸味が絶妙。', cat:'drink',
+  { th:'น้ำส้ม', jp:'オレンジジュース', kana:'ナムソム', desc:'小ぶりなタイのオレンジを丸ごと絞った果汁100%ジュース。果肉感たっぷりで、甘みとほどよい酸味が絶妙。', cat:'drink',
     mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'น้ำทับทิม', jp:'ナムタプティム', desc:'屋台の絞り器でその場で抽出される贅沢な生搾りザクロジュース。深紅の美しい色合いと、甘酸っぱく濃厚な果汁。', cat:'drink',
+  { th:'น้ำทับทิม', jp:'ザクロジュース', kana:'ナムタプティム', desc:'屋台の絞り器でその場で抽出される贅沢な生搾りザクロジュース。深紅の美しい色合いと、甘酸っぱく濃厚な果汁。', cat:'drink',
     mods:[{th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'อเมริกาโน่น้ำส้ม', jp:'アメリカーノ・ソム', desc:'フレッシュなオレンジジュースの上にエスプレッソショットを注いだカフェの人気メニュー。フルーティーな甘みとコーヒーの苦みがマッチ。', cat:'drink',
+  { th:'อเมริกาโน่น้ำส้ม', jp:'オレンジ・アメリカーノ', kana:'アメリカーノ・ソム', desc:'フレッシュなオレンジジュースの上にエスプレッソショットを注いだカフェの人気メニュー。フルーティーな甘みとコーヒーの苦みがマッチ。', cat:'drink',
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
-  { th:'โอเลี้ยง', jp:'オーリアン', desc:'ロブスタ種のコーヒー豆にトウモロコシやゴマ、タマリンドの種などをブレンドし、布フィルターで濃く抽出したタイの昔ながらのアイスコーヒー。たっぷりの砂糖と氷で提供される。', cat:'drink',
+  { th:'เอสเย็น', jp:'タイ式練乳入りアイスエスプレッソ', kana:'エスイェン', desc:'タイの暑い気候に合わせて独自に発展したタイで親しまれている甘くて濃いタイ風のアイスエスプレッソのことで大人気の定番コーヒー。', cat:'drink',
     mods:[{th:'หวานน้อย', jp:'甘さ控えめで', group:'sweetness'}, {th:'ไม่ใส่น้ำแข็ง', jp:'氷なしで', ctype:'remove', nounJp:'氷', nounTh:'น้ำแข็ง'}, {th:'ใส่นม', jp:'ミルクを入れて', ctype:'add', nounJp:'ミルク', nounTh:'นม'}, {th:'หวานปกติ', jp:'甘さ普通で', group:'sweetness'}, {th:'หวานๆ', jp:'甘さ強めで', group:'sweetness'}, {th:'ใส่ถุงกลับบ้าน', jp:'袋に入れてください', ctype:'takeout'}] },
   { th:'พานาดอล', jp:'パナドーン(Panadol)', desc:'成分はパラセタモール(Paracetamol)。タイで非常に一般的な解熱鎮痛薬。', symptom:'頭痛・発熱・軽い痛みに', stores:['convenience','pharmacy'], cat:'medicine', standalone:true,
     mods:pharmacyMods('พานาดอล','パナドーン') },
@@ -4319,7 +4323,7 @@ function renderDishDetail(){
   }).join('');
   document.getElementById('dishFixed').innerHTML = `
     <img class="dish-detail-photo" src="${dishImagesFull[dishSelectedIdx]}" alt="${d.jp}" onclick="event.stopPropagation(); openDishPhotoLightbox(${dishSelectedIdx});">
-    <div class="dish-desc-box">${d.desc}</div>
+    <div class="dish-desc-box">${d.kana ? `<div class="dish-desc-kana">読み方：${d.kana}</div>` : ''}${d.desc}</div>
     <div class="selected-phrase">
       ${dishSelectedMods.length > 0 ? `<div class="sp-header"><button class="sp-clear-btn" onclick="clearDishMods()">✕ 選択を解除</button></div>` : ''}
       <div class="sp-th">${th}</div>

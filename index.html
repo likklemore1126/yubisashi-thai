@@ -5004,8 +5004,8 @@ function openCategoryComposer(i){
 }
 function renderCategoryFixed(){
   const s = situations[openState.index];
-  const hotelHtml = (s.icon === 'hotel') ? hotelInfoBlockHtml() : '';
-  const dishEntryHtml = (s.icon === 'bowl') ? `<div class="dish-category-grid">
+  const hotelHtml = (s.icon === 'sit_hotel') ? hotelInfoBlockHtml() : '';
+  const dishEntryHtml = (s.icon === 'sit_restaurant') ? `<div class="dish-category-grid">
     <div class="dish-category-card" onclick="openDishList(false,'food')">
       <span class="dish-category-emoji">🍜</span>
       <span class="dish-category-text">料理</span>
@@ -5022,7 +5022,7 @@ function renderCategoryFixed(){
       <span class="dish-category-count">${dishCategoryCount('drink')}品</span>
     </div>
   </div>` : '';
-  const pharmacyEntryHtml = (s.icon === 'cross' && s.title === '薬局・コンビニで薬を買う') ? `
+  const pharmacyEntryHtml = (s.icon === 'sit_pharmacy' && s.title === '薬局・コンビニで薬を買う') ? `
     <div class="pharmacy-browse-banner" onclick="openDishList(false,'medicine')">
       <span class="pharmacy-browse-emoji">💊</span>
       <div class="pharmacy-browse-text">

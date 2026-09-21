@@ -16,21 +16,44 @@
   // CSSのdvh単位だけだと再計算のタイミングがずれて.deviceの下端に隙間が出ることがある。
   // JSで実際の innerHeight を測って --app-height に反映し、CSS側でdvhより優先させる。
   (function(){
+    function currentHeight(){
+      // visualViewport は「今実際に見えている領域」を返すため、window.innerHeight より
+      // 信頼できることが多い。使えない環境では innerHeight にフォールバックする。
+      return (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    }
     function setAppHeight(){
-      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+      document.documentElement.style.setProperty('--app-height', currentHeight() + 'px');
+    }
+    // iOS Safari、特にホーム画面に追加したPWA(standaloneモード)では、起動直後は
+    // 実際に見えている領域とブラウザ内部のレイアウト計算がズレたまま固定されてしまい、
+    // ユーザーが指でスクロール操作をした瞬間に初めて正しい値へ更新される、という
+    // 既知のクセがある。時間を置いて測り直すだけでは直らないため、ユーザー操作を待たず、
+    // ごく小さな(1px)スクロールを自動的に起こしてブラウザに再計算を促すことで、
+    // 実際にスクロールしたのと同じ効果を先回りして起こす。
+    function nudgeScroll(){
+      document.querySelectorAll('.page-scroll').forEach(function(el){
+        if(el.scrollHeight > el.clientHeight){
+          const prevTop = el.scrollTop;
+          el.scrollTop = prevTop + 1;
+          requestAnimationFrame(function(){
+            el.scrollTop = prevTop;
+            setAppHeight();
+          });
+        }
+      });
     }
     setAppHeight();
     // ページを開いた直後は、ブラウザのアドレスバーが縮むアニメーションがまだ終わっておらず、
-    // 1回目の innerHeight 測定が実際より小さい値になっていることがある。
+    // 1回目の高さ測定が実際より小さい値になっていることがある。
     // その状態のまま resize が一度も発火しないと、下端に白い隙間が残り続けてしまうため、
-    // 少し時間を置いて複数回測り直し、初回のズレを吸収する。
-    setTimeout(setAppHeight, 300);
-    setTimeout(setAppHeight, 800);
-    setTimeout(setAppHeight, 1500);
+    // 少し時間を置いて複数回測り直し(+ 上記のnudgeScrollも併用し)、初回のズレを吸収する。
+    setTimeout(function(){ setAppHeight(); nudgeScroll(); }, 300);
+    setTimeout(function(){ setAppHeight(); nudgeScroll(); }, 800);
+    setTimeout(function(){ setAppHeight(); nudgeScroll(); }, 1500);
     window.addEventListener('resize', setAppHeight);
     window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
     // PWAをバックグラウンドから復帰した際などにもズレが残らないようにする。
-    window.addEventListener('pageshow', setAppHeight);
+    window.addEventListener('pageshow', function(){ setAppHeight(); nudgeScroll(); });
     // AndroidのChromeはアドレスバーの表示/非表示で「visual viewport」だけが変わり、
     // window の resize が発火しないことがある。visualViewport.resize も見ておく。
     if(window.visualViewport){
@@ -51,6 +74,7 @@
     // 全画面表示系のオーバーレイ(相手に見せる/写真拡大/マナー画像拡大など)を開く直前にも
     // 呼び直せるよう、外部の関数からも使えるようにしておく。
     window.setAppHeight = setAppHeight;
+    window.nudgeScroll = nudgeScroll;
   })();
 </script>
 <title>指さしタイ - トップ画面</title>
@@ -4532,10 +4556,16 @@ function showFullscreenNow(){
   landscapeManuallyClosed = false;
   fullscreenManuallyOpened = true;
   if(typeof window.setAppHeight === 'function') window.setAppHeight();
+  if(typeof window.nudgeScroll === 'function') window.nudgeScroll();
   document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
   document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
   document.getElementById('landscapeDisplay').classList.add('show');
   requestAnimationFrame(fitLandscapeText);
+  // 開いた直後にもう一度測り直す。起動直後(PWAスタンドアロン)は、この一瞬だけ
+  // 実際の表示領域とズレていることがあるため、ここでも保険をかけておく。
+  setTimeout(function(){
+    if(typeof window.setAppHeight === 'function') window.setAppHeight();
+  }, 250);
 }
 function fullscreenBtnHtml(){
   return `<button class="fullscreen-btn" onclick="event.stopPropagation(); showFullscreenNow();">${iconSvg('search', 16)} 相手に見せる</button>`;

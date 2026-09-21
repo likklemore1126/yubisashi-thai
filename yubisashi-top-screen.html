@@ -140,6 +140,7 @@
          正確に合わせてくれるため、高さを自分で計算する必要がなくなる。 */
       position:fixed;
       inset:0;
+      top:0; right:0; bottom:0; left:0;
       height:auto;
       max-width:100%;
       border-radius:0;
@@ -201,7 +202,7 @@
   @keyframes boot-spin{ to{ transform:rotate(360deg); } }
 
   .license-gate{
-    position:fixed; inset:0; z-index:10000;
+    position:fixed; inset:0; top:0; right:0; bottom:0; left:0; z-index:10000;
     background:var(--paper);
     display:flex; align-items:center; justify-content:center;
     padding:24px;
@@ -539,7 +540,7 @@
     margin:10px 0 12px; padding-top:14px; border-top:1.5px solid var(--line);
   }
   .manner-lightbox{
-    position:fixed; inset:0; background:rgba(10,20,20,0.92); z-index:50;
+    position:fixed; inset:0; top:0; right:0; bottom:0; left:0; background:rgba(10,20,20,0.92); z-index:50;
     display:none; align-items:center; justify-content:center; padding:16px;
   }
   .manner-lightbox.show{ display:flex; }
@@ -854,7 +855,7 @@
   .dish-recommend-phrase .fav-star{ color:rgba(23,36,42,0.35); }
   .dish-recommend-phrase .fav-star.active{ color:var(--ink); }
   .photo-lightbox{
-    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:60;
+    display:none; position:fixed; inset:0; top:0; right:0; bottom:0; left:0; background:rgba(0,0,0,0.92); z-index:60;
     align-items:center; justify-content:center; padding:20px;
   }
   .photo-lightbox.show{ display:flex; }
@@ -948,7 +949,7 @@
   .airline-select-option:active{ background:var(--sand); }
   .airline-select-option.selected{ background:var(--marigold); font-weight:700; color:#5c4415; }
   .landscape-display{
-    display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
+    display:none; position:fixed; inset:0; top:0; right:0; bottom:0; left:0; z-index:999; background:var(--ink); color:#fff;
     flex-direction:column; align-items:center; justify-content:center; text-align:center;
     cursor:pointer;
     padding:24px calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
@@ -6038,8 +6039,31 @@ loadFavorites();
 updateRatePillText();
 
 if ('serviceWorker' in navigator) {
+  // これまでは新しいSWがactivateされて「制御」を握っても、今開いているページ自体は
+  // 古いHTML/CSS/JSのままだった(リロードするまで反映されない)。
+  // ファイルを差し替えて配信しても、ユーザーが「アプリを完全に閉じて開き直す」だけでは
+  // 実際のネットワーク再取得が起きないことがあり(特にiOSのPWA standaloneモード)、
+  // その場合はいつまで経っても古い見た目のまま、という状態になっていた。
+  // 新しいSWが制御を握った瞬間(=更新が来た瞬間)を検知し、1回だけ自動でページを
+  // リロードすることで、確実に最新のファイルが表示されるようにする。
+  let swRefreshing = false;
+  const hadControllerAtLoad = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    updateVersionDisplay();
+    // 初回インストール時(今までSWがいなかった状態から入った場合)はリロード不要。
+    // 「既にSWがいた状態で、別のSWに切り替わった」= 更新が来た時だけリロードする。
+    if (!hadControllerAtLoad) return;
+    if (swRefreshing) return;
+    swRefreshing = true;
+    window.location.reload();
+  });
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch((err) => {
+    // {updateViaCache:'none'} を指定し、sw.js自体がブラウザのHTTPキャッシュに
+    // 乗って「新しいバージョンが来ているのに気づけない」ことがないようにする。
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
+      // ページを開くたびに明示的に更新チェックを行う。
+      reg.update().catch(() => {});
+    }).catch((err) => {
       console.log('Service Worker registration failed:', err);
     });
   });
@@ -6065,9 +6089,7 @@ async function updateVersionDisplay(){
   }
 }
 updateVersionDisplay();
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('controllerchange', updateVersionDisplay);
-}
+// controllerchange時のバージョン表示更新・自動リロードは、上の登録処理でまとめて行っている。
 
 // iOSのホーム画面アイコンからの起動アニメーション(アイコン→フルスクリーンへの拡大)が
 // 完全に収まってから中身を見せる(タイマーはスクリプトの先頭で既に開始済み)

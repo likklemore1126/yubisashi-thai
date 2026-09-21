@@ -4303,6 +4303,9 @@ function selectDishPhrase(mi){
   dishSelectedPhraseIdx = (dishSelectedPhraseIdx === mi) ? null : mi;
   pharmacyQuickAnswerVal = null;
   renderDishDetail();
+  // 薬の質問一覧の下の方を選んだ時も同様に、選択結果が表示される画面上部まで
+  // 自動でスクロールして戻す(2026-09-22、selectCategoryPhraseと同じ対策)。
+  document.getElementById('dishScreen').scrollTop = 0;
 }
 function clearDishSelectedPhrase(){
   dishSelectedPhraseIdx = null;
@@ -5172,6 +5175,9 @@ function selectCategoryPhrase(idx){
   categoryNumInputVal = null;
   renderCategoryFixed();
   renderCategoryList();
+  // 一覧の下の方にあるフレーズを選んだ時、選択結果(相手に見せるボタン)が
+  // 画面上部の固定ブロックに表示されるため、そこまで自動でスクロールして戻す(2026-09-22)。
+  document.getElementById('composerScreen').scrollTop = 0;
 }
 
 function renderDestinationAnchor(){

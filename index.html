@@ -96,11 +96,11 @@
       box-shadow:none;
     }
   }
-  /* ▼診断用A/Bテスト(2026-09-21): iOS26 SafariのLiquid Glass tinting疑惑の検証用。
-     html/bodyの背景色をvar(--ink)に明示することで、Safariが下部ツールバー領域の
-     色をどこから拾っているか(bodyのフォールバックか、fixed要素のサンプリングか)を切り分ける。
-     結果が出たらこのブロックごと削除してよい(通常時のbody背景は#fffのままでよいはず)。 */
-  html, body{ background-color:var(--ink) !important; }
+  /* ▼診断用A/Bテスト(2026-09-21 第2弾): 白帯が消えたのを確認できたので、
+     html/bodyの背景色を強制変更する案は一旦オフにして、boot-splash/license-gateの
+     display:none対策だけで消えるかを切り分ける。
+     (元に戻す場合はこのコメントの下の1行を有効化する)
+  html, body{ background-color:var(--ink) !important; } */
   /* ▲診断用ここまで */
   header{
     background:var(--ink);

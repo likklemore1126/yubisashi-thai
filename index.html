@@ -903,12 +903,18 @@
     cursor:pointer;
     padding:24px calc(24px + env(safe-area-inset-right)) 24px calc(24px + env(safe-area-inset-left));
     /* この画面上での指のドラッグが、背後にある本来のページのスクロールとして
-       素通りしてしまうのを防ぐ。これが素通りすると、Safariのアドレスバーが
-       出たり隠れたりするアニメーションが始まってしまい、その最中にこの
-       全画面表示(position:fixed)の高さがアニメーションに追従しきれず、
-       下に隙間(白/黒)が見えてしまう。touch-action:none でこの画面上の
-       スクロールジェスチャー自体を発生させないようにする。 */
+       素通りしてしまうのを防ぐための保険。 */
     touch-action:none;
+    /* 実機での検証で判明: レイアウト上の座標(top/bottom/height)は常に画面いっぱいで
+       正常なのに、見た目には背後の古い描画がそのまま透けて見える現象だった
+       (レイアウトの問題ではなく、WebKitの再描画/合成のバグ)。
+       この要素を独立した合成レイヤーとして確実に扱わせることで、
+       表示を切り替えるたびに古い描画が残らず、きちんと描き直されるようにする。 */
+    transform:translateZ(0);
+    -webkit-transform:translate3d(0,0,0);
+    will-change:transform;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
   }
   .landscape-display.show{ display:flex; }
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; white-space:normal; word-break:normal; overflow-wrap:normal; }
@@ -3698,7 +3704,11 @@ function openFavoritesChain(){
       <div class="fav-chain-jp">${f.jp}</div>
     </div>
   `).join('');
-  document.getElementById('favChainDisplay').classList.add('show');
+  const favOverlay = document.getElementById('favChainDisplay');
+  favOverlay.classList.add('show');
+  // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
+  // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
+  void favOverlay.offsetHeight;
 }
 function closeFavChain(){
   document.getElementById('favChainDisplay').classList.remove('show');
@@ -4521,7 +4531,11 @@ function showFullscreenNow(){
   fullscreenManuallyOpened = true;
   document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
   document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
-  document.getElementById('landscapeDisplay').classList.add('show');
+  const overlayNow = document.getElementById('landscapeDisplay');
+  overlayNow.classList.add('show');
+  // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
+  // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
+  void overlayNow.offsetHeight;
   requestAnimationFrame(fitLandscapeText);
 }
 function fullscreenBtnHtml(){
@@ -4535,6 +4549,9 @@ function checkOrientationDisplay(){
     document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
     document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
     overlay.classList.add('show');
+    // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
+    // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
+    void overlay.offsetHeight;
     requestAnimationFrame(fitLandscapeText);
   } else {
     overlay.classList.remove('show');

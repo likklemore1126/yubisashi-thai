@@ -22,14 +22,6 @@
     setAppHeight();
     window.addEventListener('resize', setAppHeight);
     window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
-    // AndroidのChromeはアドレスバーの表示/非表示で「visual viewport」だけが変わり、
-    // window の resize が発火しないことがある。visualViewport.resize も見ておく。
-    if(window.visualViewport){
-      window.visualViewport.addEventListener('resize', setAppHeight);
-    }
-    // 全画面表示系のオーバーレイ(相手に見せる/写真拡大/マナー画像拡大など)を開く直前にも
-    // 呼び直せるよう、外部の関数からも使えるようにしておく。
-    window.setAppHeight = setAppHeight;
   })();
 </script>
 <title>指さしタイ - トップ画面</title>
@@ -153,7 +145,6 @@
 
   .license-gate{
     position:fixed; inset:0; z-index:10000;
-    height:var(--app-height, 100dvh);
     background:var(--paper);
     display:flex; align-items:center; justify-content:center;
     padding:24px;
@@ -492,7 +483,6 @@
   }
   .manner-lightbox{
     position:fixed; inset:0; background:rgba(10,20,20,0.92); z-index:50;
-    height:var(--app-height, 100dvh);
     display:none; align-items:center; justify-content:center; padding:16px;
   }
   .manner-lightbox.show{ display:flex; }
@@ -808,7 +798,6 @@
   .dish-recommend-phrase .fav-star.active{ color:var(--ink); }
   .photo-lightbox{
     display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:60;
-    height:var(--app-height, 100dvh);
     align-items:center; justify-content:center; padding:20px;
   }
   .photo-lightbox.show{ display:flex; }
@@ -903,10 +892,9 @@
   .airline-select-option.selected{ background:var(--marigold); font-weight:700; color:#5c4415; }
   .landscape-display{
     display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
-    height:var(--app-height, 100dvh);
     flex-direction:column; align-items:center; justify-content:center; text-align:center;
     cursor:pointer;
-    padding:24px calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+    padding:24px calc(24px + env(safe-area-inset-right)) 24px calc(24px + env(safe-area-inset-left));
   }
   .landscape-display.show{ display:flex; }
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; white-space:normal; word-break:normal; overflow-wrap:normal; }
@@ -3564,7 +3552,6 @@ function closeProcFoodPairing(){
   document.getElementById('procFoodPairingScreen').classList.remove('show');
 }
 function openMannerLightbox(src){
-  if(typeof window.setAppHeight === 'function') window.setAppHeight();
   document.getElementById('mannerLightboxImg').src = src;
   document.getElementById('mannerLightbox').classList.add('show');
 }
@@ -4226,7 +4213,6 @@ function dishComposedJp(){
   return jp;
 }
 function openDishPhotoLightbox(idx){
-  if(typeof window.setAppHeight === 'function') window.setAppHeight();
   document.getElementById('dishPhotoLightboxImg').src = dishImagesFull[idx];
   document.getElementById('dishPhotoLightbox').classList.add('show');
 }
@@ -4462,6 +4448,10 @@ function renderDishDetailStandalone(d){
 }
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
+// 「相手に見せる」を手動で開いている間は、iOSでアドレスバーの伸縮などによって
+// window の resize イベントが発火しても、それを理由に閉じてしまわないようにするフラグ。
+// (端末を横向きに回転させた時の自動表示/自動非表示の判定とは別に管理する)
+let fullscreenManuallyOpened = false;
 
 function setLastPhrase(th, jp){
   lastShownPhrase = { th, jp };
@@ -4507,7 +4497,7 @@ function fitLandscapeText(){
 function showFullscreenNow(){
   if(!lastShownPhrase) return;
   landscapeManuallyClosed = false;
-  if(typeof window.setAppHeight === 'function') window.setAppHeight();
+  fullscreenManuallyOpened = true;
   document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
   document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
   document.getElementById('landscapeDisplay').classList.add('show');
@@ -4520,7 +4510,7 @@ function checkOrientationDisplay(){
   const overlay = document.getElementById('landscapeDisplay');
   if(!overlay) return;
   const isLandscape = window.matchMedia('(orientation: landscape)').matches;
-  if(isLandscape && lastShownPhrase && !landscapeManuallyClosed){
+  if((isLandscape || fullscreenManuallyOpened) && lastShownPhrase && !landscapeManuallyClosed){
     document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
     document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
     overlay.classList.add('show');
@@ -4531,6 +4521,7 @@ function checkOrientationDisplay(){
 }
 function closeLandscapeDisplay(){
   landscapeManuallyClosed = true;
+  fullscreenManuallyOpened = false;
   checkOrientationDisplay();
 }
 window.addEventListener('orientationchange', () => setTimeout(checkOrientationDisplay, 150));

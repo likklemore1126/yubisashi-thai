@@ -6009,5 +6009,79 @@ if ('serviceWorker' in navigator) {
 // 完全に収まってから中身を見せる(タイマーはスクリプトの先頭で既に開始済み)
 </script>
 
+<!-- ▼▼▼ 調査用の診断ボタンを追加(既存のCSS/JS/HTMLは1行も変更していません)。
+     原因が分かったら、この部分だけ削除して元に戻してください。▼▼▼ -->
+<button id="__diagFab" style="position:fixed; right:10px; bottom:calc(10px + env(safe-area-inset-bottom)); z-index:999999; width:56px; height:56px; border-radius:50%; background:#E23F73; color:#fff; border:3px solid #fff; font-size:11px; font-weight:700; box-shadow:0 4px 14px rgba(0,0,0,0.4);">診断<br>記録</button>
+<div id="__diagPanel" style="display:none; position:fixed; left:0; right:0; bottom:0; height:60vh; background:rgba(255,255,255,0.98); border-top:3px solid #0F6B62; padding:10px; padding-bottom:calc(10px + env(safe-area-inset-bottom)); font-size:10px; line-height:1.5; font-family:ui-monospace, monospace; z-index:999998; white-space:pre-wrap; overflow-y:auto;"></div>
+<button id="__diagPanelToggle" style="position:fixed; right:10px; bottom:calc(74px + env(safe-area-inset-bottom)); z-index:999999; width:56px; height:40px; border-radius:10px; background:#0F6B62; color:#fff; border:none; font-size:11px; font-weight:700;">ログ表示</button>
+<script>
+(function(){
+  var logText = '(端末情報) UA: ' + navigator.userAgent + '\n';
+  function findAncestorsOverflowOrTransform(el){
+    var lines = [];
+    var cur = el.parentElement;
+    while(cur && cur !== document.body.parentElement){
+      var cs = getComputedStyle(cur);
+      var tag = cur.tagName + (cur.className ? '.'+String(cur.className).replace(/\s+/g,'.') : '') + (cur.id ? '#'+cur.id : '');
+      if(cs.overflow !== 'visible' || cs.overflowX !== 'visible' || cs.overflowY !== 'visible' || cs.transform !== 'none' || cs.filter !== 'none' || cs.perspective !== 'none' || (cs.contain && cs.contain !== 'none')){
+        lines.push('  祖先要素[' + tag + ']: overflow=' + cs.overflow + ' / transform=' + cs.transform + ' / filter=' + cs.filter + ' / contain=' + cs.contain + ' / rect.height=' + cur.getBoundingClientRect().height + ' / rect.bottom=' + cur.getBoundingClientRect().bottom);
+      }
+      cur = cur.parentElement;
+    }
+    return lines.length ? lines.join('\n') : '  (overflow/transform等を持つ祖先要素は見つかりませんでした)';
+  }
+  function snapshot(label){
+    var overlays = ['landscapeDisplay','favChainDisplay','dishPhotoLightbox','mannerLightbox','licenseGate'];
+    var block = '\n=== ' + label + ' (' + new Date().toLocaleTimeString('ja-JP') + ') ===\n';
+    block += 'window.innerHeight: ' + window.innerHeight + ' / window.innerWidth: ' + window.innerWidth + '\n';
+    block += 'visualViewport: h=' + (window.visualViewport?window.visualViewport.height:'なし') + ' offsetTop=' + (window.visualViewport?window.visualViewport.offsetTop:'なし') + ' pageTop=' + (window.visualViewport?window.visualViewport.pageTop:'なし') + '\n';
+    block += 'screen: h=' + window.screen.height + ' w=' + window.screen.width + ' / devicePixelRatio=' + window.devicePixelRatio + '\n';
+    block += '--app-height (CSS変数の実際の値): ' + getComputedStyle(document.documentElement).getPropertyValue('--app-height') + '\n';
+    block += 'navigator.standalone: ' + window.navigator.standalone + ' / display-mode:standalone match: ' + window.matchMedia('(display-mode: standalone)').matches + '\n';
+    block += 'window.scrollY: ' + window.scrollY + ' / document.scrollingElement.scrollTop: ' + document.scrollingElement.scrollTop + '\n';
+    var deviceEl = document.querySelector('.device');
+    if(deviceEl){
+      var dRect = deviceEl.getBoundingClientRect();
+      var dCs = getComputedStyle(deviceEl);
+      block += '.device の実際の高さ(rect.height): ' + dRect.height + ' / rect.bottom=' + dRect.bottom + ' (画面innerHeightとの差=' + (window.innerHeight - dRect.bottom) + ')\n';
+      block += '.device の computed height: ' + dCs.height + ' / position: ' + dCs.position + ' / overflow: ' + dCs.overflow + '\n';
+    } else {
+      block += '.device が見つかりません\n';
+    }
+    overlays.forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      var cs = getComputedStyle(el);
+      if(cs.display === 'none' || (id==='licenseGate' && cs.opacity==='0')) return;
+      var rect = el.getBoundingClientRect();
+      block += '#' + id + ' display=' + cs.display + ' rect.top=' + rect.top + ' rect.bottom=' + rect.bottom + ' rect.height=' + rect.height + ' (画面下端との差=' + (window.innerHeight - rect.bottom) + ')\n';
+      block += findAncestorsOverflowOrTransform(el) + '\n';
+    });
+    block += 'document.body の computed background: ' + getComputedStyle(document.body).backgroundColor + ' / html bg: ' + getComputedStyle(document.documentElement).backgroundColor + '\n';
+    // 実際に画面の一番下(innerHeightの1px上)に、その時どの要素が描画されているかを調べる
+    try{
+      var elAtBottom = document.elementFromPoint(Math.floor(window.innerWidth/2), window.innerHeight - 5);
+      block += '画面の一番下(中央)に実際にある要素: ' + (elAtBottom ? (elAtBottom.tagName + '.' + elAtBottom.className + '#' + elAtBottom.id) : 'なし') + '\n';
+      if(elAtBottom){
+        block += 'その要素の computed background: ' + getComputedStyle(elAtBottom).backgroundColor + '\n';
+      }
+    }catch(e){ block += 'elementFromPoint 取得失敗: ' + e + '\n'; }
+    logText += block;
+    document.getElementById('__diagPanel').textContent = logText;
+  }
+  document.getElementById('__diagFab').addEventListener('click', function(){
+    snapshot('診断記録(手動)');
+    document.getElementById('__diagPanel').style.display = 'block';
+    try{ navigator.clipboard.writeText(logText); }catch(e){}
+  });
+  document.getElementById('__diagPanelToggle').addEventListener('click', function(){
+    var p = document.getElementById('__diagPanel');
+    p.style.display = (p.style.display === 'none') ? 'block' : 'none';
+  });
+  window.addEventListener('load', function(){ snapshot('ページ読み込み直後(自動)'); });
+})();
+</script>
+<!-- ▲▲▲ 診断ボタンここまで ▲▲▲ -->
+
 </body>
 </html>

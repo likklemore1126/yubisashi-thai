@@ -96,6 +96,12 @@
       box-shadow:none;
     }
   }
+  /* ▼診断用A/Bテスト(2026-09-21): iOS26 SafariのLiquid Glass tinting疑惑の検証用。
+     html/bodyの背景色をvar(--ink)に明示することで、Safariが下部ツールバー領域の
+     色をどこから拾っているか(bodyのフォールバックか、fixed要素のサンプリングか)を切り分ける。
+     結果が出たらこのブロックごと削除してよい(通常時のbody背景は#fffのままでよいはず)。 */
+  html, body{ background-color:var(--ink) !important; }
+  /* ▲診断用ここまで */
   header{
     background:var(--ink);
     color:var(--paper);
@@ -143,6 +149,11 @@
     transition:opacity 0.25s ease, visibility 0s linear 0.25s;
   }
   .boot-splash.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  /* ▼診断用A/Bテスト(2026-09-21): iOS26 SafariのLiquid Glass tinting疑惑の検証用。
+     opacity/visibilityだけでなくdisplay:noneでbox treeから完全除外してみる。
+     結果が出たらこのブロックごと削除してよい。 */
+  .boot-splash.hide{ display:none !important; }
+  /* ▲診断用ここまで */
   .boot-splash-spinner{
     position:absolute; left:50%; top:50%; width:32px; height:32px; margin:-16px 0 0 -16px;
     border:3px solid rgba(23,36,42,0.15); border-top-color:var(--marigold);
@@ -158,6 +169,9 @@
     transition:opacity 0.2s ease, visibility 0s linear 0.2s;
   }
   .license-gate.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  /* ▼診断用A/Bテスト(2026-09-21): 上のboot-splashと同じ目的・同じ理由。 */
+  .license-gate.hide{ display:none !important; }
+  /* ▲診断用ここまで */
   .license-gate-card{ width:100%; max-width:340px; text-align:center; }
   .license-gate-logo{
     font-family:'Kanit', sans-serif; font-weight:700; font-size:26px;

@@ -20,13 +20,34 @@
       document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
     }
     setAppHeight();
+    // ページを開いた直後は、ブラウザのアドレスバーが縮むアニメーションがまだ終わっておらず、
+    // 1回目の innerHeight 測定が実際より小さい値になっていることがある。
+    // その状態のまま resize が一度も発火しないと、下端に白い隙間が残り続けてしまうため、
+    // 少し時間を置いて複数回測り直し、初回のズレを吸収する。
+    setTimeout(setAppHeight, 300);
+    setTimeout(setAppHeight, 800);
+    setTimeout(setAppHeight, 1500);
     window.addEventListener('resize', setAppHeight);
     window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
+    // PWAをバックグラウンドから復帰した際などにもズレが残らないようにする。
+    window.addEventListener('pageshow', setAppHeight);
     // AndroidのChromeはアドレスバーの表示/非表示で「visual viewport」だけが変わり、
     // window の resize が発火しないことがある。visualViewport.resize も見ておく。
     if(window.visualViewport){
       window.visualViewport.addEventListener('resize', setAppHeight);
     }
+    // 指でスクロールしてアドレスバーが引っ込む瞬間は、resize/visualViewportのresizeより
+    // scrollイベントの方が先に(あるいは確実に)発火する端末があるため、
+    // どの要素のスクロールでも拾えるようキャプチャフェーズで監視し、
+    // rAFで間引きながら再計算する。
+    let scrollRaf = null;
+    document.addEventListener('scroll', function(){
+      if(scrollRaf) return;
+      scrollRaf = requestAnimationFrame(function(){
+        scrollRaf = null;
+        setAppHeight();
+      });
+    }, { capture:true, passive:true });
     // 全画面表示系のオーバーレイ(相手に見せる/写真拡大/マナー画像拡大など)を開く直前にも
     // 呼び直せるよう、外部の関数からも使えるようにしておく。
     window.setAppHeight = setAppHeight;
@@ -4462,10 +4483,12 @@ function renderDishDetailStandalone(d){
 }
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
+let fullscreenManuallyOpened = false;
 
 function setLastPhrase(th, jp){
   lastShownPhrase = { th, jp };
   landscapeManuallyClosed = false;
+  fullscreenManuallyOpened = false;
   checkOrientationDisplay();
 }
 function fitLandscapeText(){
@@ -4507,6 +4530,7 @@ function fitLandscapeText(){
 function showFullscreenNow(){
   if(!lastShownPhrase) return;
   landscapeManuallyClosed = false;
+  fullscreenManuallyOpened = true;
   if(typeof window.setAppHeight === 'function') window.setAppHeight();
   document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
   document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
@@ -4520,7 +4544,7 @@ function checkOrientationDisplay(){
   const overlay = document.getElementById('landscapeDisplay');
   if(!overlay) return;
   const isLandscape = window.matchMedia('(orientation: landscape)').matches;
-  if(isLandscape && lastShownPhrase && !landscapeManuallyClosed){
+  if((isLandscape || fullscreenManuallyOpened) && lastShownPhrase && !landscapeManuallyClosed){
     document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
     document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
     overlay.classList.add('show');
@@ -4531,6 +4555,7 @@ function checkOrientationDisplay(){
 }
 function closeLandscapeDisplay(){
   landscapeManuallyClosed = true;
+  fullscreenManuallyOpened = false;
   checkOrientationDisplay();
 }
 window.addEventListener('orientationchange', () => setTimeout(checkOrientationDisplay, 150));

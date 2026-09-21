@@ -898,10 +898,17 @@
   .airline-select-option:active{ background:var(--sand); }
   .airline-select-option.selected{ background:var(--marigold); font-weight:700; color:#5c4415; }
   .landscape-display{
-    display:none; position:fixed; inset:0; z-index:999; background:var(--ink); color:#fff;
+    display:none; position:fixed;
+    /* 画面ぴったりの inset:0 だと、WebKitが要素の端(特に下端)を
+       描き切れずに背後の色(白)がわずかに透けて見えることがあった。
+       起動画面(boot-splash)で既に使われていたのと同じ対策として、
+       画面より一回り大きく描画しておくことで、端の描き残しがあっても
+       画面の外側(見えない範囲)に逃がす。 */
+    top:-15vh; left:-5vw; right:-5vw; bottom:-15vh;
+    z-index:999; background:var(--ink); color:#fff;
     flex-direction:column; align-items:center; justify-content:center; text-align:center;
     cursor:pointer;
-    padding:24px calc(24px + env(safe-area-inset-right)) 24px calc(24px + env(safe-area-inset-left));
+    padding:calc(24px + 15vh) calc(24px + 5vw + env(safe-area-inset-right)) calc(24px + 15vh) calc(24px + 5vw + env(safe-area-inset-left));
     /* この画面上での指のドラッグが、背後にある本来のページのスクロールとして
        素通りしてしまうのを防ぐための保険。 */
     touch-action:none;
@@ -961,7 +968,9 @@
   .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; }
   .fav-chain-jp{ font-size:13px; opacity:0.6; margin-top:6px; }
   .landscape-close{
-    position:absolute; top:calc(16px + env(safe-area-inset-top)); right:calc(20px + env(safe-area-inset-right)); font-size:13px; opacity:0.55;
+    /* .landscape-display 自体が画面より一回り大きく(上下に15vh分)描画されているため、
+       その分だけ上端からの距離を余分に足して、閉じるボタンが画面外に出ないようにする。 */
+    position:absolute; top:calc(16px + 15vh + env(safe-area-inset-top)); right:calc(20px + 5vw + env(safe-area-inset-right)); font-size:13px; opacity:0.55;
     font-family:'Noto Sans JP', sans-serif;
   }
   .nb-trigger{

@@ -49,6 +49,11 @@
     --line:#E4DAC4;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  /* iOS Safariのラバーバンド(引っ張りすぎた時の跳ね返り)による
+     白い背景の露出を念のため防ぐための設定。
+     (相手に見せる表示の下に隙間が出る問題の主因はこれではなく、
+     touch-action:none の対策の方が本命。詳しくは landscape-display 参照) */
+  html{ overscroll-behavior:none; }
   body{
     background:#DED2B0;
     font-family:'Noto Sans JP', sans-serif;
@@ -57,6 +62,7 @@
     justify-content:center;
     min-height:100vh;
     padding:24px 12px;
+    overscroll-behavior:none;
   }
   .device{
     width:100%;
@@ -72,6 +78,7 @@
     height:100%;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
   }
   @media (max-width:480px){
     body{
@@ -895,6 +902,13 @@
     flex-direction:column; align-items:center; justify-content:center; text-align:center;
     cursor:pointer;
     padding:24px calc(24px + env(safe-area-inset-right)) 24px calc(24px + env(safe-area-inset-left));
+    /* この画面上での指のドラッグが、背後にある本来のページのスクロールとして
+       素通りしてしまうのを防ぐ。これが素通りすると、Safariのアドレスバーが
+       出たり隠れたりするアニメーションが始まってしまい、その最中にこの
+       全画面表示(position:fixed)の高さがアニメーションに追従しきれず、
+       下に隙間(白/黒)が見えてしまう。touch-action:none でこの画面上の
+       スクロールジェスチャー自体を発生させないようにする。 */
+    touch-action:none;
   }
   .landscape-display.show{ display:flex; }
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; white-space:normal; word-break:normal; overflow-wrap:normal; }
@@ -936,7 +950,7 @@
     flex:0 0 auto; font-size:20px; color:#C7BEA9; padding:8px 6px; cursor:grab; touch-action:none;
     user-select:none;
   }
-  .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:0 8px; }
+  .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:0 8px; overscroll-behavior:contain; touch-action:pan-y; }
   .fav-chain-item{ margin-bottom:26px; text-align:center; }
   .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; }
   .fav-chain-jp{ font-size:13px; opacity:0.6; margin-top:6px; }
@@ -6014,6 +6028,77 @@ if ('serviceWorker' in navigator) {
 
 // iOSのホーム画面アイコンからの起動アニメーション(アイコン→フルスクリーンへの拡大)が
 // 完全に収まってから中身を見せる(タイマーはスクリプトの先頭で既に開始済み)
+
+// ========== 一時的な調査用: 白い隙間の原因を数値で確認するための表示 ==========
+// 「相手に見せる」または「お気に入り一覧」を開いている間だけ、画面の左上に
+// 現在の数値を小さく表示する。白い部分が見えているときにこの数値を含めて
+// スクリーンショットを撮ってもらうことで、憶測ではなく実際の数値から原因を特定する。
+// 原因が分かり次第、この表示は削除する。
+(function(){
+  const box = document.createElement('div');
+  box.id = '__gapDebug';
+  box.style.cssText = [
+    'position:fixed',
+    'left:4px',
+    'top:calc(4px + env(safe-area-inset-top))',
+    'z-index:999999',
+    'background:rgba(0,0,0,0.72)',
+    'color:#0f0',
+    'font-family:monospace',
+    'font-size:10px',
+    'line-height:1.4',
+    'padding:4px 6px',
+    'border-radius:4px',
+    'white-space:pre',
+    'pointer-events:none',
+    'display:none'
+  ].join(';');
+  document.body.appendChild(box);
+
+  function isAnyOverlayOpen(){
+    const a = document.getElementById('landscapeDisplay');
+    const b = document.getElementById('favChainDisplay');
+    return (a && a.classList.contains('show')) || (b && b.classList.contains('show'));
+  }
+
+  function fmt(n){
+    return (typeof n === 'number') ? Math.round(n * 100) / 100 : n;
+  }
+
+  function updateGapDebug(){
+    if(!isAnyOverlayOpen()){
+      box.style.display = 'none';
+      return;
+    }
+    box.style.display = 'block';
+    const overlay = (document.getElementById('landscapeDisplay').classList.contains('show'))
+      ? document.getElementById('landscapeDisplay')
+      : document.getElementById('favChainDisplay');
+    const r = overlay.getBoundingClientRect();
+    const htmlR = document.documentElement.getBoundingClientRect();
+    const bodyR = document.body.getBoundingClientRect();
+    const vv = window.visualViewport;
+    const lines = [
+      'standalone:' + (window.navigator.standalone === true),
+      'innerH:' + window.innerHeight + ' innerW:' + window.innerWidth,
+      'vvH:' + (vv ? fmt(vv.height) : 'なし') + ' vvOffTop:' + (vv ? fmt(vv.offsetTop) : 'なし') + ' vvPageTop:' + (vv ? fmt(vv.pageTop) : 'なし') + ' vvScale:' + (vv ? fmt(vv.scale) : 'なし'),
+      'overlay#' + overlay.id + ' top:' + fmt(r.top) + ' bottom:' + fmt(r.bottom) + ' h:' + fmt(r.height),
+      'html rect h:' + fmt(htmlR.height) + ' scrollH:' + document.documentElement.scrollHeight,
+      'body rect h:' + fmt(bodyR.height) + ' scrollH:' + document.body.scrollHeight,
+      'scrollY:' + window.scrollY + ' scrollX:' + window.scrollX,
+      'overlay計算bg:' + getComputedStyle(overlay).backgroundColor
+    ];
+    box.textContent = lines.join('\n');
+  }
+
+  setInterval(updateGapDebug, 200);
+  window.addEventListener('resize', updateGapDebug);
+  window.addEventListener('scroll', updateGapDebug, true);
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', updateGapDebug);
+    window.visualViewport.addEventListener('scroll', updateGapDebug);
+  }
+})();
 </script>
 
 </body>

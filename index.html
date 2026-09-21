@@ -3722,12 +3722,14 @@ function openFavoritesChain(){
   `).join('');
   const favOverlay = document.getElementById('favChainDisplay');
   favOverlay.classList.add('show');
+  updateFullscreenTint();
   // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
   // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
   void favOverlay.offsetHeight;
 }
 function closeFavChain(){
   document.getElementById('favChainDisplay').classList.remove('show');
+  updateFullscreenTint();
 }
 
 // ---------- ホテル情報の保存欄 ----------
@@ -4493,6 +4495,20 @@ function renderDishDetailStandalone(d){
   document.getElementById('dishList').innerHTML =
     `<button class="dish-back" onclick="goBackToDishList()">‹ ${meta.label}一覧に戻る</button>` + listHtml;
 }
+// iOS26 SafariのLiquid Glass tintingバグ対策(2026-09-21):
+// .landscape-display(landscapeDisplay/favChainDisplay)がフルスクリーン表示されている間、
+// Safariが画面最下部などの隠れた領域を「.landscape-display自身の背景色」ではなく
+// 「html/bodyの背景色」で塗ってしまうことがある(実機検証で確認済み)。
+// 通常時のhtml/bodyは白(#fff)だが、.landscape-displayはvar(--ink)(濃色)のため、
+// 色が食い違って白い隙間として見えてしまう。表示中だけhtml/bodyの背景色を
+// .landscape-display側に合わせることで、この食い違いを解消する。
+// (.landscape-displayクラスを持つ要素が1つでも表示中かどうかで判定するため、
+//  landscapeDisplay/favChainDisplayどちらの開閉箇所からも個別管理せずこの関数を呼べばよい)
+function updateFullscreenTint(){
+  const anyOpen = !!document.querySelector('.landscape-display.show');
+  document.documentElement.style.backgroundColor = anyOpen ? 'var(--ink)' : '';
+  document.body.style.backgroundColor = anyOpen ? 'var(--ink)' : '';
+}
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
 // 「相手に見せる」を手動で開いている間は、iOSでアドレスバーの伸縮などによって
@@ -4549,6 +4565,7 @@ function showFullscreenNow(){
   document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
   const overlayNow = document.getElementById('landscapeDisplay');
   overlayNow.classList.add('show');
+  updateFullscreenTint();
   // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
   // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
   void overlayNow.offsetHeight;
@@ -4565,12 +4582,14 @@ function checkOrientationDisplay(){
     document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
     document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
     overlay.classList.add('show');
+    updateFullscreenTint();
     // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
     // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
     void overlay.offsetHeight;
     requestAnimationFrame(fitLandscapeText);
   } else {
     overlay.classList.remove('show');
+    updateFullscreenTint();
   }
 }
 function closeLandscapeDisplay(){

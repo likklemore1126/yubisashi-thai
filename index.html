@@ -4966,6 +4966,7 @@ function toggleTicket(){
   }
   renderComposerFixed();
   renderComposerList();
+  document.getElementById('composerScreen').scrollTop = 0;
 }
 function changeTicketCount(delta){
   ticketCount = Math.max(1, Math.min(20, ticketCount + delta));
@@ -5030,6 +5031,9 @@ function toggleFollowUp(idx){
   airlineDropdownOpen = false;
   renderComposerFixed();
   renderComposerList();
+  // 移動手段の一覧も下の方の項目を選ぶと上部の固定ブロックが更新されるため、
+  // selectCategoryPhrase/selectDishPhraseと同じ理由でスクロールを戻す(2026-09-22)。
+  document.getElementById('composerScreen').scrollTop = 0;
 }
 function toggleAnchorExpand(){
   anchorExpanded = !anchorExpanded;

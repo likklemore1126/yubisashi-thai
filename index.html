@@ -3233,8 +3233,13 @@ function restorePackItems(){
 }
 function addPackItem(){
   const input = document.getElementById('packAddInput');
-  const text = input.value.trim();
-  if(!text) return;
+  const raw = input.value.trim();
+  if(!raw) return;
+  // 自分で追加した持ち物テキストも、検索欄と同じくユーザーが自由に入力できる文字列なので、
+  // 保存前にHTMLエスケープしておく(2026-09-22、既存のescapeAttr()を流用)。
+  // 組み込みの持ち物リスト(PACKING_SECTIONS)側はHTMLタグを含まないプレーンテキストのみなので、
+  // ここでの変更は影響しない。
+  const text = escapeAttr(raw);
   const s = loadPackingState();
   s.custom.push({ id:'custom_' + Date.now(), text, checked:false });
   savePackingState(s);
@@ -5835,8 +5840,11 @@ function containsThaiScript(str){
 function renderSuggestions(matches, query){
   const box = document.getElementById('searchSuggestions');
   const hasThai = containsThaiScript(query);
+  // 検索欄の入力はユーザーが自由に打てる文字列なので、そのままHTMLへ差し込まず
+  // エスケープしてから表示する(2026-09-22、既存のescapeAttr()を流用)。
+  const safeQuery = escapeAttr(query);
   const fallbackItemHtml = `<div class="suggestion-item fallback" onclick="selectFallback()">
-    <div class="suggestion-th">${iconSvg('search', 18)}「${query}」をそのまま使う</div>
+    <div class="suggestion-th">${iconSvg('search', 18)}「${safeQuery}」をそのまま使う</div>
     <div class="suggestion-jp">入力した文字を行き先として使用します</div>
   </div>`;
   if(matches.length === 0){
@@ -5844,7 +5852,7 @@ function renderSuggestions(matches, query){
       ? 'データベースにまだ無い場所です。Googleマップの正式名称やタイ文字をコピペしたものなら、そのまま使っても現地の方に伝わる可能性が高いです。'
       : 'データベースにまだ無い場所です。日本語のままだと現地の方に伝わらないため、Googleマップでタイ文字の正式名称を調べてコピペしてみてください。';
     box.innerHTML = `<div class="fallback-box">
-      <div class="fallback-title">「${query}」は見つかりませんでした</div>
+      <div class="fallback-title">「${safeQuery}」は見つかりませんでした</div>
       <div class="fallback-desc">${desc}</div>
       ${hasThai ? fallbackItemHtml : ''}
     </div>`;
@@ -5950,7 +5958,10 @@ function applyDestination(found){
     gtag('event', 'destination_view', {
       destination_name: found.jp,
       destination_pref: found.pref || '',
-      is_registered: !found.note
+      // note: 登録済みデータの一部(例:アンパワー水上マーケット)は「週末のみ開催」等の
+      // 案内メモとして note を使っているため、note の有無では未登録判定ができない。
+      // selectFallback()が作る未登録データだけ pref:null になるため、そちらで判定する(2026-09-22)。
+      is_registered: !!found.pref
     });
   }
 }

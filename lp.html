@@ -522,7 +522,7 @@
       <h1>タイ語が<br>話せなくても<br><span class="accent">見せるだけで<br>伝わる。</span></h1>
       <p class="hero-lead">行き先を伝えるのも、食事の注文も<br>ショッピングも、体調不良のときも。<br>アプリから伝えたいフレーズを選んで<br>スマホの画面を現地の方に見せるだけ。<br>買い切り2,000円。<br>インストールしたその日から使えます。<span style="font-size:0.7em; vertical-align:super;">※1</span></p>
       <div class="hero-price-row">
-        <a class="btn disabled" href="#price">近日公開・購入はこちら</a>
+        <a class="btn js-buy-button" href="#price">購入はこちら</a>
       </div>
       <div class="hero-note">※1 アプリのインストールは不要。<br>ブラウザから開いて、ホーム画面に追加するだけです。<br>PWAという仕組みのWebアプリです。</div>
     </div>
@@ -1043,7 +1043,7 @@
         <li>オフライン対応・機種変更時も購入情報を復元可能</li>
         <li>新しい観光地・フレーズ・旅行シーンが追加されても、追加費用なし</li>
       </ul>
-      <a class="btn disabled" href="#">近日公開・買い切り¥2,000(税込)</a>
+      <a class="btn js-buy-button" href="#">買い切り¥2,000(税込)</a>
     </div>
   </div>
 </section>
@@ -1173,7 +1173,7 @@
   <div class="wrap">
     <h2>次のタイ旅行に<br>指さしタイを</h2>
     <p>旅の準備リストに加えておくと安心です</p>
-    <a class="btn disabled" href="#price">近日公開・購入はこちら</a>
+    <a class="btn js-buy-button" href="#price">購入はこちら</a>
   </div>
 </section>
 
@@ -1319,6 +1319,64 @@
       }
     }, { passive:true });
   });
+</script>
+
+<script>
+  // 購入ボタン: Cloudflare Worker で Stripe Checkout Session を作成し、
+  // 返ってきた決済ページへ遷移する(Adaptive Pricing 無効化済みのため、
+  // 通貨はJPYのみ表示される)。
+  (function(){
+    var CHECKOUT_ENDPOINT = 'https://yubisashi-thai-payment.takatobi.workers.dev/api/create-checkout-session';
+    var buyButtons = Array.prototype.slice.call(document.querySelectorAll('.js-buy-button'));
+    var isProcessing = false;
+
+    if(!buyButtons.length) return;
+
+    buyButtons.forEach(function(btn){
+      btn.dataset.originalText = btn.textContent;
+    });
+
+    function setLoading(loading){
+      buyButtons.forEach(function(b){
+        if(loading){
+          b.textContent = '処理中…';
+          b.setAttribute('aria-disabled', 'true');
+        } else {
+          b.textContent = b.dataset.originalText;
+          b.removeAttribute('aria-disabled');
+        }
+      });
+    }
+
+    buyButtons.forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        if(isProcessing) return;
+        isProcessing = true;
+        setLoading(true);
+
+        fetch(CHECKOUT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        })
+          .then(function(res){
+            if(!res.ok) throw new Error('checkout session request failed: ' + res.status);
+            return res.json();
+          })
+          .then(function(data){
+            if(!data || !data.url) throw new Error('checkout session url missing');
+            window.location.href = data.url;
+          })
+          .catch(function(err){
+            console.error('決済ページを開けませんでした:', err);
+            alert('決済ページを開けませんでした。お手数ですが、しばらくしてから再度お試しください。');
+            isProcessing = false;
+            setLoading(false);
+          });
+      });
+    });
+  })();
 </script>
 </body>
 </html>

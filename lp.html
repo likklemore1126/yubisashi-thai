@@ -3,6 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>
+  // メールなどの外部リンクで「#home-guide」のようなアンカー付きURLへ直接アクセスした場合、
+  // ページ読み込み中に画像・フォントの読み込みが進むたびにブラウザが繰り返しアンカー位置へ
+  // 再スクロールすることがある。html{scroll-behavior:smooth}(下のCSSで指定)が効いたままだと、
+  // その再スクロールのたびに「ふわっと」アニメーションしてしまい、画面が読み込み中ずっと
+  // にゅるにゅる動いて見える原因になる。アンカー付きURLで読み込まれた場合だけ、読み込みが
+  // 落ち着くまでの間、一時的にスムーズスクロールを無効化しておく
+  // (読み込み完了後、下部のスクリプトで通常のスムーズスクロールに戻す)。
+  if (location.hash) {
+    document.documentElement.style.scrollBehavior = 'auto';
+  }
+</script>
 <title>指さしタイ ― 見せるだけで、伝わる。タイ旅行の会話帳アプリ</title>
 <meta name="description" content="タイ語が話せなくても大丈夫。スマホの画面を見せるだけで伝わる、旅行者専用のタイ語会話帳アプリ「指さしタイ」。買い切り2,000円、旅行中はオフラインでも使えます。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1275,18 +1287,25 @@
   // 飛ぶ」というズレが発生する。window の load イベント発火後、さらにフォント適用の完了(document.
   // fonts.ready)を待ってから、少し間隔を空けて複数回スクロールし直すことで、画像やフォントによる
   // 遅れた高さの変化にも追従して最終的に正しい位置へ着地させる。
+  // ※ スムーズスクロール自体は<head>内のスクリプトで既に一時的に無効化されているので、ここでは
+  // 瞬時に位置を合わせるだけでよい。読み込みが落ち着いた時点(補正終了時 or ユーザーが自分で操作を
+  // 始めた時点)で、通常のメニュー等のためにスムーズスクロールを元に戻す。
   window.addEventListener('load', function(){
     if(!location.hash) return;
-    // ユーザーが自分で操作(スクロール/タップ)を始めたら、以降の自動補正は行わない
+    var htmlEl = document.documentElement;
     var userInteracted = false;
-    function markInteracted(){ userInteracted = true; }
+    function restoreSmoothScroll(){ htmlEl.style.scrollBehavior = ''; }
+    function markInteracted(){
+      userInteracted = true;
+      restoreSmoothScroll();
+    }
     window.addEventListener('touchstart', markInteracted, { passive: true, once: true });
     window.addEventListener('wheel', markInteracted, { passive: true, once: true });
     function scrollToHash(){
       try{
         var target = document.querySelector(location.hash);
         if(target){
-          target.scrollIntoView({ behavior: 'auto', block: 'start' });
+          target.scrollIntoView({ block: 'start' });
         }
       }catch(e){}
     }
@@ -1296,7 +1315,11 @@
         if(userInteracted) return;
         scrollToHash();
         attempts++;
-        if(attempts < 5){ setTimeout(attempt, 250); }
+        if(attempts < 5){
+          setTimeout(attempt, 250);
+        } else {
+          restoreSmoothScroll();
+        }
       })();
     }
     if(document.fonts && document.fonts.ready){

@@ -1280,18 +1280,23 @@
   document.addEventListener('DOMContentLoaded', closeMenu);
   closeMenu();
 
-  // メールなどの外部リンクから「lp.html#home-guide」のようにアンカー付きURLへ直接アクセスした場合、
-  // ページ内の画像やWebフォントの読み込みが完了する前にブラウザがアンカー位置へ自動スクロールして
-  // しまうことがある。このページは画像ギャラリーが多く、読み込み中はまだ下の要素の高さが確定して
-  // いないため、「表示直後は少し上(前のセクション)で止まって見えるが、リロードすると正しい位置に
-  // 飛ぶ」というズレが発生する。window の load イベント発火後、さらにフォント適用の完了(document.
-  // fonts.ready)を待ってから、少し間隔を空けて複数回スクロールし直すことで、画像やフォントによる
-  // 遅れた高さの変化にも追従して最終的に正しい位置へ着地させる。
-  // ※ スムーズスクロール自体は<head>内のスクリプトで既に一時的に無効化されているので、ここでは
-  // 瞬時に位置を合わせるだけでよい。読み込みが落ち着いた時点(補正終了時 or ユーザーが自分で操作を
-  // 始めた時点)で、通常のメニュー等のためにスムーズスクロールを元に戻す。
-  window.addEventListener('load', function(){
-    if(!location.hash) return;
+  // ---------- ページ内アンカー(#付きリンク)への遷移を、画像/フォント読み込み中でも
+  // 正しい位置に着地させるための共通処理 ----------
+  // このページは画像ギャラリーが多く、読み込みが完了するまでは下の要素の高さが確定していない。
+  // そのため、①メールなどの外部リンクから「lp.html#home-guide」のようにアンカー付きURLへ直接
+  // アクセスした場合や、②ページを開いた直後(まだ画像を読み込み中)に「価格を見る」等のボタンを
+  // タップした場合、ブラウザ標準のアンカー移動はその時点でのまだ確定していない高さをもとに位置を
+  // 計算してしまい、本来より手前(前のセクション)で止まってしまう。「リロードすると正しい位置に
+  // 飛ぶ」のは、その時点で画像がキャッシュ済みで高さが確定しているためで、これが原因である証拠。
+  // goToAnchor() は、読み込みの遅れに合わせて少し間隔を空けて複数回スクロールし直すことで、
+  // 画像やフォントによる遅れた高さの変化にも追従し、最終的に正しい位置へ着地させる。
+  // ※ html{scroll-behavior:smooth} が効いたままだと、この補正のたびに「ふわっと」アニメーション
+  // してしまい、読み込み中ずっと画面がにゅるにゅる動いて見える原因になるため、補正中は一時的に
+  // スムーズスクロールを無効化し、瞬時に位置を合わせる。ユーザーが自分でスクロール/タップを始めたら
+  // それ以降の自動補正は行わない。
+  function goToAnchor(hash, opts){
+    if(!hash || hash.length < 2) return;
+    opts = opts || {};
     var htmlEl = document.documentElement;
     var userInteracted = false;
     function restoreSmoothScroll(){ htmlEl.style.scrollBehavior = ''; }
@@ -1301,10 +1306,11 @@
     }
     window.addEventListener('touchstart', markInteracted, { passive: true, once: true });
     window.addEventListener('wheel', markInteracted, { passive: true, once: true });
-    function scrollToHash(){
+    function jump(instant){
       try{
-        var target = document.querySelector(location.hash);
+        var target = document.querySelector(hash);
         if(target){
+          if(instant){ htmlEl.style.scrollBehavior = 'auto'; }
           target.scrollIntoView({ block: 'start' });
         }
       }catch(e){}
@@ -1313,7 +1319,7 @@
       var attempts = 0;
       (function attempt(){
         if(userInteracted) return;
-        scrollToHash();
+        jump(true); // 補正は毎回瞬時に(アニメーションさせない)
         attempts++;
         if(attempts < 5){
           setTimeout(attempt, 250);
@@ -1322,11 +1328,31 @@
         }
       })();
     }
+    // クリックなどユーザー操作による遷移の場合は、最初の1回だけ自然な動き(smooth)を許可する
+    if(opts.smooth){ jump(false); } else { jump(true); }
     if(document.fonts && document.fonts.ready){
       document.fonts.ready.then(function(){ requestAnimationFrame(scrollRepeatedly); });
     } else {
       requestAnimationFrame(scrollRepeatedly);
     }
+  }
+
+  // ① メールなどの外部リンクから、アンカー付きURLへ直接アクセスした場合
+  window.addEventListener('load', function(){
+    if(location.hash){ goToAnchor(location.hash, { smooth: false }); }
+  });
+
+  // ② ページ内のアンカーリンク(「価格を見る」「購入はこちら」、メニュー・フッターのリンクなど)を
+  //    クリックした場合。読み込み中の早いタイミングでタップされても正しい位置に着地させる。
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    var hash = a.getAttribute('href');
+    if(!hash || hash.length < 2) return; // 「#」だけ(トップへ戻るボタン)は対象外、独自のonclickに任せる
+    a.addEventListener('click', function(e){
+      if(!document.querySelector(hash)) return; // 該当先がなければ通常のブラウザ挙動に任せる
+      e.preventDefault();
+      try{ history.pushState(null, '', hash); }catch(err){}
+      goToAnchor(hash, { smooth: true });
+    });
   });
 
   // ---------- 機能カード:折りたたみ+横スクロールギャラリー(試作) ----------

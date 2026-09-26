@@ -1268,6 +1268,44 @@
   document.addEventListener('DOMContentLoaded', closeMenu);
   closeMenu();
 
+  // メールなどの外部リンクから「lp.html#home-guide」のようにアンカー付きURLへ直接アクセスした場合、
+  // ページ内の画像やWebフォントの読み込みが完了する前にブラウザがアンカー位置へ自動スクロールして
+  // しまうことがある。このページは画像ギャラリーが多く、読み込み中はまだ下の要素の高さが確定して
+  // いないため、「表示直後は少し上(前のセクション)で止まって見えるが、リロードすると正しい位置に
+  // 飛ぶ」というズレが発生する。window の load イベント発火後、さらにフォント適用の完了(document.
+  // fonts.ready)を待ってから、少し間隔を空けて複数回スクロールし直すことで、画像やフォントによる
+  // 遅れた高さの変化にも追従して最終的に正しい位置へ着地させる。
+  window.addEventListener('load', function(){
+    if(!location.hash) return;
+    // ユーザーが自分で操作(スクロール/タップ)を始めたら、以降の自動補正は行わない
+    var userInteracted = false;
+    function markInteracted(){ userInteracted = true; }
+    window.addEventListener('touchstart', markInteracted, { passive: true, once: true });
+    window.addEventListener('wheel', markInteracted, { passive: true, once: true });
+    function scrollToHash(){
+      try{
+        var target = document.querySelector(location.hash);
+        if(target){
+          target.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+      }catch(e){}
+    }
+    function scrollRepeatedly(){
+      var attempts = 0;
+      (function attempt(){
+        if(userInteracted) return;
+        scrollToHash();
+        attempts++;
+        if(attempts < 5){ setTimeout(attempt, 250); }
+      })();
+    }
+    if(document.fonts && document.fonts.ready){
+      document.fonts.ready.then(function(){ requestAnimationFrame(scrollRepeatedly); });
+    } else {
+      requestAnimationFrame(scrollRepeatedly);
+    }
+  });
+
   // ---------- 機能カード:折りたたみ+横スクロールギャラリー(試作) ----------
   document.querySelectorAll('.feature-toggle-cta').forEach(function(btn){
     btn.addEventListener('click', function(){

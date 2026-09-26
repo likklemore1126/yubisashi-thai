@@ -1431,7 +1431,7 @@
     function setLoading(loading){
       buyButtons.forEach(function(b){
         if(loading){
-          b.textContent = '処理中…';
+          b.textContent = '決済ページに移動します…';
           b.setAttribute('aria-disabled', 'true');
         } else {
           b.textContent = b.dataset.originalText;

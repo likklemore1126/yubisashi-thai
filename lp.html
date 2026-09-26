@@ -410,8 +410,9 @@
   }
   @media (min-width:560px){ .flow-gallery .feature-gallery-scroll img{ width:var(--gallery-card-w-desktop); } }
 
-  /* ---------- ホーム画面への追加ガイド ---------- */
-  .flow-guide{ margin-top:24px; background:var(--sand); border-radius:16px; padding:20px 20px 22px; }
+  /* ---------- ホーム画面への追加方法 ---------- */
+  .home-guide-section h2{ font-size:24px; margin-bottom:8px; }
+  .flow-guide{ margin-top:0; background:var(--sand); border-radius:16px; padding:20px 20px 22px; }
   .flow-guide-lead{ font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:14px; }
   .flow-guide-tabs{ display:flex; gap:8px; margin-bottom:16px; }
   .flow-guide-tab{
@@ -537,6 +538,7 @@
     <li><a href="#why" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">買い切りの理由</a></li>
     <li><a href="#price" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">価格</a></li>
     <li><a href="#flow" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">購入後の流れ</a></li>
+    <li><a href="#home-guide" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">ホーム画面への追加方法</a></li>
     <li><a href="#author" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">タイが好きすぎて移住しました</a></li>
     <li><a href="#faq" onclick="document.getElementById('menuPanel').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');">FAQ</a></li>
   </ul>
@@ -1092,9 +1094,14 @@
         <span class="active"></span><span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
+  </div>
+</section>
 
+<section class="home-guide-section" id="home-guide">
+  <div class="wrap">
+    <h2>ホーム画面への追加方法</h2>
+    <p class="section-lead">一度追加しておけば、次回からはアイコンをタップするだけで開けます。</p>
     <div class="flow-guide">
-      <div class="flow-guide-lead">📱 ホーム画面への追加方法</div>
       <div class="flow-guide-tabs" role="tablist">
         <button type="button" class="flow-guide-tab active" data-target="flowGuideIphone" role="tab" aria-selected="true">iPhoneの場合</button>
         <button type="button" class="flow-guide-tab" data-target="flowGuideAndroid" role="tab" aria-selected="false">Androidの場合</button>

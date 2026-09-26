@@ -402,6 +402,13 @@
   .flow-step-title{ font-size:16px; color:var(--ink); font-weight:700; margin-bottom:3px; }
   .flow-step-desc{ font-size:13.5px; color:#6b6355; line-height:1.7; }
   .flow-arrow{ text-align:center; color:#C7BEA9; font-size:13px; padding-left:15px; }
+  .flow-gallery{ margin:0 0 28px; padding:0; }
+  .flow-gallery .feature-gallery-scroll img{
+    flex:0 0 auto; width:var(--gallery-card-w); min-width:0; scroll-snap-align:start;
+    aspect-ratio:1024/1536; object-fit:cover;
+    border-radius:16px; box-shadow:0 10px 24px -14px rgba(23,36,42,0.3);
+  }
+  @media (min-width:560px){ .flow-gallery .feature-gallery-scroll img{ width:var(--gallery-card-w-desktop); } }
 
   /* ---------- ホーム画面への追加ガイド ---------- */
   .flow-guide{ margin-top:24px; background:var(--sand); border-radius:16px; padding:20px 20px 22px; }
@@ -1071,6 +1078,20 @@
 <section class="flow" id="flow">
   <div class="wrap">
     <h2>購入後の流れ</h2>
+    <div class="flow-gallery feature-gallery">
+      <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
+      <div class="feature-gallery-scroll">
+        <img src="images/flow-01.jpg" alt="①購入する:決済ページで¥2,000のお支払いを完了します">
+        <img src="images/flow-02.jpg" alt="②利用コードを受け取る:購入完了画面に表示され、同じ内容のメールも届きます">
+        <img src="images/flow-03.jpg" alt="③「指さしタイ」を開く:購入完了画面のボタン、またはメール内のURLからアプリを開きます">
+        <img src="images/flow-04.jpg" alt="④利用コードを入力する:購入後の画面の利用コードをコピーして入力し、認証します">
+        <img src="images/flow-05.jpg" alt="⑤ホーム画面に追加する(おすすめ):一度追加しておけば次回からアイコンをタップするだけで開けます">
+        <img src="images/flow-06.jpg" alt="⑥タイ旅行へ:あとは現地で画面を見せるだけ">
+      </div>
+      <div class="feature-gallery-dots" aria-hidden="true">
+        <span class="active"></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
     <ul class="flow-list">
       <li>
         <div>

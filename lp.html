@@ -392,14 +392,34 @@
   /* ---------- 購入後の流れ ---------- */
   .flow h2{ font-size:24px; margin-bottom:20px; }
   .flow-list{ list-style:none; counter-reset:flow; display:flex; flex-direction:column; }
-  .flow-list li{ counter-increment:flow; display:flex; align-items:center; gap:16px; padding:14px 0; }
+  .flow-list li{ counter-increment:flow; display:flex; align-items:flex-start; gap:16px; padding:14px 0; border-bottom:1px solid var(--line); }
+  .flow-list li:last-child{ border-bottom:none; }
   .flow-list li::before{
     content:counter(flow); flex:0 0 30px; width:30px; height:30px; border-radius:50%;
     background:var(--teal); color:#fff; font-family:'Kanit', sans-serif; font-weight:700; font-size:13px;
-    display:flex; align-items:center; justify-content:center;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
   }
-  .flow-list li span{ font-size:16px; color:var(--ink); font-weight:600; }
+  .flow-step-title{ font-size:16px; color:var(--ink); font-weight:700; margin-bottom:3px; }
+  .flow-step-desc{ font-size:13.5px; color:#6b6355; line-height:1.7; }
   .flow-arrow{ text-align:center; color:#C7BEA9; font-size:13px; padding-left:15px; }
+
+  /* ---------- ホーム画面への追加ガイド ---------- */
+  .flow-guide{ margin-top:24px; background:var(--sand); border-radius:16px; padding:20px 20px 22px; }
+  .flow-guide-lead{ font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:14px; }
+  .flow-guide-tabs{ display:flex; gap:8px; margin-bottom:16px; }
+  .flow-guide-tab{
+    flex:1; padding:10px 0; border-radius:999px; border:1.5px solid var(--line);
+    background:#fff; font-weight:700; font-size:14px; color:var(--ink); cursor:pointer;
+    font-family:'Noto Sans JP', sans-serif;
+  }
+  .flow-guide-tab.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .flow-guide-panel{ display:none; }
+  .flow-guide-panel.active{ display:block; }
+  .flow-guide-panel img{
+    width:100%; border-radius:12px; display:block; cursor:zoom-in;
+    box-shadow:0 4px 14px -6px rgba(23,36,42,0.25);
+  }
+  .flow-guide-hint{ text-align:center; font-size:12.5px; color:#8B8272; margin-top:10px; }
 
   /* ---------- 開発者紹介 ---------- */
   .author{ background:var(--teal); color:#fff; padding:20px 0; }
@@ -1052,13 +1072,61 @@
   <div class="wrap">
     <h2>購入後の流れ</h2>
     <ul class="flow-list">
-      <li><span>購入する</span></li>
-      <li><span>利用コードを受け取る</span></li>
-      <li><span>指さしタイを開く</span></li>
-      <li><span>コードを入力する</span></li>
-      <li><span>ホーム画面に追加する</span></li>
-      <li><span>タイ旅行へ</span></li>
+      <li>
+        <div>
+          <div class="flow-step-title">購入する</div>
+          <div class="flow-step-desc">決済ページで¥2,000(税込・買い切り)のお支払いを完了します。</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="flow-step-title">利用コードを受け取る</div>
+          <div class="flow-step-desc">購入完了画面に表示され、同じ内容のメールも届きます。</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="flow-step-title">「指さしタイ」を開く</div>
+          <div class="flow-step-desc">購入完了画面のボタン、またはメール内のURLからアプリを開きます。</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="flow-step-title">利用コードを入力する</div>
+          <div class="flow-step-desc">初回起動時に、受け取った利用コードを入力します(最初の1回だけでOK)。</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="flow-step-title">ホーム画面に追加する(おすすめ)</div>
+          <div class="flow-step-desc">一度追加しておけば、次回からはアイコンをタップするだけで開けます。</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="flow-step-title">タイ旅行へ</div>
+          <div class="flow-step-desc">あとは現地で画面を見せるだけ。オフラインでもそのまま使えます。</div>
+        </div>
+      </li>
     </ul>
+
+    <div class="flow-guide">
+      <div class="flow-guide-lead">📱 ホーム画面への追加方法</div>
+      <div class="flow-guide-tabs" role="tablist">
+        <button type="button" class="flow-guide-tab active" data-target="flowGuideIphone" role="tab" aria-selected="true">iPhoneの場合</button>
+        <button type="button" class="flow-guide-tab" data-target="flowGuideAndroid" role="tab" aria-selected="false">Androidの場合</button>
+      </div>
+      <div class="flow-guide-panel active" id="flowGuideIphone">
+        <img src="images/home-guide-iphone.jpg" alt="iPhoneでホーム画面に追加する手順:①Safariで「指さしタイ」を開く②画面下の共有ボタンをタップ③「ホーム画面に追加」をタップ④右上の「追加」をタップ⑤ホーム画面にアイコンが追加される⑥次回からワンタップで開ける" tabindex="0" role="button" aria-label="タップして拡大">
+      </div>
+      <div class="flow-guide-panel" id="flowGuideAndroid">
+        <img src="images/home-guide-android.jpg" alt="Androidでアプリをインストールする手順:①Chromeで「指さしタイ」を開く②右上のメニュー(縦三点)をタップ③「ホーム画面に追加」をタップ④「インストール」をタップ⑤インストール完了⑥ホーム画面にアイコンが追加される" tabindex="0" role="button" aria-label="タップして拡大">
+      </div>
+      <div class="flow-guide-hint">🔍 画像をタップすると拡大できます</div>
+      <div class="hint-text" style="margin-top:14px; font-size:12.5px; color:#6b6355;">
+        ※ ホーム画面のアイコンから開いた際、まれに利用コードの再入力を求められることがありますが、その場合も購入時と同じ利用コードをご入力ください。
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1228,6 +1296,22 @@
     });
   });
 
+  document.querySelectorAll('.flow-guide-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var group = tab.closest('.flow-guide');
+      group.querySelectorAll('.flow-guide-tab').forEach(function(t){
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      var targetId = tab.getAttribute('data-target');
+      group.querySelectorAll('.flow-guide-panel').forEach(function(p){
+        p.classList.toggle('active', p.id === targetId);
+      });
+    });
+  });
+
   (function(){
     var lightbox = document.getElementById('imgLightbox');
     var scroller = document.getElementById('imgLightboxScroll');
@@ -1291,6 +1375,14 @@
       var imgs = Array.prototype.slice.call(galleryScroller.querySelectorAll('img'));
       imgs.forEach(function(img, i){
         img.addEventListener('click', function(){ openLightbox(imgs, i); });
+      });
+    });
+
+    // ホーム画面追加ガイドの画像(iPhone/Android)もタップで拡大表示できるようにする
+    document.querySelectorAll('.flow-guide-panel img').forEach(function(img){
+      img.addEventListener('click', function(){ openLightbox([img], 0); });
+      img.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox([img], 0); }
       });
     });
 

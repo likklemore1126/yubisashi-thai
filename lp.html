@@ -1342,9 +1342,13 @@
     if(location.hash){ goToAnchor(location.hash, { smooth: false }); }
   });
 
-  // ② ページ内のアンカーリンク(「価格を見る」「購入はこちら」、メニュー・フッターのリンクなど)を
+  // ② ページ内のアンカーリンク(「価格を見る」、メニュー・フッターのリンクなど)を
   //    クリックした場合。読み込み中の早いタイミングでタップされても正しい位置に着地させる。
-  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  //    ただし「購入はこちら」ボタン(.js-buy-button, href="#price")は対象外にする。
+  //    このボタンは決済ページへ直接遷移させる専用のクリック処理を別途持っており、
+  //    ここで一緒にscrollIntoViewさせると、クリック時に一瞬「価格」セクションへ
+  //    ジャンプしてから決済ページへ遷移する、という見た目上の不具合になってしまうため。
+  document.querySelectorAll('a[href^="#"]:not(.js-buy-button)').forEach(function(a){
     var hash = a.getAttribute('href');
     if(!hash || hash.length < 2) return; // 「#」だけ(トップへ戻るボタン)は対象外、独自のonclickに任せる
     a.addEventListener('click', function(e){

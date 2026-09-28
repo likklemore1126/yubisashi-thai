@@ -3802,19 +3802,19 @@ function hotelInfoBlockHtml(){
       <span>${iconSvg('hotel', 16)} 宿泊メモ(この端末に保存されます)</span>
       <button class="hotel-info-clear" onclick="clearHotelInfo()">✕ クリア</button>
     </div>
-    <label class="hotel-info-label">ホテル名(コピペ可)</label>
+    <label class="hotel-info-label">ホテル名(コピペ可) / ชื่อโรงแรม</label>
     <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.name)}"
       placeholder="例: ◯◯ Hotel Bangkok"
       oninput="hotelInfo.name=this.value; saveHotelInfoData();">
     <div class="hotel-info-row">
       <div>
-        <label class="hotel-info-label">階数</label>
+        <label class="hotel-info-label">階数 / ชั้น</label>
         <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.floor)}"
           placeholder="例: 5" inputmode="numeric"
           oninput="hotelInfo.floor=this.value; saveHotelInfoData();">
       </div>
       <div>
-        <label class="hotel-info-label">部屋番号</label>
+        <label class="hotel-info-label">部屋番号 / หมายเลขห้อง</label>
         <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.room)}"
           placeholder="例: 512"
           oninput="hotelInfo.room=this.value; saveHotelInfoData();">
@@ -3822,12 +3822,12 @@ function hotelInfoBlockHtml(){
     </div>
     <div class="hotel-info-date-stack">
       <div>
-        <label class="hotel-info-label">チェックイン日</label>
+        <label class="hotel-info-label">チェックイン日 / วันเช็คอิน</label>
         <input type="date" class="hotel-info-input" value="${escapeAttr(hotelInfo.checkin)}"
           onchange="hotelInfo.checkin=this.value; saveHotelInfoData(); updateNightsDisplay();">
       </div>
       <div>
-        <label class="hotel-info-label">チェックアウト日</label>
+        <label class="hotel-info-label">チェックアウト日 / วันเช็คเอาท์</label>
         <input type="date" class="hotel-info-input" value="${escapeAttr(hotelInfo.checkout)}"
           onchange="hotelInfo.checkout=this.value; saveHotelInfoData(); updateNightsDisplay();">
       </div>

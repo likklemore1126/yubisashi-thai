@@ -4128,6 +4128,13 @@ let dishSelectedMods = [];
 let dishSelectedPhraseIdx = null;
 let dishListScrollTop = 0;
 let dishScreenScrollTop = 0;
+// スクロール位置の復元/リセットは requestAnimationFrame で数フレーム遅らせて
+// 何度も再適用しているため(アニメーション対策)、「一覧に戻る」→「(その反映が
+// 終わる前に)別の料理を開く」のように素早く操作すると、古い方の遅延処理が後から
+// 発火して、新しく開いた詳細画面のスクロール位置を上書きしてしまうことがある。
+// 呼び出すたびにこの値をインクリメントし、各遅延処理の実行時に「自分がまだ最新か」を
+// 確認することで、古い処理が新しい処理の結果を横取りしないようにする。
+let dishScrollToken = 0;
 let dishCategory = 'food';
 const DISH_CATEGORY_META = {
   food:  { emoji:'🍜', label:'料理' },
@@ -4160,6 +4167,7 @@ function goBackToDishList(){
   }, 190);
 }
 function openDishList(restoreScroll, cat){
+  const myScrollToken = ++dishScrollToken;
   dishSelectedIdx = null;
   if(cat) dishCategory = cat;
   const meta = DISH_CATEGORY_META[dishCategory] || DISH_CATEGORY_META.food;
@@ -4174,7 +4182,10 @@ function openDishList(restoreScroll, cat){
   const scr = document.getElementById('dishScreen');
   const listTarget = restoreScroll ? dishListScrollTop : 0;
   const scrTarget = restoreScroll ? dishScreenScrollTop : 0;
-  const applyScroll = () => { list.scrollTop = listTarget; scr.scrollTop = scrTarget; };
+  const applyScroll = () => {
+    if(myScrollToken !== dishScrollToken) return;
+    list.scrollTop = listTarget; scr.scrollTop = scrTarget;
+  };
   applyScroll();
   requestAnimationFrame(() => {
     applyScroll();
@@ -4276,6 +4287,7 @@ function closeDishPhotoLightbox(){
   document.getElementById('dishPhotoLightbox').classList.remove('show');
 }
 function openDishDetail(i){
+  const myScrollToken = ++dishScrollToken;
   dishListScrollTop = document.getElementById('dishList').scrollTop;
   dishScreenScrollTop = document.getElementById('dishScreen').scrollTop;
   dishSelectedIdx = i;
@@ -4293,7 +4305,7 @@ function openDishDetail(i){
   updateDishHeaderBack();
   const scr = document.getElementById('dishScreen');
   scr.scrollTop = 0;
-  requestAnimationFrame(() => { scr.scrollTop = 0; });
+  requestAnimationFrame(() => { if(myScrollToken === dishScrollToken) scr.scrollTop = 0; });
   const wrap = document.getElementById('dishContentWrap');
   wrap.style.transition = 'none';
   wrap.style.transform = 'translateX(24px)';

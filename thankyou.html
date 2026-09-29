@@ -164,11 +164,36 @@
 
   .state{ display:none; }
   .state.active{ display:block; }
+
+  /* ---------- アプリ内ブラウザ(Instagram/Threads等)向けの案内 ----------
+     判定は実機で確認した名前のみを使う(2026-09-29 iPhone実機で確認)
+     Instagram: UAに「Instagram」 / Threads: UAに「Barcelona」
+     ※InstagramのUAには「Safari」も含まれるため、Safariの有無では判定しない */
+  .iab-notice{ display:none; background:#FFF3DC; border:1.5px solid #E8A33D; color:#17242A;
+    border-radius:12px; padding:14px 14px 12px; font-size:13.5px; line-height:1.7; text-align:left; }
+  .iab-notice.show{ display:block; }
+  .iab-notice-title{ font-weight:700; font-size:14.5px; margin-bottom:4px; }
+  .iab-notice ol{ margin:6px 0 10px 1.3em; padding:0; }
+  .iab-notice-copy{ width:100%; padding:11px; border:none; border-radius:10px; background:#17242A; color:#fff;
+    font-size:13.5px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .iab-notice-copy.copied{ background:#0F6B62; }
+  .iab-notice{ margin-bottom:22px; }
 </style>
 </head>
 <body>
 
 <div class="card">
+  <div class="iab-notice" id="iabNotice">
+    <div class="iab-notice-title">⚠️ アプリは<span class="iab-browser">Safari</span>でお使いください</div>
+    いま<span class="iab-app"></span>アプリの中でこのページを開いています。このままではアプリをホーム画面に追加できません。
+    <ol>
+      <li>下に表示される利用コードをコピーする（同じコードはメールにも届きます）</li>
+      <li>下のボタンでアプリのURLをコピーする</li>
+      <li><span class="iab-browser">Safari</span>に貼り付けて開き、利用コードを入力する</li>
+    </ol>
+    <button type="button" class="iab-notice-copy" data-url="https://yubisashi.takatobi.jp/index.html">アプリのURLをコピー</button>
+  </div>
+
   <div class="logo">指さしタイ</div>
   <div class="tagline">見せるだけで、伝わる。</div>
 
@@ -315,5 +340,41 @@
 })();
 </script>
 
+
+<script>
+(function(){
+  var ua = navigator.userAgent || '';
+  var appName = /Instagram/i.test(ua) ? 'Instagram' : (/Barcelona/i.test(ua) ? 'Threads' : (/FBAN|FBAV/i.test(ua) ? 'Facebook' : (/\bLine\//i.test(ua) ? 'LINE' : '')));
+  if(!appName) return;
+  var box = document.getElementById('iabNotice');
+  if(!box) return;
+  var browser = /Android/i.test(ua) ? 'Chrome' : 'Safari';
+  box.querySelectorAll('.iab-app').forEach(function(el){ el.textContent = appName; });
+  box.querySelectorAll('.iab-browser').forEach(function(el){ el.textContent = browser; });
+  box.classList.add('show');
+  var btn = box.querySelector('.iab-notice-copy');
+  if(!btn) return;
+  var url = btn.getAttribute('data-url') || window.location.href;
+  var label = btn.textContent;
+  function done(){
+    btn.textContent = 'コピーしました。' + browser + 'に貼り付けて開いてください';
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = label; btn.classList.remove('copied'); }, 4000);
+  }
+  function fallback(){
+    try{
+      var ta = document.createElement('textarea');
+      ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); done();
+    }catch(e){}
+  }
+  btn.addEventListener('click', function(){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done).catch(fallback);
+    } else { fallback(); }
+  });
+})();
+</script>
 </body>
 </html>

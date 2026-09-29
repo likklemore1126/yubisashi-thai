@@ -523,9 +523,35 @@
   .footer-copyright{ font-size:11.5px; color:#B3AA98; margin-top:18px; }
   .footer-links{ display:flex; gap:18px; flex-wrap:wrap; margin-top:10px; }
   .footer-links a{ text-decoration:underline; }
+
+  /* ---------- アプリ内ブラウザ(Instagram/Threads等)向けの案内 ----------
+     判定は実機で確認した名前のみを使う(2026-09-29 iPhone実機で確認)
+     Instagram: UAに「Instagram」 / Threads: UAに「Barcelona」
+     ※InstagramのUAには「Safari」も含まれるため、Safariの有無では判定しない */
+  .iab-notice{ display:none; background:#FFF3DC; border:1.5px solid #E8A33D; color:#17242A;
+    border-radius:12px; padding:14px 14px 12px; font-size:13.5px; line-height:1.7; text-align:left; }
+  .iab-notice.show{ display:block; }
+  .iab-notice-title{ font-weight:700; font-size:14.5px; margin-bottom:4px; }
+  .iab-notice ol{ margin:6px 0 10px 1.3em; padding:0; }
+  .iab-notice-copy{ width:100%; padding:11px; border:none; border-radius:10px; background:#17242A; color:#fff;
+    font-size:13.5px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .iab-notice-copy.copied{ background:#0F6B62; }
+  .iab-wrap{ max-width:720px; margin:0 auto; padding:12px 16px 0; }
 </style>
 </head>
 <body>
+
+<div class="iab-wrap"><div class="iab-notice" id="iabNotice">
+  <div class="iab-notice-title">⚠️ <span class="iab-browser">Safari</span>で開いてからご購入ください</div>
+  いま<span class="iab-app"></span>アプリの中でこのページを開いています。このままだと購入後にアプリをホーム画面に追加できません。
+  <ol>
+    <li>右上の「<span class="iab-menu">…</span>」メニューを開く</li>
+    <li>「<span class="iab-item">外部ブラウザで開く</span>」を選ぶ</li>
+  </ol>
+  メニューに見当たらない場合は、下のボタンでURLをコピーして<span class="iab-browser">Safari</span>に貼り付けてください。
+  <button type="button" class="iab-notice-copy" data-url="https://yubisashi.takatobi.jp/lp.html" style="margin-top:10px;">このページのURLをコピー</button>
+</div></div>
+
 
 <header>
   <div class="header-inner">
@@ -1560,6 +1586,52 @@
       setLoading(false);
     });
   })();
+</script>
+
+<script>
+(function(){
+  var ua = navigator.userAgent || '';
+  var appName = /Instagram/i.test(ua) ? 'Instagram' : (/Barcelona/i.test(ua) ? 'Threads' : (/FBAN|FBAV/i.test(ua) ? 'Facebook' : (/\bLine\//i.test(ua) ? 'LINE' : '')));
+  if(!appName) return;
+  var box = document.getElementById('iabNotice');
+  if(!box) return;
+  var browser = /Android/i.test(ua) ? 'Chrome' : 'Safari';
+  box.querySelectorAll('.iab-app').forEach(function(el){ el.textContent = appName; });
+  box.querySelectorAll('.iab-browser').forEach(function(el){ el.textContent = browser; });
+  // メニューの形と項目名(2026-09-29 Android実機Pixel 8で確認):
+  //   Android Instagram: 右上「︙」→「Chromeで開く」 / Android Threads: 右上「…」→「外部ブラウザーで開く」
+  //   iPhoneは既定値(「…」→「外部ブラウザで開く」)のまま
+  var menu = null, item = null;
+  if(/Android/i.test(ua)){
+    if(appName === 'Instagram'){ menu = '︙'; item = 'Chromeで開く'; }
+    else if(appName === 'Threads'){ menu = '…'; item = '外部ブラウザーで開く'; }
+  }
+  if(menu){ box.querySelectorAll('.iab-menu').forEach(function(el){ el.textContent = menu; }); }
+  if(item){ box.querySelectorAll('.iab-item').forEach(function(el){ el.textContent = item; }); }
+  box.classList.add('show');
+  var btn = box.querySelector('.iab-notice-copy');
+  if(!btn) return;
+  var url = btn.getAttribute('data-url') || window.location.href;
+  var label = btn.textContent;
+  function done(){
+    btn.textContent = 'コピーしました。' + browser + 'に貼り付けて開いてください';
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = label; btn.classList.remove('copied'); }, 4000);
+  }
+  function fallback(){
+    try{
+      var ta = document.createElement('textarea');
+      ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); done();
+    }catch(e){}
+  }
+  btn.addEventListener('click', function(){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done).catch(fallback);
+    } else { fallback(); }
+  });
+})();
 </script>
 </body>
 </html>

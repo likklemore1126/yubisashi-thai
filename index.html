@@ -2325,6 +2325,10 @@ const transportItems = [
   {mode:'plane', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
   {mode:'plane', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
   {mode:'plane', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+  {mode:'plane', base:"ซื้อซิมการ์ดได้ที่ไหน", type:'q', jp:"SIMカードはどこで買えますか？"},
+  {mode:'plane', base:"ขอซิมการ์ดแบบใช้เน็ตอย่างเดียว", type:'s', jp:"データ専用SIMカードをください"},
+  {mode:'plane', base:"ขอซิมการ์ดแบบโทรได้และใช้เน็ตได้", type:'s', jp:"電話とデータ両方が使えるSIMカードをください"},
+  {mode:'plane', base:"จะอยู่ที่ไทย {D} วัน", type:'s', jp:"滞在日数は{D}日です", dayInput:true, dayDefault:3, keepListOrder:true},
   {mode:'ferry', base:"เรือลำนี้ไป {DEST} ไหม", type:'q', jp:"この船は{DEST}へ行きますか？", destInsert:true},
   {mode:'ferry', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'ferry', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
@@ -4925,8 +4929,10 @@ function renderComposerList(){
         return true;
       })
       .sort((a, b) => {
-        const pa = (a.item.destInsert || a.item.hourInput || a.item.peopleInput || a.item.dayInput || a.item.airlineInput) ? 0 : 1;
-        const pb = (b.item.destInsert || b.item.hourInput || b.item.peopleInput || b.item.dayInput || b.item.airlineInput) ? 0 : 1;
+        // keepListOrder:true の項目は入力付きでも先頭に寄せず、定義順の位置に表示する
+        // (例: 飛行機タブの「滞在日数は〇日です」をSIMカード関連フレーズと並べるため 2026-10-02)
+        const pa = (!a.item.keepListOrder && (a.item.destInsert || a.item.hourInput || a.item.peopleInput || a.item.dayInput || a.item.airlineInput)) ? 0 : 1;
+        const pb = (!b.item.keepListOrder && (b.item.destInsert || b.item.hourInput || b.item.peopleInput || b.item.dayInput || b.item.airlineInput)) ? 0 : 1;
         return pa - pb;
       });
     if(transportTab === 'densha') html += ticketRowHtml();
@@ -4947,8 +4953,10 @@ function renderComposerList(){
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に人数を変更できます</span>`;
       }
       if(item.dayInput){
-        th = th.replace('{D}', dayCount);
-        jp = jp.replace('{D}', dayCount);
+        // dayDefault を持つ項目は、未選択時はその初期値で表示する(タップ時の初期値と一致させる)
+        const dShow = (!isSelectedNow && item.dayDefault) ? item.dayDefault : dayCount;
+        th = th.replace('{D}', dShow);
+        jp = jp.replace('{D}', dShow);
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に日数を変更できます</span>`;
       }
       if(item.airlineInput){
@@ -5040,7 +5048,7 @@ function toggleFollowUp(idx){
     peopleCount = 4;
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].dayInput){
-    dayCount = 1;
+    dayCount = transportItems[selectedFollowUp].dayDefault || 1;
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].airlineInput){
     airlineSelectedIdx = -1;

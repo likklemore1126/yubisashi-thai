@@ -16,65 +16,12 @@
   // CSSのdvh単位だけだと再計算のタイミングがずれて.deviceの下端に隙間が出ることがある。
   // JSで実際の innerHeight を測って --app-height に反映し、CSS側でdvhより優先させる。
   (function(){
-    function currentHeight(){
-      // visualViewport は「今実際に見えている領域」を返すため、window.innerHeight より
-      // 信頼できることが多い。使えない環境では innerHeight にフォールバックする。
-      return (window.visualViewport && window.visualViewport.height) || window.innerHeight;
-    }
     function setAppHeight(){
-      document.documentElement.style.setProperty('--app-height', currentHeight() + 'px');
-    }
-    // iOS Safari、特にホーム画面に追加したPWA(standaloneモード)では、起動直後は
-    // 実際に見えている領域とブラウザ内部のレイアウト計算がズレたまま固定されてしまい、
-    // ユーザーが指でスクロール操作をした瞬間に初めて正しい値へ更新される、という
-    // 既知のクセがある。時間を置いて測り直すだけでは直らないため、ユーザー操作を待たず、
-    // ごく小さな(1px)スクロールを自動的に起こしてブラウザに再計算を促すことで、
-    // 実際にスクロールしたのと同じ効果を先回りして起こす。
-    function nudgeScroll(){
-      document.querySelectorAll('.page-scroll').forEach(function(el){
-        if(el.scrollHeight > el.clientHeight){
-          const prevTop = el.scrollTop;
-          el.scrollTop = prevTop + 1;
-          requestAnimationFrame(function(){
-            el.scrollTop = prevTop;
-            setAppHeight();
-          });
-        }
-      });
+      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
     }
     setAppHeight();
-    // ページを開いた直後は、ブラウザのアドレスバーが縮むアニメーションがまだ終わっておらず、
-    // 1回目の高さ測定が実際より小さい値になっていることがある。
-    // その状態のまま resize が一度も発火しないと、下端に白い隙間が残り続けてしまうため、
-    // 少し時間を置いて複数回測り直し(+ 上記のnudgeScrollも併用し)、初回のズレを吸収する。
-    setTimeout(function(){ setAppHeight(); nudgeScroll(); }, 300);
-    setTimeout(function(){ setAppHeight(); nudgeScroll(); }, 800);
-    setTimeout(function(){ setAppHeight(); nudgeScroll(); }, 1500);
     window.addEventListener('resize', setAppHeight);
     window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
-    // PWAをバックグラウンドから復帰した際などにもズレが残らないようにする。
-    window.addEventListener('pageshow', function(){ setAppHeight(); nudgeScroll(); });
-    // AndroidのChromeはアドレスバーの表示/非表示で「visual viewport」だけが変わり、
-    // window の resize が発火しないことがある。visualViewport.resize も見ておく。
-    if(window.visualViewport){
-      window.visualViewport.addEventListener('resize', setAppHeight);
-    }
-    // 指でスクロールしてアドレスバーが引っ込む瞬間は、resize/visualViewportのresizeより
-    // scrollイベントの方が先に(あるいは確実に)発火する端末があるため、
-    // どの要素のスクロールでも拾えるようキャプチャフェーズで監視し、
-    // rAFで間引きながら再計算する。
-    let scrollRaf = null;
-    document.addEventListener('scroll', function(){
-      if(scrollRaf) return;
-      scrollRaf = requestAnimationFrame(function(){
-        scrollRaf = null;
-        setAppHeight();
-      });
-    }, { capture:true, passive:true });
-    // 全画面表示系のオーバーレイ(相手に見せる/写真拡大/マナー画像拡大など)を開く直前にも
-    // 呼び直せるよう、外部の関数からも使えるようにしておく。
-    window.setAppHeight = setAppHeight;
-    window.nudgeScroll = nudgeScroll;
   })();
 </script>
 <title>指さしタイ - トップ画面</title>
@@ -102,6 +49,11 @@
     --line:#E4DAC4;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  /* iOS Safariのラバーバンド(引っ張りすぎた時の跳ね返り)による
+     白い背景の露出を念のため防ぐための設定。
+     (相手に見せる表示の下に隙間が出る問題の主因はこれではなく、
+     touch-action:none の対策の方が本命。詳しくは landscape-display 参照) */
+  html{ overscroll-behavior:none; }
   body{
     background:#DED2B0;
     font-family:'Noto Sans JP', sans-serif;
@@ -110,6 +62,7 @@
     justify-content:center;
     min-height:100vh;
     padding:24px 12px;
+    overscroll-behavior:none;
   }
   .device{
     width:100%;
@@ -125,8 +78,15 @@
     height:100%;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
   }
   @media (max-width:480px){
+    /* ▼診断用A/Bテスト(2026-09-21 第3弾): 色を変えず(通常通り#fffのまま)、
+       htmlにだけ明示的に背景色を指定してみる。body側は元々#fffが指定済みだが、
+       html側には一切指定がなかったため、Safariのtinting判定がhtmlの
+       「背景色未指定(透明)」を拾っている可能性を検証する。 */
+    html{ background:#fff; }
+    /* ▲診断用ここまで */
     body{
       padding:0; background:#fff;
       min-height:100vh;
@@ -134,14 +94,9 @@
       min-height:var(--app-height, 100dvh);
     }
     .device{
-      /* heightをJSやdvhの計算値で指定すると、その値が実際のビューポートと
-         ズレた瞬間に下端(あるいは他要素)に隙間ができてしまう。
-         position:fixed; inset:0; ならブラウザが実際に見えている領域に
-         正確に合わせてくれるため、高さを自分で計算する必要がなくなる。 */
-      position:fixed;
-      inset:0;
-      top:0; right:0; bottom:0; left:0;
-      height:auto;
+      height:100vh;
+      height:100dvh;
+      height:var(--app-height, 100dvh);
       max-width:100%;
       border-radius:0;
       box-shadow:none;
@@ -202,7 +157,7 @@
   @keyframes boot-spin{ to{ transform:rotate(360deg); } }
 
   .license-gate{
-    position:fixed; inset:0; top:0; right:0; bottom:0; left:0; z-index:10000;
+    position:fixed; inset:0; z-index:10000;
     background:var(--paper);
     display:flex; align-items:center; justify-content:center;
     padding:24px;
@@ -540,7 +495,7 @@
     margin:10px 0 12px; padding-top:14px; border-top:1.5px solid var(--line);
   }
   .manner-lightbox{
-    position:fixed; inset:0; top:0; right:0; bottom:0; left:0; background:rgba(10,20,20,0.92); z-index:50;
+    position:fixed; inset:0; background:rgba(10,20,20,0.92); z-index:50;
     display:none; align-items:center; justify-content:center; padding:16px;
   }
   .manner-lightbox.show{ display:flex; }
@@ -855,7 +810,7 @@
   .dish-recommend-phrase .fav-star{ color:rgba(23,36,42,0.35); }
   .dish-recommend-phrase .fav-star.active{ color:var(--ink); }
   .photo-lightbox{
-    display:none; position:fixed; inset:0; top:0; right:0; bottom:0; left:0; background:rgba(0,0,0,0.92); z-index:60;
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:60;
     align-items:center; justify-content:center; padding:20px;
   }
   .photo-lightbox.show{ display:flex; }
@@ -949,10 +904,17 @@
   .airline-select-option:active{ background:var(--sand); }
   .airline-select-option.selected{ background:var(--marigold); font-weight:700; color:#5c4415; }
   .landscape-display{
-    display:none; position:fixed; inset:0; top:0; right:0; bottom:0; left:0; z-index:999; background:var(--ink); color:#fff;
+    /* 検証のため、一旦シンプルな状態に戻す(画面外描画や合成レイヤー化のCSSハックは
+       いずれも実機で効果が確認できなかったため撤去)。今回はDOM構造の変更
+       (.deviceの外、body直下への移動)で切り分けを行う。 */
+    display:none; position:fixed; inset:0;
+    z-index:999; background:var(--ink); color:#fff;
     flex-direction:column; align-items:center; justify-content:center; text-align:center;
     cursor:pointer;
-    padding:24px calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+    padding:24px calc(24px + env(safe-area-inset-right)) 24px calc(24px + env(safe-area-inset-left));
+    /* この画面上での指のドラッグが、背後にある本来のページのスクロールとして
+       素通りしてしまうのを防ぐための保険(実機で効果を確認済み、維持)。 */
+    touch-action:none;
   }
   .landscape-display.show{ display:flex; }
   .landscape-th{ font-family:'Kanit', sans-serif; font-weight:700; line-height:1.15; white-space:normal; word-break:normal; overflow-wrap:normal; }
@@ -994,7 +956,9 @@
     flex:0 0 auto; font-size:20px; color:#C7BEA9; padding:8px 6px; cursor:grab; touch-action:none;
     user-select:none;
   }
-  .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:0 8px; }
+  /* お気に入り件数が多く縦に伸びた時、中央寄せのままだと右上固定の「タップで閉じる」と
+     被ってしまうため、常にその分の余白をあらかじめ上に確保しておく(2026-09-22)。 */
+  .fav-chain-list{ max-height:80vh; overflow-y:auto; padding:calc(28px + env(safe-area-inset-top)) 8px 0; overscroll-behavior:contain; touch-action:pan-y; }
   .fav-chain-item{ margin-bottom:26px; text-align:center; }
   .fav-chain-th{ font-family:'Kanit', sans-serif; font-weight:700; font-size:min(9vw,40px); line-height:1.25; }
   .fav-chain-jp{ font-size:13px; opacity:0.6; margin-top:6px; }
@@ -1184,9 +1148,16 @@
   var gate = document.getElementById('licenseGate');
 
   // 既に認証済みなら、他の処理を待たずただちにゲートを隠す(再表示させない)
+  // opacity/visibilityでフェードアウトさせるだけだと、まれに描画だけが画面に
+  // 残ってしまうことがあるため(boot-splashで実際に確認済みのWebKitの既知のクセ)、
+  // フェードが終わったタイミングでDOMから完全に取り除き、
+  // 「相手に見せる」などの他の全画面表示の上に古い描画が透けて見える可能性そのものをなくす。
   try{
     if(localStorage.getItem(STORAGE_KEY) === 'true'){
-      if(gate) gate.classList.add('hide');
+      if(gate){
+        gate.classList.add('hide');
+        setTimeout(function(){ if(gate && gate.parentNode) gate.remove(); }, 300);
+      }
     }
   }catch(e){}
 
@@ -1242,7 +1213,12 @@
         msg.textContent = '認証できました!';
         msg.className = 'license-gate-msg ok';
         if(gate){
-          setTimeout(function(){ gate.classList.add('hide'); }, 300);
+          setTimeout(function(){
+            gate.classList.add('hide');
+            // フェードアウト後、古い描画が残らないようDOMから完全に取り除く
+            // (詳しい理由は上の「既に認証済みなら」の処理と同じ)
+            setTimeout(function(){ if(gate && gate.parentNode) gate.remove(); }, 300);
+          }, 300);
         }
       } else if(data.reason === 'not_found'){
         msg.textContent = 'コードが見つかりません。入力内容をご確認ください。';
@@ -1541,22 +1517,26 @@
     <img id="mannerLightboxImg" src="" alt="">
   </div>
 
-  <div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
-    <div class="landscape-close">タップで閉じる ✕</div>
-    <div class="fav-chain-list" id="favChainList"></div>
-  </div>
 
-  <div class="photo-lightbox" id="dishPhotoLightbox" onclick="closeDishPhotoLightbox()">
-    <div class="landscape-close">タップで閉じる ✕</div>
-    <img id="dishPhotoLightboxImg" src="" alt="">
-  </div>
+</div>
 
-  <div class="landscape-display" id="landscapeDisplay" onclick="closeLandscapeDisplay()">
-    <div class="landscape-close">タップで閉じる ✕</div>
-    <div class="landscape-th" id="landscapeTh"></div>
-    <div class="landscape-jp" id="landscapeJp"></div>
-  </div>
+<!-- position:fixed の全画面UIは、overflow:hidden の .device の中に置いたままだと
+     WebKitの描画・合成で問題が起きやすいとの指摘を受け、.device の外(body直下)に
+     移動した。boot-splash・license-gate も元々ここ(body直下)にある。 -->
+<div class="landscape-display" id="favChainDisplay" onclick="closeFavChain()">
+  <div class="landscape-close">タップで閉じる ✕</div>
+  <div class="fav-chain-list" id="favChainList"></div>
+</div>
 
+<div class="photo-lightbox" id="dishPhotoLightbox" onclick="closeDishPhotoLightbox()">
+  <div class="landscape-close">タップで閉じる ✕</div>
+  <img id="dishPhotoLightboxImg" src="" alt="">
+</div>
+
+<div class="landscape-display" id="landscapeDisplay" onclick="closeLandscapeDisplay()">
+  <div class="landscape-close">タップで閉じる ✕</div>
+  <div class="landscape-th" id="landscapeTh"></div>
+  <div class="landscape-jp" id="landscapeJp"></div>
 </div>
 
 <script>
@@ -1564,7 +1544,14 @@
 // (処理が全部終わってから400msではなく、全体の処理時間と400msの「遅い方」で確定する)
 setTimeout(() => {
   const splash = document.getElementById('bootSplash');
-  if(splash) splash.classList.add('hide');
+  if(splash){
+    splash.classList.add('hide');
+    // opacity/visibilityでフェードアウトさせるだけだと、まれに描画だけが
+    // 画面に残ってしまうことがあるため(WebKitの既知のクセ)、
+    // フェードが終わったタイミングでDOMから完全に取り除き、
+    // 描画が残る可能性そのものをなくす。
+    setTimeout(() => { splash.remove(); }, 300);
+  }
 }, 200);
 
 const ICON_DATA = {
@@ -2338,6 +2325,10 @@ const transportItems = [
   {mode:'plane', base:"จ่ายด้วยการสแกนได้ไหม", type:'q', jp:"スキャンで支払いできますか？"},
   {mode:'plane', base:"นี่คือราคารวมใช่ไหม", type:'q', jp:"これは合計金額ですか？"},
   {mode:'plane', base:"ขอใบเสร็จได้ไหม", type:'q', jp:"領収書はいただけますか？"},
+  {mode:'plane', base:"ซื้อซิมการ์ดได้ที่ไหน", type:'q', jp:"SIMカードはどこで買えますか？"},
+  {mode:'plane', base:"ขอซิมการ์ดแบบใช้เน็ตอย่างเดียว", type:'s', jp:"データ専用SIMカードをください"},
+  {mode:'plane', base:"ขอซิมการ์ดแบบโทรได้และใช้เน็ตได้", type:'s', jp:"電話とデータ両方が使えるSIMカードをください"},
+  {mode:'plane', base:"จะอยู่ที่ไทย {D} วัน", type:'s', jp:"滞在日数は{D}日です", dayInput:true, dayDefault:3, keepListOrder:true},
   {mode:'ferry', base:"เรือลำนี้ไป {DEST} ไหม", type:'q', jp:"この船は{DEST}へ行きますか？", destInsert:true},
   {mode:'ferry', base:"ไป {DEST} เท่าไหร่", type:'q', jp:"{DEST}までいくらですか？", destInsert:true, numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
   {mode:'ferry', base:"เท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true}},
@@ -3246,8 +3237,13 @@ function restorePackItems(){
 }
 function addPackItem(){
   const input = document.getElementById('packAddInput');
-  const text = input.value.trim();
-  if(!text) return;
+  const raw = input.value.trim();
+  if(!raw) return;
+  // 自分で追加した持ち物テキストも、検索欄と同じくユーザーが自由に入力できる文字列なので、
+  // 保存前にHTMLエスケープしておく(2026-09-22、既存のescapeAttr()を流用)。
+  // 組み込みの持ち物リスト(PACKING_SECTIONS)側はHTMLタグを含まないプレーンテキストのみなので、
+  // ここでの変更は影響しない。
+  const text = escapeAttr(raw);
   const s = loadPackingState();
   s.custom.push({ id:'custom_' + Date.now(), text, checked:false });
   savePackingState(s);
@@ -3610,7 +3606,6 @@ function closeProcFoodPairing(){
   document.getElementById('procFoodPairingScreen').classList.remove('show');
 }
 function openMannerLightbox(src){
-  if(typeof window.setAppHeight === 'function') window.setAppHeight();
   document.getElementById('mannerLightboxImg').src = src;
   document.getElementById('mannerLightbox').classList.add('show');
 }
@@ -3736,10 +3731,16 @@ function openFavoritesChain(){
       <div class="fav-chain-jp">${f.jp}</div>
     </div>
   `).join('');
-  document.getElementById('favChainDisplay').classList.add('show');
+  const favOverlay = document.getElementById('favChainDisplay');
+  favOverlay.classList.add('show');
+  updateFullscreenTint();
+  // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
+  // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
+  void favOverlay.offsetHeight;
 }
 function closeFavChain(){
   document.getElementById('favChainDisplay').classList.remove('show');
+  updateFullscreenTint();
 }
 
 // ---------- ホテル情報の保存欄 ----------
@@ -3805,19 +3806,19 @@ function hotelInfoBlockHtml(){
       <span>${iconSvg('hotel', 16)} 宿泊メモ(この端末に保存されます)</span>
       <button class="hotel-info-clear" onclick="clearHotelInfo()">✕ クリア</button>
     </div>
-    <label class="hotel-info-label">ホテル名(コピペ可)</label>
+    <label class="hotel-info-label">ホテル名(コピペ可) / ชื่อโรงแรม</label>
     <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.name)}"
       placeholder="例: ◯◯ Hotel Bangkok"
       oninput="hotelInfo.name=this.value; saveHotelInfoData();">
     <div class="hotel-info-row">
       <div>
-        <label class="hotel-info-label">階数</label>
+        <label class="hotel-info-label">階数 / ชั้น</label>
         <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.floor)}"
           placeholder="例: 5" inputmode="numeric"
           oninput="hotelInfo.floor=this.value; saveHotelInfoData();">
       </div>
       <div>
-        <label class="hotel-info-label">部屋番号</label>
+        <label class="hotel-info-label">部屋番号 / หมายเลขห้อง</label>
         <input type="text" class="hotel-info-input" value="${escapeAttr(hotelInfo.room)}"
           placeholder="例: 512"
           oninput="hotelInfo.room=this.value; saveHotelInfoData();">
@@ -3825,12 +3826,12 @@ function hotelInfoBlockHtml(){
     </div>
     <div class="hotel-info-date-stack">
       <div>
-        <label class="hotel-info-label">チェックイン日</label>
+        <label class="hotel-info-label">チェックイン日 / วันเช็คอิน</label>
         <input type="date" class="hotel-info-input" value="${escapeAttr(hotelInfo.checkin)}"
           onchange="hotelInfo.checkin=this.value; saveHotelInfoData(); updateNightsDisplay();">
       </div>
       <div>
-        <label class="hotel-info-label">チェックアウト日</label>
+        <label class="hotel-info-label">チェックアウト日 / วันเช็คเอาท์</label>
         <input type="date" class="hotel-info-input" value="${escapeAttr(hotelInfo.checkout)}"
           onchange="hotelInfo.checkout=this.value; saveHotelInfoData(); updateNightsDisplay();">
       </div>
@@ -4131,6 +4132,13 @@ let dishSelectedMods = [];
 let dishSelectedPhraseIdx = null;
 let dishListScrollTop = 0;
 let dishScreenScrollTop = 0;
+// スクロール位置の復元/リセットは requestAnimationFrame で数フレーム遅らせて
+// 何度も再適用しているため(アニメーション対策)、「一覧に戻る」→「(その反映が
+// 終わる前に)別の料理を開く」のように素早く操作すると、古い方の遅延処理が後から
+// 発火して、新しく開いた詳細画面のスクロール位置を上書きしてしまうことがある。
+// 呼び出すたびにこの値をインクリメントし、各遅延処理の実行時に「自分がまだ最新か」を
+// 確認することで、古い処理が新しい処理の結果を横取りしないようにする。
+let dishScrollToken = 0;
 let dishCategory = 'food';
 const DISH_CATEGORY_META = {
   food:  { emoji:'🍜', label:'料理' },
@@ -4163,6 +4171,7 @@ function goBackToDishList(){
   }, 190);
 }
 function openDishList(restoreScroll, cat){
+  const myScrollToken = ++dishScrollToken;
   dishSelectedIdx = null;
   if(cat) dishCategory = cat;
   const meta = DISH_CATEGORY_META[dishCategory] || DISH_CATEGORY_META.food;
@@ -4177,7 +4186,10 @@ function openDishList(restoreScroll, cat){
   const scr = document.getElementById('dishScreen');
   const listTarget = restoreScroll ? dishListScrollTop : 0;
   const scrTarget = restoreScroll ? dishScreenScrollTop : 0;
-  const applyScroll = () => { list.scrollTop = listTarget; scr.scrollTop = scrTarget; };
+  const applyScroll = () => {
+    if(myScrollToken !== dishScrollToken) return;
+    list.scrollTop = listTarget; scr.scrollTop = scrTarget;
+  };
   applyScroll();
   requestAnimationFrame(() => {
     applyScroll();
@@ -4272,7 +4284,6 @@ function dishComposedJp(){
   return jp;
 }
 function openDishPhotoLightbox(idx){
-  if(typeof window.setAppHeight === 'function') window.setAppHeight();
   document.getElementById('dishPhotoLightboxImg').src = dishImagesFull[idx];
   document.getElementById('dishPhotoLightbox').classList.add('show');
 }
@@ -4280,6 +4291,7 @@ function closeDishPhotoLightbox(){
   document.getElementById('dishPhotoLightbox').classList.remove('show');
 }
 function openDishDetail(i){
+  const myScrollToken = ++dishScrollToken;
   dishListScrollTop = document.getElementById('dishList').scrollTop;
   dishScreenScrollTop = document.getElementById('dishScreen').scrollTop;
   dishSelectedIdx = i;
@@ -4297,7 +4309,7 @@ function openDishDetail(i){
   updateDishHeaderBack();
   const scr = document.getElementById('dishScreen');
   scr.scrollTop = 0;
-  requestAnimationFrame(() => { scr.scrollTop = 0; });
+  requestAnimationFrame(() => { if(myScrollToken === dishScrollToken) scr.scrollTop = 0; });
   const wrap = document.getElementById('dishContentWrap');
   wrap.style.transition = 'none';
   wrap.style.transform = 'translateX(24px)';
@@ -4312,6 +4324,9 @@ function selectDishPhrase(mi){
   dishSelectedPhraseIdx = (dishSelectedPhraseIdx === mi) ? null : mi;
   pharmacyQuickAnswerVal = null;
   renderDishDetail();
+  // 薬の質問一覧の下の方を選んだ時も同様に、選択結果が表示される画面上部まで
+  // 自動でスクロールして戻す(2026-09-22、selectCategoryPhraseと同じ対策)。
+  document.getElementById('dishScreen').scrollTop = 0;
 }
 function clearDishSelectedPhrase(){
   dishSelectedPhraseIdx = null;
@@ -4506,14 +4521,30 @@ function renderDishDetailStandalone(d){
   document.getElementById('dishList').innerHTML =
     `<button class="dish-back" onclick="goBackToDishList()">‹ ${meta.label}一覧に戻る</button>` + listHtml;
 }
+// iOS26 SafariのLiquid Glass tintingバグ対策(2026-09-21):
+// .landscape-display(landscapeDisplay/favChainDisplay)がフルスクリーン表示されている間、
+// Safariが画面最下部などの隠れた領域を「.landscape-display自身の背景色」ではなく
+// 「html/bodyの背景色」で塗ってしまうことがある(実機検証で確認済み)。
+// 通常時のhtml/bodyは白(#fff)だが、.landscape-displayはvar(--ink)(濃色)のため、
+// 色が食い違って白い隙間として見えてしまう。表示中だけhtml/bodyの背景色を
+// .landscape-display側に合わせることで、この食い違いを解消する。
+// (.landscape-displayクラスを持つ要素が1つでも表示中かどうかで判定するため、
+//  landscapeDisplay/favChainDisplayどちらの開閉箇所からも個別管理せずこの関数を呼べばよい)
+function updateFullscreenTint(){
+  const anyOpen = !!document.querySelector('.landscape-display.show');
+  document.documentElement.style.backgroundColor = anyOpen ? 'var(--ink)' : '';
+  document.body.style.backgroundColor = anyOpen ? 'var(--ink)' : '';
+}
 let lastShownPhrase = null;
 let landscapeManuallyClosed = false;
+// 「相手に見せる」を手動で開いている間は、iOSでアドレスバーの伸縮などによって
+// window の resize イベントが発火しても、それを理由に閉じてしまわないようにするフラグ。
+// (端末を横向きに回転させた時の自動表示/自動非表示の判定とは別に管理する)
 let fullscreenManuallyOpened = false;
 
 function setLastPhrase(th, jp){
   lastShownPhrase = { th, jp };
   landscapeManuallyClosed = false;
-  fullscreenManuallyOpened = false;
   checkOrientationDisplay();
 }
 function fitLandscapeText(){
@@ -4556,17 +4587,15 @@ function showFullscreenNow(){
   if(!lastShownPhrase) return;
   landscapeManuallyClosed = false;
   fullscreenManuallyOpened = true;
-  if(typeof window.setAppHeight === 'function') window.setAppHeight();
-  if(typeof window.nudgeScroll === 'function') window.nudgeScroll();
   document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
   document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
-  document.getElementById('landscapeDisplay').classList.add('show');
+  const overlayNow = document.getElementById('landscapeDisplay');
+  overlayNow.classList.add('show');
+  updateFullscreenTint();
+  // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
+  // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
+  void overlayNow.offsetHeight;
   requestAnimationFrame(fitLandscapeText);
-  // 開いた直後にもう一度測り直す。起動直後(PWAスタンドアロン)は、この一瞬だけ
-  // 実際の表示領域とズレていることがあるため、ここでも保険をかけておく。
-  setTimeout(function(){
-    if(typeof window.setAppHeight === 'function') window.setAppHeight();
-  }, 250);
 }
 function fullscreenBtnHtml(){
   return `<button class="fullscreen-btn" onclick="event.stopPropagation(); showFullscreenNow();">${iconSvg('search', 16)} 相手に見せる</button>`;
@@ -4579,9 +4608,14 @@ function checkOrientationDisplay(){
     document.getElementById('landscapeTh').textContent = lastShownPhrase.th;
     document.getElementById('landscapeJp').textContent = lastShownPhrase.jp;
     overlay.classList.add('show');
+    updateFullscreenTint();
+    // WebKitの再描画/合成バグ対策: 表示直後に強制的にレイアウトを再計算させ、
+    // 背後の古い描画が残ったまま表示されてしまうのを防ぐ。
+    void overlay.offsetHeight;
     requestAnimationFrame(fitLandscapeText);
   } else {
     overlay.classList.remove('show');
+    updateFullscreenTint();
   }
 }
 function closeLandscapeDisplay(){
@@ -4895,8 +4929,10 @@ function renderComposerList(){
         return true;
       })
       .sort((a, b) => {
-        const pa = (a.item.destInsert || a.item.hourInput || a.item.peopleInput || a.item.dayInput || a.item.airlineInput) ? 0 : 1;
-        const pb = (b.item.destInsert || b.item.hourInput || b.item.peopleInput || b.item.dayInput || b.item.airlineInput) ? 0 : 1;
+        // keepListOrder:true の項目は入力付きでも先頭に寄せず、定義順の位置に表示する
+        // (例: 飛行機タブの「滞在日数は〇日です」をSIMカード関連フレーズと並べるため 2026-10-02)
+        const pa = (!a.item.keepListOrder && (a.item.destInsert || a.item.hourInput || a.item.peopleInput || a.item.dayInput || a.item.airlineInput)) ? 0 : 1;
+        const pb = (!b.item.keepListOrder && (b.item.destInsert || b.item.hourInput || b.item.peopleInput || b.item.dayInput || b.item.airlineInput)) ? 0 : 1;
         return pa - pb;
       });
     if(transportTab === 'densha') html += ticketRowHtml();
@@ -4917,8 +4953,10 @@ function renderComposerList(){
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に人数を変更できます</span>`;
       }
       if(item.dayInput){
-        th = th.replace('{D}', dayCount);
-        jp = jp.replace('{D}', dayCount);
+        // dayDefault を持つ項目は、未選択時はその初期値で表示する(タップ時の初期値と一致させる)
+        const dShow = (!isSelectedNow && item.dayDefault) ? item.dayDefault : dayCount;
+        th = th.replace('{D}', dShow);
+        jp = jp.replace('{D}', dShow);
         if(!isSelectedNow) hourBadge = `<span class="fi-editable-badge">✏️ タップ後に日数を変更できます</span>`;
       }
       if(item.airlineInput){
@@ -4953,6 +4991,7 @@ function toggleTicket(){
   }
   renderComposerFixed();
   renderComposerList();
+  document.getElementById('composerScreen').scrollTop = 0;
 }
 function changeTicketCount(delta){
   ticketCount = Math.max(1, Math.min(20, ticketCount + delta));
@@ -5009,7 +5048,7 @@ function toggleFollowUp(idx){
     peopleCount = 4;
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].dayInput){
-    dayCount = 1;
+    dayCount = transportItems[selectedFollowUp].dayDefault || 1;
   }
   if(selectedFollowUp !== null && transportItems[selectedFollowUp].airlineInput){
     airlineSelectedIdx = -1;
@@ -5017,6 +5056,9 @@ function toggleFollowUp(idx){
   airlineDropdownOpen = false;
   renderComposerFixed();
   renderComposerList();
+  // 移動手段の一覧も下の方の項目を選ぶと上部の固定ブロックが更新されるため、
+  // selectCategoryPhrase/selectDishPhraseと同じ理由でスクロールを戻す(2026-09-22)。
+  document.getElementById('composerScreen').scrollTop = 0;
 }
 function toggleAnchorExpand(){
   anchorExpanded = !anchorExpanded;
@@ -5162,6 +5204,9 @@ function selectCategoryPhrase(idx){
   categoryNumInputVal = null;
   renderCategoryFixed();
   renderCategoryList();
+  // 一覧の下の方にあるフレーズを選んだ時、選択結果(相手に見せるボタン)が
+  // 画面上部の固定ブロックに表示されるため、そこまで自動でスクロールして戻す(2026-09-22)。
+  document.getElementById('composerScreen').scrollTop = 0;
 }
 
 function renderDestinationAnchor(){
@@ -5815,8 +5860,11 @@ function containsThaiScript(str){
 function renderSuggestions(matches, query){
   const box = document.getElementById('searchSuggestions');
   const hasThai = containsThaiScript(query);
+  // 検索欄の入力はユーザーが自由に打てる文字列なので、そのままHTMLへ差し込まず
+  // エスケープしてから表示する(2026-09-22、既存のescapeAttr()を流用)。
+  const safeQuery = escapeAttr(query);
   const fallbackItemHtml = `<div class="suggestion-item fallback" onclick="selectFallback()">
-    <div class="suggestion-th">${iconSvg('search', 18)}「${query}」をそのまま使う</div>
+    <div class="suggestion-th">${iconSvg('search', 18)}「${safeQuery}」をそのまま使う</div>
     <div class="suggestion-jp">入力した文字を行き先として使用します</div>
   </div>`;
   if(matches.length === 0){
@@ -5824,7 +5872,7 @@ function renderSuggestions(matches, query){
       ? 'データベースにまだ無い場所です。Googleマップの正式名称やタイ文字をコピペしたものなら、そのまま使っても現地の方に伝わる可能性が高いです。'
       : 'データベースにまだ無い場所です。日本語のままだと現地の方に伝わらないため、Googleマップでタイ文字の正式名称を調べてコピペしてみてください。';
     box.innerHTML = `<div class="fallback-box">
-      <div class="fallback-title">「${query}」は見つかりませんでした</div>
+      <div class="fallback-title">「${safeQuery}」は見つかりませんでした</div>
       <div class="fallback-desc">${desc}</div>
       ${hasThai ? fallbackItemHtml : ''}
     </div>`;
@@ -5930,7 +5978,10 @@ function applyDestination(found){
     gtag('event', 'destination_view', {
       destination_name: found.jp,
       destination_pref: found.pref || '',
-      is_registered: !found.note
+      // note: 登録済みデータの一部(例:アンパワー水上マーケット)は「週末のみ開催」等の
+      // 案内メモとして note を使っているため、note の有無では未登録判定ができない。
+      // selectFallback()が作る未登録データだけ pref:null になるため、そちらで判定する(2026-09-22)。
+      is_registered: !!found.pref
     });
   }
 }
@@ -6039,31 +6090,8 @@ loadFavorites();
 updateRatePillText();
 
 if ('serviceWorker' in navigator) {
-  // これまでは新しいSWがactivateされて「制御」を握っても、今開いているページ自体は
-  // 古いHTML/CSS/JSのままだった(リロードするまで反映されない)。
-  // ファイルを差し替えて配信しても、ユーザーが「アプリを完全に閉じて開き直す」だけでは
-  // 実際のネットワーク再取得が起きないことがあり(特にiOSのPWA standaloneモード)、
-  // その場合はいつまで経っても古い見た目のまま、という状態になっていた。
-  // 新しいSWが制御を握った瞬間(=更新が来た瞬間)を検知し、1回だけ自動でページを
-  // リロードすることで、確実に最新のファイルが表示されるようにする。
-  let swRefreshing = false;
-  const hadControllerAtLoad = !!navigator.serviceWorker.controller;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    updateVersionDisplay();
-    // 初回インストール時(今までSWがいなかった状態から入った場合)はリロード不要。
-    // 「既にSWがいた状態で、別のSWに切り替わった」= 更新が来た時だけリロードする。
-    if (!hadControllerAtLoad) return;
-    if (swRefreshing) return;
-    swRefreshing = true;
-    window.location.reload();
-  });
   window.addEventListener('load', () => {
-    // {updateViaCache:'none'} を指定し、sw.js自体がブラウザのHTTPキャッシュに
-    // 乗って「新しいバージョンが来ているのに気づけない」ことがないようにする。
-    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
-      // ページを開くたびに明示的に更新チェックを行う。
-      reg.update().catch(() => {});
-    }).catch((err) => {
+    navigator.serviceWorker.register('sw.js').catch((err) => {
       console.log('Service Worker registration failed:', err);
     });
   });
@@ -6089,10 +6117,13 @@ async function updateVersionDisplay(){
   }
 }
 updateVersionDisplay();
-// controllerchange時のバージョン表示更新・自動リロードは、上の登録処理でまとめて行っている。
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', updateVersionDisplay);
+}
 
 // iOSのホーム画面アイコンからの起動アニメーション(アイコン→フルスクリーンへの拡大)が
 // 完全に収まってから中身を見せる(タイマーはスクリプトの先頭で既に開始済み)
+
 </script>
 
 </body>

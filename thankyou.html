@@ -2,6 +2,15 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C3M22ZEFTT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  // URLの ?session_id=… は決済の番号なので、GAにはページの場所だけを送る
+  gtag('config', 'G-C3M22ZEFTT', { page_location: location.origin + location.pathname });
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ご購入ありがとうございます - 指さしタイ</title>
 <link rel="icon" href="icon-192.png">
@@ -282,6 +291,8 @@
         if(data.ready === true && data.code){
           document.getElementById('codeValue').textContent = data.code;
           showState('success');
+          // GA: 購入完了を記録（同じ決済番号は1回だけ数えられるので、再読み込みしても二重にならない）
+          if(typeof gtag === 'function') gtag('event', 'purchase', { transaction_id: sessionId, currency: 'JPY', value: 2000 });
           return;
         }
         if(attempts >= MAX_ATTEMPTS){

@@ -2,6 +2,14 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C3M22ZEFTT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C3M22ZEFTT');
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <script>
   // メールなどの外部リンクで「#home-guide」のようなアンカー付きURLへ直接アクセスした場合、
@@ -1555,6 +1563,8 @@
         if(isProcessing) return;
         isProcessing = true;
         setLoading(true);
+        // GA: 購入ボタンが押された回数を記録（決済ページへ進もうとした人の数）
+        if(typeof gtag === 'function') gtag('event', 'begin_checkout', { currency: 'JPY', value: 2000 });
 
         fetch(CHECKOUT_ENDPOINT, {
           method: 'POST',

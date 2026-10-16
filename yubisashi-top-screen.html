@@ -2468,7 +2468,7 @@ const situations = [
     {base:"นั่งตรงนี้ได้ไหม", type:'q', jp:"ここに座ってもいいですか？"},
     {base:"ขอเงินคืนด้วย", type:'s', jp:"払い戻しをお願いします"},
   ]},
-  { icon:"sit_market", title:"市場で買い物する", color:"#CA2156", count:"24", sample:"値段交渉・サイズ・会計など", phrases:[
+  { icon:"sit_market", title:"市場で買い物する", color:"#CA2156", count:"29", sample:"値段交渉・サイズ・会計など", phrases:[
     {base:"ขอดูอันนี้หน่อย", type:'s', jp:"これを見せてください"},
     {base:"ราคาเท่าไหร่", type:'q', jp:"いくらですか？", numberAnswer:{unit:'บาท', position:'suffix', jpy:true, modes:priceModes}},
     {base:"ลดได้ไหม", type:'q', jp:"安くなりますか？"},
@@ -2493,6 +2493,11 @@ const situations = [
     {base:"วันไหนหยุด", type:'q', jp:"何曜日が店休日ですか？"},
     {base:"มีไซส์อื่นไหม", type:'q', jp:"他のサイズはありますか？"},
     {base:"อันนี้จะเอาไปเป็นของขวัญ ไม่ต้องแกะห่อนะ", type:'s', jp:"これはプレゼント用なので開封しないでください"},
+    {base:"ทำเรื่องขอคืนภาษี VAT ได้ไหม", type:'q', jp:"VAT還付の手続きはできますか？"},
+    {base:"ช่วยทำเอกสารขอคืนภาษี ภ.พ.10 ให้หน่อย", type:'s', jp:"還付の書類を作ってください"},
+    {base:"นี่พาสปอร์ต", type:'s', jp:"パスポートはこれです"},
+    {base:"ยอดรวมถึง 2,000 บาทหรือยัง", type:'q', jp:"合計で2,000バーツ以上になっていますか？"},
+    {base:"เคาน์เตอร์คืนภาษีอยู่ที่ไหน", type:'q', jp:"還付のカウンターはどこですか？"},
   ]},
   { icon:"sit_massage", title:"マッサージ", color:"#793F8D", count:"21", sample:"タイ・フット・オイル、強さ調整、会計など", phrases:[
     {base:"ขอนวดไทย {DURATION} นาที", type:'s', jp:"タイマッサージを{DURATION}分お願いします", durationOptions:[30,60,90,120]},

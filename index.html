@@ -4851,7 +4851,7 @@ function openNearby(i){
 function openModeList(mode){
   openState = {type:'transport'};
   transportTab = mode;
-  document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg('taxi', 22)}</span>移動する`;
+  document.getElementById('composerTitle').textContent = '移動する';
   renderComposerFixed();
   renderTransportTabs();
   renderComposerList();
@@ -4863,7 +4863,7 @@ function openModeList(mode){
 function openTransportComposer(){
   openState = {type:'transport'};
   transportTab = 'bus';
-  document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg('taxi', 22)}</span>移動する`;
+  document.getElementById('composerTitle').textContent = '移動する';
   renderComposerFixed();
   renderTransportTabs();
   renderComposerList();
@@ -5120,7 +5120,9 @@ function openCategoryComposer(i){
   openState = {type:'category', index:i};
   selectedCategoryIdx = null;
   const s = situations[i];
-  document.getElementById('composerTitle').innerHTML = `<span class="ctitle-icon">${iconSvg(s.icon, 22)}</span>${s.title}`;
+  // シチュエーションのアイコン(sit_*.png)は色付きの四角の上で使う白い絵のため、背景のない見出しでは
+  // 見えなくなる。見出しはタイトル文字だけにする(2026-10-16)。
+  document.getElementById('composerTitle').textContent = s.title;
   document.getElementById('transportTabsFixed').innerHTML = '';
   renderCategoryFixed();
   renderCategoryList();

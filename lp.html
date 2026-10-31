@@ -547,9 +547,27 @@
   .iab-notice-copy.copied{ background:#0F6B62; }
   .iab-wrap{ max-width:720px; margin:0 auto; padding:12px 16px 0; }
   .price-card .iab-notice{ margin-bottom:16px; }
+
+  /* ---------- 12月セール（期間中と ?sale=preview の時だけ表示。期間外は何も変わらない） ---------- */
+  .sale-banner{
+    display:none; background:#FFF4E0; color:var(--ink); border-bottom:1px solid var(--line);
+    text-align:center; font-size:13px; font-weight:600; line-height:1.5; padding:7px 16px;
+  }
+  .is-sale .sale-banner{ display:block; }
+  .sale-preview-note{ display:none; font-size:11px; font-weight:500; color:#8B8272; line-height:1.5; }
+  .is-sale-preview .sale-preview-note{ display:block; }
+  .price-card-sale-tag{
+    display:table; margin:0 auto 6px; font-family:'Noto Sans JP', sans-serif; font-size:13px; font-weight:700;
+    color:#fff; background:var(--pink); border-radius:6px; padding:2px 10px; line-height:1.5;
+  }
+  .price-card-regular{ display:block; font-family:'Noto Sans JP', sans-serif; font-size:14px; font-weight:600; color:#8B8272; line-height:1.5; }
+  .price-card .sale-preview-note{ margin-top:6px; }
 </style>
 </head>
 <body>
+
+<!-- 12月セールの帯（期間中と ?sale=preview の時だけ表示される） -->
+<div class="sale-banner" role="note">12月限定セール：¥2,000 → ¥980（12/31まで）<span class="sale-preview-note">※プレビュー表示です。実際の決済金額は変わりません</span></div>
 
 <header>
   <div class="header-inner">
@@ -585,7 +603,7 @@
     <div style="flex:1 1 300px;">
       <div class="hero-eyebrow">持ち歩ける、旅のパートナー</div>
       <h1>タイ語が<br>話せなくても<br><span class="accent">見せるだけで<br>伝わる。</span></h1>
-      <p class="hero-lead">行き先を伝えるのも、食事の注文も<br>ショッピングも、体調不良のときも。<br>アプリから伝えたいフレーズを選んで<br>スマホの画面を現地の方に見せるだけ。<br>買い切り2,000円。<br>インストールしたその日から使えます。<span style="font-size:0.7em; vertical-align:super;">※1</span></p>
+      <p class="hero-lead">行き先を伝えるのも、食事の注文も<br>ショッピングも、体調不良のときも。<br>アプリから伝えたいフレーズを選んで<br>スマホの画面を現地の方に見せるだけ。<br><span id="salePriceHero">買い切り2,000円。</span><br>インストールしたその日から使えます。<span style="font-size:0.7em; vertical-align:super;">※1</span></p>
       <div class="hero-price-row">
         <a class="btn js-buy-button" href="#price">購入はこちら</a>
       </div>
@@ -1078,11 +1096,11 @@
 <section class="why" id="why">
   <div class="wrap">
     <h2>なぜ「買い切り」なのか</h2>
-    <p><strong>タイ旅行のサポートツール代として2,000円。</strong><br>指さしタイは、旅行の間だけ使うツールです。<br>帰国後も払い続けるサブスクリプションは<br>この用途に合いません。一度購入すれば<br>その後の追加料金は一切かかりません。</p>
+    <p><strong>タイ旅行のサポートツール代として<span id="salePriceWhy">2,000円</span>。</strong><br>指さしタイは、旅行の間だけ使うツールです。<br>帰国後も払い続けるサブスクリプションは<br>この用途に合いません。一度購入すれば<br>その後の追加料金は一切かかりません。</p>
     <div class="why-compare">
       <div class="why-card highlight">
         <div class="why-card-label">指さしタイ</div>
-        <div class="why-card-title">買い切り 2,000円</div>
+        <div class="why-card-title" id="salePriceWhyCard">買い切り 2,000円</div>
         <p>一度の購入で、何度でも・何回の旅行でも使えます。</p>
       </div>
       <div class="why-card">
@@ -1100,7 +1118,8 @@
     <p class="section-lead">シンプルな一つのプランだけです。</p>
     <div class="price-card">
       <div class="price-card-name">指さしタイ ― 買い切り版</div>
-      <div class="price-card-amount">¥2,000<small> (税込)</small></div>
+      <div class="price-card-amount" id="salePriceCard">¥2,000<small> (税込)</small></div>
+      <div class="sale-preview-note">※プレビュー表示です。実際の決済金額は変わりません</div>
       <div class="price-card-sub">一度購入すれば追加料金なしで使い続けられます</div>
       <ul class="price-card-features">
         <li>すべてのシチュエーション・フレーズが使える</li>
@@ -1129,7 +1148,7 @@
     <div class="flow-gallery feature-gallery">
       <div class="feature-gallery-hint hint-persist">👉 横にスワイプ・画像タップで拡大表示できます</div>
       <div class="feature-gallery-scroll">
-        <img src="images/flow-01.jpg" alt="①購入する:決済ページで¥2,000のお支払いを完了します">
+        <img id="saleFlowImg" src="images/flow-01.jpg" alt="①購入する:決済ページで¥2,000のお支払いを完了します">
         <img src="images/flow-02.jpg" alt="②利用コードを受け取る:購入完了画面に表示され、同じ内容のメールも届きます">
         <img src="images/flow-03.jpg" alt="③「指さしタイ」を開く:購入完了画面のボタン、またはメール内のURLからアプリを開きます">
         <img src="images/flow-04.jpg" alt="④利用コードを入力する:購入後の画面の利用コードをコピーして入力し、認証します">
@@ -1142,6 +1161,50 @@
     </div>
   </div>
 </section>
+
+<script>
+  // ============================================================
+  // 12月セールの表示切り替え
+  // ・日本時間 2026-12-01 0:00 〜 2026-12-31 23:59:59 だけ、価格の表示を「12月限定 ¥980（通常 ¥2,000）」にする
+  // ・判定は UTC（世界標準時）の時刻で行うので、スマホのタイムゾーン設定には左右されない
+  //   （決済用 Worker の src/sale.js と同じ日時。変える時は両方を同じ値にすること）
+  // ・URL に ?sale=preview を付けると、期間外でもセールの表示を確認できる（実際の決済金額は変わらない）
+  // ・期間外（プレビューなし）は何もしない＝今までと全く同じ表示
+  // ============================================================
+  (function(){
+    var SALE_START_UTC = '2026-11-30T15:00:00Z'; // = 日本時間 2026-12-01 00:00（この時刻を含む）
+    var SALE_END_UTC   = '2026-12-31T15:00:00Z'; // = 日本時間 2027-01-01 00:00（この時刻は含まない）
+    var START = Date.parse(SALE_START_UTC), END = Date.parse(SALE_END_UTC);
+
+    // GA の金額（begin_checkout）でも使うため、外から呼べるようにしておく。プレビューでは true にならない
+    window.yubisashiIsSaleNow = function(){
+      var now = Date.now();
+      return now >= START && now < END;
+    };
+
+    var active = window.yubisashiIsSaleNow();
+    var preview = false;
+    try{ preview = new URLSearchParams(window.location.search).get('sale') === 'preview'; }catch(e){}
+    if(!active && !preview) return;
+
+    var root = document.documentElement;
+    root.classList.add('is-sale');
+    if(!active) root.classList.add('is-sale-preview'); // 期間外のプレビューだけ注意書きを出す
+
+    var SALE_TEXT = '12月限定 ¥980（通常 ¥2,000）';
+    function setHtml(id, html){ var el = document.getElementById(id); if(el) el.innerHTML = html; }
+    setHtml('salePriceHero', '買い切り ' + SALE_TEXT + '。');
+    setHtml('salePriceWhy', SALE_TEXT);
+    setHtml('salePriceWhyCard', '買い切り<br>' + SALE_TEXT);
+    setHtml('salePriceCard', '<span class="price-card-sale-tag">12月限定</span>¥980<small> (税込)</small><span class="price-card-regular">（通常 ¥2,000）</span>');
+
+    var img = document.getElementById('saleFlowImg');
+    if(img){
+      img.src = 'images/flow-01-sale.jpg';
+      img.alt = '①購入する:決済ページで¥980のお支払いを完了します';
+    }
+  })();
+</script>
 
 <section class="home-guide-section" id="home-guide">
   <div class="wrap">
@@ -1563,7 +1626,7 @@
         isProcessing = true;
         setLoading(true);
         // GA: 購入ボタンが押された回数を記録（決済ページへ進もうとした人の数）
-        if(typeof gtag === 'function') gtag('event', 'begin_checkout', { currency: 'JPY', value: 2000 });
+        if(typeof gtag === 'function') gtag('event', 'begin_checkout', { currency: 'JPY', value: (typeof window.yubisashiIsSaleNow === 'function' && window.yubisashiIsSaleNow()) ? 980 : 2000 }); // 12月セール中は 980
 
         fetch(CHECKOUT_ENDPOINT, {
           method: 'POST',

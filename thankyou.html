@@ -292,7 +292,11 @@
           document.getElementById('codeValue').textContent = data.code;
           showState('success');
           // GA: 購入完了を記録（同じ決済番号は1回だけ数えられるので、再読み込みしても二重にならない）
-          if(typeof gtag === 'function') gtag('event', 'purchase', { transaction_id: sessionId, currency: 'JPY', value: 2000 });
+          // 12月セール（日本時間 2026-12-01 0:00 〜 12-31 23:59:59。UTC で判定）の間は 980、それ以外は 2000
+          //   決済用 Worker の src/sale.js・lp.html と同じ日時。変える時は全部を同じ値にすること
+          var nowMs = Date.now();
+          var saleNow = nowMs >= Date.parse('2026-11-30T15:00:00Z') && nowMs < Date.parse('2026-12-31T15:00:00Z');
+          if(typeof gtag === 'function') gtag('event', 'purchase', { transaction_id: sessionId, currency: 'JPY', value: saleNow ? 980 : 2000 });
           return;
         }
         if(attempts >= MAX_ATTEMPTS){

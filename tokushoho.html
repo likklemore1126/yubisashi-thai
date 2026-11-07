@@ -34,7 +34,7 @@
 <div class="wrap">
   <a class="back" href="lp.html">‹ 指さしタイ トップへ戻る</a>
   <h1>特定商取引法に基づく表記</h1>
-  <div class="updated">最終更新日:2026年10月31日</div>
+  <div class="updated">最終更新日:2026年11月7日</div>
 
   <table>
     <tr><th>販売業者</th><td>TakaTobi(運営統括責任者:及川貴幸)</td></tr>
@@ -43,7 +43,7 @@
     <tr><th>メールアドレス</th><td>takatobi.th@gmail.com</td></tr>
     <tr><th>運営統括責任者</th><td>及川貴幸</td></tr>
     <tr><th>追加手数料等の追加料金</th><td>なし(消費税は販売価格に含みます。通信費はお客様のご負担となります)</td></tr>
-    <tr><th>販売価格</th><td>2,000円(税込) ※2026年12月1日〜12月31日（日本時間）は980円(税込)<br>※詳細は<a href="lp.html">商品ページ</a>をご確認ください</td></tr>
+    <tr><th>販売価格</th><td><span id="tokushohoPrice">500円(税込)（イーペン・年末キャンペーン：2026年12月31日（日本時間）までの期間限定価格）</span><br>※詳細は<a href="lp.html">商品ページ</a>をご確認ください</td></tr>
     <tr><th>お支払い方法</th><td>クレジットカード決済</td></tr>
     <tr><th>お支払い時期</th><td>ご注文手続き完了時</td></tr>
     <tr><th>商品の引き渡し時期</th><td>決済完了後、直ちに利用コードを画面表示・発行いたします</td></tr>
@@ -53,5 +53,18 @@
   </table>
 
 </div>
+<script>
+  // 販売価格の切り替え：日本時間 2027-01-01 0:00 から定価 1,000円(税込) の表示にする（UTC で判定）
+  //   決済用 Worker の src/sale.js・lp.html・thankyou.html と同じ日時。変える時は全部を同じ値にすること
+  //   URL に ?preview=2027 を付けると、今でも 1/1 以降の表示を確認できる（実際の決済金額は変わらない）
+  (function(){
+    var after = Date.now() >= Date.parse('2026-12-31T15:00:00Z');
+    var preview = false;
+    try{ preview = new URLSearchParams(window.location.search).get('preview') === '2027'; }catch(e){}
+    if(!after && !preview) return;
+    var el = document.getElementById('tokushohoPrice');
+    if(el) el.textContent = '1,000円(税込)' + (after ? '' : '　※プレビュー表示です（2027年1月1日以降の表示）。実際の決済金額は変わりません');
+  })();
+</script>
 </body>
 </html>
